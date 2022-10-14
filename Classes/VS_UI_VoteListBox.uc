@@ -93,20 +93,20 @@ function DrawCandidate(Canvas C, VS_UI_VoteListItem Item, int Index, float X, fl
 
 	C.DrawColor = FG;
 	C.Font = Root.Fonts[F_Normal];
-	ClippingRegion.W = FMin(113.0, ClippingRegion.W);
+	ClippingRegion.W = FMin(163.0, ClippingRegion.W);
 	ClipText(C, X+2, Y, Item.Preset);
 	ClippingRegion = OldClipRegion;
 
 	C.DrawColor = Sep;
-	DrawStretchedTexture(C, X+115, Y, 1, H, Texture'WhiteTexture');
+	DrawStretchedTexture(C, X+165, Y, 1, H, Texture'WhiteTexture');
 
 	C.DrawColor = FG;
-	ClippingRegion.W = FMin(213.0, ClippingRegion.W);
-	ClipText(C, X+118, Y, Item.MapName);
+	ClippingRegion.W = FMin(363.0, ClippingRegion.W);
+	ClipText(C, X+168, Y, Item.MapName);
 	ClippingRegion = OldClipRegion;
 
 	C.DrawColor = Sep;
-	DrawStretchedTexture(C, X+215, Y, 1, H, Texture'WhiteTexture');
+	DrawStretchedTexture(C, X+365, Y, 1, H, Texture'WhiteTexture');
 
 	C.DrawColor = FG;
 	C.StrLen(Item.Votes, VW, VH);

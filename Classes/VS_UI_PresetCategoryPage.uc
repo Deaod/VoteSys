@@ -19,7 +19,7 @@ function Created() {
 	VoteButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 10, 338, 150, 12));
 	VoteButton.SetText(VoteButtonText);
 
-	VoteListBox = VS_UI_VoteListBox(CreateControl(class'VS_UI_VoteListBox', 170, 10, 250, 150));
+	VoteListBox = VS_UI_VoteListBox(CreateControl(class'VS_UI_VoteListBox', 170, 10, 400, 150));
 }
 
 function AddPreset(VS_Preset P) {

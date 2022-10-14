@@ -10,7 +10,7 @@ function Created() {
 	if (WinLeft != -1.0 || WinTop != -1.0)
 		bPlaced = true;
 
-	WinWidth = 438;
+	WinWidth = 588;
 	WinHeight = 400;
 }
 
