@@ -568,7 +568,7 @@ function VS_Preset LoadPreset(VS_PresetConfig PC) {
 	}
 
 	if (PC.Parameters.Length > 0) {
-		for (i = 0; i < PC.Mutators.Length; i++)
+		for (i = 0; i < PC.Parameters.Length; i++)
 			P.Parameters = P.Parameters$PC.Parameters[i];
 	}
 
