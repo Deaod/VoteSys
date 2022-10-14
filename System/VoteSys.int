@@ -1,0 +1,9 @@
+[Public]
+Object=(Name=VoteSys.MutVoteSys,Class=Class,MetaClass=Engine.Mutator,Description="MutVoteSys,<Insert description here>")
+
+[VS_UI_PresetCategoryPage]
+VoteButtonText="Vote"
+
+[VS_UI_Window]
+WindowTitle="VoteSys Menu"
+

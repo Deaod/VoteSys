@@ -1,0 +1,24 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+			"folder_exclude_patterns": ["Build/Temp"],
+		}
+	],
+	"settings":
+	{
+		"tab_size": 4,
+		"translate_tabs_to_spaces": false,
+		"default_encoding": "UTF-8",
+		"default_line_ending": "windows",
+	},
+	"build_systems":
+	[
+		{
+			"name": "Build VoteSys",
+			"file_patterns": ["*.uc"],
+			"cmd": ["$project_path/Build.bat", "silent"]
+		}
+	]
+}
