@@ -60,7 +60,7 @@ function CreateChannel(Pawn P) {
 event PostBeginPlay() {
 	super.PostBeginPlay();
 
-
+	ApplyVotedPreset();
 
 	SetTimer(Level.TimeDilation, true);
 	LoadConfig();
