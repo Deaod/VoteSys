@@ -446,6 +446,7 @@ function AddClassToPackageMap(string ClassName) {
 		return;
 	}
 
+	// TODO: uncomment the following lines once compiling with 469c
 	// if (IsInPackageMap(P, true) == false) 
 	// 	AddToPackageMap(P);
 }
