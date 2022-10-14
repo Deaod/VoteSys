@@ -127,7 +127,8 @@ simulated function ShowVoteMenu() {
 }
 
 simulated function HideVoteMenu() {
-	VoteMenuDialog.Close();
+	if (VoteMenuDialog != none)
+		VoteMenuDialog.Close();
 }
 
 simulated function AddPreset(VS_Preset P) {
