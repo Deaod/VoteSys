@@ -7,3 +7,12 @@ VoteButtonText="Vote"
 [VS_UI_Window]
 WindowTitle="VoteSys Menu"
 
+[VS_Msg_LocalMessage]
+MsgNobodyVoted="Nobody voted, randomly selecting {1}"
+MsgVotesTied="Tied, randomly selecting {1}"
+MsgHaveWinner="{1} won"
+MsgMidGame="Initiating mid-game voting, opening Vote Menu"
+MsgGameEnded="Game ended, opening Vote Menu"
+MsgPlayerVoted="{1} voted for {2}"
+MsgAdminForceTravel="Admin {1} forced switching to {2}"
+

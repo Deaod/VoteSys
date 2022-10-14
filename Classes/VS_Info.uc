@@ -56,11 +56,26 @@ function AddMapVote(VS_PlayerChannel Origin, string Category, string PresetName,
 	if (M == none)
 		return;
 
-	BroadcastMessage(Origin.PlayerOwner.PlayerReplicationInfo.PlayerName@"voted for"@M.MapName@"("$P.Abbreviation$")");
-	InternalIndex = AddMapVoteUnsafe(P.GetFullName(), MapName);
-	if (InternalIndex >= 0) {
-		CandidatesInternal[InternalIndex].Preset = P;
-		CandidatesInternal[InternalIndex].MapRef = M;
+	if (VoteSys.CanVote(Origin.PlayerOwner)) {
+		if (Origin.PlayerOwner.PlayerReplicationInfo.bAdmin) {
+			VoteSys.BroadcastLocalizedMessage2(
+				class'VS_Msg_LocalMessage', 7,
+				Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
+				M.MapName@"("$P.Abbreviation$")"
+			);
+			VoteSys.AdminForceTravelTo(P, M);
+		} else {
+			VoteSys.BroadcastLocalizedMessage2(
+				class'VS_Msg_LocalMessage', 6,
+				Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
+				M.MapName@"("$P.Abbreviation$")"
+			);
+			InternalIndex = AddMapVoteUnsafe(P.GetFullName(), MapName);
+			if (InternalIndex >= 0) {
+				CandidatesInternal[InternalIndex].Preset = P;
+				CandidatesInternal[InternalIndex].MapRef = M;
+			}
+		}
 	}
 
 	// if we get here, there were more than 32 players on the server

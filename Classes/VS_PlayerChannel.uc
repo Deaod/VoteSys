@@ -32,7 +32,11 @@ replication {
 		ServerVote;
 
 	reliable if (Role == ROLE_Authority)
-		ShowVoteMenu, HideVoteMenu;
+		ShowVoteMenu,
+		HideVoteMenu;
+
+	reliable if (Role == ROLE_Authority && ((bDemoRecording == false) || (bClientDemoRecording && bClientDemoNetFunc) || (Level.NetMode == NM_Standalone)))
+		LocalizeMessage;
 }
 
 simulated event PostBeginPlay() {
@@ -210,6 +214,28 @@ function ClearVote() {
 		VotePresetName = "";
 		VoteMapName = "";
 	}
+}
+
+simulated function LocalizeMessage(
+	class<LocalMessage> MessageClass,
+	optional int Switch,
+	optional string Param1,
+	optional string Param2,
+	optional string Param3,
+	optional string Param4,
+	optional string Param5
+) {
+	local VS_Msg_ParameterContainer Params;
+
+	Params = new(none) class'VS_Msg_ParameterContainer';
+	// no Param0, reserved for invalid parameter sequences
+	Params.Params[1] = Param1;
+	Params.Params[2] = Param2;
+	Params.Params[3] = Param3;
+	Params.Params[4] = Param4;
+	Params.Params[5] = Param5;
+
+	PlayerOwner.ReceiveLocalizedMessage(MessageClass, Switch, /*PRI1*/, /*PRI2*/, Params);
 }
 
 defaultproperties {

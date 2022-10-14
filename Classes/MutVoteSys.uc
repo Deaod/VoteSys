@@ -119,7 +119,7 @@ function CheckMidGameVoting() {
 
 	GameState = GS_Voting;
 	TimeCounter = VoteTimeLimit;
-	BroadcastMessage("Initiating Mid-Game Voting, opening Vote Menu");
+	BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 4);
 	OpenVoteMenuForAll();
 	AnnounceCountdown(TimeCounter);
 }
@@ -173,7 +173,7 @@ function TickVoteMenuDelay() {
 
 	GameState = GS_Voting;
 	TimeCounter = VoteTimeLimit;
-	BroadcastMessage("Game ended, opening Vote Menu");
+	BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 5);
 	OpenVoteMenuForAll();
 	AnnounceCountdown(TimeCounter);
 }
@@ -241,6 +241,14 @@ function TravelTo(VS_Preset P, VS_Map M) {
 	Level.ServerTravel(Url, false);
 }
 
+function AdminForceTravelTo(VS_Preset P, VS_Map M) {
+	GameState = GS_VoteEnded;
+	TimeCounter = 5;
+	VotedPreset = P;
+	VotedMap = M;
+	CloseVoteMenuForAll();
+}
+
 function VS_Map SelectRandomMapFromList(VS_Map MapList) {
 	local float Target;
 	local float TargetCount;
@@ -300,7 +308,7 @@ function TallyVotes() {
 		VotedPreset = DefaultPresetRef;
 		VotedMap = M;
 
-		BroadcastMessage("Nobody voted, randomly selecting"@VotedMap.MapName@"("$VotedPreset.Abbreviation$")");
+		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 1, VotedMap.MapName@"("$VotedPreset.Abbreviation$")");
 		return;
 	}
 
@@ -321,9 +329,9 @@ function TallyVotes() {
 	VotedMap = Info.GetCandidateInternalMap(i);
 
 	if (CountTiedCandidates > 1) {
-		BroadcastMessage("Tied, randomly selecting"@VotedMap.MapName@"("$VotedPreset.Abbreviation$")");
+		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 2, VotedMap.MapName@"("$VotedPreset.Abbreviation$")");
 	} else {
-		BroadcastMessage(VotedMap.MapName@"("$VotedPreset.Abbreviation$") won.");
+		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 3, VotedMap.MapName@"("$VotedPreset.Abbreviation$")");
 	}
 }
 
@@ -393,9 +401,12 @@ function CloseVoteMenuForAll() {
 function OpenVoteMenu(PlayerPawn P) {
 	local VS_PlayerChannel C;
 
+	if (CanVote(P) == false)
+		return;
+
 	C = FindChannel(P);
 	if (C == none) {
-		P.ClientMessage("Could not find Channel for"@P.PlayerReplicationInfo.PlayerName@"("$P.PlayerReplicationInfo.PlayerId$")");
+		Log("Could not find Channel for"@P.PlayerReplicationInfo.PlayerName@"("$P.PlayerReplicationInfo.PlayerId$")", 'VoteSys');
 		return;
 	}
 
@@ -643,6 +654,27 @@ function VS_Map LoadMapList(class<GameInfo> Game, name ListName) {
 	} until(MapName == FirstMap);
 
 	return ML.First;
+}
+
+function BroadcastLocalizedMessage2(
+	class<LocalMessage> MessageClass,
+	optional int Switch,
+	optional string Param1,
+	optional string Param2,
+	optional string Param3,
+	optional string Param4,
+	optional string Param5
+) {
+	local VS_PlayerChannel C;
+	for (C = ChannelList; C != none; C = C.Next)
+		if (C.PlayerOwner != none)
+			C.LocalizeMessage(MessageClass, Switch, Param1, Param2, Param3, Param4, Param5);
+}
+
+function bool CanVote(PlayerPawn P) {
+	return GameState != GS_VoteEnded
+		&& P.PlayerReplicationInfo != none
+		&& (P.PlayerReplicationInfo.bIsSpectator == false || P.PlayerReplicationInfo.bAdmin);
 }
 
 defaultproperties {
