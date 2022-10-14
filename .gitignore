@@ -1,0 +1,6 @@
+/System/*.u*
+/Build/Temp/**/*
+/Classes/VersionInfo.uc
+
+*.sublime-workspace
+PostBuildHook.bat
