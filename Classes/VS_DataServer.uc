@@ -35,7 +35,7 @@ event PostBeginPlay() {
 		Log("VS_DataServer DetermineAddr", 'VoteSys');
 		GetLocalIP(A);
 		Info.DataAddr = IpAddrToString(A);
-		Info.DataAddr = Left(Info.DataAddr, Len(Info.DataAddr)-2);
+		Info.DataAddr = Left(Info.DataAddr, Len(Info.DataAddr)-2); // -2 to cut off Port specifier (:0)
 		Info.DataPort = Prt;
 	}
 

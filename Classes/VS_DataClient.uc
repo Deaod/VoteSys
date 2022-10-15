@@ -103,13 +103,14 @@ function VS_Map ParseMap(string Line) {
 }
 
 function ParseLine(string Line) {
-	Log(Left(Line, Len(Line)), 'VoteSys');
 	if (Left(Line, 8) == "/PRESET/") {
 		Channel.AddPreset(ParsePreset(Line));
 	} else if (Left(Line, 5) == "/MAP/") {
 		Channel.AddMap(ParseMap(Line));
-	} else if (Line == "/END") {
+	} else if (Left(Line, 4) == "/END") {
 		Channel.AddPreset(none);
+	} else {
+		Log(Left(Line, Len(Line)), 'VoteSys');
 	}
 }
 

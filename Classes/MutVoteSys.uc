@@ -163,7 +163,6 @@ function AnnounceCountdown(int SecondsLeft) {
 		else if (P.IsA('PlayerPawn'))
 			P.ReceiveLocalizedMessage(TimeMessageClass, 16 - Num);
 	}
-
 }
 
 function TickVoteMenuDelay() {
