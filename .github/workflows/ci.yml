@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Download 469b Patch
-        uses: robinraju/release-downloader@v1.6
+        uses: robinraju/release-downloader@v1.5
         with:
           repository: "OldUnreal/UnrealTournamentPatches"
           tag: "v469b"
