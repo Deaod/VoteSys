@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Download 469b Patch
-        uses: robinraju/release-downloader@v1
+        uses: robinraju/release-downloader@v1.6
         with:
           repository: "OldUnreal/UnrealTournamentPatches"
           tag: "v469b"
@@ -42,7 +42,7 @@ jobs:
         run: echo ("${{ env.PKG_NAME }}") >> PackageName
 
       - name: Create Package Name Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: PackageName
           path: PackageName
