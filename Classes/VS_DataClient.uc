@@ -22,35 +22,63 @@ event PostBeginPlay() {
 		break;
 }
 
+function string GetRemoteAddress() {
+	local string Result;
+	local string LevelAddress;
+	local int PortPos;
+
+	LevelAddress = Level.GetAddressURL();
+	if (Left(LevelAddress, 1) == "[") {
+		// ipv6
+		Result = Mid(LevelAddress, 1);
+		Result = Left(Result, InStr(Result, "]"));
+		return Result;
+	} else {
+		// ipv4 or domain
+		PortPos = InStr(LevelAddress, ":");
+		if (PortPos == -1)
+			return LevelAddress;
+		else 
+			return Left(LevelAddress, PortPos);
+	}
+}
+
 auto state Initial {
 	event Opened() {
 		GotoState('Talking');
 	}
+	event Resolved(IpAddr Addr) {
+		RemoteAddr.Addr = Addr.Addr;
+		RemoteAddr.Port = Info.DataPort;
+
+		Log("VS_DataClient Opening"@IpAddrToString(RemoteAddr), 'VoteSys');
+		if (BindPort(, true) != 0 && Open(RemoteAddr)) {
+			Log("VS_DataClient Open Succeeded", 'VoteSys');
+		} else {
+			Log("VS_DataClient Open Failed", 'VoteSys');
+		}
+	}
+	event ResolveFailure() {
+		local IpAddr A;
+		StringToIpAddr(Info.DataAddr, A);
+		Resolved(A);
+	}
 
 Begin:
-	Log("VS_DataClient BeforeInit", 'VoteSys');
+	Log("VS_DataClient Init", 'VoteSys');
 	// Wait for replication of these variables
 	while(Info == none) {
 		Sleep(0.1);
 		foreach AllActors(class'VS_Info', Info)
 			break;
 	}
-	Log("VS_DataClient WithInfo", 'VoteSys');
 	while(Info.DataAddr == "" || Info.DataPort == 0) {
 		Sleep(0.5);
 		Log("VS_DataClient Addr="$Info.DataAddr@"Port="$Info.DataPort, 'VoteSys');
 	}
-	Log("VS_DataClient WithServerAddr", 'VoteSys');
-
-	StringToIpAddr(Info.DataAddr, RemoteAddr);
-	RemoteAddr.Port = Info.DataPort;
-
-	Log("VS_DataClient BeforeOpen"@IpAddrToString(RemoteAddr), 'VoteSys');
-	if (BindPort(, true) != 0 && Open(RemoteAddr)) {
-		Log("VS_DataClient AfterOpen Success", 'VoteSys');
-	} else {
-		Log("VS_DataClient AfterOpen Failure", 'VoteSys');
-	}
+	Log("VS_DataClient HavePort", 'VoteSys');
+	Log("VS_DataClient RemoteAddress"@GetRemoteAddress(), 'VoteSys');
+	Resolve(GetRemoteAddress());
 }
 
 function string DecodeString(out string S) {
