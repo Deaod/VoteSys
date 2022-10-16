@@ -57,6 +57,7 @@ function AddPreset(VS_Preset P) {
 function FocusPreset(string Ref) {
 	local string Category, PresetName;
 	local int SepPos;
+	local UWindowPageControlPage Page;
 
 	SepPos = InStr(Ref, "/");
 	Category = Left(Ref, SepPos);
@@ -64,7 +65,10 @@ function FocusPreset(string Ref) {
 		Category = "Default";
 	Presetname = Mid(Ref, SepPos+1);
 
-	if (PresetName != "" && VS_UI_TabControl(ClientArea).GetPage(Category).Page != none)
+	Page = VS_UI_TabControl(ClientArea).GetPage(Category);
+	if (Page != none)
+		VS_UI_TabControl(ClientArea).GotoTab(Page);
+	if (PresetName != "" && Page.Page != none)
 		VS_UI_PresetCategoryPage(VS_UI_TabControl(ClientArea).GetPage(Category).Page).FocusPreset(PresetName);
 }
 
