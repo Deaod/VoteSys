@@ -148,6 +148,10 @@ simulated function AddPreset(VS_Preset P) {
 	LatestMap = none;
 }
 
+simulated function FocusPreset(string Ref) {
+	VoteMenuDialog.FocusPreset(Ref);
+}
+
 simulated function AddMap(VS_Map M) {
 	if (LatestPreset.MapList == none) {
 		LatestPreset.MapList = M;

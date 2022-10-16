@@ -96,7 +96,7 @@ Begin:
 		}
 	}
 
-	SendBuffer = "/END"$Chr(13)$Chr(10);
+	SendBuffer = "/END/"$VoteSys.CurrentPreset$Chr(13)$Chr(10);
 	while (true) {
 		SendBuffer = Mid(SendBuffer, SendText(SendBuffer));
 		if (Len(SendBuffer) <= 0)

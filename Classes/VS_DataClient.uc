@@ -102,6 +102,10 @@ function VS_Map ParseMap(string Line) {
 	return M;
 }
 
+function string ParsePresetRef(string Line) {
+	return Mid(Line, 5);
+}
+
 function ParseLine(string Line) {
 	if (Left(Line, 8) == "/PRESET/") {
 		Channel.AddPreset(ParsePreset(Line));
@@ -109,6 +113,7 @@ function ParseLine(string Line) {
 		Channel.AddMap(ParseMap(Line));
 	} else if (Left(Line, 4) == "/END") {
 		Channel.AddPreset(none);
+		Channel.FocusPreset(ParsePresetRef(Line));
 	} else {
 		Log(Left(Line, Len(Line)), 'VoteSys');
 	}

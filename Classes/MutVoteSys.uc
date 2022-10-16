@@ -28,6 +28,7 @@ var class<CriticalEventPlus> TimeMessageClass;
 
 var config string DefaultPreset;
 var VS_Preset DefaultPresetRef;
+var string CurrentPreset;
 
 var VS_Preset VotedPreset;
 var VS_Map VotedMap;
@@ -232,6 +233,8 @@ function TravelTo(VS_Preset P, VS_Map M) {
 	TempDataDummy = new(none, 'VoteSysTemp') class'Object';
 	TD = new(TempDataDummy, 'Data') class'VS_TempData';
 
+	TD.PresetName = P.PresetName;
+	TD.Category = P.Category;
 	TD.Mutators = Mutators;
 	TD.Actors = Actors;
 	TD.GameSettings = P.GameSettings;
@@ -419,11 +422,15 @@ function ApplyVotedPreset() {
 	TempDataDummy = new(none, 'VoteSysTemp') class'Object';
 	TD = new(TempDataDummy, 'Data') class'VS_TempData';
 
+	if (TD.PresetName != "")
+		CurrentPreset = TD.Category$"/"$TD.PresetName;
 	AddClassesToPackageMap(TD.Mutators);
 	CreateServerActors(TD.Actors);
 	AddClassesToPackageMap(TD.Actors);
 	ApplyGameSettings(TD.GameSettings);
 
+	TD.PresetName = "";
+	TD.Category = "";
 	TD.Mutators = "";
 	TD.Actors = "";
 	TD.GameSettings = "";

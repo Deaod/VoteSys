@@ -26,6 +26,10 @@ function AddPreset(VS_Preset P) {
 	Presets.AddPreset(P);
 }
 
+function FocusPreset(string PresetName) {
+	Presets.FocusPreset(PresetName);
+}
+
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	local VS_Map M;
 	local VS_UI_VoteListItem VLI;

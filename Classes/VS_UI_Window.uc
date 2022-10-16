@@ -54,6 +54,20 @@ function AddPreset(VS_Preset P) {
 	VS_UI_PresetCategoryPage(VS_UI_TabControl(ClientArea).GetPage(Cat).Page).AddPreset(P);
 }
 
+function FocusPreset(string Ref) {
+	local string Category, PresetName;
+	local int SepPos;
+
+	SepPos = InStr(Ref, "/");
+	Category = Left(Ref, SepPos);
+	if (Category == "")
+		Category = "Default";
+	Presetname = Mid(Ref, SepPos+1);
+
+	if (PresetName != "" && VS_UI_TabControl(ClientArea).GetPage(Category).Page != none)
+		VS_UI_PresetCategoryPage(VS_UI_TabControl(ClientArea).GetPage(Category).Page).FocusPreset(PresetName);
+}
+
 defaultproperties
 {
 	ClientClass=class'VS_UI_TabControl'
