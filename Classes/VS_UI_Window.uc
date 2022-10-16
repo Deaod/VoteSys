@@ -25,8 +25,8 @@ function BeforePaint(Canvas C, float X, float Y) {
 
 	if (WaitModal() && ModalWindow.IsA('UWindowMessageBox') && UWindowMessageBox(ModalWindow).bSetupSize == false) {
 		ModalWindow.BeforePaint(C, X, Y);
-		ModalWindow.WinLeft = FClamp(WinLeft+(WinWidth-ModalWindow.WinWidth)/2, 0, C.SizeX-ModalWindow.WinWidth);
-		ModalWindow.WinTop = FClamp(WinTop+(WinHeight-ModalWindow.WinHeight)/2, 0, C.SizeY-ModalWindow.WinHeight);
+		ModalWindow.WinLeft = FClamp(WinLeft+(WinWidth-ModalWindow.WinWidth)/2.0, 0, C.SizeX-ModalWindow.WinWidth);
+		ModalWindow.WinTop = FClamp(WinTop+(WinHeight-ModalWindow.WinHeight)/2.0, 0, C.SizeY-ModalWindow.WinHeight);
 	}
 }
 
@@ -69,7 +69,7 @@ function FocusPreset(string Ref) {
 	if (Page != none)
 		VS_UI_TabControl(ClientArea).GotoTab(Page);
 	if (PresetName != "" && Page.Page != none)
-		VS_UI_PresetCategoryPage(VS_UI_TabControl(ClientArea).GetPage(Category).Page).FocusPreset(PresetName);
+		VS_UI_PresetCategoryPage(Page.Page).FocusPreset(PresetName);
 }
 
 defaultproperties
