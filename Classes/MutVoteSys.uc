@@ -681,7 +681,7 @@ function BroadcastLocalizedMessage2(
 function bool CanVote(PlayerPawn P) {
 	return GameState != GS_VoteEnded
 		&& P.PlayerReplicationInfo != none
-		&& (P.PlayerReplicationInfo.bIsSpectator == false || P.PlayerReplicationInfo.bAdmin);
+		&& (P.IsA('Spectator') == false || P.PlayerReplicationInfo.bAdmin);
 }
 
 defaultproperties {
