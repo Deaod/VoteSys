@@ -2,6 +2,7 @@ class VS_DataClient extends TcpLink
 	transient;
 
 var string Buffer;
+var string CRLF;
 
 var VS_Info Info;
 var VS_PlayerChannel Channel;
@@ -12,6 +13,7 @@ event PostBeginPlay() {
 	Log("VS_DataClient.PostBeginPlay", 'VoteSys');
 	LinkMode = MODE_Text;
 	ReceiveMode = RMODE_Event;
+	CRLF = Chr(13)$Chr(10);
 	Channel = VS_PlayerChannel(Owner);
 
 	SetTimer(5 * Level.TimeDilation, true);
@@ -124,7 +126,7 @@ event ReceivedText(string Text) {
 
 	Text = Buffer$Text;
 
-	for(Pos = InStr(Text, Chr(13)$Chr(10)); Pos > -1; Pos = InStr(Text, Chr(13)$Chr(10))) {
+	for(Pos = InStr(Text, CRLF); Pos > -1; Pos = InStr(Text, CRLF)) {
 		ParseLine(Left(Text, Pos));
 
 		Text = Mid(Text, Pos+2);
