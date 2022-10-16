@@ -107,7 +107,7 @@ Begin:
 }
 
 function HandleError() {
-	SendText("/RECONNECT");
+	SendLine("/RECONNECT");
 	Close();
 }
 
