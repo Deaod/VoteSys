@@ -381,6 +381,8 @@ function Mutate(string Command, PlayerPawn Sender) {
 	if (Command ~= "VoteMenu") {
 		OpenVoteMenu(Sender);
 		return;
+	} else if (Command ~= "bdbmapvote votemenu") {
+		OpenVoteMenu(Sender);
 	}
 
 	super.Mutate(Command, Sender);
