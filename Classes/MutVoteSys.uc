@@ -502,11 +502,11 @@ function ApplyGameSetting(string Setting) {
 function ApplyGameSettings(string GameSettings) {
 	local int Pos;
 
-	Pos = InStr(GameSettings, Chr(10));
+	Pos = InStr(GameSettings, ",");
 	while(Pos >= 0) {
 		ApplyGameSetting(Left(GameSettings, Pos));
 		GameSettings = Mid(GameSettings, Pos+1);
-		Pos = InStr(GameSettings, Chr(10));
+		Pos = InStr(GameSettings, ",");
 	}
 	ApplyGameSetting(GameSettings);
 }
@@ -575,7 +575,7 @@ function VS_Preset LoadPreset(VS_PresetConfig PC) {
 	if (PC.GameSettings.Length > 0) {
 		P.GameSettings = PC.GameSettings[0];
 		for (i = 1; i < PC.GameSettings.Length; i++)
-			P.GameSettings = P.GameSettings$Chr(10)$PC.GameSettings[i];
+			P.GameSettings = P.GameSettings$","$PC.GameSettings[i];
 	}
 
 	return P;
