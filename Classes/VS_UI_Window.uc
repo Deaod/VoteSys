@@ -12,6 +12,7 @@ function Created() {
 
 	WinWidth = 588;
 	WinHeight = 400;
+	WindowTitle = default.WindowTitle@"-"@class'VersionInfo'.default.PackageVersion;
 }
 
 function BeforePaint(Canvas C, float X, float Y) {
