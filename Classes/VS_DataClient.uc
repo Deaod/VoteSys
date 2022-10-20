@@ -133,7 +133,8 @@ function VS_Map ParseMap(string Line) {
 }
 
 function string ParsePresetRef(string Line) {
-	return Mid(Line, 5);
+	Line = Mid(Line, 5);
+	return DecodeString(Line);
 }
 
 function ParseLine(string Line) {
