@@ -11,11 +11,15 @@ var VS_Preset PresetList;
 var Object MapListDummy;
 var VS_MapList MapLists;
 
+var Object HistoryDummy;
+var VS_HistoryConfig History;
+
 enum EGameState {
 	GS_Playing,
 	GS_GameEnded,
 	GS_Voting,
-	GS_VoteEnded
+	GS_VoteEnded,
+	GS_Travelling
 };
 
 var EGameState GameState;
@@ -65,6 +69,7 @@ event PostBeginPlay() {
 
 	SetTimer(Level.TimeDilation, true);
 	LoadConfig();
+	LoadHistory();
 	Info = Spawn(class'VS_Info', self);
 	Info.VoteSys = self;
 	DataServer = Spawn(class'VS_DataServer', self);
@@ -240,6 +245,9 @@ function TravelTo(VS_Preset P, VS_Map M) {
 	TD.GameSettings = P.GameSettings;
 	TD.SaveConfig();
 
+	History.InsertVote(P.Category, P.PresetName, M.MapName);
+	History.SaveConfig();
+
 	Level.ServerTravel(Url, false);
 }
 
@@ -354,6 +362,7 @@ function TickTimeBeforeTravel() {
 	if (TimeCounter > 0)
 		return;
 
+	GameState = GS_Travelling;
 	TravelTo(VotedPreset, VotedMap);
 }
 
@@ -373,6 +382,8 @@ event Timer() {
 			break;
 		case GS_VoteEnded:
 			TickTimeBeforeTravel();
+			break;
+		case GS_Travelling:
 			break;
 	}
 }
@@ -605,7 +616,7 @@ function VS_Map LoadMapList(class<GameInfo> Game, name ListName) {
 		// dont recreate if it already exists
 		for (ML = MapLists; ML != none; ML = ML.Next)
 			if (ML.ListName == string(ListName))
-				return ML.First;
+				return ML.DuplicateList();
 
 		MC = new(MapListDummy, ListName) class'VS_MapListConfig';
 
@@ -627,7 +638,7 @@ function VS_Map LoadMapList(class<GameInfo> Game, name ListName) {
 		}
 
 		if (ML.First != none)
-			return ML.First;
+			return ML.DuplicateList();
 	}
 
 	// If no map list specified, or no maps in map list, use all maps available for game type.
@@ -662,7 +673,13 @@ function VS_Map LoadMapList(class<GameInfo> Game, name ListName) {
 		MapName = GetMapName(Game.default.MapPrefix, MapName, 1);
 	} until(MapName == FirstMap);
 
-	return ML.First;
+	return ML.DuplicateList();
+}
+
+function LoadHistory() {
+	HistoryDummy = new(none, 'VoteSysHistory') class'Object';
+	History = new(HistoryDummy, 'History') class'VS_HistoryConfig';
+
 }
 
 function BroadcastLocalizedMessage2(
@@ -681,7 +698,7 @@ function BroadcastLocalizedMessage2(
 }
 
 function bool CanVote(PlayerPawn P) {
-	return GameState != GS_VoteEnded
+	return GameState < GS_VoteEnded
 		&& P.PlayerReplicationInfo != none
 		&& (P.IsA('Spectator') == false || P.PlayerReplicationInfo.bAdmin);
 }
