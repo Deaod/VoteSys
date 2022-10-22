@@ -18,8 +18,6 @@ static function string GetString(
 	local VS_Msg_ParameterContainer Params;
 
 	Params = VS_Msg_ParameterContainer(OptionalObject);
-	if (Params == none)
-		return "";
 
 	switch(Switch) {
 		case 1: Result = default.MsgNobodyVoted; break;
@@ -33,6 +31,8 @@ static function string GetString(
 			return "";
 	}
 	
+	if (Params == none)
+		return Result;
 	return Params.ApplyParameters(Result);
 }
 
