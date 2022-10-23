@@ -2,13 +2,18 @@ class VS_DataServer extends TcpLink
 	config(VoteSys)
 	transient;
 
-var config string LocalAddr;
-
+var MutVoteSys VoteSys;
 var VS_Info Info;
+var VS_ServerSettings Settings;
 
 event PostBeginPlay() {
 	local IpAddr A;
 	local int Prt;
+
+	foreach AllActors(class'MutVoteSys', VoteSys)
+		break;
+
+	Settings = VoteSys.Settings;
 
 	// needs to be set because children inherit LinkMode
 	LinkMode = MODE_Text;
@@ -27,9 +32,9 @@ event PostBeginPlay() {
 	foreach AllActors(class'VS_Info', Info)
 		break;
 
-	if (StringToIpAddr(LocalAddr, A)) {
+	if (StringToIpAddr(Settings.ServerAddress, A)) {
 		Log("VS_DataServer UseLocalAddr", 'VoteSys');
-		Info.DataAddr = LocalAddr;
+		Info.DataAddr = Settings.ServerAddress;
 		Info.DataPort = Prt;
 	} else {
 		Log("VS_DataServer DetermineAddr", 'VoteSys');

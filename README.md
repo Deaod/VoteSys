@@ -5,7 +5,7 @@ A new, independent implementation of map vote.
 * Unlimited number of maps
 * Quicker transfer of data to clients
 
-Servers must run at least UT v469b.  
+Servers must run at least UT v469.  
 Clients must run at least UT v436.
 
 ## Installation
@@ -22,14 +22,12 @@ Server settings are split between multiple INI files.
 
 ### VoteSys.ini
 ```ini
-[VoteSys.MutVoteSys]
+[ServerSettings]
 GameEndedVoteDelay=5
 VoteTimeLimit=30
 DefaultTimeMessageClass=Botpack.TimeMessage
 DefaultPreset=
-
-[VoteSys.VS_DataServer]
-LocalAddr=127.0.0.1
+ServerAddress=127.0.0.1
 ```
 
 ### VoteSysPresets.ini

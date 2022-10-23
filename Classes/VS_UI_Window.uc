@@ -1,7 +1,7 @@
 class VS_UI_Window extends UWindowFramedWindow;
 
 var bool bPlaced;
-var VS_Settings Settings;
+var VS_ClientSettings Settings;
 var VS_PlayerChannel Channel;
 
 function Created() {

@@ -5,6 +5,9 @@ var VS_PlayerChannel ChannelList;
 var VS_Info Info;
 var VS_DataServer DataServer;
 
+var Object SettingsDummy;
+var VS_ServerSettings Settings;
+
 var Object PresetConfigDummy;
 var VS_Preset PresetList;
 
@@ -24,13 +27,8 @@ enum EGameState {
 
 var EGameState GameState;
 var int TimeCounter;
-var config int GameEndedVoteDelay;
-var config int VoteTimeLimit;
-
-var config string DefaultTimeMessageClass;
 var class<CriticalEventPlus> TimeMessageClass;
 
-var config string DefaultPreset;
 var VS_Preset DefaultPresetRef;
 var string CurrentPreset;
 
@@ -64,6 +62,9 @@ function CreateChannel(Pawn P) {
 
 event PostBeginPlay() {
 	super.PostBeginPlay();
+
+	SettingsDummy = new(none, 'VoteSys') class 'Object';
+	Settings = new (SettingsDummy, 'ServerSettings') class'VS_ServerSettings';
 
 	ApplyVotedPreset();
 
@@ -124,7 +125,7 @@ function CheckMidGameVoting() {
 		return;
 
 	GameState = GS_Voting;
-	TimeCounter = VoteTimeLimit;
+	TimeCounter = Settings.VoteTimeLimit;
 	BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 4);
 	OpenVoteMenuForAll();
 	AnnounceCountdown(TimeCounter);
@@ -136,7 +137,7 @@ function CheckGameEnded() {
 		return;
 
 	GameState = GS_GameEnded;
-	TimeCounter = GameEndedVoteDelay;
+	TimeCounter = Settings.GameEndedVoteDelay;
 }
 
 function AnnounceCountdown(int SecondsLeft) {
@@ -144,7 +145,7 @@ function AnnounceCountdown(int SecondsLeft) {
 	local Pawn P;
 
 	if (TimeMessageClass == none)
-		TimeMessageClass = class<CriticalEventPlus>(DynamicLoadObject(DefaultTimeMessageClass, class'Class'));
+		TimeMessageClass = class<CriticalEventPlus>(DynamicLoadObject(Settings.DefaultTimeMessageClass, class'Class'));
 	if (SecondsLeft <= 10 && SecondsLeft > 0) {
 		Num = SecondsLeft;
 	} else if (SecondsLeft == 30) {
@@ -177,7 +178,7 @@ function TickVoteMenuDelay() {
 		return;
 
 	GameState = GS_Voting;
-	TimeCounter = VoteTimeLimit;
+	TimeCounter = Settings.VoteTimeLimit;
 	BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 5);
 	OpenVoteMenuForAll();
 	AnnounceCountdown(TimeCounter);
@@ -441,13 +442,6 @@ function ApplyVotedPreset() {
 	CreateServerActors(TD.Actors);
 	AddClassesToPackageMap(TD.Actors);
 	ApplyGameSettings(TD.GameSettings);
-
-	TD.PresetName = "";
-	TD.Category = "";
-	TD.Mutators = "";
-	TD.Actors = "";
-	TD.GameSettings = "";
-	TD.SaveConfig();
 }
 
 function AddClassToPackageMap(string ClassName) {
@@ -553,7 +547,7 @@ function LoadConfig() {
 				P = P.Next;
 		}
 
-		if (DefaultPresetRef == none || (P != none && Len(DefaultPreset) > 0 && P.GetFullName() == DefaultPreset))
+		if (DefaultPresetRef == none || (P != none && Len(Settings.DefaultPreset) > 0 && P.GetFullName() == Settings.DefaultPreset))
 			DefaultPresetRef = P;
 	}
 
@@ -705,7 +699,4 @@ function bool CanVote(PlayerPawn P) {
 
 defaultproperties {
 	GameState=GS_Playing
-	GameEndedVoteDelay=5
-	VoteTimeLimit=30
-	DefaultTimeMessageClass="Botpack.TimeMessage"
 }

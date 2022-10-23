@@ -10,7 +10,7 @@ var VS_Preset PresetList;
 var VS_UI_Window VoteMenuDialog;
 
 var Object SettingsDummy;
-var VS_Settings Settings;
+var VS_ClientSettings Settings;
 
 // Temporary variables used while receiving Preset/Map information
 var VS_Preset LatestPreset;
@@ -46,7 +46,7 @@ simulated event PostBeginPlay() {
 	}
 
 	SettingsDummy = new(none, 'VoteSys') class 'Object';
-	Settings = new (SettingsDummy, 'Settings') class'VS_Settings';
+	Settings = new (SettingsDummy, 'ClientSettings') class'VS_ClientSettings';
 }
 
 simulated function VS_Info VoteInfo() {

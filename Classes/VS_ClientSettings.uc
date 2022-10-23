@@ -1,4 +1,4 @@
-class VS_Settings extends Object
+class VS_ClientSettings extends Object
 	config(VoteSys)
 	perobjectconfig;
 
