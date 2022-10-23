@@ -57,8 +57,6 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 		VLI.Votes = Info.GetCandidateVotes(i);
 		i++;
 	}
-
-	VoteListBox.Items.Sort();
 }
 
 function Notify(UWindowDialogControl C, byte E) {

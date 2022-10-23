@@ -83,12 +83,18 @@ function AddMapVote(VS_PlayerChannel Origin, string Category, string PresetName,
 
 function int AddMapVoteUnsafe(string Preset, string MapName) {
 	local int i;
+	local int Result;
+	local MapCandidateData Tmp;
+	local InternalCandidateData TmpInt;
+
+	Result = -1;
 
 	for (i = 0; i < MaxCandidates; i++) {
 		if (Candidates[i].Preset == Preset && Candidates[i].MapName == MapName) {
 			Log("AddMapVoteUnsafe Old Candidate", 'VoteSys');
 			Candidates[i].Votes += 1;
-			return -1;
+			Result = -1;
+			break;
 		}
 
 		if (Candidates[i].Preset == "" && Candidates[i].MapName == "") {
@@ -97,10 +103,22 @@ function int AddMapVoteUnsafe(string Preset, string MapName) {
 			Candidates[i].MapName = MapName;
 			Candidates[i].Votes = 1;
 			NumCandidates += 1;
-			return i;
+			Result = i;
+			break;
 		}
 	}
-	return -1;
+
+	while(i > 0 && Candidates[i-1].Votes < Candidates[i].Votes) {
+		Tmp = Candidates[i-1];
+		Candidates[i-1] = Candidates[i];
+		Candidates[i] = Tmp;
+
+		TmpInt = CandidatesInternal[i-1];
+		CandidatesInternal[i-1] = CandidatesInternal[i];
+		CandidatesInternal[i] = TmpInt;
+	}
+
+	return Result;
 }
 
 function RemMapVote(VS_PlayerChannel Origin, string Category, string PresetName, string MapName) {
@@ -128,6 +146,9 @@ function RemMapVote(VS_PlayerChannel Origin, string Category, string PresetName,
 
 function RemMapVoteUnsafe(string Preset, string MapName) {
 	local int i;
+	local MapCandidateData Tmp;
+	local InternalCandidateData TmpInt;
+
 	for (i = 0; i < MaxCandidates; i++) {
 		if (Candidates[i].Preset == Preset && Candidates[i].MapName == MapName) {
 			Candidates[i].Votes -= 1;
@@ -141,8 +162,18 @@ function RemMapVoteUnsafe(string Preset, string MapName) {
 				CandidatesInternal[NumCandidates].Preset = none;
 				CandidatesInternal[NumCandidates].MapRef = none;
 			}
-			return;
+			break;
 		}
+	}
+
+	while(i+1 < arraycount(Candidates) && Candidates[i].Votes < Candidates[i+1].Votes) {
+		Tmp = Candidates[i+1];
+		Candidates[i+1] = Candidates[i];
+		Candidates[i] = Tmp;
+
+		TmpInt = CandidatesInternal[i+1];
+		CandidatesInternal[i+1] = CandidatesInternal[i];
+		CandidatesInternal[i] = TmpInt;
 	}
 }
 
