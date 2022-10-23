@@ -1,5 +1,4 @@
 class VS_DataServer extends TcpLink
-	config(VoteSys)
 	transient;
 
 var MutVoteSys VoteSys;

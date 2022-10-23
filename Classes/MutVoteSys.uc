@@ -1,5 +1,4 @@
-class MutVoteSys extends Mutator
-	config(VoteSys);
+class MutVoteSys extends Mutator;
 
 var VS_PlayerChannel ChannelList;
 var VS_Info Info;
@@ -62,6 +61,8 @@ function CreateChannel(Pawn P) {
 
 event PostBeginPlay() {
 	super.PostBeginPlay();
+
+	AddClassesToPackageMap(string(self.Class));
 
 	SettingsDummy = new(none, 'VoteSys') class 'Object';
 	Settings = new (SettingsDummy, 'ServerSettings') class'VS_ServerSettings';
