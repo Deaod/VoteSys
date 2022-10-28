@@ -6,6 +6,8 @@ var config int VoteTimeLimit;
 var config string DefaultTimeMessageClass;
 var config string DefaultPreset;
 var config string ServerAddress;
+var config bool bManageServerPackages;
+var config array<string> DefaultPackages;
 
 defaultproperties {
 	GameEndedVoteDelay=5
@@ -13,4 +15,5 @@ defaultproperties {
 	DefaultTimeMessageClass="Botpack.TimeMessage"
 	DefaultPreset=
 	ServerAddress=
+	bManageServerPackages=False
 }

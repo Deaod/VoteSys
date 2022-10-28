@@ -62,10 +62,12 @@ function CreateChannel(Pawn P) {
 event PostBeginPlay() {
 	super.PostBeginPlay();
 
-	AddClassesToPackageMap(string(self.Class));
-
 	SettingsDummy = new(none, 'VoteSys') class 'Object';
 	Settings = new (SettingsDummy, 'ServerSettings') class'VS_ServerSettings';
+
+	if (/**(Level.EngineVersion$Level.GetPropertyText("EngineRevision")) < "469c" &&*/ Settings.bManageServerPackages) {
+		GetDefaultServerPackages();
+	}
 
 	ApplyVotedPreset();
 
@@ -230,6 +232,7 @@ function TravelTo(VS_Preset P, VS_Map M) {
 	local string Actors;
 	local Object TempDataDummy;
 	local VS_TempData TD;
+	local array<string> Pkgs;
 
 	SortMutators(P.Mutators, Mutators, Actors);
 	if (InStr(Mutators, "MutVoteSys") == -1)
@@ -249,6 +252,13 @@ function TravelTo(VS_Preset P, VS_Map M) {
 
 	History.InsertVote(P.Category, P.PresetName, M.MapName);
 	History.SaveConfig();
+
+	if (/**(Level.EngineVersion$Level.GetPropertyText("EngineRevision")) < "469c" &&*/ Settings.bManageServerPackages) {
+		Pkgs = Settings.DefaultPackages;
+		AddClassesToPackageMap(TD.Mutators, Pkgs);
+		AddClassesToPackageMap(TD.Actors, Pkgs);
+		SetServerPackages(Pkgs);
+	}
 
 	Level.ServerTravel(Url, false);
 }
@@ -433,19 +443,27 @@ function OpenVoteMenu(PlayerPawn P) {
 function ApplyVotedPreset() {
 	local Object TempDataDummy;
 	local VS_TempData TD;
+	// local array<string> Pkgs;
+	// local int i;
 
 	TempDataDummy = new(none, 'VoteSysTemp') class'Object';
 	TD = new(TempDataDummy, 'Data') class'VS_TempData';
 
 	if (TD.PresetName != "")
 		CurrentPreset = TD.Category$"/"$TD.PresetName;
-	AddClassesToPackageMap(TD.Mutators);
 	CreateServerActors(TD.Actors);
-	AddClassesToPackageMap(TD.Actors);
 	ApplyGameSettings(TD.GameSettings);
+
+	// if ((Level.EngineVersion$Level.GetPropertyText("EngineRevision")) >= "469c") {
+	// 	AddClassToPackageMap(TD.Mutators, Pkgs);
+	// 	AddClassToPackageMap(TD.Actors, Pkgs);
+	// 	for (i = 0; i < Pkgs.Length; i++)
+	// 		if (IsInPackageMap(Pkgs[i], true) == false)
+	// 			AddToPackageMap(Pkgs[i]);
+	// }
 }
 
-function AddClassToPackageMap(string ClassName) {
+function AddClassToPackageMap(string ClassName, out array<string> PkgMap) {
 	local int DotPos;
 	local string P;
 	local class C;
@@ -456,28 +474,87 @@ function AddClassToPackageMap(string ClassName) {
 	} else {
 		C = class(DynamicLoadObject(ClassName, class'Class'));
 		if (C != none)
-			AddClassToPackageMap(string(C));
+			AddClassToPackageMap(string(C), PkgMap);
 		return;
 	}
 
-	// TODO: uncomment the following lines once compiling with 469c
-	// if (IsInPackageMap(P, true) == false) 
-	// 	AddToPackageMap(P);
+	if (IsPackageInPackageMap(P, PkgMap) == false)
+		InsertPackageIntoPackageMap(P, PkgMap);
 }
 
-function AddClassesToPackageMap(string Classes) {
-	local int Pos;
+function bool IsPackageInPackageMap(string Pkg, out array<string> PkgMap) {
+	local int i;
+	for (i = 0; i < PkgMap.Length; i++)
+		if (PkgMap[i] ~= Pkg)
+			return true;
 
-	if ((Level.EngineVersion$Level.GetPropertyText("EngineRevision")) < "469c")
-		return;
+	return false;
+}
+
+function InsertPackageIntoPackageMap(string Pkg, out array<string> PkgMap) {
+	PkgMap.Insert(PkgMap.Length);
+	PkgMap[PkgMap.Length - 1] = Pkg;
+}
+
+function AddClassesToPackageMap(string Classes, out array<string> PkgMap) {
+	local int Pos;
 
 	Pos = InStr(Classes, ",");
 	while(Pos >= 0) {
-		AddClassToPackageMap(Left(Classes, Pos));
+		AddClassToPackageMap(Left(Classes, Pos), PkgMap);
 		Classes = Mid(Classes, Pos+1);
 		Pos = InStr(Classes, ",");
 	}
-	AddClassToPackageMap(Classes);
+	AddClassToPackageMap(Classes, PkgMap);
+}
+
+function AppendDefaultServerPackage(string Pkg) {
+	Settings.DefaultPackages.Insert(Settings.DefaultPackages.Length, 1);
+	Settings.DefaultPackages[Settings.DefaultPackages.Length - 1] = Pkg;
+}
+
+function GetDefaultServerPackages() {
+	local string Prop;
+	local int Pos;
+
+	if (Settings.DefaultPackages.Length > 0)
+		return; // already done
+
+	Prop = ConsoleCommand("get Engine.GameEngine ServerPackages");
+	Log("Packages="$Prop, 'VoteSys');
+	Prop = Mid(Prop, 1, Len(Prop)-2); // remove ( and )
+
+	Pos = InStr(Prop, "\"");
+	while(Pos >= 0) {
+		Prop = Mid(Prop, Pos + 1);
+		Pos = InStr(Prop, "\"");
+		if (Pos >= 0) {
+			AppendDefaultServerPackage(Left(Prop, Pos));
+			Prop = Mid(Prop, Pos + 1);
+		} else {
+			AppendDefaultServerPackage(Prop);
+		}
+
+		Pos = InStr(Prop, "\"");
+	}
+
+	Settings.SaveConfig();
+}
+
+function SetServerPackages(array<string> Packages) {
+	local string Value;
+	local int i;
+
+	if (Packages.Length <= 0)
+		return;
+
+	Value = "\""$Packages[0]$"\""; // hardcode first to save inside loop
+	for (i = 1; i < Packages.Length; i++) {
+		Value = Value$",\""$Packages[i]$"\"";
+	}
+
+	Log("Packages=("$Value$")", 'VoteSys');
+	ConsoleCommand("set Engine.GameEngine ServerPackages ("$Value$")");
 }
 
 function CreateServerActor(string ClassName) {
