@@ -87,6 +87,7 @@ simulated function CreateVoteMenuDialog() {
 		));
 		VoteMenuDialog.Channel = self;
 		VoteMenuDialog.Settings = Settings;
+		VoteMenuDialog.HideWindow();
 
 		if (VoteMenuDialog == none) {
 			PlayerOwner.ClientMessage("Failed to create VoteMenu window (Could not create Dialog)");
