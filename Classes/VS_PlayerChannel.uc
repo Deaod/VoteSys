@@ -40,13 +40,18 @@ replication {
 }
 
 simulated event PostBeginPlay() {
-	Log(self$".PostBeginPlay"@Role, 'VoteSys');
-	if (Role != ROLE_Authority) {
-		DataClient = Spawn(class'VS_DataClient', self);
-	}
-
 	SettingsDummy = new(none, 'VoteSys') class 'Object';
 	Settings = new (SettingsDummy, 'ClientSettings') class'VS_ClientSettings';
+}
+
+simulated event Tick(float Delta) {
+	if (Owner != none) {
+		PlayerOwner = PlayerPawn(Owner);
+		if (PlayerOwner != none && PlayerOwner.Player != none && PlayerOwner.Player.IsA('Viewport')) {
+			DataClient = Spawn(class'VS_DataClient', self);
+		}
+		Disable('Tick');
+	}
 }
 
 simulated function VS_Info VoteInfo() {
