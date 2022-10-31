@@ -65,7 +65,7 @@ event PostBeginPlay() {
 	SettingsDummy = new(none, 'VoteSys') class 'Object';
 	Settings = new (SettingsDummy, 'ServerSettings') class'VS_ServerSettings';
 
-	if (/**(Level.EngineVersion$Level.GetPropertyText("EngineRevision")) < "469c" &&*/ Settings.bManageServerPackages) {
+	if ((Level.EngineVersion$Level.GetPropertyText("EngineRevision")) < "469c" && Settings.bManageServerPackages) {
 		GetDefaultServerPackages();
 	}
 
@@ -253,7 +253,7 @@ function TravelTo(VS_Preset P, VS_Map M) {
 	History.InsertVote(P.Category, P.PresetName, M.MapName);
 	History.SaveConfig();
 
-	if (/**(Level.EngineVersion$Level.GetPropertyText("EngineRevision")) < "469c" &&*/ Settings.bManageServerPackages) {
+	if ((Level.EngineVersion$Level.GetPropertyText("EngineRevision")) < "469c" && Settings.bManageServerPackages) {
 		Pkgs = Settings.DefaultPackages;
 		AddClassesToPackageMap(TD.Mutators, Pkgs);
 		AddClassesToPackageMap(TD.Actors, Pkgs);
@@ -443,8 +443,8 @@ function OpenVoteMenu(PlayerPawn P) {
 function ApplyVotedPreset() {
 	local Object TempDataDummy;
 	local VS_TempData TD;
-	// local array<string> Pkgs;
-	// local int i;
+	local array<string> Pkgs;
+	local int i;
 
 	TempDataDummy = new(none, 'VoteSysTemp') class'Object';
 	TD = new(TempDataDummy, 'Data') class'VS_TempData';
@@ -454,13 +454,13 @@ function ApplyVotedPreset() {
 	CreateServerActors(TD.Actors);
 	ApplyGameSettings(TD.GameSettings);
 
-	// if ((Level.EngineVersion$Level.GetPropertyText("EngineRevision")) >= "469c") {
-	// 	AddClassToPackageMap(TD.Mutators, Pkgs);
-	// 	AddClassToPackageMap(TD.Actors, Pkgs);
-	// 	for (i = 0; i < Pkgs.Length; i++)
-	// 		if (IsInPackageMap(Pkgs[i], true) == false)
-	// 			AddToPackageMap(Pkgs[i]);
-	// }
+	if ((Level.EngineVersion$Level.GetPropertyText("EngineRevision")) >= "469c") {
+		AddClassToPackageMap(TD.Mutators, Pkgs);
+		AddClassToPackageMap(TD.Actors, Pkgs);
+		for (i = 0; i < Pkgs.Length; i++)
+			if (IsInPackageMap(Pkgs[i], true) == false)
+				AddToPackageMap(Pkgs[i]);
+	}
 }
 
 function AddClassToPackageMap(string ClassName, out array<string> PkgMap) {
