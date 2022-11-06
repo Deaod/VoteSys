@@ -4,6 +4,8 @@ class VS_DataClient extends TcpLink
 var string Buffer;
 var string CRLF;
 
+var bool bTransferDone;
+
 var VS_Info Info;
 var VS_PlayerChannel Channel;
 var VS_Preset Preset;
@@ -128,7 +130,9 @@ function VS_Preset ParsePreset(string Line) {
 function VS_Map ParseMap(string Line) {
 	local VS_Map M;
 	M = new(none) class'VS_Map';
-	M.MapName = Mid(Line, 5);
+	Line = Mid(Line, 5);
+	M.MapName = DecodeString(Line); Line = Mid(Line, 1);
+	M.Sequence = int(Line);
 	return M;
 }
 
@@ -139,10 +143,14 @@ function string ParsePresetRef(string Line) {
 
 function ParseLine(string Line) {
 	if (Left(Line, 8) == "/PRESET/") {
+		bTransferDone = false;
+		Log(Line, 'VoteSys');
 		Channel.AddPreset(ParsePreset(Line));
 	} else if (Left(Line, 5) == "/MAP/") {
 		Channel.AddMap(ParseMap(Line));
 	} else if (Left(Line, 4) == "/END") {
+		bTransferDone = true;
+		Log(Line, 'VoteSys');
 		Channel.AddPreset(none);
 		Channel.FocusPreset(ParsePresetRef(Line));
 	} else {

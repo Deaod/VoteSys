@@ -107,6 +107,11 @@ simulated function ShowVoteMenu() {
 	if (PlayerOwner == none)
 		PlayerOwner = PlayerPawn(Owner);
 
+	if (DataClient.bTransferDone == false) {
+		LocalizeMessage(class'VS_Msg_LocalMessage', -1);
+		return;
+	}
+
 	if (PlayerOwner.Player != none)
 		C = WindowConsole(PlayerOwner.Player.Console);
 

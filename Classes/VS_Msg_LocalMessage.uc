@@ -8,6 +8,8 @@ var localized string MsgGameEnded;
 var localized string MsgPlayerVoted;
 var localized string MsgAdminForceTravel;
 
+var localized string ErrStillLoading;
+
 static function string GetString(
 	optional int Switch,
 	optional PlayerReplicationInfo RelatedPRI_1, 
@@ -27,6 +29,9 @@ static function string GetString(
 		case 5: Result = default.MsgGameEnded; break;
 		case 6: Result = default.MsgPlayerVoted; break;
 		case 7: Result = default.MsgAdminForceTravel; break;
+
+		case -1: Result = default.ErrStillLoading; break;
+
 		default:
 			return "";
 	}
@@ -72,4 +77,6 @@ defaultproperties {
 	MsgGameEnded="Game ended, opening Vote Menu"
 	MsgPlayerVoted="{1} voted for {2}"
 	MsgAdminForceTravel="Admin {1} forced switching to {2}"
+
+	ErrStillLoading="Vote Menu data is still being transferred, please try again"
 }

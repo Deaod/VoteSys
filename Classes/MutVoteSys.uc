@@ -15,6 +15,7 @@ var VS_MapList MapLists;
 
 var Object HistoryDummy;
 var VS_HistoryConfig History;
+var VS_HistoryProcessor HistoryProcessor;
 
 enum EGameState {
 	GS_Playing,
@@ -752,6 +753,10 @@ function LoadHistory() {
 	HistoryDummy = new(none, 'VoteSysHistory') class'Object';
 	History = new(HistoryDummy, 'History') class'VS_HistoryConfig';
 
+	HistoryProcessor = Spawn(class'VS_HistoryProcessor');
+	HistoryProcessor.VoteSys = self;
+	HistoryProcessor.History = History;
+	HistoryProcessor.PresetList = PresetList;
 }
 
 function BroadcastLocalizedMessage2(

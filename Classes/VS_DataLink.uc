@@ -86,7 +86,7 @@ Begin:
 			Sleep(0);
 		}
 		for (TempMap = TempPreset.MapList; TempMap != none; TempMap = TempMap.Next) {
-			SendBuffer = "/MAP/"$TempMap.MapName$Chr(13)$Chr(10);
+			SendBuffer = "/MAP/"$EncodeString(TempMap.MapName)$"/"$TempMap.Sequence$Chr(13)$Chr(10);
 			while (true) {
 				SendBuffer = Mid(SendBuffer, SendText(SendBuffer));
 				if (Len(SendBuffer) <= 0)
