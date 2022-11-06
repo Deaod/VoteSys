@@ -18,15 +18,15 @@ function UWindowListBoxItem GetItemAt(float MouseX, float MouseY) {
 	i = 0;
 	YLimit = WinHeight - LookAndFeel.MiscBevelB[LookAndFeel.EditBoxBevel].H;
 
-	while((CurItem != none) && (i < VertSB.Pos)) {
-		if(CurItem.ShowThisItem())
+	while ((CurItem != none) && (i < VertSB.Pos)) {
+		if (CurItem.ShowThisItem())
 			i++;
 		CurItem = CurItem.Next;
 	}
 
-	for(y=LookAndFeel.MiscBevelT[LookAndFeel.EditBoxBevel].H;(y < YLimit) && (CurItem != none);CurItem = CurItem.Next) {
-		if(CurItem.ShowThisItem()) {
-			if(MouseY >= y && MouseY < y+ItemHeight)
+	for (y = LookAndFeel.MiscBevelT[LookAndFeel.EditBoxBevel].H; (y < YLimit) && (CurItem != none); CurItem = CurItem.Next) {
+		if (CurItem.ShowThisItem()) {
+			if (MouseY >= y && MouseY < y+ItemHeight)
 				return UWindowListBoxItem(CurItem);
 			y = y + ItemHeight;
 		}
