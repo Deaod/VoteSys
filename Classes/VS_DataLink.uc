@@ -74,6 +74,8 @@ state SendPresets {
 Begin:
 	foreach AllActors(class'MutVoteSys', VoteSys)
 		break;
+	while(VoteSys.HistoryProcessor != none)
+		Sleep(0);
 
 	Log("VS_DataLink SendPresets", 'VoteSys');
 
