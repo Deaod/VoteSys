@@ -71,14 +71,12 @@ function int AddMapVoteUnsafe(string Preset, string MapName) {
 
 	for (i = 0; i < MaxCandidates; i++) {
 		if (Candidates[i].Preset == Preset && Candidates[i].MapName == MapName) {
-			Log("AddMapVoteUnsafe Old Candidate", 'VoteSys');
 			Candidates[i].Votes += 1;
 			Result = -1;
 			break;
 		}
 
 		if (Candidates[i].Preset == "" && Candidates[i].MapName == "") {
-			Log("AddMapVoteUnsafe New Candidate"@i, 'VoteSys');
 			Candidates[i].Preset = Preset;
 			Candidates[i].MapName = MapName;
 			Candidates[i].Votes = 1;
