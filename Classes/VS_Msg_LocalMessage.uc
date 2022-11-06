@@ -9,6 +9,9 @@ var localized string MsgPlayerVoted;
 var localized string MsgAdminForceTravel;
 
 var localized string ErrStillLoading;
+var localized string ErrNoRootWindow;
+var localized string ErrCreateDialog;
+var localized string ErrWrongConsole;
 
 static function string GetString(
 	optional int Switch,
@@ -31,6 +34,9 @@ static function string GetString(
 		case 7: Result = default.MsgAdminForceTravel; break;
 
 		case -1: Result = default.ErrStillLoading; break;
+		case -2: Result = default.ErrNoRootWindow; break;
+		case -3: Result = default.ErrCreateDialog; break;
+		case -4: Result = default.ErrWrongConsole; break;
 
 		default:
 			return "";
@@ -79,4 +85,7 @@ defaultproperties {
 	MsgAdminForceTravel="Admin {1} forced switching to {2}"
 
 	ErrStillLoading="Vote Menu data is still being transferred, please try again"
+	ErrNoRootWindow="Failed to create VoteMenu window (Root does not exist)"
+	ErrCreateDialog="Failed to create VoteMenu window (Could not create Dialog)"
+	ErrWrongConsole="Failed to create VoteMenu window (Console not a WindowConsole)"
 }

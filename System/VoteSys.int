@@ -16,4 +16,7 @@ MsgGameEnded="Game ended, opening Vote Menu"
 MsgPlayerVoted="{1} voted for {2}"
 MsgAdminForceTravel="Admin {1} forced switching to {2}"
 ErrStillLoading="Vote Menu data is still being transferred, please try again"
+ErrNoRootWindow="Failed to create VoteMenu window (Root does not exist)"
+ErrCreateDialog="Failed to create VoteMenu window (Could not create Dialog)"
+ErrWrongConsole="Failed to create VoteMenu window (Console not a WindowConsole)"
 

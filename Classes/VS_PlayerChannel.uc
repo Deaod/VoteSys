@@ -69,13 +69,13 @@ simulated function CreateVoteMenuDialog() {
 		C = WindowConsole(PlayerOwner.Player.Console);
 
 	if (C == none) {
-		PlayerOwner.ClientMessage("Failed to create VoteMenu window (Console not a WindowConsole)");
+		LocalizeMessage(class'VS_Msg_LocalMessage', -4);
 		return;
 	}
 
 	if (VoteMenuDialog == none) {
 		if (C.Root == none) {
-			PlayerOwner.ClientMessage("Failed to create VoteMenu window (Root does not exist)");
+			LocalizeMessage(class'VS_Msg_LocalMessage', -2);
 			return;
 		}
 
@@ -90,7 +90,7 @@ simulated function CreateVoteMenuDialog() {
 		VoteMenuDialog.HideWindow();
 
 		if (VoteMenuDialog == none) {
-			PlayerOwner.ClientMessage("Failed to create VoteMenu window (Could not create Dialog)");
+			LocalizeMessage(class'VS_Msg_LocalMessage', -3);
 			return;
 		}
 	}
@@ -111,7 +111,7 @@ simulated function ShowVoteMenu() {
 		C = WindowConsole(PlayerOwner.Player.Console);
 
 	if (C == none) {
-		PlayerOwner.ClientMessage("Failed to create VoteMenu window (Console not a WindowConsole)");
+		LocalizeMessage(class'VS_Msg_LocalMessage', -4);
 		return;
 	}
 
@@ -124,7 +124,7 @@ simulated function ShowVoteMenu() {
 	}
 
 	if (VoteMenuDialog == none) {
-		PlayerOwner.ClientMessage("Failed to create VoteMenu window (Could not create Dialog)");
+		LocalizeMessage(class'VS_Msg_LocalMessage', -3);
 		return;
 	}
 
