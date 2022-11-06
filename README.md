@@ -4,6 +4,9 @@ A new, independent implementation of map vote.
 * Unlimited number of presets
 * Unlimited number of maps
 * Quicker transfer of data to clients
+* Automatic management of ServerPackages
+  * Before server version 469c its opt-in (`bManageServerPackages`)
+  * With 469c VoteSys always adds the package of mutators to ServerPackages
 
 Servers must run at least UT v469.  
 Clients must run at least UT v436.
@@ -20,6 +23,11 @@ Server settings are split between multiple INI files.
 * VoteSysPresets.ini
 * VoteSysMapLists.ini
 
+In addition there are INI files that dont contain configuration, but are used to store data between map-changes:
+
+* VoteSysTemp.ini
+* VoteSysHistory.ini
+
 ### VoteSys.ini
 ```ini
 [ServerSettings]
@@ -28,6 +36,7 @@ VoteTimeLimit=30
 DefaultTimeMessageClass=Botpack.TimeMessage
 DefaultPreset=
 ServerAddress=127.0.0.1
+bManageServerPackages=False
 ```
 
 ### VoteSysPresets.ini
@@ -63,7 +72,7 @@ Map=DM-Morpheus
 ```
 
 ## Build
-In order to build this mutator, you need to have UT99 v469b installed.
+In order to build this mutator, you need to be using UT99 v469c.
 
 1. Go to the installation directory of UT99 in a command shell
 2. Use `git clone https://github.com/Deaod/VoteSys` to clone the repo
