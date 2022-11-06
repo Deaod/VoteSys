@@ -226,7 +226,7 @@ exit /B %ERRORLEVEL%
 ::    Usually the last Package is the one that you are trying to compile
 ::    If Package A depends on Package B, then B must appear before A in this list.
 :GenerateMakeIni
-    if not exist %1 mkdir "%~dp1"
+    if not exist "%~dp1" mkdir "%~dp1"
     call :GenerateMakeIniPreamble %1
 
     :GenerateMakeIni_Loop
