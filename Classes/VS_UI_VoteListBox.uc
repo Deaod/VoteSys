@@ -180,6 +180,15 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 	ClippingRegion.W = ItemWidth;
 	ClippingRegion.H = YLimit;
 
+	C.DrawColor.R = 96;
+	C.DrawColor.G = 96;
+	C.DrawColor.B = 96;
+	DrawStretchedTexture(C, 165, 0, 1, YLimit, Texture'WhiteTexture');
+	DrawStretchedTexture(C, 365, 0, 1, YLimit, Texture'WhiteTexture');
+	C.DrawColor.R = 255;
+	C.DrawColor.G = 255;
+	C.DrawColor.B = 255;
+
 	while ((CurItem != None) && (i < VertSB.Pos)) {
 		if (CurItem.ShowThisItem())
 			i++;
