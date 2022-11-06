@@ -35,26 +35,8 @@ replication {
 		PlayerInfo;
 }
 
-function AddMapVote(VS_PlayerChannel Origin, string Category, string PresetName, string MapName) {
-	local VS_Preset P;
-	local VS_Map M;
+function AddMapVote(VS_PlayerChannel Origin, VS_Preset P, VS_Map M) {
 	local int InternalIndex;
-
-	// make sure preset exists
-	for (P = VoteSys.PresetList; P != none; P = P.Next)
-		if (P.Category == Category && P.PresetName == PresetName)
-			break;
-
-	if (P == none)
-		return;
-
-	// make sure map exists
-	for (M = P.MapList; M != none; M = M.Next)
-		if (M.MapName == MapName)
-			break;
-
-	if (M == none)
-		return;
 
 	if (VoteSys.CanVote(Origin.PlayerOwner)) {
 		if (Origin.PlayerOwner.PlayerReplicationInfo.bAdmin) {
@@ -70,15 +52,13 @@ function AddMapVote(VS_PlayerChannel Origin, string Category, string PresetName,
 				Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
 				M.MapName@"("$P.Abbreviation$")"
 			);
-			InternalIndex = AddMapVoteUnsafe(P.GetFullName(), MapName);
+			InternalIndex = AddMapVoteUnsafe(P.GetFullName(), M.MapName);
 			if (InternalIndex >= 0) {
 				CandidatesInternal[InternalIndex].Preset = P;
 				CandidatesInternal[InternalIndex].MapRef = M;
 			}
 		}
 	}
-
-	// if we get here, there were more than 32 players on the server
 }
 
 function int AddMapVoteUnsafe(string Preset, string MapName) {
@@ -121,27 +101,8 @@ function int AddMapVoteUnsafe(string Preset, string MapName) {
 	return Result;
 }
 
-function RemMapVote(VS_PlayerChannel Origin, string Category, string PresetName, string MapName) {
-	local VS_Preset P;
-	local VS_Map M;
-
-	// make sure preset exists
-	for (P = VoteSys.PresetList; P != none; P = P.Next)
-		if (P.Category == Category && P.PresetName == PresetName)
-			break;
-
-	if (P == none)
-		return;
-
-	// make sure map exists
-	for (M = P.MapList; M != none; M = M.Next)
-		if (M.MapName == MapName)
-			break;
-
-	if (M == none)
-		return;
-
-	RemMapVoteUnsafe(P.GetFullName(), MapName);
+function RemMapVote(VS_PlayerChannel Origin, VS_Preset P, VS_Map M) {
+	RemMapVoteUnsafe(P.GetFullName(), M.MapName);
 }
 
 function RemMapVoteUnsafe(string Preset, string MapName) {
@@ -183,6 +144,39 @@ function int FindCandidateIndex(string Preset, string MapName) {
 		if (Candidates[Index].Preset == Preset && Candidates[Index].MapName == MapName)
 			return Index;
 	return -1;
+}
+
+function VS_Preset ResolvePresetSeparate(string Category, string PresetName) {
+	local VS_Preset P;
+
+	for (P = VoteSys.PresetList; P != none; P = P.Next)
+		if (P.Category == Category && P.PresetName == PresetName)
+			return P;
+
+	return none;
+}
+
+function VS_Preset ResolvePresetCombined(string FullPresetName) {
+	local VS_Preset P;
+
+	for (P = VoteSys.PresetList; P != none; P = P.Next)
+		if (P.GetFullName() == FullPresetName)
+			return P;
+
+	return none;
+}
+
+function VS_Map ResolveMapOfPreset(VS_Preset P, string MapName) {
+	local VS_Map M;
+
+	if (P == none)
+		return none;
+
+	for (M = P.MapList; M != none; M = M.Next)
+		if (M.MapName == MapName)
+			return M;
+
+	return none;
 }
 
 simulated final function string GetCandidatePreset(int Index) {

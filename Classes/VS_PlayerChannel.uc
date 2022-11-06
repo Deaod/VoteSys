@@ -16,20 +16,15 @@ var VS_ClientSettings Settings;
 var VS_Preset LatestPreset;
 var VS_Map LatestMap;
 
-// Server Player Voting Information
-// unreplicated, server-only
-var bool bHasVoted;
-var string VoteCategory;
-var string VotePresetName;
-var string VoteMapName;
-
-// Client Player Voting Information
-var VS_Preset VotePreset;
-var VS_Map VoteMap;
+// Player Voting Information
+var bool bHasVoted; // unreplicated, server-only
+var VS_Preset VotePreset; // unreplicated
+var VS_Map VoteMap; // unreplicated
 
 replication {
 	reliable if (Role < ROLE_Authority)
-		ServerVote;
+		ServerVote,
+		ServerVoteExisting;
 
 	reliable if (Role == ROLE_Authority)
 		ShowVoteMenu,
@@ -183,20 +178,30 @@ simulated function Vote(VS_Preset P, VS_Map M) {
 }
 
 function ServerVote(string Category, string PresetName, string MapName) {
+	local VS_Preset P;
+	local VS_Map M;
+	local VS_Info I;
+
 	if (PlayerOwner == none)
 		return;
 
-	if (VoteCategory == Category && VotePresetName == PresetName && VoteMapName == MapName)
+	I = VoteInfo();
+	P = I.ResolvePresetSeparate(Category, PresetName);
+	M = I.ResolveMapOfPreset(P, MapName);
+
+	if (P == none || M == none)
+		return;
+
+	if (VotePreset == P || VoteMap == M)
 		return;
 
 	if (bHasVoted)
-		VoteInfo().RemMapVote(self, VoteCategory, VotePresetName, VoteMapName);
-	VoteInfo().AddMapVote(self, Category, PresetName, MapName);
+		I.RemMapVote(self, VotePreset, VoteMap);
+	I.AddMapVote(self, P, M);
 
 	bHasVoted = true;
-	VoteCategory = Category;
-	VotePresetName = PresetName;
-	VoteMapName = MapName;
+	VotePreset = P;
+	VoteMap = M;
 }
 
 simulated function VoteExisting(string Preset, string MapName) {
@@ -204,7 +209,6 @@ simulated function VoteExisting(string Preset, string MapName) {
 }
 
 function ServerVoteExisting(string Preset, string MapName) {
-	local int Index;
 	local VS_Info I;
 	local VS_Preset P;
 	local VS_Map M;
@@ -213,22 +217,30 @@ function ServerVoteExisting(string Preset, string MapName) {
 		return;
 
 	I = VoteInfo();
-	Index = I.FindCandidateIndex(Preset, MapName);
-	if (Index >= 0) {
-		P = I.GetCandidateInternalPreset(Index);
-		M = I.GetCandidateInternalMap(Index);
+	P = I.ResolvePresetCombined(Preset);
+	M = I.ResolveMapOfPreset(P, MapName);
 
-		ServerVote(P.Category, P.PresetName, M.MapName);
-	}
+	if (P == none || M == none)
+		return;
+
+	if (VotePreset == P || VoteMap == M)
+		return;
+
+	if (bHasVoted)
+		I.RemMapVote(self, VotePreset, VoteMap);
+	I.AddMapVote(self, P, M);
+
+	bHasVoted = true;
+	VotePreset = P;
+	VoteMap = M;
 }
 
 function ClearVote() {
 	if (bHasVoted) {
-		VoteInfo().RemMapVote(self, VoteCategory, VotePresetName, VoteMapName);
+		VoteInfo().RemMapVote(self, VotePreset, VoteMap);
 		bHasVoted = false;
-		VoteCategory = "";
-		VotePresetName = "";
-		VoteMapName = "";
+		VotePreset = none;
+		VoteMap = none;
 	}
 }
 
