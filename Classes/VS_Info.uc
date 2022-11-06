@@ -88,6 +88,9 @@ function int AddMapVoteUnsafe(string Preset, string MapName) {
 		}
 	}
 
+	if (i >= MaxCandidates)
+		return Result;
+
 	while(i > 0 && Candidates[i-1].Votes < Candidates[i].Votes) {
 		Tmp = Candidates[i-1];
 		Candidates[i-1] = Candidates[i];
