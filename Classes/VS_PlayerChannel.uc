@@ -43,9 +43,12 @@ simulated event Tick(float Delta) {
 	if (Owner != none) {
 		PlayerOwner = PlayerPawn(Owner);
 		if (PlayerOwner != none && PlayerOwner.Player != none && PlayerOwner.Player.IsA('Viewport')) {
-			DataClient = Spawn(class'VS_DataClient', self);
+			TryCreateVoteMenuDialog();
+			if (VoteMenuDialog != none) {
+				DataClient = Spawn(class'VS_DataClient', self);
+				Disable('Tick');
+			}
 		}
-		Disable('Tick');
 	}
 }
 
@@ -57,6 +60,37 @@ simulated function VS_Info VoteInfo() {
 		break;
 
 	return Info;
+}
+
+simulated function TryCreateVoteMenuDialog() {
+	local WindowConsole C;
+
+	if (PlayerOwner == none)
+		PlayerOwner = PlayerPawn(Owner);
+
+	if (PlayerOwner.Player != none)
+		C = WindowConsole(PlayerOwner.Player.Console);
+
+	if (C == none)
+		return;
+
+	if (VoteMenuDialog == none) {
+		if (C.Root == none)
+			return;
+
+		VoteMenuDialog = VS_UI_Window(C.Root.CreateWindow(
+			class'VS_UI_Window',
+			Settings.MenuX,
+			Settings.MenuY,
+			0,0 // Size set internally
+		));
+		if (VoteMenuDialog == none)
+			return;
+		VoteMenuDialog.Channel = self;
+		VoteMenuDialog.Settings = Settings;
+		VoteMenuDialog.HideWindow();
+
+	}
 }
 
 simulated function CreateVoteMenuDialog() {
@@ -102,7 +136,7 @@ simulated function ShowVoteMenu() {
 	if (PlayerOwner == none)
 		PlayerOwner = PlayerPawn(Owner);
 
-	if (DataClient.bTransferDone == false) {
+	if (DataClient == none || DataClient.bTransferDone == false) {
 		LocalizeMessage(class'VS_Msg_LocalMessage', -1);
 		return;
 	}
