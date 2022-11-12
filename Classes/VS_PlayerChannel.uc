@@ -226,7 +226,7 @@ function ServerVote(string Category, string PresetName, string MapName) {
 	if (P == none || M == none)
 		return;
 
-	if (VotePreset == P || VoteMap == M)
+	if (VotePreset == P && VoteMap == M && PlayerOwner.PlayerReplicationInfo.bAdmin == false)
 		return;
 
 	if (bHasVoted)
@@ -257,7 +257,7 @@ function ServerVoteExisting(string Preset, string MapName) {
 	if (P == none || M == none)
 		return;
 
-	if (VotePreset == P || VoteMap == M)
+	if (VotePreset == P && VoteMap == M && PlayerOwner.PlayerReplicationInfo.bAdmin == false)
 		return;
 
 	if (bHasVoted)
