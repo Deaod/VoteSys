@@ -1,5 +1,5 @@
 [Public]
-Object=(Name=VoteSys.MutVoteSys,Class=Class,MetaClass=Engine.Mutator,Description="MutVoteSys,<Insert description here>")
+Object=(Name=VoteSys.MutVoteSys,Class=Class,MetaClass=Engine.Mutator,Description="VoteSys,Enables voting for next map")
 
 [VS_UI_PresetCategoryPage]
 VoteButtonText="Vote"

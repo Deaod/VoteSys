@@ -457,7 +457,7 @@ function ApplyVotedPreset() {
 	CreateServerActors(TD.Actors);
 	ApplyGameSettings(TD.GameSettings);
 
-	if ((Level.EngineVersion$Level.GetPropertyText("EngineRevision")) >= "469c") {
+	if ((Level.EngineVersion$Level.GetPropertyText("EngineRevision")) >= "469c" && Settings.bManageServerPackages) {
 		AddClassToPackageMap(TD.Mutators, Pkgs);
 		AddClassToPackageMap(TD.Actors, Pkgs);
 		for (i = 0; i < Pkgs.Length; i++)
