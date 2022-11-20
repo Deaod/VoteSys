@@ -21,6 +21,8 @@ var bool bHasVoted; // unreplicated, server-only
 var VS_Preset VotePreset; // unreplicated
 var VS_Map VoteMap; // unreplicated
 
+var int MaxMapSequenceNumber;
+
 replication {
 	reliable if (Role < ROLE_Authority)
 		ServerVote,
@@ -193,6 +195,10 @@ simulated function FocusPreset(string Ref) {
 }
 
 simulated function AddMap(VS_Map M) {
+	if (M != none) {
+		MaxMapSequenceNumber = Max(MaxMapSequenceNumber, M.Sequence);
+	}
+
 	if (LatestPreset.MapList == none) {
 		LatestPreset.MapList = M;
 	} else {

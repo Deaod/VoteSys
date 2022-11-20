@@ -5,6 +5,7 @@ var VS_UI_MapListItem HoverItem;
 function UWindowListBoxItem GetItemAt(float MouseX, float MouseY) {
 	local float y;
 	local UWindowList CurItem;
+	local VS_UI_MapListItem MapItem;
 	local int i;
 	local float YLimit;
 	
@@ -25,9 +26,14 @@ function UWindowListBoxItem GetItemAt(float MouseX, float MouseY) {
 	}
 
 	for(y=LookAndFeel.MiscBevelT[LookAndFeel.EditBoxBevel].H;(y < YLimit) && (CurItem != none);CurItem = CurItem.Next) {
-		if(CurItem.ShowThisItem()) {
-			if(MouseY >= y && MouseY < y+ItemHeight)
-				return UWindowListBoxItem(CurItem);
+		if (CurItem.ShowThisItem()) {
+			if (MouseY >= y && MouseY < y+ItemHeight) {
+				MapItem = VS_UI_MapListItem(CurItem);
+				if (MapItem.bEnabled)
+					return MapItem;
+				else
+					return none;
+			}
 			y = y + ItemHeight;
 		}
 	}
@@ -38,7 +44,11 @@ function UWindowListBoxItem GetItemAt(float MouseX, float MouseY) {
 function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H) {
 	local VS_UI_MapListItem I;
 	I = VS_UI_MapListItem(Item);
-	if (I.bSelected) {
+	if (I.bEnabled == false) {
+		C.DrawColor.r = 128;
+		C.DrawColor.g = 128;
+		C.DrawColor.b = 128;
+	} else if (I.bSelected) {
 		C.DrawColor.r = 0;
 		C.DrawColor.g = 0;
 		C.DrawColor.b = 128;
@@ -154,10 +164,11 @@ function DoubleClickItem(UWindowListBoxItem I) {
 	Notify(DE_DoubleClick);
 }
 
-function AppendMap(VS_Map M) {
+function AppendMap(VS_Map M, bool bEnabled) {
 	local VS_UI_MapListItem I;
 	I = VS_UI_MapListItem(Items.Append(ListClass));
 	I.MapRef = M;
+	I.bEnabled = bEnabled;
 }
 
 function ClearSelection() {

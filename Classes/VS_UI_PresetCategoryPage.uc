@@ -36,15 +36,15 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	local VS_Info Info;
 	local int i;
 
+	Info = Channel.VoteInfo(); 
 	if (Presets.SelectedPreset != ActivePreset) {
 		ActivePreset = Presets.SelectedPreset;
 		MapListBox.Items.Clear();
 		for (M = ActivePreset.MapList; M != none; M = M.Next)
-			MapListBox.AppendMap(M);
+			MapListBox.AppendMap(M, (M.Sequence == 0) || (Channel.MaxMapSequenceNumber - M.Sequence >= Info.MinimumMapRepeatDistance));
 		MapListBox.Sort();
 	}
 
-	Info = Channel.VoteInfo(); 
 	while(Info.NumCandidates > VoteListBox.Items.Count())
 		VoteListBox.Items.Append(class'VS_UI_VoteListItem');
 

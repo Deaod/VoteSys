@@ -65,6 +65,7 @@ event PostBeginPlay() {
 
 	SettingsDummy = new(none, 'VoteSys') class 'Object';
 	Settings = new (SettingsDummy, 'ServerSettings') class'VS_ServerSettings';
+	Settings.SaveConfig();
 
 	if ((Level.EngineVersion$Level.GetPropertyText("EngineRevision")) < "469c" && Settings.bManageServerPackages) {
 		GetDefaultServerPackages();
@@ -77,6 +78,7 @@ event PostBeginPlay() {
 	LoadHistory();
 	Info = Spawn(class'VS_Info', self);
 	Info.VoteSys = self;
+	Info.MinimumMapRepeatDistance = Settings.MinimumMapRepeatDistance;
 	DataServer = Spawn(class'VS_DataServer', self);
 
 	Level.Game.SetPropertyText("bDontRestart", "True"); // Botpack.DeathMatchPlus and UnrealShare.DeathMatchGame
