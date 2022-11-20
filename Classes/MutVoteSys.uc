@@ -718,7 +718,7 @@ function VS_Map LoadMapList(class<GameInfo> Game, name ListName) {
 	// As before, see if the list already exists for the specified game type.
 	for (ML = MapLists; ML != none; ML = ML.Next)
 		if (ML.Game == Game)
-			return ML.First;
+			return ML.DuplicateList();
 
 	ML = new(MapListDummy) class'VS_MapList';
 	ML.Next = MapLists;
