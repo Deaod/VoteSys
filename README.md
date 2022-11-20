@@ -5,8 +5,10 @@ A new, independent implementation of map vote.
 * Unlimited number of maps
 * Quicker transfer of data to clients
 * Automatic management of ServerPackages
-  * Before server version 469c its opt-in (`bManageServerPackages`)
-  * With 469c VoteSys always adds the package of mutators to ServerPackages
+  * Opt-in (`bManageServerPackages`)
+  * Before server version 469c `DefaultPackages` have to be configured correctly
+  * With 469c no further configuration is necessary
+* Map repeat limits (`MinimumMapRepeatDistance`)
 
 Servers must run at least UT v469.  
 Clients must run at least UT v436.
@@ -33,10 +35,17 @@ In addition there are INI files that dont contain configuration, but are used to
 [ServerSettings]
 GameEndedVoteDelay=5
 VoteTimeLimit=30
+MinimumMapRepeatDistance=0
 DefaultTimeMessageClass=Botpack.TimeMessage
 DefaultPreset=
 ServerAddress=127.0.0.1
 bManageServerPackages=False
+DefaultPackages=SoldierSkins
+DefaultPackages=CommandoSkins
+DefaultPackages=FCommandoSkins
+DefaultPackages=SGirlSkins
+DefaultPackages=BossSkins
+DefaultPackages=Botpack
 ```
 
 ### VoteSysPresets.ini
