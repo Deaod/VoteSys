@@ -191,7 +191,14 @@ simulated function AddPreset(VS_Preset P) {
 }
 
 simulated function FocusPreset(string Ref) {
-	VoteMenuDialog.FocusPreset(Ref);
+	var VS_Preset P;
+
+	for (P = PresetList; P != none; P = P.Next)
+		if (P.GetFullName() == Ref)
+			break;
+
+	if (P != none)
+		VoteMenuDialog.FocusPreset(P);
 }
 
 simulated function AddMap(VS_Map M) {

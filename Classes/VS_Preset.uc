@@ -10,6 +10,12 @@ var string          Mutators;
 var string          Parameters;
 var string          GameSettings;
 
+function string GetDisplayCategory() {
+	if (Category == "")
+		return "Default";
+	return Category;
+}
+
 function string GetFullName() {
 	return Category$"/"$PresetName;
 }

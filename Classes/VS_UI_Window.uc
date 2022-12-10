@@ -45,9 +45,7 @@ function Close(optional bool bByParent) {
 function AddPreset(VS_Preset P) {
 	local string Cat;
 
-	Cat = P.Category;
-	if (Cat == "")
-		Cat = "Default";
+	Cat = P.GetDisplayCategory();
 
 	if (VS_UI_TabControl(ClientArea).GetPage(Cat) == none) {
 		VS_UI_PresetCategoryPage(VS_UI_TabControl(ClientArea).AddPage(Cat, class'VS_UI_PresetCategoryPage').Page).Channel = Channel;
@@ -55,22 +53,19 @@ function AddPreset(VS_Preset P) {
 	VS_UI_PresetCategoryPage(VS_UI_TabControl(ClientArea).GetPage(Cat).Page).AddPreset(P);
 }
 
-function FocusPreset(string Ref) {
-	local string Category, PresetName;
+function FocusPreset(VS_Preset P) {
+	local string PresetName;
 	local int SepPos;
 	local UWindowPageControlPage Page;
 
-	SepPos = InStr(Ref, "/");
-	Category = Left(Ref, SepPos);
-	if (Category == "")
-		Category = "Default";
-	Presetname = Mid(Ref, SepPos+1);
+	PresetName = P.PresetName;
 
-	Page = VS_UI_TabControl(ClientArea).GetPage(Category);
-	if (Page != none)
+	Page = VS_UI_TabControl(ClientArea).GetPage(P.GetDisplayCategory());
+	if (Page != none) {
 		VS_UI_TabControl(ClientArea).GotoTab(Page);
-	if (PresetName != "" && Page.Page != none)
-		VS_UI_PresetCategoryPage(Page.Page).FocusPreset(PresetName);
+		if (P.PresetName != "" && Page.Page != none)
+			VS_UI_PresetCategoryPage(Page.Page).FocusPreset(P.PresetName);
+	}
 }
 
 defaultproperties
