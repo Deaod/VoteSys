@@ -191,7 +191,7 @@ simulated function AddPreset(VS_Preset P) {
 }
 
 simulated function FocusPreset(string Ref) {
-	var VS_Preset P;
+	local VS_Preset P;
 
 	for (P = PresetList; P != none; P = P.Next)
 		if (P.GetFullName() == Ref)
