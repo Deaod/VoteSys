@@ -43,30 +43,17 @@ function Close(optional bool bByParent) {
 }
 
 function AddPreset(VS_Preset P) {
-	local string Cat;
-
-	Cat = P.GetDisplayCategory();
-
-	if (VS_UI_TabControl(ClientArea).GetPage(Cat) == none) {
-		VS_UI_PresetCategoryPage(VS_UI_TabControl(ClientArea).AddPage(Cat, class'VS_UI_PresetCategoryPage').Page).Channel = Channel;
-	}
-	VS_UI_PresetCategoryPage(VS_UI_TabControl(ClientArea).GetPage(Cat).Page).AddPreset(P);
+	VS_UI_ClientWindow(ClientArea).Channel = Channel;
+	VS_UI_ClientWindow(ClientArea).AddPreset(P);
 }
 
 function FocusPreset(VS_Preset P) {
-	local UWindowPageControlPage Page;
-
-	Page = VS_UI_TabControl(ClientArea).GetPage(P.GetDisplayCategory());
-	if (Page != none) {
-		VS_UI_TabControl(ClientArea).GotoTab(Page);
-		if (P.PresetName != "" && Page.Page != none)
-			VS_UI_PresetCategoryPage(Page.Page).FocusPreset(P.PresetName);
-	}
+	VS_UI_ClientWindow(ClientArea).FocusPreset(P);
 }
 
 defaultproperties
 {
-	ClientClass=class'VS_UI_TabControl'
+	ClientClass=class'VS_UI_ClientWindow'
 	WindowTitle="VoteSys Menu"
 	bStatusBar=False
 }
