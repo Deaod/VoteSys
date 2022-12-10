@@ -54,11 +54,7 @@ function AddPreset(VS_Preset P) {
 }
 
 function FocusPreset(VS_Preset P) {
-	local string PresetName;
-	local int SepPos;
 	local UWindowPageControlPage Page;
-
-	PresetName = P.PresetName;
 
 	Page = VS_UI_TabControl(ClientArea).GetPage(P.GetDisplayCategory());
 	if (Page != none) {
