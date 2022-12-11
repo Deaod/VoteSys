@@ -1,6 +1,9 @@
 class VS_UI_VoteListBox extends UWindowListBox;
 
 var VS_UI_VoteListItem HoverItem;
+var localized string PresetColumnHeader;
+var localized string MapColumnHeader;
+var localized string VotesColumnHeader;
 
 function UWindowListBoxItem GetItemAt(float MouseX, float MouseY) {
 	local float y;
@@ -24,7 +27,7 @@ function UWindowListBoxItem GetItemAt(float MouseX, float MouseY) {
 		CurItem = CurItem.Next;
 	}
 
-	for (y = LookAndFeel.MiscBevelT[LookAndFeel.EditBoxBevel].H; (y < YLimit) && (CurItem != none); CurItem = CurItem.Next) {
+	for (y = LookAndFeel.MiscBevelT[LookAndFeel.EditBoxBevel].H+ItemHeight+1; (y < YLimit) && (CurItem != none); CurItem = CurItem.Next) {
 		if (CurItem.ShowThisItem()) {
 			if (MouseY >= y && MouseY < y+ItemHeight)
 				return UWindowListBoxItem(CurItem);
@@ -101,15 +104,16 @@ function DrawCandidate(Canvas C, VS_UI_VoteListItem Item, int Index, float X, fl
 	DrawStretchedTexture(C, X+165, Y, 1, H, Texture'WhiteTexture');
 
 	C.DrawColor = FG;
-	ClippingRegion.W = FMin(363.0, ClippingRegion.W);
+	ClippingRegion.W = FMin(353.0, ClippingRegion.W);
 	ClipText(C, X+168, Y, Item.MapName);
 	ClippingRegion = OldClipRegion;
 
 	C.DrawColor = Sep;
-	DrawStretchedTexture(C, X+365, Y, 1, H, Texture'WhiteTexture');
+	DrawStretchedTexture(C, X+355, Y, 1, H, Texture'WhiteTexture');
 
 	C.DrawColor = FG;
 	C.StrLen(Item.Votes, VW, VH);
+	VW /= Root.GUIScale;
 	ClipText(C, X+W-VW-3, Y, Item.Votes);
 }
 
@@ -122,7 +126,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	VertSB.SetRange(
 		0,
 		Items.CountShown(),
-		int((WinHeight - (LookAndFeel.MiscBevelT[BevelType].H + LookAndFeel.MiscBevelB[BevelType].H)) / ItemHeight)
+		int((WinHeight - (LookAndFeel.MiscBevelT[BevelType].H + LookAndFeel.MiscBevelB[BevelType].H + (ItemHeight + 1))) / ItemHeight)
 	);
 
 	if (HoverItem != none)
@@ -150,6 +154,8 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 	local float ItemWidth;
 	local float YLimit;
 
+	local float XL, YL;
+
 	local Region OldClipRegion;
 	local float OrgX,OrgY;
 	local float ClipX,ClipY;
@@ -165,14 +171,87 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 	CurItem = Items.Next;
 	i = 0;
 	ItemWidth = WinWidth - VertSB.WinWidth - LookAndFeel.MiscBevelL[BevelType].W - LookAndFeel.MiscBevelR[BevelType].W;
-	YLimit = WinHeight - LookAndFeel.MiscBevelT[BevelType].H - LookAndFeel.MiscBevelB[BevelType].H;
+	YLimit = WinHeight - LookAndFeel.MiscBevelT[BevelType].H - LookAndFeel.MiscBevelB[BevelType].H - (ItemHeight + 1);
+
+	C.DrawColor.R = 160;
+	C.DrawColor.G = 160;
+	C.DrawColor.B = 160;
+	DrawStretchedTexture(
+		C,
+		LookAndFeel.MiscBevelL[BevelType].W,
+		LookAndFeel.MiscBevelT[BevelType].H,
+		ItemWidth,
+		ItemHeight,
+		Texture'WhiteTexture'
+	);
+
+	C.DrawColor.R = 96;
+	C.DrawColor.G = 96;
+	C.DrawColor.B = 96;
+	DrawStretchedTexture(
+		C,
+		LookAndFeel.MiscBevelL[BevelType].W,
+		LookAndFeel.MiscBevelT[BevelType].H + ItemHeight,
+		ItemWidth,
+		1,
+		Texture'WhiteTexture'
+	);
+	DrawStretchedTexture(
+		C,
+		LookAndFeel.MiscBevelL[BevelType].W + 165,
+		LookAndFeel.MiscBevelT[BevelType].H,
+		1,
+		ItemHeight,
+		Texture'WhiteTexture'
+	);
+	DrawStretchedTexture(
+		C,
+		LookAndFeel.MiscBevelL[BevelType].W + 355,
+		LookAndFeel.MiscBevelT[BevelType].H,
+		1,
+		ItemHeight,
+		Texture'WhiteTexture'
+	);
+
+	C.DrawColor.R = 0;
+	C.DrawColor.G = 0;
+	C.DrawColor.B = 0;
+	C.StrLen(PresetColumnHeader, XL, YL);
+	XL /= Root.GUIScale;
+	ClipText(
+		C,
+		LookAndFeel.MiscBevelL[BevelType].W + ((165 - XL) / 2),
+		LookAndFeel.MiscBevelT[BevelType].H,
+		PresetColumnHeader
+	);
+
+	C.StrLen(MapColumnHeader, XL, YL);
+	XL /= Root.GUIScale;
+	ClipText(
+		C,
+		LookAndFeel.MiscBevelL[BevelType].W + 166 + ((189 - XL) / 2),
+		LookAndFeel.MiscBevelT[BevelType].H,
+		MapColumnHeader
+	);
+	C.StrLen(VotesColumnHeader, XL, YL);
+	XL /= Root.GUIScale;
+	ClipText(
+		C,
+		LookAndFeel.MiscBevelL[BevelType].W + 356 + ((ItemWidth - 356 - XL) / 2), 
+		LookAndFeel.MiscBevelT[BevelType].H,
+		VotesColumnHeader
+	);
+
+	C.DrawColor.R = 255;
+	C.DrawColor.G = 255;
+	C.DrawColor.B = 255;
 
 	OrgX = C.OrgX; OrgY = C.OrgY;
 	ClipX = C.ClipX; ClipY = C.ClipY;
 	OldClipRegion = ClippingRegion;
 
 	C.OrgX = int(C.OrgX + LookAndFeel.MiscBevelL[BevelType].W * Root.GUIScale);
-	C.OrgY = int(C.OrgY + LookAndFeel.MiscBevelT[BevelType].H * Root.GUIScale);
+	C.OrgY = int(C.OrgY + (LookAndFeel.MiscBevelT[BevelType].H + ItemHeight + 1) * Root.GUIScale);
 	C.ClipX = ItemWidth * Root.GUIScale;
 	C.ClipY = YLimit * Root.GUIScale;
 	ClippingRegion.X = 0.0;
@@ -184,7 +263,7 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 	C.DrawColor.G = 96;
 	C.DrawColor.B = 96;
 	DrawStretchedTexture(C, 165, 0, 1, YLimit, Texture'WhiteTexture');
-	DrawStretchedTexture(C, 365, 0, 1, YLimit, Texture'WhiteTexture');
+	DrawStretchedTexture(C, 355, 0, 1, YLimit, Texture'WhiteTexture');
 	C.DrawColor.R = 255;
 	C.DrawColor.G = 255;
 	C.DrawColor.B = 255;
@@ -221,4 +300,7 @@ function ClearSelection() {
 defaultproperties {
 	ListClass=class'VS_UI_VoteListItem'
 	ItemHeight=13
+	PresetColumnHeader="Preset"
+	MapColumnHeader="Map"
+	VotesColumnHeader="Votes"
 }

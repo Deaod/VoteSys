@@ -20,3 +20,8 @@ ErrWrongConsole="Failed to create VoteMenu window (Console not a WindowConsole)"
 [VS_UI_ClientWindow]
 VoteButtonText="Vote"
 
+[VS_UI_VoteListBox]
+PresetColumnHeader="Preset"
+MapColumnHeader="Map"
+VotesColumnHeader="Votes"
+
