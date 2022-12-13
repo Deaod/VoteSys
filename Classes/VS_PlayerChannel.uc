@@ -8,6 +8,7 @@ var VS_DataClient DataClient;
 
 var VS_Preset PresetList;
 var VS_UI_Window VoteMenuDialog;
+var bool bOpenVoteMenuAfterTyping;
 
 var Object SettingsDummy;
 var VS_ClientSettings Settings;
@@ -42,15 +43,27 @@ simulated event PostBeginPlay() {
 }
 
 simulated event Tick(float Delta) {
-	if (Owner != none) {
-		PlayerOwner = PlayerPawn(Owner);
-		if (PlayerOwner != none && PlayerOwner.Player != none && PlayerOwner.Player.IsA('Viewport')) {
-			TryCreateVoteMenuDialog();
-			if (VoteMenuDialog != none) {
-				DataClient = Spawn(class'VS_DataClient', self);
-				Disable('Tick');
-			}
+	if (PlayerOwner == none) {
+		if (Owner != none) {
+			PlayerOwner = PlayerPawn(Owner);
 		}
+	}
+
+	if (PlayerOwner == none || PlayerOwner.Player == none || PlayerOwner.Player.IsA('Viewport') == false)
+		return;
+
+	if (VoteMenuDialog == none)
+		TryCreateVoteMenuDialog();
+
+	if (VoteMenuDialog == none)
+		return;
+
+	if (DataClient == none)
+		DataClient = Spawn(class'VS_DataClient', self);
+
+	if (bOpenVoteMenuAfterTyping && PlayerOwner.Player.Console.IsInState('Typing') == false) {
+		bOpenVoteMenuAfterTyping = false;
+		ShowVoteMenu();
 	}
 }
 
@@ -148,6 +161,12 @@ simulated function ShowVoteMenu() {
 
 	if (C == none) {
 		LocalizeMessage(class'VS_Msg_LocalMessage', -4);
+		return;
+	}
+
+	if (C.IsInState('Typing')) {
+		// delay until after player is done typing on the console
+		bOpenVoteMenuAfterTyping = true;
 		return;
 	}
 
