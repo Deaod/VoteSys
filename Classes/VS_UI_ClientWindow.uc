@@ -13,6 +13,7 @@ var UWindowSmallButton VoteButton;
 var localized string VoteButtonText;
 
 var VS_UI_VoteListBox VoteListBox;
+var VS_UI_PlayerListBox PlayerListBox;
 
 function Created() {
 	local float TabsHeight;
@@ -31,12 +32,15 @@ function Created() {
 	VoteButton.SetText(VoteButtonText);
 
 	VoteListBox = VS_UI_VoteListBox(CreateControl(class'VS_UI_VoteListBox', 170, TabsHeight + 10, 400, 150));
+	PlayerListBox = VS_UI_PlayerListBox(CreateControl(class'VS_UI_PlayerListBox', 420, TabsHeight + 170, 150, 180));
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	local VS_UI_CategoryPresetWrapper P;
 	local VS_Map M;
 	local VS_UI_VoteListItem VLI;
+	local VS_UI_PlayerListItem PLI, TempPLI;
+	local PlayerReplicationInfo PRI;
 	local VS_Info Info;
 	local int i;
 
@@ -76,11 +80,38 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	while(Info.NumCandidates < VoteListBox.Items.Count())
 		VoteListBox.Items.Last.Remove();
 
+	i = 0;
 	for (VLI = VS_UI_VoteListItem(VoteListBox.Items.Next); VLI != none; VLI = VS_UI_VoteListItem(VLI.Next)) {
 		VLI.Preset = Info.GetCandidatePreset(i);
 		VLI.MapName = Info.GetCandidateMapName(i);
 		VLI.Votes = Info.GetCandidateVotes(i);
 		i++;
+	}
+
+	i = 0;
+	PLI = VS_UI_PlayerListItem(PlayerListBox.Items.Next);
+	PRI = Info.GetPlayerInfoPRI(i);
+	while(PRI != none && PLI != none) {
+		PLI.PRI = PRI;
+		PLI.bHasVoted = Info.GetPlayerInfoHasVoted(i);
+
+		i++;
+		PLI = VS_UI_PlayerListItem(PLI.Next);
+		PRI = Info.GetPlayerInfoPRI(i);
+	}
+	while(PRI != none) {
+		PLI = VS_UI_PlayerListItem(PlayerListBox.Items.Append(class'VS_UI_PlayerListItem'));
+		PLI.PRI = PRI;
+		PLI.bHasVoted = Info.GetPlayerInfoHasVoted(i);
+
+		i++;
+		PRI = Info.GetPlayerInfoPRI(i);
+		PLI = VS_UI_PlayerListItem(PLI.Next);
+	}
+	while(PLI != none) {
+		TempPLI = VS_UI_PlayerListItem(PLI.Next);
+		PLI.Remove();
+		PLI = TempPLI;
 	}
 
 	CategoryTabs.WinWidth = WinWidth;
