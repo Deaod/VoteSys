@@ -97,7 +97,7 @@ function UpdatePlayerVoteInformation() {
 	local VS_PlayerChannel C;
 
 	for (C = ChannelList; C != none; C = C.Next) {
-		if (i < 32 && C.PlayerOwner != none) {
+		if (i < 32 && C.PlayerOwner != none && CanVote(C.PlayerOwner)) {
 			Info.SetPlayerInfoPRI(i, C.PlayerOwner.PlayerReplicationInfo);
 			Info.SetPlayerInfoHasVoted(i, C.bHasVoted);
 			i++;
