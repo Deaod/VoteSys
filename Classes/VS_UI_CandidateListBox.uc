@@ -1,6 +1,6 @@
-class VS_UI_VoteListBox extends UWindowListBox;
+class VS_UI_CandidateListBox extends UWindowListBox;
 
-var VS_UI_VoteListItem HoverItem;
+var VS_UI_CandidateListItem HoverItem;
 var localized string PresetColumnHeader;
 var localized string MapColumnHeader;
 var localized string VotesColumnHeader;
@@ -38,7 +38,7 @@ function UWindowListBoxItem GetItemAt(float MouseX, float MouseY) {
 	return none;
 }
 
-function CalcColors(VS_UI_VoteListItem Item, int Index, out color BG, out color FG, out color Sep) {
+function CalcColors(VS_UI_CandidateListItem Item, int Index, out color BG, out color FG, out color Sep) {
 	if (Item.bSelected) {
 		BG.r = 0;
 		BG.g = 0;
@@ -82,7 +82,7 @@ function CalcColors(VS_UI_VoteListItem Item, int Index, out color BG, out color 
 	}
 }
 
-function DrawCandidate(Canvas C, VS_UI_VoteListItem Item, int Index, float X, float Y, float W, float H) {
+function DrawCandidate(Canvas C, VS_UI_CandidateListItem Item, int Index, float X, float Y, float W, float H) {
 	local color BG, FG, Sep;
 	local Region OldClipRegion;
 	local float VW,VH;
@@ -131,7 +131,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 
 	if (HoverItem != none)
 		HoverItem.bHover = false;
-	HoverItem = VS_UI_VoteListItem(GetItemAt(MouseX, MouseY));
+	HoverItem = VS_UI_CandidateListItem(GetItemAt(MouseX, MouseY));
 	if (HoverItem != none)
 		HoverItem.bHover = true;
 
@@ -276,7 +276,7 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 
 	for(Y = 0; (Y < YLimit) && (CurItem != None); CurItem = CurItem.Next) {
 		if(CurItem.ShowThisItem()) {
-			DrawCandidate(C, VS_UI_VoteListItem(CurItem), i++, 0, Y, ItemWidth, ItemHeight);
+			DrawCandidate(C, VS_UI_CandidateListItem(CurItem), i++, 0, Y, ItemWidth, ItemHeight);
 			Y += ItemHeight;
 		}
 	}
@@ -298,7 +298,7 @@ function ClearSelection() {
 }
 
 defaultproperties {
-	ListClass=class'VS_UI_VoteListItem'
+	ListClass=class'VS_UI_CandidateListItem'
 	ItemHeight=13
 	PresetColumnHeader="Preset"
 	MapColumnHeader="Map"

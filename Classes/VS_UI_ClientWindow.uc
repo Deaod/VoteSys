@@ -12,7 +12,7 @@ var VS_UI_MapListBox MapListBox;
 var UWindowSmallButton VoteButton;
 var localized string VoteButtonText;
 
-var VS_UI_VoteListBox VoteListBox;
+var VS_UI_CandidateListBox VoteListBox;
 var VS_UI_PlayerListBox PlayerListBox;
 
 function Created() {
@@ -31,23 +31,29 @@ function Created() {
 	VoteButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 10, TabsHeight + 338, 150, 12));
 	VoteButton.SetText(VoteButtonText);
 
-	VoteListBox = VS_UI_VoteListBox(CreateControl(class'VS_UI_VoteListBox', 170, TabsHeight + 10, 400, 150));
-	PlayerListBox = VS_UI_PlayerListBox(CreateControl(class'VS_UI_PlayerListBox', 420, TabsHeight + 170, 150, 180));
+	VoteListBox = VS_UI_CandidateListBox(CreateControl(class'VS_UI_CandidateListBox', 170, TabsHeight + 10, 400, 150));
+	PlayerListBox = VS_UI_PlayerListBox(CreateControl(class'VS_UI_PlayerListBox', 450, TabsHeight + 170, 120, 180));
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
-	local VS_UI_CategoryPresetWrapper P;
-	local VS_Map M;
-	local VS_UI_VoteListItem VLI;
-	local VS_UI_PlayerListItem PLI, TempPLI;
-	local PlayerReplicationInfo PRI;
 	local VS_Info Info;
-	local int i;
 
 	super.BeforePaint(C, MouseX, MouseY);
 
 	Info = Channel.VoteInfo();
 
+	UpdateActiveCategory();
+	UpdateActivePreset(Info);
+
+	UpdateCandidateList(Info);
+	UpdatePlayerList(Info);
+
+	CategoryTabs.WinWidth = WinWidth;
+}
+
+function UpdateActiveCategory() {
+	local VS_UI_CategoryPresetWrapper P;
+	
 	if (CategoryTabs.SelectedTab != ActiveCategory) {
 		if (ActiveCategory != none)
 			ActiveCategory.SelectedPreset = Presets.SelectedPreset;
@@ -63,6 +69,10 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 				Presets.FocusPreset(ActiveCategory.SelectedPreset.PresetName);
 		}
 	}
+}
+
+function UpdateActivePreset(VS_Info Info) {
+	local VS_Map M;
 
 	if (Presets.SelectedPreset != ActivePreset) {
 		ActivePreset = Presets.SelectedPreset;
@@ -73,22 +83,35 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 			MapListBox.Sort();
 		}
 	}
+}
+
+function UpdateCandidateList(VS_Info Info) {
+	local int i;
+	local VS_UI_CandidateListItem VLI;
 
 	while(Info.NumCandidates > VoteListBox.Items.Count())
-		VoteListBox.Items.Append(class'VS_UI_VoteListItem');
+		VoteListBox.Items.Append(class'VS_UI_CandidateListItem');
 
 	while(Info.NumCandidates < VoteListBox.Items.Count())
 		VoteListBox.Items.Last.Remove();
 
 	i = 0;
-	for (VLI = VS_UI_VoteListItem(VoteListBox.Items.Next); VLI != none; VLI = VS_UI_VoteListItem(VLI.Next)) {
+	for (VLI = VS_UI_CandidateListItem(VoteListBox.Items.Next); VLI != none; VLI = VS_UI_CandidateListItem(VLI.Next)) {
 		VLI.Preset = Info.GetCandidatePreset(i);
 		VLI.MapName = Info.GetCandidateMapName(i);
 		VLI.Votes = Info.GetCandidateVotes(i);
 		i++;
 	}
+}
+
+function UpdatePlayerList(VS_Info Info) {
+	local int i;
+	local VS_UI_PlayerListItem PLI, TempPLI;
+	local PlayerReplicationInfo PRI;
 
 	i = 0;
+
+	// update existing items
 	PLI = VS_UI_PlayerListItem(PlayerListBox.Items.Next);
 	PRI = Info.GetPlayerInfoPRI(i);
 	while(PRI != none && PLI != none) {
@@ -99,26 +122,28 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 		PLI = VS_UI_PlayerListItem(PLI.Next);
 		PRI = Info.GetPlayerInfoPRI(i);
 	}
+
+	// add new items for new players
 	while(PRI != none) {
 		PLI = VS_UI_PlayerListItem(PlayerListBox.Items.Append(class'VS_UI_PlayerListItem'));
 		PLI.PRI = PRI;
 		PLI.bHasVoted = Info.GetPlayerInfoHasVoted(i);
 
 		i++;
-		PRI = Info.GetPlayerInfoPRI(i);
 		PLI = VS_UI_PlayerListItem(PLI.Next);
+		PRI = Info.GetPlayerInfoPRI(i);
 	}
+
+	// remove superfluous items
 	while(PLI != none) {
 		TempPLI = VS_UI_PlayerListItem(PLI.Next);
 		PLI.Remove();
 		PLI = TempPLI;
 	}
-
-	CategoryTabs.WinWidth = WinWidth;
 }
 
 function Notify(UWindowDialogControl C, byte E) {
-	local VS_UI_VoteListItem VLI;
+	local VS_UI_CandidateListItem VLI;
 
 	if ((C == VoteButton && E == DE_Click && MapListBox.SelectedItem != none) ||
 		(C == MapListBox && E == DE_DoubleClick)
@@ -128,7 +153,7 @@ function Notify(UWindowDialogControl C, byte E) {
 	} else if ((C == VoteButton && E == DE_Click && VoteListBox.SelectedItem != none) ||
 		(C == VoteListBox && E == DE_DoubleClick)
 	) {
-		VLI = VS_UI_VoteListItem(VoteListBox.SelectedItem);
+		VLI = VS_UI_CandidateListItem(VoteListBox.SelectedItem);
 		if (VLI != none)
 			Channel.VoteExisting(VLI.Preset, VLI.MapName);
 	} else if (C == VoteListBox && E == DE_Click) {
