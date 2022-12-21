@@ -51,6 +51,8 @@ auto state Initial {
 	}
 	event Resolved(IpAddr Addr) {
 		RemoteAddr.Addr = Addr.Addr;
+		if (Addr.Addr == 0) // listen servers have this address
+			StringToIpAddr("127.0.0.1", RemoteAddr);
 		RemoteAddr.Port = Info.DataPort;
 
 		Log("VS_DataClient Opening"@IpAddrToString(RemoteAddr), 'VoteSys');
