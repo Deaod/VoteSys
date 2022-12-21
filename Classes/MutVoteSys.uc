@@ -9,6 +9,7 @@ var VS_ServerSettings Settings;
 
 var Object PresetConfigDummy;
 var VS_Preset PresetList;
+var name PresetNameDummy;
 
 var Object MapListDummy;
 var VS_MapList MapLists;
@@ -449,7 +450,7 @@ function ApplyVotedPreset() {
 	local array<string> Pkgs;
 	local int i;
 
-	TempDataDummy = new(none, 'VoteSysTemp') class'Object';
+	TempDataDummy = new(XLevel, 'VoteSysTemp') class'Object';
 	TD = new(TempDataDummy, 'Data') class'VS_TempData';
 
 	if (TD.PresetName != "")
@@ -609,12 +610,15 @@ function ApplyGameSettings(string GameSettings) {
 function LoadConfig() {
 	local VS_PresetConfig PC;
 	local VS_Preset P;
+	local int i;
 
-	PresetConfigDummy = new(none, 'VoteSysPresets')  class'Object';
-	MapListDummy      = new(none, 'VoteSysMapLists') class'Object';
+	PresetConfigDummy = new(XLevel, 'VoteSysPresets')  class'Object';
+	MapListDummy      = new(XLevel, 'VoteSysMapLists') class'Object';
+	i = 0;
 
 	while(true) {
-		PC = new(PresetConfigDummy) class'VS_PresetConfig';
+		SetPropertyText("PresetNameDummy", "VS_PresetConfig"$i);
+		PC = new(PresetConfigDummy, PresetNameDummy) class'VS_PresetConfig';
 		Log("Try Loading"@PC.Name, 'VoteSys');
 		if (PC.PresetName == "")
 			return;
@@ -630,6 +634,8 @@ function LoadConfig() {
 
 		if (DefaultPresetRef == none || (P != none && Len(Settings.DefaultPreset) > 0 && P.GetFullName() == Settings.DefaultPreset))
 			DefaultPresetRef = P;
+
+		i++;
 	}
 
 	if (PresetList == none) {
