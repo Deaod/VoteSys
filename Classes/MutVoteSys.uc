@@ -37,6 +37,8 @@ var string CurrentPreset;
 var VS_Preset VotedPreset;
 var VS_Map VotedMap;
 
+var VS_Package TempPkg;
+
 function VS_PlayerChannel FindChannel(Pawn P) {
 	local VS_PlayerChannel C;
 	
@@ -471,17 +473,21 @@ function ApplyVotedPreset() {
 }
 
 function AddClassToPackageMap(string ClassName, out array<string> PkgMap) {
-	local int DotPos;
 	local string P;
 	local class C;
-	
-	DotPos = InStr(ClassName, ".");
-	if (DotPos >= 0) {
-		P = Left(ClassName, DotPos);
-	} else {
-		C = class(DynamicLoadObject(ClassName, class'Class'));
-		if (C != none)
-			AddClassToPackageMap(string(C), PkgMap);
+
+	C = class(DynamicLoadObject(ClassName, class'Class'));
+	if (C == none)
+		return;
+
+	P = string(C.Outer.Name);
+
+	SetPropertyText("TempPkg", C.GetPropertyText("Outer"));
+	if (TempPkg == none) {
+		Log("Casting to Package failed"@C.Outer, 'VoteSys');
+		return;
+	} else if ((TempPkg.PackageFlags & 0x0004) != 0) {
+		Log("Package '"$P$"' is marked ServerSideOnly", 'VoteSys');
 		return;
 	}
 
