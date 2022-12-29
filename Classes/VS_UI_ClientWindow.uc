@@ -73,6 +73,33 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 		ChatSay.SetText(ChatSayText);
 }
 
+function Paint(Canvas C, float MouseX, float MouseY) {
+	local float S;
+	local Region TL, T, TR;
+	local float X,Y,W;
+
+	super.Paint(C, MouseX, MouseY);
+
+	// adapted from UWindowWindow.DrawUpBevel
+	// draws only the top bevel for a more pleasing separation between tabs and content
+
+	X = 0;
+	Y = LookAndFeel.Size_TabAreaHeight;
+	W = WinWidth;
+
+	if ( Root.GUIScale > 1 )
+		S = float(int(Root.GUIScale)) / Root.GUIScale;
+	else
+		S = 1;
+
+	TL = LookAndFeel.BevelUpTL;
+	T = LookAndFeel.BevelUpT;
+	TR = LookAndFeel.BevelUpTR;
+	DrawStretchedTextureSegment( C, X             , Y             ,     (TL.W)*S     ,     (TL.H)*S     , TL.X, TL.Y, TL.W, TL.H, GetLookAndFeelTexture() );
+	DrawStretchedTextureSegment( C, X   + (TL.W)*S, Y             , W - (TL.W+TR.W)*S,     (T.H)*S      ,  T.X,  T.Y,  T.W,  T.H, GetLookAndFeelTexture() );
+	DrawStretchedTextureSegment( C, X+W - (TR.W)*S, Y             ,     (TR.W)*S     ,     (TR.H)*S     , TR.X, TR.Y, TR.W, TR.H, GetLookAndFeelTexture() );
+}
+
 function UpdateActiveCategory() {
 	local VS_UI_CategoryPresetWrapper P;
 	
