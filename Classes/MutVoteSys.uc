@@ -3,6 +3,7 @@ class MutVoteSys extends Mutator;
 var VS_PlayerChannel ChannelList;
 var VS_Info Info;
 var VS_DataServer DataServer;
+var VS_ChatObserver ChatObserver;
 
 var Object SettingsDummy;
 var VS_ServerSettings Settings;
@@ -81,6 +82,8 @@ event PostBeginPlay() {
 	Info.VoteSys = self;
 	Info.MinimumMapRepeatDistance = Settings.MinimumMapRepeatDistance;
 	DataServer = Spawn(class'VS_DataServer', self);
+	ChatObserver = Level.Spawn(class'VS_ChatObserver');
+	ChatObserver.VoteSys = self;
 
 	Level.Game.SetPropertyText("bDontRestart", "True"); // Botpack.DeathMatchPlus and UnrealShare.DeathMatchGame
 }
@@ -780,6 +783,13 @@ function BroadcastLocalizedMessage2(
 	for (C = ChannelList; C != none; C = C.Next)
 		if (C.PlayerOwner != none)
 			C.LocalizeMessage(MessageClass, Switch, Param1, Param2, Param3, Param4, Param5);
+}
+
+function ChatMessage(PlayerReplicationInfo PRI, string Msg) {
+	local VS_PlayerChannel C;
+	for (C = ChannelList; C != none; C = C.Next)
+		if (C.PlayerOwner != none)
+			C.ChatMessage(PRI, Msg);
 }
 
 function bool CanVote(PlayerPawn P) {

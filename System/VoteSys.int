@@ -11,6 +11,8 @@ WindowTitle="VoteSys Menu"
 
 [VS_UI_ClientWindow]
 VoteButtonText="Vote"
+ChatSayText="Say"
+ChatTeamSayText="TeamSay"
 
 [VS_Msg_LocalMessage]
 MsgNobodyVoted="Nobody voted, randomly selecting {1}"

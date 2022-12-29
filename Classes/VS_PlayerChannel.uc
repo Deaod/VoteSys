@@ -34,7 +34,7 @@ replication {
 		HideVoteMenu;
 
 	reliable if (Role == ROLE_Authority && ((bDemoRecording == false) || (bClientDemoRecording && bClientDemoNetFunc) || (Level.NetMode == NM_Standalone)))
-		LocalizeMessage;
+		LocalizeMessage, ChatMessage;
 }
 
 simulated event PostBeginPlay() {
@@ -330,6 +330,18 @@ simulated function LocalizeMessage(
 	Params.Params[5] = Param5;
 
 	PlayerOwner.ReceiveLocalizedMessage(MessageClass, Switch, /*PRI1*/, /*PRI2*/, Params);
+}
+
+simulated function ChatMessage(PlayerReplicationInfo PRI, string Msg) {
+	local string OutMsg;
+	
+	if (VoteMenuDialog == none)
+		return;
+
+	if (PRI == none) OutMsg = Msg;
+	else OutMsg = PRI.PlayerName$": "$Msg;
+
+	VS_UI_ClientWindow(VoteMenuDialog.ClientArea).ChatArea.AddText(OutMsg);
 }
 
 defaultproperties {

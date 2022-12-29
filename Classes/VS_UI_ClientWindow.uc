@@ -15,6 +15,12 @@ var localized string VoteButtonText;
 var VS_UI_CandidateListBox VoteListBox;
 var VS_UI_PlayerListBox PlayerListBox;
 
+var VS_UI_ChatArea ChatArea;
+var UWindowEditControl ChatEdit;
+var UWindowSmallButton ChatSay;
+var localized string ChatSayText;
+var localized string ChatTeamSayText;
+
 function Created() {
 	local float TabsHeight;
 
@@ -27,12 +33,19 @@ function Created() {
 	Presets.bCanEdit = false;
 	Presets.EditBoxWidth = 150;
 
-	MapListBox = VS_UI_MapListBox(CreateControl(class'VS_UI_MapListBox', 10, TabsHeight + 30, 150, 300));
+	MapListBox = VS_UI_MapListBox(CreateControl(class'VS_UI_MapListBox', 10, TabsHeight + 30, 150, 304));
 	VoteButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 10, TabsHeight + 338, 150, 12));
 	VoteButton.SetText(VoteButtonText);
 
-	VoteListBox = VS_UI_CandidateListBox(CreateControl(class'VS_UI_CandidateListBox', 170, TabsHeight + 10, 400, 150));
-	PlayerListBox = VS_UI_PlayerListBox(CreateControl(class'VS_UI_PlayerListBox', 450, TabsHeight + 170, 120, 180));
+	VoteListBox = VS_UI_CandidateListBox(CreateControl(class'VS_UI_CandidateListBox', 170, TabsHeight + 10, 400, 100));
+	PlayerListBox = VS_UI_PlayerListBox(CreateControl(class'VS_UI_PlayerListBox', 450, TabsHeight + 120, 120, 214));
+
+	ChatArea = VS_UI_ChatArea(CreateControl(class'VS_UI_ChatArea', 170, TabsHeight + 120, 270, 214));
+	ChatEdit = UWindowEditControl(CreateControl(class'UWindowEditControl', 170, TabsHeight + 338, 220, 12));
+	ChatEdit.EditBoxWidth = ChatEdit.WinWidth;
+	ChatEdit.SetHistory(true);
+	ChatSay = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 395, TabsHeight + 338, 45, 12));
+	ChatSay.SetText(ChatSayText);
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
@@ -49,6 +62,11 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	UpdatePlayerList(Info);
 
 	CategoryTabs.WinWidth = WinWidth;
+
+	if (ChatEdit.EditBox.bControlDown)
+		ChatSay.SetText(ChatTeamSayText);
+	else
+		ChatSay.SetText(ChatSayText);
 }
 
 function UpdateActiveCategory() {
@@ -160,7 +178,29 @@ function Notify(UWindowDialogControl C, byte E) {
 		MapListBox.ClearSelection();
 	} else if (C == MapListBox && E == DE_Click) {
 		VoteListBox.ClearSelection();
+	} else if (C == ChatSay && E == DE_Click) {
+		// instead of invoking SendChat immediately, divert through
+		// ChatEdit.EditBox to make its history actually useful
+		ChatEdit.EditBox.KeyDown(GetPlayerOwner().EInputKey.IK_Enter, 0, 0);
+		ChatEdit.EditBox.KeyUp(GetPlayerOwner().EInputKey.IK_Enter, 0, 0);
+	} else if (C == ChatEdit && E == DE_EnterPressed) {
+		SendChat();
 	}
+}
+
+function SendChat() {
+	local string Msg;
+
+	Msg = ChatEdit.GetValue();
+	if (Msg == "")
+		return;
+
+	if (ChatEdit.EditBox.bControlDown)
+		GetPlayerOwner().TeamSay(Msg);
+	else
+		GetPlayerOwner().Say(Msg);
+
+	ChatEdit.Clear();
 }
 
 function AddPreset(VS_Preset P) {
@@ -193,4 +233,6 @@ function FocusPreset(VS_Preset P) {
 
 defaultproperties {
 	VoteButtonText="Vote"
+	ChatSayText="Say"
+	ChatTeamSayText="TeamSay"
 }
