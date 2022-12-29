@@ -95,9 +95,9 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 	TL = LookAndFeel.BevelUpTL;
 	T = LookAndFeel.BevelUpT;
 	TR = LookAndFeel.BevelUpTR;
-	DrawStretchedTextureSegment( C, X             , Y             ,     (TL.W)*S     ,     (TL.H)*S     , TL.X, TL.Y, TL.W, TL.H, GetLookAndFeelTexture() );
-	DrawStretchedTextureSegment( C, X   + (TL.W)*S, Y             , W - (TL.W+TR.W)*S,     (T.H)*S      ,  T.X,  T.Y,  T.W,  T.H, GetLookAndFeelTexture() );
-	DrawStretchedTextureSegment( C, X+W - (TR.W)*S, Y             ,     (TR.W)*S     ,     (TR.H)*S     , TR.X, TR.Y, TR.W, TR.H, GetLookAndFeelTexture() );
+	DrawStretchedTextureSegment(C, X             , Y,     (TL.W)*S     , (TL.H)*S, TL.X, TL.Y, TL.W, TL.H, GetLookAndFeelTexture());
+	DrawStretchedTextureSegment(C, X   + (TL.W)*S, Y, W - (TL.W+TR.W)*S, (T.H)*S ,  T.X,  T.Y,  T.W,  T.H, GetLookAndFeelTexture());
+	DrawStretchedTextureSegment(C, X+W - (TR.W)*S, Y,     (TR.W)*S     , (TR.H)*S, TR.X, TR.Y, TR.W, TR.H, GetLookAndFeelTexture());
 }
 
 function UpdateActiveCategory() {
