@@ -21,6 +21,8 @@ var UWindowSmallButton ChatSay;
 var localized string ChatSayText;
 var localized string ChatTeamSayText;
 
+var UWindowSmallCloseButton CloseButton;
+
 function Created() {
 	local float TabsHeight;
 
@@ -46,6 +48,8 @@ function Created() {
 	ChatEdit.SetHistory(true);
 	ChatSay = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 395, TabsHeight + 338, 45, 12));
 	ChatSay.SetText(ChatSayText);
+
+	CloseButton = UWindowSmallCloseButton(CreateControl(class'UWindowSmallCloseButton', 450, TabsHeight + 338, 120, 12));
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
