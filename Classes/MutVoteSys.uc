@@ -621,7 +621,7 @@ function LoadConfig() {
 		PC = new(PresetConfigDummy, PresetNameDummy) class'VS_PresetConfig';
 		Log("Try Loading"@PC.Name, 'VoteSys');
 		if (PC.PresetName == "")
-			return;
+			break;
 
 		if (PresetList == none) {
 			P = LoadPreset(PC);
