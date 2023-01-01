@@ -39,6 +39,35 @@ var VS_Map VotedMap;
 
 var VS_Package TempPkg;
 
+event PostBeginPlay() {
+	super.PostBeginPlay();
+
+	SettingsDummy = new(none, 'VoteSys') class 'Object';
+	Settings = new (SettingsDummy, 'ServerSettings') class'VS_ServerSettings';
+	Settings.SaveConfig();
+
+	if ((Level.EngineVersion$Level.GetPropertyText("EngineRevision")) < "469c" && Settings.bManageServerPackages) {
+		GetDefaultServerPackages();
+	}
+	if (Settings.bUseServerActorsCompatibilityMode) {
+		GetDefaultServerActors();
+	}
+
+	ApplyVotedPreset();
+
+	SetTimer(Level.TimeDilation, true);
+	LoadConfig();
+	LoadHistory();
+	Info = Spawn(class'VS_Info', self);
+	Info.VoteSys = self;
+	Info.MinimumMapRepeatDistance = Settings.MinimumMapRepeatDistance;
+	DataServer = Spawn(class'VS_DataServer', self);
+	ChatObserver = Level.Spawn(class'VS_ChatObserver');
+	ChatObserver.VoteSys = self;
+
+	Level.Game.SetPropertyText("bDontRestart", "True"); // Botpack.DeathMatchPlus and UnrealShare.DeathMatchGame
+}
+
 function VS_PlayerChannel FindChannel(Pawn P) {
 	local VS_PlayerChannel C;
 	
@@ -64,30 +93,94 @@ function CreateChannel(Pawn P) {
 	ChannelList = C;
 }
 
-event PostBeginPlay() {
-	super.PostBeginPlay();
+function BroadcastLocalizedMessage2(
+	class<LocalMessage> MessageClass,
+	optional int Switch,
+	optional string Param1,
+	optional string Param2,
+	optional string Param3,
+	optional string Param4,
+	optional string Param5
+) {
+	local VS_PlayerChannel C;
+	for (C = ChannelList; C != none; C = C.Next)
+		if (C.PlayerOwner != none)
+			C.LocalizeMessage(MessageClass, Switch, Param1, Param2, Param3, Param4, Param5);
+}
 
-	SettingsDummy = new(none, 'VoteSys') class 'Object';
-	Settings = new (SettingsDummy, 'ServerSettings') class'VS_ServerSettings';
-	Settings.SaveConfig();
+function ChatMessage(PlayerReplicationInfo PRI, string Msg) {
+	local VS_PlayerChannel C;
+	for (C = ChannelList; C != none; C = C.Next)
+		if (C.PlayerOwner != none)
+			C.ChatMessage(PRI, Msg);
+}
 
-	if ((Level.EngineVersion$Level.GetPropertyText("EngineRevision")) < "469c" && Settings.bManageServerPackages) {
-		GetDefaultServerPackages();
+function Mutate(string Command, PlayerPawn Sender) {
+	local int i;
+
+	if (Command ~= "VoteMenu") {
+		OpenVoteMenu(Sender);
+		return;
+	} else if (Command ~= "bdbmapvote votemenu") {
+		OpenVoteMenu(Sender);
+	} else if (Command ~= "votesys dumpplayerinfo") {
+		for (i = 0; i < 32; i++)
+			if (Info.GetPlayerInfoPRI(i) != none)
+				Sender.ClientMessage("["$i$"]=(PRI="$Info.GetPlayerInfoPRI(i)$",bHasVoted="$Info.GetPlayerInfoHasVoted(i)$")");
 	}
 
-	ApplyVotedPreset();
+	super.Mutate(Command, Sender);
+}
 
-	SetTimer(Level.TimeDilation, true);
-	LoadConfig();
-	LoadHistory();
-	Info = Spawn(class'VS_Info', self);
-	Info.VoteSys = self;
-	Info.MinimumMapRepeatDistance = Settings.MinimumMapRepeatDistance;
-	DataServer = Spawn(class'VS_DataServer', self);
-	ChatObserver = Level.Spawn(class'VS_ChatObserver');
-	ChatObserver.VoteSys = self;
+function OpenVoteMenuForAll() {
+	local VS_PlayerChannel C;
+	for (C = ChannelList; C != none; C = C.Next)
+		if (C.PlayerOwner != none)
+			C.ShowVoteMenu();
+}
 
-	Level.Game.SetPropertyText("bDontRestart", "True"); // Botpack.DeathMatchPlus and UnrealShare.DeathMatchGame
+function CloseVoteMenuForAll() {
+	local VS_PlayerChannel C;
+	for (C = ChannelList; C != none; C = C.Next)
+		if (C.PlayerOwner != none)
+			C.HideVoteMenu();
+}
+
+function OpenVoteMenu(PlayerPawn P) {
+	local VS_PlayerChannel C;
+
+	if (CanVote(P) == false)
+		return;
+
+	C = FindChannel(P);
+	if (C == none) {
+		Log("Could not find Channel for"@P.PlayerReplicationInfo.PlayerName@"("$P.PlayerReplicationInfo.PlayerId$")", 'VoteSys');
+		return;
+	}
+
+	C.ShowVoteMenu();
+}
+
+event Timer() {
+	CreateMissingPlayerChannels();
+	UpdatePlayerVoteInformation();
+	switch(GameState) {
+		case GS_Playing:
+			CheckMidGameVoting();
+			CheckGameEnded();
+			break;
+		case GS_GameEnded:
+			TickVoteMenuDelay();
+			break;
+		case GS_Voting:
+			TickVoteTime();
+			break;
+		case GS_VoteEnded:
+			TickTimeBeforeTravel();
+			break;
+		case GS_Travelling:
+			break;
+	}
 }
 
 function CreateMissingPlayerChannels() {
@@ -143,15 +236,6 @@ function CheckMidGameVoting() {
 	AnnounceCountdown(TimeCounter);
 }
 
-function CheckGameEnded() {
-	if (Level.Game.GameReplicationInfo.GameEndedComments == "")
-		// not ended yet
-		return;
-
-	GameState = GS_GameEnded;
-	TimeCounter = Settings.GameEndedVoteDelay;
-}
-
 function AnnounceCountdown(int SecondsLeft) {
 	local int Num;
 	local Pawn P;
@@ -184,6 +268,15 @@ function AnnounceCountdown(int SecondsLeft) {
 	}
 }
 
+function CheckGameEnded() {
+	if (Level.Game.GameReplicationInfo.GameEndedComments == "")
+		// not ended yet
+		return;
+
+	GameState = GS_GameEnded;
+	TimeCounter = Settings.GameEndedVoteDelay;
+}
+
 function TickVoteMenuDelay() {
 	TimeCounter--;
 	if (TimeCounter > 0)
@@ -196,54 +289,50 @@ function TickVoteMenuDelay() {
 	AnnounceCountdown(TimeCounter);
 }
 
-function SortMutator(string ClassName, out string Mutators, out string Actors) {
-	local class C;
+function array<string> SplitList(string List, string Delimiter) {
+	local int Pos, DLen;
+	local array<string> Result;
 
-	if (ClassName == "")
-		return;
+	DLen = Len(Delimiter);
 
-	C = class(DynamicLoadObject(ClassName, class'Class'));
-	if (C == none)
-		return;
+	Pos = InStr(List, Delimiter);
+	while (Pos >= 0) {
+		Result.Insert(Result.Length, 1);
+		Result[Result.Length - 1] = Left(List, Pos);
 
-	if (ClassIsChildOf(C, class'Mutator')) {
-		if (Len(Mutators) <= 0) {
-			Mutators = ClassName;
-		} else if (InStr(Mutators, ClassName) == -1) {
-			Mutators = Mutators$","$ClassName;
-		}
-	} else if (InStr(Actors, ClassName) == -1) {
-		if (Len(Actors) <= 0) {
-			Actors = ClassName;
-		} else {
-			Actors = Actors$","$ClassName;
-		}
+		List = Mid(List, Pos + DLen);
+		Pos = InStr(List, Delimiter);
 	}
+	Result.Insert(Result.Length, 1);
+	Result[Result.Length - 1] = List;
+
+	return Result;
 }
 
-function SortMutators(string CombinedList, out string Mutators, out string Actors) {
-	local string E;
-	local int Pos;
+function MergeListIntoArray(string List, out array<string> Ar) {
+	local array<string> L;
+	local int i;
+	local int Start;
 
-	Pos = InStr(CombinedList, ",");
-	while (Pos >= 0) {
-		E = Left(CombinedList, Pos);
-		SortMutator(E, Mutators, Actors);
-		CombinedList = Mid(CombinedList, Pos+1);
-		Pos = InStr(CombinedList, ",");
+	L = SplitList(List, ",");
+	Start = Ar.Length;
+	Ar.Insert(Start, L.Length);
+	for (i = 0; i < L.Length; i++) {
+		Ar[Start] = L[i];
+		Start++;
 	}
-	SortMutator(CombinedList, Mutators, Actors);
 }
 
 function TravelTo(VS_Preset P, VS_Map M) {
 	local string Url;
 	local string Mutators;
-	local string Actors;
+	local string ActorsList;
 	local Object TempDataDummy;
 	local VS_TempData TD;
 	local array<string> Pkgs;
+	local array<string> Actors;
 
-	SortMutators(P.Mutators, Mutators, Actors);
+	SortMutators(P.Mutators, Mutators, ActorsList);
 	if (InStr(Mutators, "MutVoteSys") == -1)
 		Mutators = string(self.Class)$","$Mutators;
 
@@ -255,7 +344,7 @@ function TravelTo(VS_Preset P, VS_Map M) {
 	TD.PresetName = P.PresetName;
 	TD.Category = P.Category;
 	TD.Mutators = Mutators;
-	TD.Actors = Actors;
+	TD.Actors = ActorsList;
 	TD.GameSettings = P.GameSettings;
 	TD.SaveConfig();
 
@@ -267,6 +356,11 @@ function TravelTo(VS_Preset P, VS_Map M) {
 		AddClassesToPackageMap(TD.Mutators, Pkgs);
 		AddClassesToPackageMap(TD.Actors, Pkgs);
 		SetServerPackages(Pkgs);
+	}
+	if (Settings.bUseServerActorsCompatibilityMode) {
+		Actors = Settings.DefaultActors;
+		MergeListIntoArray(TD.Actors, Actors);
+		SetServerActors(Actors);
 	}
 
 	Level.ServerTravel(Url, false);
@@ -387,68 +481,6 @@ function TickTimeBeforeTravel() {
 	TravelTo(VotedPreset, VotedMap);
 }
 
-event Timer() {
-	CreateMissingPlayerChannels();
-	UpdatePlayerVoteInformation();
-	switch(GameState) {
-		case GS_Playing:
-			CheckMidGameVoting();
-			CheckGameEnded();
-			break;
-		case GS_GameEnded:
-			TickVoteMenuDelay();
-			break;
-		case GS_Voting:
-			TickVoteTime();
-			break;
-		case GS_VoteEnded:
-			TickTimeBeforeTravel();
-			break;
-		case GS_Travelling:
-			break;
-	}
-}
-
-function Mutate(string Command, PlayerPawn Sender) {
-	if (Command ~= "VoteMenu") {
-		OpenVoteMenu(Sender);
-		return;
-	} else if (Command ~= "bdbmapvote votemenu") {
-		OpenVoteMenu(Sender);
-	}
-
-	super.Mutate(Command, Sender);
-}
-
-function OpenVoteMenuForAll() {
-	local VS_PlayerChannel C;
-	for (C = ChannelList; C != none; C = C.Next)
-		if (C.PlayerOwner != none)
-			C.ShowVoteMenu();
-}
-
-function CloseVoteMenuForAll() {
-	local VS_PlayerChannel C;
-	for (C = ChannelList; C != none; C = C.Next)
-		if (C.PlayerOwner != none)
-			C.HideVoteMenu();
-}
-
-function OpenVoteMenu(PlayerPawn P) {
-	local VS_PlayerChannel C;
-
-	if (CanVote(P) == false)
-		return;
-
-	C = FindChannel(P);
-	if (C == none) {
-		Log("Could not find Channel for"@P.PlayerReplicationInfo.PlayerName@"("$P.PlayerReplicationInfo.PlayerId$")", 'VoteSys');
-		return;
-	}
-
-	C.ShowVoteMenu();
-}
-
 function ApplyVotedPreset() {
 	local Object TempDataDummy;
 	local VS_TempData TD;
@@ -460,16 +492,29 @@ function ApplyVotedPreset() {
 
 	if (TD.PresetName != "")
 		CurrentPreset = TD.Category$"/"$TD.PresetName;
-	CreateServerActors(TD.Actors);
+	if (Settings.bUseServerActorsCompatibilityMode == false)
+		CreateServerActors(TD.Actors);
 	ApplyGameSettings(TD.GameSettings);
 
 	if ((Level.EngineVersion$Level.GetPropertyText("EngineRevision")) >= "469c" && Settings.bManageServerPackages) {
-		AddClassToPackageMap(TD.Mutators, Pkgs);
-		AddClassToPackageMap(TD.Actors, Pkgs);
+		AddClassesToPackageMap(TD.Mutators, Pkgs);
+		AddClassesToPackageMap(TD.Actors, Pkgs);
 		for (i = 0; i < Pkgs.Length; i++)
 			if (IsInPackageMap(Pkgs[i], true) == false)
 				AddToPackageMap(Pkgs[i]);
 	}
+}
+
+function AddClassesToPackageMap(string Classes, out array<string> PkgMap) {
+	local int Pos;
+
+	Pos = InStr(Classes, ",");
+	while(Pos >= 0) {
+		AddClassToPackageMap(Left(Classes, Pos), PkgMap);
+		Classes = Mid(Classes, Pos+1);
+		Pos = InStr(Classes, ",");
+	}
+	AddClassToPackageMap(Classes, PkgMap);
 }
 
 function AddClassToPackageMap(string ClassName, out array<string> PkgMap) {
@@ -509,49 +554,78 @@ function InsertPackageIntoPackageMap(string Pkg, out array<string> PkgMap) {
 	PkgMap[PkgMap.Length - 1] = Pkg;
 }
 
-function AddClassesToPackageMap(string Classes, out array<string> PkgMap) {
-	local int Pos;
+function SortMutators(string CombinedList, out string Mutators, out string Actors) {
+	local array<string> Classes;
+	local int i;
 
-	Pos = InStr(Classes, ",");
-	while(Pos >= 0) {
-		AddClassToPackageMap(Left(Classes, Pos), PkgMap);
-		Classes = Mid(Classes, Pos+1);
-		Pos = InStr(Classes, ",");
-	}
-	AddClassToPackageMap(Classes, PkgMap);
+	Classes = SplitList(CombinedList, ",");
+	for (i = 0; i < Classes.Length; i++)
+		SortMutator(Classes[i], Mutators, Actors);
 }
 
-function AppendDefaultServerPackage(string Pkg) {
-	Settings.DefaultPackages.Insert(Settings.DefaultPackages.Length, 1);
-	Settings.DefaultPackages[Settings.DefaultPackages.Length - 1] = Pkg;
+function SortMutator(string ClassName, out string Mutators, out string Actors) {
+	local class C;
+
+	if (ClassName == "")
+		return;
+
+	C = class(DynamicLoadObject(ClassName, class'Class'));
+	if (C == none)
+		return;
+
+	if (ClassIsChildOf(C, class'Mutator')) {
+		if (Len(Mutators) <= 0) {
+			Mutators = ClassName;
+		} else if (InStr(Mutators, ClassName) == -1) {
+			Mutators = Mutators$","$ClassName;
+		}
+	} else if (InStr(Actors, ClassName) == -1) {
+		if (Len(Actors) <= 0) {
+			Actors = ClassName;
+		} else {
+			Actors = Actors$","$ClassName;
+		}
+	}
 }
 
 function GetDefaultServerPackages() {
 	local string Prop;
-	local int Pos;
 
 	if (Settings.DefaultPackages.Length > 0)
 		return; // already done
 
 	Prop = ConsoleCommand("get Engine.GameEngine ServerPackages");
 	Log("Packages="$Prop, 'VoteSys');
-	Prop = Mid(Prop, 1, Len(Prop)-2); // remove ( and )
-
-	Pos = InStr(Prop, "\"");
-	while(Pos >= 0) {
-		Prop = Mid(Prop, Pos + 1);
-		Pos = InStr(Prop, "\"");
-		if (Pos >= 0) {
-			AppendDefaultServerPackage(Left(Prop, Pos));
-			Prop = Mid(Prop, Pos + 1);
-		} else {
-			AppendDefaultServerPackage(Prop);
-		}
-
-		Pos = InStr(Prop, "\"");
-	}
-
+	Settings.DefaultPackages = ParseConsoleStringArray(Prop);
 	Settings.SaveConfig();
+}
+
+function GetDefaultServerActors() {
+	local string Prop;
+
+	if (Settings.DefaultPackages.Length > 0)
+		return; // already done
+
+	Prop = ConsoleCommand("get Engine.GameEngine ServerActors");
+	Log("Actors="$Prop, 'VoteSys');
+	Settings.DefaultActors = ParseConsoleStringArray(Prop);
+	Settings.SaveConfig();
+}
+
+// This function has a glaring weakness: it cannot parse strings correctly, if
+// those strings contain one or more commas.
+// Dont expect this to work.
+function array<string> ParseConsoleStringArray(string Output) {
+	local array<string> Result;
+	local int i;
+
+	Output = Mid(Output, Len(Output) - 2); // remove ( and )
+
+	Result = SplitList(Output, ",");
+	for (i = 0; i < Result.Length; i++)
+		Result[i] = Mid(Result[i], Len(Result[i]) - 2); // remove surrounding ""
+
+	return Result;
 }
 
 function SetServerPackages(array<string> Packages) {
@@ -570,6 +644,31 @@ function SetServerPackages(array<string> Packages) {
 	ConsoleCommand("set Engine.GameEngine ServerPackages ("$Value$")");
 }
 
+function SetServerActors(array<string> Actors) {
+	local string Value;
+	local int i;
+
+	if (Actors.Length <= 0)
+		return;
+
+	Value = "\""$Actors[0]$"\""; // hardcode first to save inside loop
+	for (i = 1; i < Actors.Length; i++) {
+		Value = Value$",\""$Actors[i]$"\"";
+	}
+
+	Log("Actors=("$Value$")", 'VoteSys');
+	ConsoleCommand("set Engine.GameEngine ServerActors ("$Value$")");
+}
+
+function CreateServerActors(string Actors) {
+	local int i;
+	local array<string> ActorList;
+
+	ActorList = SplitList(Actors, ",");
+	for (i = 0; i < ActorList.Length; i++)
+		CreateServerActor(ActorList[i]);
+}
+
 function CreateServerActor(string ClassName) {
 	local class<Actor> C;
 
@@ -578,16 +677,13 @@ function CreateServerActor(string ClassName) {
 		Level.Game.Spawn(C);
 }
 
-function CreateServerActors(string Actors) {
-	local int Pos;
+function ApplyGameSettings(string GameSettings) {
+	local int i;
+	local array<string> Settings;
 
-	Pos = InStr(Actors, ",");
-	while(Pos >= 0) {
-		CreateServerActor(Left(Actors, Pos));
-		Actors = Mid(Actors, Pos+1);
-		Pos = InStr(Actors, ",");
-	}
-	CreateServerActor(Actors);
+	Settings = SplitList(GameSettings, ",");
+	for (i = 0; i < Settings.Length; i++)
+		ApplyGameSetting(Settings[i]);
 }
 
 function ApplyGameSetting(string Setting) {
@@ -602,18 +698,6 @@ function ApplyGameSetting(string Setting) {
 	Value = Mid(Setting, Pos+1);
 
 	Level.Game.SetPropertyText(Key, Value);
-}
-
-function ApplyGameSettings(string GameSettings) {
-	local int Pos;
-
-	Pos = InStr(GameSettings, ",");
-	while(Pos >= 0) {
-		ApplyGameSetting(Left(GameSettings, Pos));
-		GameSettings = Mid(GameSettings, Pos+1);
-		Pos = InStr(GameSettings, ",");
-	}
-	ApplyGameSetting(GameSettings);
 }
 
 function LoadConfig() {
@@ -774,28 +858,6 @@ function LoadHistory() {
 	HistoryProcessor.VoteSys = self;
 	HistoryProcessor.History = History;
 	HistoryProcessor.PresetList = PresetList;
-}
-
-function BroadcastLocalizedMessage2(
-	class<LocalMessage> MessageClass,
-	optional int Switch,
-	optional string Param1,
-	optional string Param2,
-	optional string Param3,
-	optional string Param4,
-	optional string Param5
-) {
-	local VS_PlayerChannel C;
-	for (C = ChannelList; C != none; C = C.Next)
-		if (C.PlayerOwner != none)
-			C.LocalizeMessage(MessageClass, Switch, Param1, Param2, Param3, Param4, Param5);
-}
-
-function ChatMessage(PlayerReplicationInfo PRI, string Msg) {
-	local VS_PlayerChannel C;
-	for (C = ChannelList; C != none; C = C.Next)
-		if (C.PlayerOwner != none)
-			C.ChatMessage(PRI, Msg);
 }
 
 function bool CanVote(PlayerPawn P) {
