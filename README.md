@@ -40,13 +40,89 @@ DefaultTimeMessageClass=Botpack.TimeMessage
 DefaultPreset=
 ServerAddress=127.0.0.1
 bManageServerPackages=False
+bUseServerActorsCompatibilityMode=False
 DefaultPackages=SoldierSkins
 DefaultPackages=CommandoSkins
 DefaultPackages=FCommandoSkins
 DefaultPackages=SGirlSkins
 DefaultPackages=BossSkins
 DefaultPackages=Botpack
+DefaultActors=IpDrv.UdpBeacon
+DefaultActors=UWeb.WebServer
+DefaultActors=IpServer.UdpServerQuery
+DefaultActors=IpServer.UdpServerUplink MasterServerAddress=utmaster.epicgames.com MasterServerPort=27900
+DefaultActors=IpServer.UdpServerUplink MasterServerAddress=333networks.com MasterServerPort=27900
+DefaultActors=IpServer.UdpServerUplink MasterServerAddress=unreal.epicgames.com MasterServerPort=27900
+
 ```
+
+#### GameEndedVoteDelay
+
+Number of seconds to wait before opening the map vote menu at the end of the game. Defaults to 5.
+
+#### VoteTimeLimit
+
+Number of seconds players have to vote for the next map. Defaults to 30.
+
+#### MinimumRepeatDistance
+
+Number of different maps that must be played before being able to play the current map again.
+
+Same map, but a different preset does not count as the same map for the purposes of this check.
+
+Defaults to 0.
+
+#### DefaultTimeMessageClass
+
+Specifies a message class that is used when the PlayerPawn class is not based on TournamentPlayer.
+
+Defaults to Botpack.TimeMessage.
+
+#### DefaultPreset
+
+Specifies the preset thats selected by default should the server not know what preset was voted last.
+
+Empty by default.
+
+#### ServerAddress
+
+Specifies the IP address thats used by clients should the clients be unable to determine the IP address of the server.
+
+Empty by default.
+
+#### bManageServerPackages
+
+If True, VoteSys will automatically adjust the ServerPackages depending on the currently running preset.
+If False, VoteSys will not adjust ServerPackages at all.
+
+Defaults to False.
+
+Prior to 469c, automatically adjusting ServerPackages requires modifying the INI, which VoteSys will do automatically. DefaultPackages is used to restore a clean state. If you as server admin want to add new packages to the list of ServerPackages, you should add them to DefaultPackages instead.
+
+On 469c and later modifying the INI is no longer required.
+
+Only Packages that do **not** have the ServerSideOnly flag set are added to ServerPackages automatically.
+
+#### bUseServerActorsCompatibilityMode
+
+If True, VoteSys will modify the ServerActors list to spawn the Actors specific to a preset. DefaultActors is used to restore a standard list of ServerActors to add the preset's ServerActors to.
+If False, VoteSys will spawn the presets Actors itself.
+
+Defaults to False.
+
+Only set to True if you want to use at least one ServerActor that does not work correctly without this option set to True, but does work correctly when activated statically through the ServerActors list.
+
+#### DefaultPackages
+
+Filled in automatically after bManageServerPackages is set to True. While that setting is True, edit this list to change the static ServerPackages.
+
+By default no entries for this variable exists.
+
+#### DefaultActors
+
+Filled in automatically after bUseServerActorsCompatibilityMode is set to True. While this setting is True, edit this list to change the static ServerActors.
+
+By default no entries for this variable exists.
 
 ### VoteSysPresets.ini
 ```ini
