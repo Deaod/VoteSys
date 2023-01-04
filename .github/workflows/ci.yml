@@ -64,7 +64,7 @@ jobs:
 
             $OldName = $File.Name
             $NewName = ($File.Name -replace "${{ github.event.repository.name }}\.","${{ env.PKG_NAME }}.")
-            $NewItem = ("${{ env.PKG_NAME }}"+ $SubDir + $NewName)
+            $NewItem = ("${{ env.PKG_NAME }}"+$SubDir+$NewName)
             Write-Output ($SubDir + $OldName + " -> " + $SubDir + $NewName)
             if (Test-Path -Path $NewItem) { Remove-Item $NewItem }
             (Get-Content -Path $File.FullName) | ForEach-Object {
@@ -77,7 +77,7 @@ jobs:
               $SubDir,
               $FilePattern
             )
-            Get-ChildItem ("${{ env.PKG_NAME }}" + $SubDir + $FilePattern) | ForEach-Object {
+            Get-ChildItem ("${{ env.PKG_NAME }}"+$SubDir+$FilePattern) | ForEach-Object {
               Replace-PackageName-File($_, $SubDir)
             }
           }
