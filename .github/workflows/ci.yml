@@ -72,15 +72,19 @@ jobs:
             }
             Remove-Item $File
           }
+
           function Replace-PackageName {
             param(
-              $SubDir,
-              $FilePattern
+              [string]$SubDir,
+              [string]$FilePattern
             )
+            Write-Output "$SubDir"
+            Write-Output "$FilePattern"
             Get-ChildItem ("${{ env.PKG_NAME }}"+$SubDir+$FilePattern) | ForEach-Object {
               Replace-PackageName-File($_, $SubDir)
             }
           }
+
           Replace-PackageName("/System/",  "${{ github.event.repository.name }}.*")
           Replace-PackageName("/System/",  "ACEFileList_${{ github.event.repository.name }}.*")
           Replace-PackageName("/System/",  "ACETweakList_${{ github.event.repository.name }}.*")
