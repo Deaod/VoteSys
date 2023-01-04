@@ -81,7 +81,7 @@ jobs:
             Write-Output "'$SubDir'"
             Write-Output "'$FilePattern'"
             Get-ChildItem ("${{ env.PKG_NAME }}"+$SubDir+$FilePattern) | ForEach-Object {
-              Replace-PackageName-File($_, $SubDir)
+              Replace-PackageName-File $_ $SubDir
             }
           }
 
