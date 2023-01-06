@@ -669,12 +669,28 @@ function CreateServerActors(string Actors) {
 		CreateServerActor(ActorList[i]);
 }
 
-function CreateServerActor(string ClassName) {
+function CreateServerActor(string ActorLine) {
 	local class<Actor> C;
+	local array<string> Elements;
+	local Actor A;
+	local int i;
+	local int Pos;
 
-	C = class<Actor>(DynamicLoadObject(ClassName, class'Class'));
+	Elements = SplitList(ActorLine, " ");
+	C = class<Actor>(DynamicLoadObject(Elements[0], class'Class'));
 	if (C != none)
-		Level.Game.Spawn(C);
+		A = Level.Game.Spawn(C);
+
+	if (A == none)
+		return;
+
+	for (i = 1; i < Elements.Length; i++) {
+		Pos = InStr(Elements[i], "=");
+		if (Pos == -1)
+			continue;
+
+		A.SetPropertyText(Left(Elements[i], Pos), Mid(Elements[i], Pos+1));
+	}
 }
 
 function ApplyGameSettings(string GameSettings) {
