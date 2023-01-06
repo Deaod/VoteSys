@@ -13,6 +13,8 @@ A new, independent implementation of map vote.
 Servers must run at least UT v469.  
 Clients must run at least UT v436.
 
+## [UI Documentation](Docs/ui.md)
+
 ## Installation
 1. Make sure the VoteSys .u and .int files are in the System folder
 2. Add VoteSys mutator to URL when starting the server
@@ -145,6 +147,54 @@ MapListName=
 Mutators=
 Parameters=?MaxPlayers=8
 GameSettings=bTournament=True
+```
+
+Each preset is a different section inside VoteSysPresets.ini (e.g. `[VS_PresetConfig0]`, `[VS_PresetConfig1]`, etc.). Each preset section needs to start with VS_PresetConfig, followed by a number. The number needs to start from 0 and can go as high as you want. You can not leave out numbers.
+
+#### Preset Identification
+Each preset has a `Name`, a `Category` and an `Abbreviation`.  
+`Category` and `Name` are used to uniquely identify presets, so you may not have two presets with the same `Category` and `Name`.  
+`Category` and `Abbreviation` may be blank.  
+`Name` may not be blank.
+
+#### Game Type
+`Game` is used to identify the gametype for the preset. It must not be blank.
+
+#### Map List
+`MapListName` can be used to specify a custom list of maps that can be used with the preset. If `MapListName` is blank, all maps for the specified gametype are used.
+
+#### Mutators
+`Mutators` can be used to specify both Mutators and ServerActors.
+
+```
+Mutators=Package1.ExampleMutator1
+Mutators=Package2.ExampleMutator2
+```
+is equivalent to
+```
+Mutators=Package1.ExampleMutator1,Package2.ExampleMutator2
+```
+
+#### Parameters
+Can be used to specify URL parameters.
+```
+Parameters=?Parameter1=Value1
+Parameters=?Parameter2=Value2
+```
+is equivalent to
+```
+Parameters=?Parameter1=Value1?Parameter2=Value2
+```
+
+#### Game Settings
+Can be used to specify changes to the gametype from the defaults.
+```
+GameSettings=Variable1=Value1
+GameSettings=Variable2=Value2
+```
+is equivalent to
+```
+GameSettings=Variable1=Value1,Variable2=Value2
 ```
 
 ### VoteSysMapLists.ini
