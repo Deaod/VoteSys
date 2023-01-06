@@ -23,6 +23,10 @@ var localized string ChatTeamSayText;
 
 var UWindowSmallCloseButton CloseButton;
 
+var float PrevMouseX, PrevMouseY;
+var float LastMouseMoveTime;
+var VS_UI_ScreenshotWindow MapScreenshotWindow;
+
 function Created() {
 	local float TabsHeight;
 
@@ -50,10 +54,16 @@ function Created() {
 	ChatSay.SetText(ChatSayText);
 
 	CloseButton = UWindowSmallCloseButton(CreateControl(class'UWindowSmallCloseButton', 450, TabsHeight + 338, 120, 12));
+
+	MapScreenshotWindow = VS_UI_ScreenshotWindow(Root.CreateWindow(class'VS_UI_ScreenshotWindow', 0,0,200,200));
+	MapScreenshotWindow.HideWindow();
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	local VS_Info Info;
+	local LevelInfo L;
+	local Texture T;
+	local float Ratio;
 
 	super.BeforePaint(C, MouseX, MouseY);
 
@@ -71,6 +81,33 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 		ChatSay.SetText(ChatTeamSayText);
 	else
 		ChatSay.SetText(ChatSayText);
+
+
+	L = GetLevel();
+	if (MouseX != PrevMouseX || MouseY != PrevMouseY || MapListBox.HoverItem == none || IsActive() == false) {
+		PrevMouseX = MouseX;
+		PrevMouseY = MouseY;
+		LastMouseMoveTime = L.TimeSeconds;
+		if (MapScreenshotWindow.bWindowVisible)
+			MapScreenshotWindow.HideWindow();
+	}
+	if (((L.TimeSeconds - LastMouseMoveTime) > L.TimeDilation) && (MapListBox.HoverItem != none)) {
+		if (MapScreenshotWindow.bWindowVisible == false) {
+			MapScreenshotWindow.ShowWindow();
+
+			T = Texture(DynamicLoadObject(MapListBox.HoverItem.MapRef.MapName$".Screenshot", class'Texture', true));
+			if (T == none)
+				T = Texture'BlackTexture';
+			MapScreenshotWindow.Screenshot = T;
+
+			Ratio = FMin(200.0/T.USize, 200.0/T.VSize);
+
+			MapScreenshotWindow.WinLeft = Root.MouseX;
+			MapScreenshotWindow.WinTop = Root.MouseY + 24;
+			MapScreenshotWindow.WinWidth = T.USize * Ratio;
+			MapScreenshotWindow.WinHeight = T.VSize * Ratio;
+		}
+	}
 }
 
 function Paint(Canvas C, float MouseX, float MouseY) {
