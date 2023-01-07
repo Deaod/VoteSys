@@ -103,7 +103,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 			Ratio = FMin(200.0/T.USize, 200.0/T.VSize);
 
 			MapScreenshotWindow.WinLeft = Root.MouseX;
-			MapScreenshotWindow.WinTop = Root.MouseY + 24;
+			MapScreenshotWindow.WinTop = Root.MouseY + (20/Root.GUIScale);
 			MapScreenshotWindow.WinWidth = T.USize * Ratio;
 			MapScreenshotWindow.WinHeight = T.VSize * Ratio;
 		}
