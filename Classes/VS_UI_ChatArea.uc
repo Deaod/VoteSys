@@ -186,7 +186,7 @@ function AddChat(PlayerReplicationInfo PRI, string Message) {
 		foreach GetLevel().AllActors(class'GameReplicationInfo', GRI)
 			break;
 
-	if (GRI != none && GRI.bTeamGame)
+	if (GRI != none && GRI.bTeamGame && PRI.bIsSpectator == false && PRI.Team < 4 && Len(PRI.TeamName) > 0)
 		M.PlayerColor = class'ChallengeTeamHUD'.default.TeamColor[PRI.Team];
 	else
 		M.PlayerColor = TextColor;
