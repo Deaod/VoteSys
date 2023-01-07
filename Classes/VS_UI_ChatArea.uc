@@ -1,5 +1,7 @@
 class VS_UI_ChatArea extends UWindowDynamicTextArea;
 
+var GameReplicationInfo GRI;
+
 function Paint(Canvas C, float MouseX, float MouseY) {
 	local UWindowDynamicTextRow L;
 	local int SkipCount, DrawCount;
@@ -156,19 +158,42 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 
 function float DrawTextLine2(Canvas C, UWindowDynamicTextRow L, float Y, float Width) {
 	local float X, W, H;
+	local VS_UI_ChatMessage M;
+
+	M = VS_UI_ChatMessage(L);
 
 	if(bHCenter) {
-		TextAreaTextSize(C, L.Text, W, H);
+		TextAreaTextSize(C, M.PRI.PlayerName$": "$M.Text, W, H);
 		X = int((Width - W) / 2);
 	} else {
 		X = 2;
 	}
-	TextAreaClipText(C, X, Y, L.Text);
+	TextAreaClipText(C, X, Y, M.PRI.PlayerName$": "$M.Text);
+
+	C.DrawColor = M.PlayerColor;
+	TextAreaClipText(C, X, Y, M.PRI.PlayerName);
+	C.DrawColor = TextColor;
 
 	return DefaultTextHeight;
+}
+
+function AddChat(PlayerReplicationInfo PRI, string Message) {
+	local VS_UI_ChatMessage M;
+	M = VS_UI_ChatMessage(AddText(Message));
+	M.PRI = PRI;
+
+	if (GRI == none)
+		foreach GetLevel().AllActors(class'GameReplicationInfo', GRI)
+			break;
+
+	if (GRI != none && GRI.bTeamGame)
+		M.PlayerColor = class'ChallengeTeamHUD'.default.TeamColor[PRI.Team];
+	else
+		M.PlayerColor = TextColor;
 }
 
 defaultproperties {
 	MaxLines=500
 	TextColor=(R=0,G=0,B=0,A=255)
+	RowClass=class'VS_UI_ChatMessage'
 }

@@ -333,15 +333,10 @@ simulated function LocalizeMessage(
 }
 
 simulated function ChatMessage(PlayerReplicationInfo PRI, string Msg) {
-	local string OutMsg;
-	
 	if (VoteMenuDialog == none)
 		return;
 
-	if (PRI == none) OutMsg = Msg;
-	else OutMsg = PRI.PlayerName$": "$Msg;
-
-	VS_UI_ClientWindow(VoteMenuDialog.ClientArea).ChatArea.AddText(OutMsg);
+	VS_UI_ClientWindow(VoteMenuDialog.ClientArea).ChatArea.AddChat(PRI, Msg);
 }
 
 defaultproperties {
