@@ -7,6 +7,8 @@ var float CheckboxOffsetY;
 var float PlayerNameOffsetX;
 var float PlayerNameOffsetY;
 
+var transient GameReplicationInfo GRI;
+
 function Created() {
 	super.Created();
 
@@ -67,6 +69,11 @@ function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H
 	C.DrawColor.g = 0;
 	C.DrawColor.b = 0;
 	ClipText(C, X+PlayerNameOffsetX, Y+PlayerNameOffsetY, I.PRI.PlayerName);
+
+	if (GRI != none && GRI.bTeamGame && I.PRI.bIsSpectator == false && I.PRI.Team < 4 && Len(I.PRI.TeamName) > 0)
+		C.DrawColor = class'ChallengeTeamHUD'.default.TeamColor[I.PRI.Team];
+
+	ClipText(C, X+PlayerNameOffsetX, Y+PlayerNameOffsetY, I.PRI.PlayerName);
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
@@ -91,6 +98,10 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 		Items.CountShown(),
 		int((WinHeight - (LookAndFeel.MiscBevelT[BevelType].H + LookAndFeel.MiscBevelB[BevelType].H)) / ItemHeight)
 	);
+
+	if (GRI == none)
+		foreach GetLevel().AllActors(class'GameReplicationInfo', GRI)
+			break;
 }
 
 
