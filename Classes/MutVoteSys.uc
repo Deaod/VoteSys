@@ -38,6 +38,7 @@ var VS_Preset VotedPreset;
 var VS_Map VotedMap;
 
 var VS_Package TempPkg;
+var array<string> BannedAddresses;
 
 event PostBeginPlay() {
 	super.PostBeginPlay();
@@ -83,14 +84,39 @@ function VS_PlayerChannel FindChannel(Pawn P) {
 
 function CreateChannel(Pawn P) {
 	local VS_PlayerChannel C;
+	local PlayerPawn PP;
 	
 	if (P.IsA('PlayerPawn') == false)
 		return;
 
+	PP = PlayerPawn(P);
+	if (PP != none && IsAddressBanned(PP.GetPlayerNetworkAddress())) {
+		PP.KickMe("Temp Banned (VoteSys)");
+		return;
+	}
+
 	C = Spawn(class'VS_PlayerChannel', P);
-	C.PlayerOwner = PlayerPawn(P);
+	C.PlayerOwner = PP;
 	C.Next = ChannelList;
 	ChannelList = C;
+}
+
+function bool IsAddressBanned(string Address) {
+	local int i;
+
+	for (i = 0; i < BannedAddresses.Length; i++)
+		if (Address == BannedAddresses[i])
+			return true;
+
+	return false;
+}
+
+function TempBanAddress(string Address) {
+	if (IsAddressBanned(Address))
+		return;
+
+	BannedAddresses.Insert(BannedAddresses.Length, 1)
+	BannedAddresses[BannedAddresses.Length - 1] = Address;
 }
 
 function BroadcastLocalizedMessage2(

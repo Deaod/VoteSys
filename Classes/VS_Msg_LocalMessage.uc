@@ -7,6 +7,8 @@ var localized string MsgMidGame;
 var localized string MsgGameEnded;
 var localized string MsgPlayerVoted;
 var localized string MsgAdminForceTravel;
+var localized string MsgAdminKickPlayer;
+var localized string MsgAdminBanPlayer;
 
 var localized string ErrStillLoading;
 var localized string ErrNoRootWindow;
@@ -32,6 +34,8 @@ static function string GetString(
 		case 5: Result = default.MsgGameEnded; break;
 		case 6: Result = default.MsgPlayerVoted; break;
 		case 7: Result = default.MsgAdminForceTravel; break;
+		case 8: Result = default.MsgAdminKickPlayer; break;
+		case 9: Result = default.MsgAdminBanPlayer; break;
 
 		case -1: Result = default.ErrStillLoading; break;
 		case -2: Result = default.ErrNoRootWindow; break;
@@ -83,6 +87,8 @@ defaultproperties {
 	MsgGameEnded="Game ended, opening Vote Menu"
 	MsgPlayerVoted="{1} voted for {2}"
 	MsgAdminForceTravel="Admin {1} forced switching to {2}"
+	MsgAdminKickPlayer="Admin {1} kicked player {2} ({3})"
+	MsgAdminBanPlayer="Admin {1} banned player {2} ({3})"
 
 	ErrStillLoading="Vote Menu data is still being transferred, please try again"
 	ErrNoRootWindow="Failed to create VoteMenu window (Root does not exist)"

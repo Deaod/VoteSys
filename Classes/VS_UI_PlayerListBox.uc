@@ -8,6 +8,8 @@ var float PlayerNameOffsetX;
 var float PlayerNameOffsetY;
 
 var VS_UI_PlayerListItem HoverItem;
+var VS_UI_PlayerMenu ContextMenu;
+
 
 var transient GameReplicationInfo GRI;
 
@@ -16,6 +18,9 @@ function Created() {
 
 	DummyCheckbox = new class'UWindowCheckbox';
 	DummyCheckbox.Root = Root;
+
+	ContextMenu = VS_UI_PlayerMenu(Root.CreateWindow(class'VS_UI_PlayerMenu', 0, 0, 100, 100, self));
+	ContextMenu.HideWindow();
 }
 
 function UWindowListBoxItem GetItemAt(float MouseX, float MouseY) {
@@ -177,6 +182,31 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 	C.OrgX = OrgX; C.OrgY = OrgY;
 	C.ClipX = ClipX; C.ClipY = ClipY;
 	ClippingRegion = OldClipRegion;
+}
+
+function Close(optional bool bByParent) {
+	if (ContextMenu.bWindowVisible)
+		ContextMenu.CloseUp();
+	super.Close(bByParent);
+}
+
+function RMouseDown(float MouseX, float MouseY) {
+	local VS_UI_PlayerListItem I;
+	super.RMouseDown(MouseX, MouseY);
+
+	I = VS_UI_PlayerListItem(GetItemAt(MouseX, MouseY));
+	if (I == none)
+		return;
+
+	ContextMenu.WinLeft = Root.MouseX;
+	ContextMenu.WinTop = Root.MouseY;
+	ContextMenu.PlayerKick.bDisabled = (GetPlayerOwner().PlayerReplicationInfo.bAdmin == false);
+	ContextMenu.PlayerBan.bDisabled = (GetPlayerOwner().PlayerReplicationInfo.bAdmin == false);
+
+	// ContextMenu.PRI MUST be set before ShowWindow is invoked,
+	// ShowWindow renames the ContextMenu items depending on PRI
+	ContextMenu.PRI = I.PRI;
+	ContextMenu.ShowWindow();
 }
 
 defaultproperties {

@@ -26,6 +26,8 @@ var int MaxMapSequenceNumber;
 
 replication {
 	reliable if (Role < ROLE_Authority)
+		ServerBanPlayer,
+		ServerKickPlayer,
 		ServerVote,
 		ServerVoteExisting;
 
@@ -308,6 +310,28 @@ function ClearVote() {
 		VotePreset = none;
 		VoteMap = none;
 	}
+}
+
+simulated function KickPlayer(PlayerReplicationInfo PRI) {
+	ServerKickPlayer(PRI);
+}
+
+function ServerKickPlayer(PlayerReplicationInfo PRI) {
+	if (PlayerOwner == none)
+		return;
+
+	VoteInfo().KickPlayer(self, PRI);
+}
+
+simulated function BanPlayer(PlayerReplicationInfo PRI) {
+	ServerBanPlayer(PRI);
+}
+
+function ServerBanPlayer(PlayerReplicationInfo PRI) {
+	if (PlayerOwner == none)
+		return;
+
+	VoteInfo().BanPlayer(self, PRI);
 }
 
 simulated function LocalizeMessage(

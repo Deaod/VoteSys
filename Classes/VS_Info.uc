@@ -141,6 +141,53 @@ function RemMapVoteUnsafe(string Preset, string MapName) {
 	}
 }
 
+function KickPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target) {
+	local PlayerPawn P;
+	if (Origin == none || Target == none)
+		return;
+
+	if (Origin.PlayerOwner != none &&
+		Origin.PlayerOwner.PlayerReplicationInfo != none &&
+		Origin.PlayerOwner.PlayerReplicationInfo.bAdmin
+	) {
+		P = PlayerPawn(Target.Owner);
+		if (P != none) {
+			VoteSys.BroadcastLocalizedMessage2(
+				class'VS_Msg_LocalMessage', 8,
+				Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
+				Target.PlayerName,
+				string(Target.PlayerId)
+			);
+
+			VoteSys.TempBanAddress(P.GetPlayerNetworkAddress());
+			P.KickMe("Admin Kick (VoteSys)");
+		}
+	}
+}
+
+function BanPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target) {
+	local PlayerPawn P;
+	if (Origin == none || Target == none)
+		return;
+
+	if (Origin.PlayerOwner != none &&
+		Origin.PlayerOwner.PlayerReplicationInfo != none &&
+		Origin.PlayerOwner.PlayerReplicationInfo.bAdmin
+	) {
+		P = PlayerPawn(Target.Owner);
+		if (P != none) {
+			VoteSys.BroadcastLocalizedMessage2(
+				class'VS_Msg_LocalMessage', 9,
+				Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
+				Target.PlayerName,
+				string(Target.PlayerId)
+			);
+
+			P.KickBanMe("Admin Ban (VoteSys)");
+		}
+	}
+}
+
 function int FindCandidateIndex(string Preset, string MapName) {
 	local int Index;
 	for (Index = 0; Index < arraycount(Candidates); Index++)
