@@ -115,7 +115,7 @@ function TempBanAddress(string Address) {
 	if (IsAddressBanned(Address))
 		return;
 
-	BannedAddresses.Insert(BannedAddresses.Length, 1)
+	BannedAddresses.Insert(BannedAddresses.Length, 1);
 	BannedAddresses[BannedAddresses.Length - 1] = Address;
 }
 
