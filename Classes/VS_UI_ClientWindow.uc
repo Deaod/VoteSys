@@ -62,7 +62,7 @@ function Created() {
 
 	CloseButton = UWindowSmallCloseButton(CreateControl(class'UWindowSmallCloseButton', 450, TabsHeight + 338, 120, 12));
 
-	MapScreenshotWindow = VS_UI_ScreenshotWindow(Root.CreateWindow(class'VS_UI_ScreenshotWindow', 0,0,200,200));
+	MapScreenshotWindow = VS_UI_ScreenshotWindow(Root.CreateWindow(class'VS_UI_ScreenshotWindow', 0,0,130,130));
 	MapScreenshotWindow.HideWindow();
 }
 
@@ -109,7 +109,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 				T = Texture'BlackTexture';
 			MapScreenshotWindow.Screenshot = T;
 
-			Ratio = FMin(200.0/T.USize, 200.0/T.VSize);
+			Ratio = FMin(MapScreenshotWindow.WinWidth/T.USize, MapScreenshotWindow.WinHeight/T.VSize);
 
 			MapScreenshotWindow.WinLeft = Root.MouseX;
 			MapScreenshotWindow.WinTop = Root.MouseY + (20/Root.GUIScale);
