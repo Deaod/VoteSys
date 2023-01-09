@@ -7,6 +7,10 @@ var VS_Preset ActivePreset;
 
 var VS_UI_CategoryTabControl CategoryTabs;
 var VS_UI_PresetComboBox Presets;
+var VS_UI_EditControl MapFilter;
+var localized string MapFilterText;
+var float LastMapFilterEditTime;
+var bool bMapFilterApplied;
 var VS_UI_MapListBox MapListBox;
 
 var UWindowSmallButton VoteButton;
@@ -39,7 +43,10 @@ function Created() {
 	Presets.bCanEdit = false;
 	Presets.EditBoxWidth = 150;
 
-	MapListBox = VS_UI_MapListBox(CreateControl(class'VS_UI_MapListBox', 10, TabsHeight + 30, 150, 304));
+	MapFilter = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 10, TabsHeight + 30, 150, 12));
+	MapFilter.SetText(MapFilterText);
+
+	MapListBox = VS_UI_MapListBox(CreateControl(class'VS_UI_MapListBox', 10, TabsHeight + 50, 150, 284));
 	VoteButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 10, TabsHeight + 338, 150, 12));
 	VoteButton.SetText(VoteButtonText);
 
@@ -64,6 +71,8 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	local LevelInfo L;
 	local Texture T;
 	local float Ratio;
+	local string Filter;
+	local VS_UI_MapListItem M;
 
 	super.BeforePaint(C, MouseX, MouseY);
 
@@ -106,6 +115,18 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 			MapScreenshotWindow.WinTop = Root.MouseY + (20/Root.GUIScale);
 			MapScreenshotWindow.WinWidth = T.USize * Ratio;
 			MapScreenshotWindow.WinHeight = T.VSize * Ratio;
+		}
+	}
+
+	if (((L.TimeSeconds - LastMapFilterEditTime) > (L.TimeDilation * 0.25)) && (bMapFilterApplied == false)) {
+		bMapFilterApplied = true;
+		Filter = Caps(MapFilter.GetValue());
+		if (Filter != "") {
+			for (M = VS_UI_MapListItem(MapListBox.Items.Next); M != none; M = VS_UI_MapListItem(M.Next))
+				M.bFilteredOut = InStr(Caps(M.MapRef.MapName), Filter) < 0;
+		} else {
+			for (M = VS_UI_MapListItem(MapListBox.Items.Next); M != none; M = VS_UI_MapListItem(M.Next))
+				M.bFilteredOut = false;
 		}
 	}
 }
@@ -253,6 +274,9 @@ function Notify(UWindowDialogControl C, byte E) {
 		ChatEdit.EditBox.KeyUp(GetPlayerOwner().EInputKey.IK_Enter, 0, 0);
 	} else if (C == ChatEdit && E == DE_EnterPressed) {
 		SendChat();
+	} else if (C == MapFilter && E == DE_Change) {
+		LastMapFilterEditTime = GetLevel().TimeSeconds;
+		bMapFilterApplied = false;
 	}
 }
 
@@ -300,7 +324,10 @@ function FocusPreset(VS_Preset P) {
 }
 
 defaultproperties {
+	MapFilterText="Filter Maps By Name"
 	VoteButtonText="Vote"
 	ChatSayText="Say"
 	ChatTeamSayText="TeamSay"
+
+	bMapFilterApplied=True
 }

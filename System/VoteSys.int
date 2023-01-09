@@ -10,6 +10,7 @@ VotesColumnHeader="Votes"
 WindowTitle="VoteSys Menu"
 
 [VS_UI_ClientWindow]
+MapFilterText="Filter Maps By Name"
 VoteButtonText="Vote"
 ChatSayText="Say"
 ChatTeamSayText="TeamSay"
