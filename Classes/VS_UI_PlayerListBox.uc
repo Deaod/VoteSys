@@ -7,6 +7,8 @@ var float CheckboxOffsetY;
 var float PlayerNameOffsetX;
 var float PlayerNameOffsetY;
 
+var VS_UI_PlayerListItem HoverItem;
+
 var transient GameReplicationInfo GRI;
 
 function Created() {
@@ -52,6 +54,14 @@ function UWindowListBoxItem GetItemAt(float MouseX, float MouseY) {
 function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H) {
 	local VS_UI_PlayerListItem I;
 	I = VS_UI_PlayerListItem(Item);
+
+	if (I.bHover) {
+		C.DrawColor.r = 192;
+		C.DrawColor.g = 192;
+		C.DrawColor.b = 192;
+		DrawStretchedTexture(C, X, Y, W, H, Texture'WhiteTexture');
+	}
+
 	C.DrawColor.r = 255;
 	C.DrawColor.g = 255;
 	C.DrawColor.b = 255;
@@ -92,6 +102,12 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	DummyCheckbox.WinWidth = 16;
 	DummyCheckbox.WinHeight = 16;
 	DummyCheckbox.LookAndFeel = LookAndFeel;
+
+	if (HoverItem != none)
+		HoverItem.bHover = false;
+	HoverItem = VS_UI_PlayerListItem(GetItemAt(MouseX, MouseY));
+	if (HoverItem != none)
+		HoverItem.bHover = true;
 
 	VertSB.SetRange(
 		0,
@@ -165,5 +181,5 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 
 defaultproperties {
 	ListClass=class'VS_UI_PlayerListItem'
-	ItemHeight=16
+	ItemHeight=13
 }
