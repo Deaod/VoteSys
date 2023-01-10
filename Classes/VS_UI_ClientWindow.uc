@@ -62,7 +62,7 @@ function Created() {
 
 	CloseButton = UWindowSmallCloseButton(CreateControl(class'UWindowSmallCloseButton', 450, TabsHeight + 338, 120, 12));
 
-	MapScreenshotWindow = VS_UI_ScreenshotWindow(Root.CreateWindow(class'VS_UI_ScreenshotWindow', 0,0,130,130));
+	MapScreenshotWindow = VS_UI_ScreenshotWindow(Root.CreateWindow(class'VS_UI_ScreenshotWindow', 0,0,130,130, self));
 	MapScreenshotWindow.HideWindow();
 }
 
