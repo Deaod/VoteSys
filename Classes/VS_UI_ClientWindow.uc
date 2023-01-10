@@ -323,6 +323,13 @@ function FocusPreset(VS_Preset P) {
 	}
 }
 
+function Close(optional bool bByParent) {
+	if (MapScreenshotWindow.bWindowVisible)
+		MapScreenshotWindow.Close();
+
+	super.Close(bByParent);
+}
+
 defaultproperties {
 	MapFilterText="Filter Maps By Name"
 	VoteButtonText="Vote"
