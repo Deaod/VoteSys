@@ -34,4 +34,6 @@ ChatTeamSayText="TeamSay"
 PlayerIdText="ID:"
 PlayerKickText="&Kick"
 PlayerBanText="&Ban"
+PlayerBanTitle="Ban Player"
+PlayerBanMessage="Do you want to permanently ban {1}?"
 
