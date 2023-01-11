@@ -38,6 +38,7 @@ In addition there are INI files that dont contain configuration, but are used to
 GameEndedVoteDelay=5
 VoteTimeLimit=30
 MinimumMapRepeatDistance=0
+KickVoteThreshold=0.6
 DefaultTimeMessageClass=Botpack.TimeMessage
 DefaultPreset=
 ServerAddress=127.0.0.1
@@ -73,6 +74,12 @@ Number of different maps that must be played before being able to play the curre
 Same map, but a different preset does not count as the same map for the purposes of this check.
 
 Defaults to 0.
+
+#### KickVoteThreshold
+
+Fraction of eligible players that have to be in favor of kicking another player for that player to be kicked.
+
+Default is 0.6
 
 #### DefaultTimeMessageClass
 
