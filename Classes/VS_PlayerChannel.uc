@@ -22,6 +22,9 @@ var bool bHasVoted; // unreplicated, server-only
 var VS_Preset VotePreset; // unreplicated
 var VS_Map VoteMap; // unreplicated
 
+var int KickVotesAgainstMe;
+var array<PlayerReplicationInfo> IWantToKick;
+
 var int MaxMapSequenceNumber;
 
 replication {
@@ -32,6 +35,8 @@ replication {
 		ServerVoteExisting;
 
 	reliable if (Role == ROLE_Authority)
+		ClientApplyKickVote,
+		DumpPlayerList,
 		ShowVoteMenu,
 		HideVoteMenu;
 
@@ -312,15 +317,40 @@ function ClearVote() {
 	}
 }
 
+simulated function int WantsToKick(PlayerReplicationInfo PRI) {
+	local int i;
+
+	for (i = 0; i < IWantToKick.Length; i++) 
+		if (IWantToKick[i] == PRI)
+			return i;
+	
+	return -1;
+}
+
+simulated function bool ToggleKick(PlayerReplicationInfo PRI) {
+	local int Index;
+
+	Index = WantsToKick(PRI);
+	if (Index < 0) {
+		IWantToKick.Insert(0, 1);
+		IWantToKick[0] = PRI;
+		return true;
+	} else {
+		IWantToKick.Remove(Index, 1);
+		return false;
+	}
+}
+
 simulated function KickPlayer(PlayerReplicationInfo PRI) {
 	ServerKickPlayer(PRI);
 }
 
 function ServerKickPlayer(PlayerReplicationInfo PRI) {
-	if (PlayerOwner == none)
-		return;
-
 	VoteInfo().KickPlayer(self, PRI);
+}
+
+simulated function ClientApplyKickVote(PlayerReplicationInfo PRI) {
+	ToggleKick(PRI);
 }
 
 simulated function BanPlayer(PlayerReplicationInfo PRI) {
@@ -361,6 +391,21 @@ simulated function ChatMessage(PlayerReplicationInfo PRI, string Msg) {
 		return;
 
 	VS_UI_ClientWindow(VoteMenuDialog.ClientArea).ChatArea.AddChat(PRI, Msg);
+}
+
+simulated function DumpPlayerList() {
+	local int i;
+	local VS_Info Info;
+	local VS_UI_PlayerListItem Item;
+
+	Info = VoteInfo();
+	for (i = 0; i < 32; i++)
+		if (Info.GetPlayerInfoPRI(i) != none)
+			PlayerOwner.ClientMessage("["$i$"]=(PRI="$Info.GetPlayerInfoPRI(i)$",bHasVoted="$Info.GetPlayerInfoHasVoted(i)$")");
+
+	for (Item = VS_UI_PlayerListItem(VS_UI_ClientWindow(VoteMenuDialog.ClientArea).PlayerListBox.Items.Next); Item != none; Item = VS_UI_PlayerListItem(Item.Next)) {
+		PlayerOwner.ClientMessage(string(Item.PRI));
+	}
 }
 
 defaultproperties {

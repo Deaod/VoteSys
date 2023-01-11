@@ -200,7 +200,6 @@ function RMouseDown(float MouseX, float MouseY) {
 
 	ContextMenu.WinLeft = Root.MouseX;
 	ContextMenu.WinTop = Root.MouseY;
-	ContextMenu.PlayerKick.bDisabled = (GetPlayerOwner().PlayerReplicationInfo.bAdmin == false);
 	ContextMenu.PlayerBan.bDisabled = (GetPlayerOwner().PlayerReplicationInfo.bAdmin == false);
 
 	// ContextMenu.PRI MUST be set before ShowWindow is invoked,

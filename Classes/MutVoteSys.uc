@@ -72,7 +72,7 @@ event PostBeginPlay() {
 function VS_PlayerChannel FindChannel(Pawn P) {
 	local VS_PlayerChannel C;
 	
-	if (P.IsA('PlayerPawn') == false)
+	if (P == none || P.IsA('PlayerPawn') == false)
 		return none;
 
 	for (C = ChannelList; C != none; C = C.Next)
@@ -80,6 +80,10 @@ function VS_PlayerChannel FindChannel(Pawn P) {
 			return C;
 
 	return none;
+}
+
+function VS_PlayerChannel FindChannelForPRI(PlayerReplicationInfo PRI) {
+	return FindChannel(Pawn(PRI.Owner));
 }
 
 function CreateChannel(Pawn P) {
@@ -143,6 +147,7 @@ function ChatMessage(PlayerReplicationInfo PRI, string Msg) {
 
 function Mutate(string Command, PlayerPawn Sender) {
 	local int i;
+	local VS_PlayerChannel C;
 
 	if (Command ~= "VoteMenu") {
 		OpenVoteMenu(Sender);
@@ -190,6 +195,7 @@ function OpenVoteMenu(PlayerPawn P) {
 event Timer() {
 	CreateMissingPlayerChannels();
 	UpdatePlayerVoteInformation();
+	HandleKickVoting();
 	switch(GameState) {
 		case GS_Playing:
 			CheckMidGameVoting();
@@ -221,6 +227,7 @@ function UpdatePlayerVoteInformation() {
 	local int i;
 	local VS_PlayerChannel C;
 
+	i = 0;
 	for (C = ChannelList; C != none; C = C.Next) {
 		if (i < 32 && C.PlayerOwner != none && CanVote(C.PlayerOwner)) {
 			Info.SetPlayerInfoPRI(i, C.PlayerOwner.PlayerReplicationInfo);
@@ -234,6 +241,38 @@ function UpdatePlayerVoteInformation() {
 	while (i < 32) {
 		Info.SetPlayerInfoPRI(i, none);
 		i++;
+	}
+}
+
+function HandleKickVoting() {
+	local VS_PlayerChannel C;
+	local VS_PlayerChannel Other;
+	local int VotingPlayers;
+	local int i;
+
+	for (C = ChannelList; C != none; C = C.Next) {
+		if (CanVote(C.PlayerOwner)) {
+			VotingPlayers++;
+		} else {
+			for (i = C.IWantToKick.Length - 1; i >= 0; i--) {
+				Other = FindChannelForPRI(C.IWantToKick[i]);
+				if (Other != none)
+					Other.KickVotesAgainstMe--;
+			}
+			C.IWantToKick.Remove(0, C.IWantToKick.Length);
+		}
+	}
+
+	for (C = ChannelList; C != none; C = C.Next) {
+		if (C.KickVotesAgainstMe > Settings.KickVoteThreshold * VotingPlayers) {
+			BroadcastLocalizedMessage2(
+				class'VS_Msg_LocalMessage', 11,
+				C.PlayerOwner.PlayerReplicationInfo.PlayerName
+			);
+
+			TempBanAddress(C.PlayerOwner.GetPlayerNetworkAddress());
+			C.PlayerOwner.KickMe("Kick Vote Successful (VoteSys)");
+		}
 	}
 }
 

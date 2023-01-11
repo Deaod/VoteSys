@@ -143,13 +143,18 @@ function RemMapVoteUnsafe(string Preset, string MapName) {
 
 function KickPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target) {
 	local PlayerPawn P;
+	local VS_PlayerChannel TCh;
+
 	if (Origin == none || Target == none)
 		return;
 
-	if (Origin.PlayerOwner != none &&
-		Origin.PlayerOwner.PlayerReplicationInfo != none &&
-		Origin.PlayerOwner.PlayerReplicationInfo.bAdmin
-	) {
+	if (Origin.PlayerOwner == none || Origin.PlayerOwner.PlayerReplicationInfo == none)
+		return;
+
+	if (VoteSys.CanVote(Origin.PlayerOwner) == false)
+		return;
+
+	if (Origin.PlayerOwner.PlayerReplicationInfo.bAdmin) {
 		P = PlayerPawn(Target.Owner);
 		if (P != none) {
 			VoteSys.BroadcastLocalizedMessage2(
@@ -161,6 +166,20 @@ function KickPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target) {
 
 			VoteSys.TempBanAddress(P.GetPlayerNetworkAddress());
 			P.KickMe("Admin Kick (VoteSys)");
+		}
+	} else {
+		TCh = VoteSys.FindChannelForPRI(Target);
+		if (TCh != none) {
+			if (Origin.ToggleKick(Target)) {
+				TCh.KickVotesAgainstMe++;
+				VoteSys.BroadcastLocalizedMessage2(
+					class'VS_Msg_LocalMessage', 10,
+					Target.PlayerName
+				);
+			} else {
+				TCh.KickVotesAgainstMe--;
+			}
+			Origin.ClientApplyKickVote(Target);
 		}
 	}
 }

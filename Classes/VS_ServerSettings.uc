@@ -4,6 +4,7 @@ class VS_ServerSettings extends Object
 var config int GameEndedVoteDelay;
 var config int VoteTimeLimit;
 var config int MinimumMapRepeatDistance;
+var config float KickVoteThreshold;
 var config string DefaultTimeMessageClass;
 var config string DefaultPreset;
 var config string ServerAddress;
@@ -15,10 +16,11 @@ var config array<string> DefaultActors;
 defaultproperties {
 	GameEndedVoteDelay=5
 	VoteTimeLimit=30
+	MinimumMapRepeatDistance=0
+	KickVoteThreshold=0.6
 	DefaultTimeMessageClass="Botpack.TimeMessage"
 	DefaultPreset=
 	ServerAddress=
 	bManageServerPackages=False
 	bUseServerActorsCompatibilityMode=False
-	MinimumMapRepeatDistance=0
 }

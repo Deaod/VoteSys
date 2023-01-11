@@ -25,10 +25,16 @@ function Created() {
 }
 
 function ShowWindow() {
+	local VS_PlayerChannel Ch;
+
 	super.ShowWindow();
+
 	PlayerId.SetCaption(PlayerIdText@PRI.PlayerId);
 	PlayerKick.SetCaption(PlayerKickText@PRI.PlayerName);
 	PlayerBan.SetCaption(PlayerBanText@PRI.PlayerName);
+
+	Ch = VS_UI_ClientWindow(OwnerWindow.OwnerWindow).Channel;
+	PlayerKick.bChecked = (Ch.WantsToKick(PRI) >= 0);
 
 	if (PlayerBanMB != none)
 		PlayerBanMB.Close();
