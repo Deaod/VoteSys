@@ -42,6 +42,7 @@ KickVoteThreshold=0.6
 DefaultTimeMessageClass=Botpack.TimeMessage
 DefaultPreset=
 ServerAddress=127.0.0.1
+DataPort=0
 bManageServerPackages=False
 bUseServerActorsCompatibilityMode=False
 DefaultPackages=SoldierSkins
@@ -98,6 +99,12 @@ Empty by default.
 Specifies the IP address thats used by clients should the clients be unable to determine the IP address of the server.
 
 Empty by default.
+
+#### DataPort
+
+Specifies the port on the server that clients are supposed to connect to, in order to receive preset data. Values less than 1024 should not really be used as they might fail to bind (check server log if you suspect this). 0 lets VoteSys grab a random port (greater than 1024).
+
+0 by default.
 
 #### bManageServerPackages
 

@@ -8,6 +8,7 @@ var config float KickVoteThreshold;
 var config string DefaultTimeMessageClass;
 var config string DefaultPreset;
 var config string ServerAddress;
+var config int DataPort;
 var config bool bManageServerPackages;
 var config bool bUseServerActorsCompatibilityMode;
 var config array<string> DefaultPackages;
@@ -21,6 +22,7 @@ defaultproperties {
 	DefaultTimeMessageClass="Botpack.TimeMessage"
 	DefaultPreset=
 	ServerAddress=
+	DataPort=0
 	bManageServerPackages=False
 	bUseServerActorsCompatibilityMode=False
 }

@@ -17,7 +17,7 @@ event PostBeginPlay() {
 	// needs to be set because children inherit LinkMode
 	LinkMode = MODE_Text;
 
-	Prt = BindPort(, true);
+	Prt = BindPort(Settings.DataPort, true);
 	if (Prt == 0) {
 		Log("VS_DataServer - Failed to BindPort", 'VoteSys');
 		return;
