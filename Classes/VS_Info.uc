@@ -223,7 +223,7 @@ function VS_Preset ResolvePresetSeparate(string Category, string PresetName) {
 	local VS_Preset P;
 
 	for (P = VoteSys.PresetList; P != none; P = P.Next)
-		if (P.Category == Category && P.PresetName == PresetName)
+		if (P.Category == Category && P.PresetName == PresetName && P.bDisabled == false)
 			return P;
 
 	return none;
@@ -233,7 +233,7 @@ function VS_Preset ResolvePresetCombined(string FullPresetName) {
 	local VS_Preset P;
 
 	for (P = VoteSys.PresetList; P != none; P = P.Next)
-		if (P.GetFullName() == FullPresetName)
+		if (P.GetFullName() == FullPresetName && P.bDisabled == false)
 			return P;
 
 	return none;

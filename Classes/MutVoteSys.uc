@@ -860,6 +860,7 @@ function VS_Preset LoadPreset(VS_PresetConfig PC) {
 	P.Category     = PC.Category;
 	P.Game         = Game;
 	P.MapList      = LoadMapList(Game, PC.MapListName);
+	P.bDisabled    = PC.bDisabled;
 
 	if (PC.Mutators.Length > 0) {
 		P.Mutators = PC.Mutators[0];

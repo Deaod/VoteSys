@@ -80,6 +80,9 @@ Begin:
 	Log("VS_DataLink SendPresets", 'VoteSys');
 
 	for (TempPreset = VoteSys.PresetList; TempPreset != none; TempPreset = TempPreset.Next) {
+		if (TempPreset.bDisabled)
+			continue;
+
 		SendBuffer = "/PRESET/"$EncodeString(TempPreset.PresetName)$"/"$EncodeString(TempPreset.Abbreviation)$"/"$EncodeString(TempPreset.Category)$Chr(13)$Chr(10);
 		while (true) {
 			SendBuffer = Mid(SendBuffer, SendText(SendBuffer));

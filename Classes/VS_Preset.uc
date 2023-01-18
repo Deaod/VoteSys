@@ -9,6 +9,7 @@ var VS_Map          MapList;
 var string          Mutators;
 var string          Parameters;
 var string          GameSettings;
+var bool            bDisabled;
 
 function string GetDisplayCategory() {
 	if (Category == "")

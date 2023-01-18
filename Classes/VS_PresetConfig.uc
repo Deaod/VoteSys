@@ -1,7 +1,7 @@
 class VS_PresetConfig extends Object
 	perobjectconfig;
 
-/** Name of the preset,  */
+/** Name of the preset */
 var config string PresetName;
 /** Short version of Name */
 var config string Abbreviation;
@@ -17,3 +17,5 @@ var config array<string> Mutators;
 var config array<string> Parameters;
 /** Comma-separated list of game type settings to change */
 var config array<string> GameSettings;
+/** Disabled presets are not shown to users and cannot be voted for */
+var config bool bDisabled;
