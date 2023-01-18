@@ -479,7 +479,7 @@ function TallyVotes() {
 		if (Score > BestScore) {
 			BestScore = Score;
 			CountTiedCandidates = 1;
-		} else if (Score == BestScore) {
+		} else if (Score > 0 && Score == BestScore) {
 			CountTiedCandidates++;
 		}
 	}
