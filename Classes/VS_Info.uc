@@ -99,6 +99,8 @@ function int AddMapVoteUnsafe(string Preset, string MapName) {
 		TmpInt = CandidatesInternal[i-1];
 		CandidatesInternal[i-1] = CandidatesInternal[i];
 		CandidatesInternal[i] = TmpInt;
+
+		i--;
 	}
 
 	return Result;
@@ -138,6 +140,8 @@ function RemMapVoteUnsafe(string Preset, string MapName) {
 		TmpInt = CandidatesInternal[i+1];
 		CandidatesInternal[i+1] = CandidatesInternal[i];
 		CandidatesInternal[i] = TmpInt;
+
+		i++;
 	}
 }
 
