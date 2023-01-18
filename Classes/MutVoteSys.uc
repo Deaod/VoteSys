@@ -29,6 +29,7 @@ enum EGameState {
 
 var EGameState GameState;
 var int TimeCounter;
+var bool bChangeMapImmediately;
 var class<CriticalEventPlus> TimeMessageClass;
 
 var VS_Preset DefaultPresetRef;
@@ -193,6 +194,15 @@ function OpenVoteMenu(PlayerPawn P) {
 }
 
 event Timer() {
+	if (bChangeMapImmediately) {
+		bChangeMapImmediately = false;
+		SetTimer(0.0, false);
+		GameState = GS_VoteEnded;
+		TallyVotes();
+		TravelTo(VotedPreset, VotedMap);
+		return;
+	}
+
 	CreateMissingPlayerChannels();
 	UpdatePlayerVoteInformation();
 	HandleKickVoting();
@@ -406,6 +416,7 @@ function TravelTo(VS_Preset P, VS_Map M) {
 	TempDataDummy = new(none, 'VoteSysTemp') class'Object';
 	TD = new(TempDataDummy, 'Data') class'VS_TempData';
 
+	TD.bNoColdStart = true;
 	TD.PresetName = P.PresetName;
 	TD.Category = P.Category;
 	TD.Mutators = Mutators;
@@ -413,8 +424,10 @@ function TravelTo(VS_Preset P, VS_Map M) {
 	TD.GameSettings = P.GameSettings;
 	TD.SaveConfig();
 
-	History.InsertVote(P.Category, P.PresetName, M.MapName);
-	History.SaveConfig();
+	if (bChangeMapImmediately == false) {
+		History.InsertVote(P.Category, P.PresetName, M.MapName);
+		History.SaveConfig();
+	}
 
 	if ((Level.EngineVersion$Level.GetPropertyText("EngineRevision")) < "469c" && Settings.bManageServerPackages) {
 		Pkgs = Settings.DefaultPackages;
@@ -546,6 +559,10 @@ function TickTimeBeforeTravel() {
 	TravelTo(VotedPreset, VotedMap);
 }
 
+function QueueImmediateMapChange() {
+	bChangeMapImmediately = true;
+}
+
 function ApplyVotedPreset() {
 	local Object TempDataDummy;
 	local VS_TempData TD;
@@ -554,6 +571,14 @@ function ApplyVotedPreset() {
 
 	TempDataDummy = new(XLevel, 'VoteSysTemp') class'Object';
 	TD = new(TempDataDummy, 'Data') class'VS_TempData';
+
+	if (TD.bNoColdStart) {
+		TD.bNoColdStart = false;
+		TD.SaveConfig();
+	} else {
+		// crash during gameplay (outside map change) or deliberate restart
+		QueueImmediateMapChange();
+	}
 
 	if (TD.PresetName != "")
 		CurrentPreset = TD.Category$"/"$TD.PresetName;
