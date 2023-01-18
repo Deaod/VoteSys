@@ -132,7 +132,7 @@ function RemMapVoteUnsafe(string Preset, string MapName) {
 		}
 	}
 
-	while(i+1 < arraycount(Candidates) && Candidates[i].Votes < Candidates[i+1].Votes) {
+	while(i+1 < MaxCandidates && Candidates[i].Votes < Candidates[i+1].Votes) {
 		Tmp = Candidates[i+1];
 		Candidates[i+1] = Candidates[i];
 		Candidates[i] = Tmp;
@@ -213,7 +213,7 @@ function BanPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target) {
 
 function int FindCandidateIndex(string Preset, string MapName) {
 	local int Index;
-	for (Index = 0; Index < arraycount(Candidates); Index++)
+	for (Index = 0; Index < MaxCandidates; Index++)
 		if (Candidates[Index].Preset == Preset && Candidates[Index].MapName == MapName)
 			return Index;
 	return -1;
