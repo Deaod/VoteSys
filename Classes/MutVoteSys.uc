@@ -865,7 +865,8 @@ function VS_Preset LoadPreset(VS_PresetConfig PC) {
 	if (PC.Mutators.Length > 0) {
 		P.Mutators = PC.Mutators[0];
 		for (i = 1; i < PC.Mutators.Length; i++)
-			P.Mutators = P.Mutators$","$PC.Mutators[i];
+			if (PC.Mutators[i] != "")
+				P.Mutators = P.Mutators$","$PC.Mutators[i];
 	}
 
 	if (PC.Parameters.Length > 0) {
@@ -876,7 +877,8 @@ function VS_Preset LoadPreset(VS_PresetConfig PC) {
 	if (PC.GameSettings.Length > 0) {
 		P.GameSettings = PC.GameSettings[0];
 		for (i = 1; i < PC.GameSettings.Length; i++)
-			P.GameSettings = P.GameSettings$","$PC.GameSettings[i];
+			if (PC.GameSettings[i] != "")
+				P.GameSettings = P.GameSettings$","$PC.GameSettings[i];
 	}
 
 	return P;
