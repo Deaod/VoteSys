@@ -4,6 +4,18 @@ var VS_MapList Next;
 var class<GameInfo> Game;
 var string ListName;
 var VS_Map First;
+var VS_Map Last;
+
+function AppendMap(string MapName) {
+	if (Last == none) {
+		Last = new class'VS_Map';
+		First = Last;
+	} else {
+		Last.Next = new class'VS_Map';
+		Last = Last.Next;
+	}
+	Last.MapName = MapName;
+}
 
 function VS_Map DuplicateList() {
 	local VS_Map C;

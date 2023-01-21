@@ -904,18 +904,24 @@ function VS_Map LoadMapList(class<GameInfo> Game, name ListName) {
 		ML = new(MapListDummy) class'VS_MapList';
 		ML.ListName = string(ListName);
 
-		for (i = 0; i < MC.Map.Length; i++) {
-			if (!(Left(MC.Map[i], Len(Game.default.MapPrefix)) ~= Game.default.MapPrefix))
+		for (i = 0; i < MC.Map.Length; i++)
+			if (MC.Map[i] != "")
+				ML.AppendMap(MC.Map[i]);
+
+		for (i = 0; i < MC.IncludeMapsWithPrefix.Length; i++) {
+			if (MC.IncludeMapsWithPrefix[i] == "")
 				continue;
 
-			if (ML.First == none) {
-				M = new(ML) class'VS_Map';
-				ML.First = M;
-			} else {
-				M.Next = new(ML) class'VS_Map';
-				M = M.Next;
-			}
-			M.MapName = MC.Map[i];
+			FirstMap = GetMapName(MC.IncludeMapsWithPrefix[i], "", 0);
+			if (FirstMap == "")
+				continue; // no maps with this prefix
+			MapName = FirstMap;
+
+			do {
+				ML.AppendMap(Left(MapName, Len(MapName) - 4)); // we dont care about extension
+
+				MapName = GetMapName(MC.IncludeMapsWithPrefix[i], MapName, 1);
+			} until(MapName == FirstMap);
 		}
 
 		if (ML.First != none)
@@ -941,14 +947,7 @@ function VS_Map LoadMapList(class<GameInfo> Game, name ListName) {
 	do {
 		// ignore tutorial maps for game types
 		if (!(Left(MapName, Len(MapName) - 4) ~= (Game.default.MapPrefix$"-Tutorial"))) {
-			if (ML.First == none) {
-				M = new(ML) class'VS_Map';
-				ML.First = M;
-			} else {
-				M.Next = new(ML) class'VS_Map';
-				M = M.Next;
-			}
-			M.MapName = Left(MapName, Len(MapName) - 4); // we dont care about extension
+			ML.AppendMap(Left(MapName, Len(MapName) - 4)); // we dont care about extension
 		}
 
 		MapName = GetMapName(Game.default.MapPrefix, MapName, 1);

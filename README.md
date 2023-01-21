@@ -218,7 +218,18 @@ Map=DM-Deck16][
 Map=DM-Agony
 Map=DM-StalwartXL
 Map=DM-Morpheus
+
+[BTMaps]
+Map=CTF-AwesomeBTMap
+IncludeMapsWithPrefix=CTF-BT+
+IncludeMapsWithPrefix=CTF-BT-
 ```
+
+#### Map
+Specify individual maps to add to the map list.
+
+#### IncludeMapsWithPrefix
+Adds all maps that match any of the specified prefixes to the map list.
 
 ## Build
 In order to build this mutator, you need to be using UT99 v469c.
