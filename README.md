@@ -90,7 +90,7 @@ Defaults to Botpack.TimeMessage.
 
 #### DefaultPreset
 
-Specifies the preset thats selected by default should the server not know what preset was voted last.
+Specifies the preset thats selected by default should the server not know what preset was voted last. If empty, the first detected detected preset will be selected as default preset.
 
 Empty by default.
 
@@ -161,6 +161,7 @@ MapListName=
 Mutators=
 Parameters=?MaxPlayers=8
 GameSettings=bTournament=True
+bDisabled=False
 ```
 
 Each preset is a different section inside VoteSysPresets.ini (e.g. `[VS_PresetConfig0]`, `[VS_PresetConfig1]`, etc.). Each preset section needs to start with VS_PresetConfig, followed by a number. The number needs to start from 0 and can go as high as you want. You can not leave out numbers.
@@ -210,6 +211,14 @@ is equivalent to
 ```
 GameSettings=Variable1=Value1,Variable2=Value2
 ```
+
+#### bDisabled
+
+If `True` the preset will not be shown to users and will not be eligible to become the default preset if [`DefaultPreset`](#defaultpreset) is empty.
+
+This setting does not need to be mentioned explicitly. Its default value will be used if it is not mentioned.
+
+Default is `False`
 
 ### VoteSysMapLists.ini
 ```ini
