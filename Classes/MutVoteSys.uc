@@ -887,7 +887,6 @@ function VS_Preset LoadPreset(VS_PresetConfig PC) {
 function VS_Map LoadMapList(class<GameInfo> Game, name ListName) {
 	local VS_MapListConfig MC;
 	local VS_MapList ML;
-	local VS_Map M;
 	local string FirstMap;
 	local string MapName;
 	local int i;
