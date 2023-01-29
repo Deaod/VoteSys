@@ -10,7 +10,7 @@ function Created() {
 	if (WinLeft != -1.0 || WinTop != -1.0)
 		bPlaced = true;
 
-	WinWidth = 584;
+	WinWidth = 614;
 	WinHeight = 400;
 	WindowTitle = default.WindowTitle@"-"@class'VersionInfo'.default.PackageVersion;
 }

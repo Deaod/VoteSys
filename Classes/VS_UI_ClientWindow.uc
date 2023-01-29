@@ -39,28 +39,28 @@ function Created() {
 	TabsHeight = LookAndFeel.Size_TabAreaHeight + LookAndFeel.Size_TabAreaOverhangHeight;
 	CategoryTabs = VS_UI_CategoryTabControl(CreateControl(class'VS_UI_CategoryTabControl', 0, 0, WinWidth, TabsHeight));
 
-	Presets = VS_UI_PresetComboBox(CreateControl(class'VS_UI_PresetComboBox', 10, TabsHeight + 10, 150, 0));
+	Presets = VS_UI_PresetComboBox(CreateControl(class'VS_UI_PresetComboBox', 10, TabsHeight + 10, 180, 0));
 	Presets.bCanEdit = false;
-	Presets.EditBoxWidth = 150;
+	Presets.EditBoxWidth = Presets.WinWidth;
 
-	MapFilter = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 10, TabsHeight + 30, 150, 12));
+	MapFilter = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 10, TabsHeight + 30, 180, 12));
 	MapFilter.SetText(MapFilterText);
 
-	MapListBox = VS_UI_MapListBox(CreateControl(class'VS_UI_MapListBox', 10, TabsHeight + 50, 150, 284));
-	VoteButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 10, TabsHeight + 338, 150, 12));
+	MapListBox = VS_UI_MapListBox(CreateControl(class'VS_UI_MapListBox', 10, TabsHeight + 50, 180, 284));
+	VoteButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 10, TabsHeight + 338, 180, 12));
 	VoteButton.SetText(VoteButtonText);
 
-	VoteListBox = VS_UI_CandidateListBox(CreateControl(class'VS_UI_CandidateListBox', 170, TabsHeight + 10, 400, 100));
-	PlayerListBox = VS_UI_PlayerListBox(CreateControl(class'VS_UI_PlayerListBox', 450, TabsHeight + 120, 120, 214));
+	VoteListBox = VS_UI_CandidateListBox(CreateControl(class'VS_UI_CandidateListBox', 200, TabsHeight + 10, 400, 100));
+	PlayerListBox = VS_UI_PlayerListBox(CreateControl(class'VS_UI_PlayerListBox', 480, TabsHeight + 120, 120, 214));
 
-	ChatArea = VS_UI_ChatArea(CreateControl(class'VS_UI_ChatArea', 170, TabsHeight + 120, 270, 214));
-	ChatEdit = UWindowEditControl(CreateControl(class'UWindowEditControl', 170, TabsHeight + 338, 220, 12));
+	ChatArea = VS_UI_ChatArea(CreateControl(class'VS_UI_ChatArea', 200, TabsHeight + 120, 270, 214));
+	ChatEdit = UWindowEditControl(CreateControl(class'UWindowEditControl', 200, TabsHeight + 338, 220, 12));
 	ChatEdit.EditBoxWidth = ChatEdit.WinWidth;
 	ChatEdit.SetHistory(true);
-	ChatSay = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 395, TabsHeight + 338, 45, 12));
+	ChatSay = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 425, TabsHeight + 338, 45, 12));
 	ChatSay.SetText(ChatSayText);
 
-	CloseButton = UWindowSmallCloseButton(CreateControl(class'UWindowSmallCloseButton', 450, TabsHeight + 338, 120, 12));
+	CloseButton = UWindowSmallCloseButton(CreateControl(class'UWindowSmallCloseButton', 480, TabsHeight + 338, 120, 12));
 
 	MapScreenshotWindow = VS_UI_ScreenshotWindow(Root.CreateWindow(class'VS_UI_ScreenshotWindow', 0,0,130,130, self));
 	MapScreenshotWindow.HideWindow();
