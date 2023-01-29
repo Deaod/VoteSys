@@ -9,6 +9,7 @@ var config string DefaultTimeMessageClass;
 var config string DefaultPreset;
 var config string ServerAddress;
 var config int DataPort;
+var config int ClientDataPort;
 var config bool bManageServerPackages;
 var config bool bUseServerActorsCompatibilityMode;
 var config array<string> DefaultPackages;
@@ -23,6 +24,7 @@ defaultproperties {
 	DefaultPreset=
 	ServerAddress=
 	DataPort=0
+	ClientDataPort=0
 	bManageServerPackages=False
 	bUseServerActorsCompatibilityMode=False
 }

@@ -34,13 +34,20 @@ event PostBeginPlay() {
 	if (StringToIpAddr(Settings.ServerAddress, A)) {
 		Log("VS_DataServer UseLocalAddr", 'VoteSys');
 		Info.DataAddr = Settings.ServerAddress;
-		Info.DataPort = Prt;
 	} else {
 		Log("VS_DataServer DetermineAddr", 'VoteSys');
 		GetLocalIP(A);
 		Info.DataAddr = IpAddrToString(A);
 		Info.DataAddr = Left(Info.DataAddr, Len(Info.DataAddr)-2); // -2 to cut off Port specifier (:0)
+	}
+	if (Settings.ClientDataPort == 0 || Settings.DataPort != Prt) {
+		// Either the admin didnt specify a port clients should use,
+		// or we didnt get the port we wanted (likely because its in use).
+		// Anyway, we should use the port we actually bound to.
 		Info.DataPort = Prt;
+	} else {
+		// we bound to the port we wanted and the admin specified a port clients should use.
+		Info.DataPort = Settings.ClientDataPort;
 	}
 
 	Log("VS_DataServer Addr="$Info.DataAddr@"Port="$Info.DataPort, 'VoteSys');

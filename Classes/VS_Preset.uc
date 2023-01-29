@@ -29,7 +29,7 @@ function AppendParameter(string Param) {
 function AppendGameSetting(string Setting) {
 	if (Setting == "")
 		return;
-		
+
 	if (GameSettings == "") {
 		GameSettings = Setting;
 	} else {

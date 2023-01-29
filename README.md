@@ -43,6 +43,7 @@ DefaultTimeMessageClass=Botpack.TimeMessage
 DefaultPreset=
 ServerAddress=127.0.0.1
 DataPort=0
+ClientDataPort=0
 bManageServerPackages=False
 bUseServerActorsCompatibilityMode=False
 DefaultPackages=SoldierSkins
@@ -102,7 +103,23 @@ Empty by default.
 
 #### DataPort
 
-Specifies the port on the server that clients are supposed to connect to, in order to receive preset data. Values less than 1024 should not really be used as they might fail to bind (check server log if you suspect this). 0 lets VoteSys grab a random port (greater than 1024).
+Specifies the port on the server to listen on for connections by clients.
+
+Use this if you are running behind a firewall and need to explicitly allow connections on specific ports.
+
+Values less than 1024 should not really be used as they might fail to bind (check server log if you suspect this). 0 lets VoteSys grab a random port (greater than 1024).
+
+0 by default.
+
+#### ClientDataPort
+
+Specifies the port clients should connect to, in order to receive preset data.
+
+Useful when there is a proxy between clients and the game server. Both `DataPort` and `ClientDataPort` must be non-zero for `ClientDataPort` to be used.
+
+Clients will connect to `ClientDataPort`, the server will listen on `DataPort`, and the proxy in between client and server will need to forward connections on `ClientDataPort` to the server on `DataPort`.
+
+If `DataPort` is 0 or specifies a port that cannot be used, `ClientDataPort` will be disregarded. This means clients will try to connect on the same port as the one the server is listening on.
 
 0 by default.
 
