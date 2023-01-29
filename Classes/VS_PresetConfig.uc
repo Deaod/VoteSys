@@ -7,6 +7,8 @@ var config string PresetName;
 var config string Abbreviation;
 /** Which Category to add this Preset to */
 var config string Category;
+/** List of full preset names to inherit data from */
+var config array<string> InheritFrom;
 /** Which game type to use */
 var config string Game;
 /** Which MapList to use for this preset, empty uses all map for specified game type */

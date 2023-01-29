@@ -162,6 +162,14 @@ Mutators=
 Parameters=?MaxPlayers=8
 GameSettings=bTournament=True
 bDisabled=False
+
+[VS_PresetConfig2]
+PresetName=2v2v2v2 TDM
+Abbreviation=xTDM
+Category=DM
+InheritsFrom=DM/Team DeathMatch
+GameSettings=MaxTeams=4
+Mutators=Botpack.InstaGibDM
 ```
 
 Each preset is a different section inside VoteSysPresets.ini (e.g. `[VS_PresetConfig0]`, `[VS_PresetConfig1]`, etc.). Each preset section needs to start with VS_PresetConfig, followed by a number. The number needs to start from 0 and can go as high as you want. You can not leave out numbers.
@@ -172,8 +180,19 @@ Each preset has a `Name`, a `Category` and an `Abbreviation`.
 `Category` and `Abbreviation` may be blank.  
 `Name` may not be blank.
 
+#### Inheriting From Other Preset
+`InheritsFrom` is used to inherit certain elements from other presets. You can only inherit from presets that are located above the current preset according to the number after `VS_ConfigPreset` inside the section title.
+
+You can inherit from an arbitrary number of other presets.
+
+You can inherit `Game`, `Mutators`, `Parameters`, and `GameSettings`. Other elements cannot be inherited.
+
+If you dont specify a value for `Game` in the current preset, the first non-empty value in the list of presets you inherit from will be used.
+
+For `Mutators`, `Parameters`, and `GameSettings` the values will be combined in the same order you specified the base presets. If you specify any addition values in the current preset, they will be added at the end.
+
 #### Game Type
-`Game` is used to identify the gametype for the preset. It must not be blank.
+`Game` is used to identify the gametype for the preset. It must not be blank for enabled presets.
 
 #### Map List
 `MapListName` can be used to specify a custom list of maps that can be used with the preset. If `MapListName` is blank, all maps for the specified gametype are used.
@@ -218,7 +237,7 @@ If `True` the preset will not be shown to users and will not be eligible to beco
 
 This setting does not need to be mentioned explicitly. Its default value will be used if it is not mentioned.
 
-Default is `False`
+Default is `False`.
 
 ### VoteSysMapLists.ini
 ```ini

@@ -11,6 +11,32 @@ var string          Parameters;
 var string          GameSettings;
 var bool            bDisabled;
 
+function AppendMutator(string Mut) {
+	if (Mut == "")
+		return;
+
+	if (Mutators == "") {
+		Mutators = Mut;
+	} else {
+		Mutators = Mutators$","$Mut;
+	}
+}
+
+function AppendParameter(string Param) {
+	Parameters = Parameters$Param;
+}
+
+function AppendGameSetting(string Setting) {
+	if (Setting == "")
+		return;
+		
+	if (GameSettings == "") {
+		GameSettings = Setting;
+	} else {
+		GameSettings = GameSettings$","$Setting;
+	}
+}
+
 function string GetDisplayCategory() {
 	if (Category == "")
 		return "Default";

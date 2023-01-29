@@ -846,11 +846,8 @@ function LoadConfig() {
 function VS_Preset LoadPreset(VS_PresetConfig PC) {
 	local class<GameInfo> Game;
 	local VS_Preset P;
+	local VS_Preset Base;
 	local int i;
-
-	Game = class<GameInfo>(DynamicLoadObject(PC.Game, class'Class'));
-	if (Game == none)
-		return none;
 
 	Log("Adding Preset '"$PC.Category$"/"$PC.PresetName$"' ("$PC.Abbreviation$")", 'VoteSys');
 
@@ -858,27 +855,45 @@ function VS_Preset LoadPreset(VS_PresetConfig PC) {
 	P.PresetName   = PC.PresetName;
 	P.Abbreviation = PC.Abbreviation;
 	P.Category     = PC.Category;
-	P.Game         = Game;
-	P.MapList      = LoadMapList(Game, PC.MapListName);
-	P.bDisabled    = PC.bDisabled;
 
-	if (PC.Mutators.Length > 0) {
-		P.Mutators = PC.Mutators[0];
-		for (i = 1; i < PC.Mutators.Length; i++)
-			if (PC.Mutators[i] != "")
-				P.Mutators = P.Mutators$","$PC.Mutators[i];
+	for (i = 0; i < PC.InheritFrom.Length; i++) {
+		if (PC.InheritFrom[i] == "")
+			continue;
+
+		Base = FindPreset(PC.InheritFrom[i]);
+		if (Base == none) {
+			Log("    Base '"$PC.InheritFrom[i]$"' does not exist. Make sure base presets are added before inheriting from them.", 'VoteSys');
+			continue;
+		}
+
+		if (P.Game == none)
+			P.Game = Base.Game;
+
+		P.AppendMutator(Base.Mutators);
+		P.AppendParameter(Base.Parameters);
+		P.AppendGameSetting(Base.GameSettings);
 	}
 
-	if (PC.Parameters.Length > 0) {
-		for (i = 0; i < PC.Parameters.Length; i++)
-			P.Parameters = P.Parameters$PC.Parameters[i];
-	}
+	Game = class<GameInfo>(DynamicLoadObject(PC.Game, class'Class'));
+	if (Game != none)
+		P.Game = Game;
 
-	if (PC.GameSettings.Length > 0) {
-		P.GameSettings = PC.GameSettings[0];
-		for (i = 1; i < PC.GameSettings.Length; i++)
-			if (PC.GameSettings[i] != "")
-				P.GameSettings = P.GameSettings$","$PC.GameSettings[i];
+	P.MapList   = LoadMapList(P.Game, PC.MapListName);
+
+	for (i = 0; i < PC.Mutators.Length; i++)
+		P.AppendMutator(PC.Mutators[i]);
+
+	for (i = 0; i < PC.Parameters.Length; i++)
+		P.AppendParameter(PC.Parameters[i]);
+
+	for (i = 0; i < PC.GameSettings.Length; i++)
+		P.AppendGameSetting(PC.GameSettings[i]);
+
+	P.bDisabled = PC.bDisabled;
+
+	if (P.Game == none && P.bDisabled == false) {
+		Log("    Forcibly disabling '"$P.GetFullName()$"' because it has no gamemode.", 'VoteSys');
+		P.bDisabled = true;
 	}
 
 	return P;
@@ -972,6 +987,16 @@ function bool CanVote(PlayerPawn P) {
 		&& P.PlayerReplicationInfo != none
 		&& (P.IsA('Spectator') == false || P.PlayerReplicationInfo.bAdmin)
 		&& P.Player != none; // disconnected players cant vote
+}
+
+function VS_Preset FindPreset(string FullName) {
+	local VS_Preset P;
+
+	for (P = PresetList; P != none; P = P.Next)
+		if (P.GetFullName() == FullName)
+			return P;
+
+	return none;
 }
 
 defaultproperties {
