@@ -26,7 +26,7 @@ event Tick(float Delta) {
 		Map = History.Entry[ProcessedEntry].MapName;
 
 		for (P = PresetList; P != none; P = P.Next)
-			if (P.Category == Cat && P.PresetName == Pre)
+			if (P.bDisabled == false && P.Category == Cat && P.PresetName == Pre)
 				for (M = P.MapList; M != none; M = M.Next)
 					if (M.MapName == Map)
 						M.Sequence = History.Entry[ProcessedEntry].Sequence;
