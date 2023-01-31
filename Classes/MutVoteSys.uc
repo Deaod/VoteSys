@@ -874,11 +874,19 @@ function VS_Preset LoadPreset(VS_PresetConfig PC) {
 		P.AppendGameSetting(Base.GameSettings);
 	}
 
-	Game = class<GameInfo>(DynamicLoadObject(PC.Game, class'Class'));
+	Game = class<GameInfo>(DynamicLoadObject(PC.Game, class'Class', true));
 	if (Game != none)
 		P.Game = Game;
 
-	P.MapList   = LoadMapList(P.Game, PC.MapListName);
+	P.bDisabled = PC.bDisabled;
+
+	if (P.Game == none && P.bDisabled == false) {
+		Log("    Forcibly disabling '"$P.GetFullName()$"' because it has no gamemode.", 'VoteSys');
+		P.bDisabled = true;
+	}
+
+	if (P.bDisabled == false)
+		P.MapList = LoadMapList(P.Game, PC.MapListName);
 
 	for (i = 0; i < PC.Mutators.Length; i++)
 		P.AppendMutator(PC.Mutators[i]);
@@ -888,13 +896,6 @@ function VS_Preset LoadPreset(VS_PresetConfig PC) {
 
 	for (i = 0; i < PC.GameSettings.Length; i++)
 		P.AppendGameSetting(PC.GameSettings[i]);
-
-	P.bDisabled = PC.bDisabled;
-
-	if (P.Game == none && P.bDisabled == false) {
-		Log("    Forcibly disabling '"$P.GetFullName()$"' because it has no gamemode.", 'VoteSys');
-		P.bDisabled = true;
-	}
 
 	return P;
 }
