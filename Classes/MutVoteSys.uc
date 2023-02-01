@@ -985,6 +985,7 @@ function LoadHistory() {
 
 function bool CanVote(PlayerPawn P) {
 	return GameState < GS_VoteEnded
+		&& P != none
 		&& P.PlayerReplicationInfo != none
 		&& (P.IsA('Spectator') == false || P.PlayerReplicationInfo.bAdmin)
 		&& P.Player != none; // disconnected players cant vote
