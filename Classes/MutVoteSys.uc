@@ -239,7 +239,7 @@ function UpdatePlayerVoteInformation() {
 
 	i = 0;
 	for (C = ChannelList; C != none; C = C.Next) {
-		if (i < 32 && C.PlayerOwner != none && CanVote(C.PlayerOwner)) {
+		if (i < 32 && CanVote(C.PlayerOwner)) {
 			Info.SetPlayerInfoPRI(i, C.PlayerOwner.PlayerReplicationInfo);
 			Info.SetPlayerInfoHasVoted(i, C.bHasVoted);
 			i++;
