@@ -408,6 +408,34 @@ simulated function DumpPlayerList() {
 	}
 }
 
+simulated function DumpLog() {
+	local string Line;
+
+	Line = string(self.Name);
+	if (PlayerOwner != none && PlayerOwner.PlayerReplicationInfo != none)
+		Line = Line@"'"$PlayerOwner.PlayerReplicationInfo.PlayerName$"'";
+	else
+		Line = Line@"''";
+
+	if (PlayerOwner != none)
+		Line = Line@PlayerOwner.Player;
+	else
+		Line = Line@none;
+
+	Line = Line@"|"@bHasVoted;
+	if (VotePreset != none)
+		Line = Line@"'"$VotePreset.GetFullName()$"'";
+	else
+		Line = Line@"''";
+
+	if (VoteMap != none)
+		Line = Line@"'"$VoteMap.MapName$"'";
+	else
+		Line = Line@"''";
+
+	Log(Line, 'VoteSys');
+}
+
 defaultproperties {
 	RemoteRole=ROLE_SimulatedProxy
 }

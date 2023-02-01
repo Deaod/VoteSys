@@ -272,6 +272,24 @@ final function VS_Map GetCandidateInternalMap(int Index) {
 	return CandidatesInternal[Index].MapRef;
 }
 
+final function DumpCandidate(int Index) {
+	local string Line;
+
+	Line = string(Index)@"|"@Candidates[Index].Votes;
+
+	if (CandidatesInternal[Index].Preset != none)
+		Line = Line@"'"$CandidatesInternal[Index].Preset.GetFullName()$"'";
+	else
+		Line = Line@"''";
+
+	if (CandidatesInternal[Index].MapRef != none)
+		Line = Line@"'"$CandidatesInternal[Index].MapRef.MapName$"'";
+	else
+		Line = Line@"''";
+
+	Log(Line, 'VoteSys');
+}
+
 //
 
 simulated final function PlayerReplicationInfo GetPlayerInfoPRI(int Index) {

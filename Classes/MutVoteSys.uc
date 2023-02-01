@@ -483,11 +483,16 @@ function TallyVotes() {
 	local float TiedCandidatesFraction;
 	local float RandomCandidate;
 	local VS_Map M;
+	local VS_PlayerChannel C;
 
 	BestScore = 0;
 	CountTiedCandidates = 0;
 
+	for (C = ChannelList; C != none; C = C.Next)
+		C.DumpLog();
+
 	for (i = 0; i < Info.NumCandidates; i++) {
+		Info.DumpCandidate(i);
 		Score = Info.GetCandidateVotes(i);
 		if (Score > BestScore) {
 			BestScore = Score;
