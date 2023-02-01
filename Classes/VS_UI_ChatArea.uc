@@ -163,15 +163,15 @@ function float DrawTextLine2(Canvas C, UWindowDynamicTextRow L, float Y, float W
 	M = VS_UI_ChatMessage(L);
 
 	if(bHCenter) {
-		TextAreaTextSize(C, M.PRI.PlayerName$": "$M.Text, W, H);
+		TextAreaTextSize(C, M.PlayerName$": "$M.Text, W, H);
 		X = int((Width - W) / 2);
 	} else {
 		X = 2;
 	}
-	TextAreaClipText(C, X, Y, M.PRI.PlayerName$": "$M.Text);
+	TextAreaClipText(C, X, Y, M.PlayerName$": "$M.Text);
 
 	C.DrawColor = M.PlayerColor;
-	TextAreaClipText(C, X, Y, M.PRI.PlayerName);
+	TextAreaClipText(C, X, Y, M.PlayerName);
 	C.DrawColor = TextColor;
 
 	return DefaultTextHeight;
@@ -180,7 +180,7 @@ function float DrawTextLine2(Canvas C, UWindowDynamicTextRow L, float Y, float W
 function AddChat(PlayerReplicationInfo PRI, string Message) {
 	local VS_UI_ChatMessage M;
 	M = VS_UI_ChatMessage(AddText(Message));
-	M.PRI = PRI;
+	M.PlayerName = PRI.PlayerName;
 
 	if (GRI == none)
 		foreach GetLevel().AllActors(class'GameReplicationInfo', GRI)
