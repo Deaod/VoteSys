@@ -96,7 +96,7 @@ function CreateChannel(Pawn P) {
 
 	PP = PlayerPawn(P);
 	if (PP != none && IsAddressBanned(PP.GetPlayerNetworkAddress())) {
-		PP.KickMe("Temp Banned (VoteSys)");
+		KickPlayer(PP, "Temp Banned (VoteSys)");
 		return;
 	}
 
@@ -104,6 +104,48 @@ function CreateChannel(Pawn P) {
 	C.PlayerOwner = PP;
 	C.Next = ChannelList;
 	ChannelList = C;
+}
+
+function KickPlayer(PlayerPawn P, string Reason) {
+	Log(P.PlayerReplicationInfo.PlayerName@"("$P.GetPlayerNetworkAddress()$") was kicked from the server:"@Reason,'AdminAction');
+	P.Destroy();
+}
+
+function string StripPort(string Address) {
+	local int i;
+	
+	//Handle IPv6 address (removes the brackets)
+	i = InStr(Address,"[");
+	if (i == 0) {
+		i = InStr(Address,"]");
+		if (i > 0)
+			return Mid(Address,1,i-1);
+	}
+
+	//Remove the port (if present)
+	i = InStr(Address,":");
+	if (i < 0)
+		return Address;
+	return Left(Address,i);
+}
+
+function KickBanPlayer(PlayerPawn P, string Reason) {
+	local string IP;
+	local int j;
+
+	IP = P.GetPlayerNetworkAddress();
+	if (Level.Game.CheckIPPolicy(IP)) {
+		IP = StripPort(IP);
+		Log(P.PlayerReplicationInfo.PlayerName@"("$IP$") was banned from the server:"@Reason,'AdminAction');
+		Log("Adding IP Ban for: "$IP);
+		for (j = 0; j<ArrayCount(Level.Game.IPPolicies); j++)
+			if (Level.Game.IPPolicies[j] == "")
+				break;
+		if (j < ArrayCount(Level.Game.IPPolicies))
+			Level.Game.IPPolicies[j] = "DENY,"$IP;
+		Level.Game.SaveConfig();
+	}
+	P.Destroy();
 }
 
 function bool IsAddressBanned(string Address) {
@@ -281,7 +323,7 @@ function HandleKickVoting() {
 			);
 
 			TempBanAddress(C.PlayerOwner.GetPlayerNetworkAddress());
-			C.PlayerOwner.KickMe("Kick Vote Successful (VoteSys)");
+			KickPlayer(C.PlayerOwner, "Kick Vote Successful (VoteSys)");
 		}
 	}
 }

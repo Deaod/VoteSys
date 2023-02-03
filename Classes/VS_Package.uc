@@ -8,7 +8,7 @@ const PKG_Unsecure       = 0x0010; // Not trusted.
 const PKG_RequireMD5     = 0x0020; // Server is requiring MD5 from the client.
 const PKG_Need           = 0x8000; // Client needs to download this package.
 
-var native const pointer DllHandle;
+var native const Object DllHandle;
 var native const bool AttemptedBind;
 var native const int PackageFlags;
 var native const string LastLoadedFrom;

@@ -169,7 +169,7 @@ function KickPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target) {
 			);
 
 			VoteSys.TempBanAddress(P.GetPlayerNetworkAddress());
-			P.KickMe("Admin Kick (VoteSys)");
+			VoteSys.KickPlayer(P, "Admin Kick (VoteSys)");
 		}
 	} else {
 		TCh = VoteSys.FindChannelForPRI(Target);
@@ -206,7 +206,7 @@ function BanPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target) {
 				string(Target.PlayerId)
 			);
 
-			P.KickBanMe("Admin Ban (VoteSys)");
+			VoteSys.KickBanPlayer(P, "Admin Ban (VoteSys)");
 		}
 	}
 }
