@@ -1,6 +1,6 @@
 class MutVoteSys extends Mutator;
 
-var VS_PlayerChannel ChannelList;
+var VS_ChannelContainer ChannelList;
 var VS_Info Info;
 var VS_DataServer DataServer;
 var VS_ChatObserver ChatObserver;
@@ -70,25 +70,25 @@ event PostBeginPlay() {
 	Level.Game.SetPropertyText("bDontRestart", "True"); // Botpack.DeathMatchPlus and UnrealShare.DeathMatchGame
 }
 
-function VS_PlayerChannel FindChannel(Pawn P) {
-	local VS_PlayerChannel C;
+function VS_ChannelContainer FindChannel(Pawn P) {
+	local VS_ChannelContainer C;
 	
 	if (P == none || P.IsA('PlayerPawn') == false)
 		return none;
 
 	for (C = ChannelList; C != none; C = C.Next)
-		if (P == C.Owner)
+		if (P == C.PlayerOwner)
 			return C;
 
 	return none;
 }
 
-function VS_PlayerChannel FindChannelForPRI(PlayerReplicationInfo PRI) {
+function VS_ChannelContainer FindChannelForPRI(PlayerReplicationInfo PRI) {
 	return FindChannel(Pawn(PRI.Owner));
 }
 
 function CreateChannel(Pawn P) {
-	local VS_PlayerChannel C;
+	local VS_ChannelContainer C;
 	local PlayerPawn PP;
 	
 	if (P.IsA('PlayerPawn') == false)
@@ -100,8 +100,8 @@ function CreateChannel(Pawn P) {
 		return;
 	}
 
-	C = Spawn(class'VS_PlayerChannel', P);
-	C.PlayerOwner = PP;
+	C = Spawn(class'VS_ChannelContainer');
+	C.Initialize(PP);
 	C.Next = ChannelList;
 	ChannelList = C;
 }
@@ -175,22 +175,22 @@ function BroadcastLocalizedMessage2(
 	optional string Param4,
 	optional string Param5
 ) {
-	local VS_PlayerChannel C;
+	local VS_ChannelContainer C;
 	for (C = ChannelList; C != none; C = C.Next)
-		if (C.PlayerOwner != none)
-			C.LocalizeMessage(MessageClass, Switch, Param1, Param2, Param3, Param4, Param5);
+		if (C.Channel != none && C.Channel.PlayerOwner != none)
+			C.Channel.LocalizeMessage(MessageClass, Switch, Param1, Param2, Param3, Param4, Param5);
 }
 
 function ChatMessage(PlayerReplicationInfo PRI, string Msg) {
-	local VS_PlayerChannel C;
+	local VS_ChannelContainer C;
 	for (C = ChannelList; C != none; C = C.Next)
-		if (C.PlayerOwner != none)
-			C.ChatMessage(PRI, Msg);
+		if (C.Channel != none && C.PlayerOwner != none)
+			C.Channel.ChatMessage(PRI, Msg);
 }
 
 function Mutate(string Command, PlayerPawn Sender) {
 	local int i;
-	local VS_PlayerChannel C;
+	local VS_ChannelContainer C;
 
 	if (Command ~= "VoteMenu") {
 		OpenVoteMenu(Sender);
@@ -207,32 +207,32 @@ function Mutate(string Command, PlayerPawn Sender) {
 }
 
 function OpenVoteMenuForAll() {
-	local VS_PlayerChannel C;
+	local VS_ChannelContainer C;
 	for (C = ChannelList; C != none; C = C.Next)
-		if (C.PlayerOwner != none)
-			C.ShowVoteMenu();
+		if (C.Channel != none && C.Channel.PlayerOwner != none)
+			C.Channel.ShowVoteMenu();
 }
 
 function CloseVoteMenuForAll() {
-	local VS_PlayerChannel C;
+	local VS_ChannelContainer C;
 	for (C = ChannelList; C != none; C = C.Next)
-		if (C.PlayerOwner != none)
-			C.HideVoteMenu();
+		if (C.Channel != none && C.Channel.PlayerOwner != none)
+			C.Channel.HideVoteMenu();
 }
 
 function OpenVoteMenu(PlayerPawn P) {
-	local VS_PlayerChannel C;
+	local VS_ChannelContainer C;
 
 	if (CanVote(P) == false)
 		return;
 
 	C = FindChannel(P);
-	if (C == none) {
+	if (C == none || C.Channel == none) {
 		Log("Could not find Channel for"@P.PlayerReplicationInfo.PlayerName@"("$P.PlayerReplicationInfo.PlayerId$")", 'VoteSys');
 		return;
 	}
 
-	C.ShowVoteMenu();
+	C.Channel.ShowVoteMenu();
 }
 
 event Timer() {
@@ -277,16 +277,16 @@ function CreateMissingPlayerChannels() {
 
 function UpdatePlayerVoteInformation() {
 	local int i;
-	local VS_PlayerChannel C;
+	local VS_ChannelContainer C;
 
 	i = 0;
 	for (C = ChannelList; C != none; C = C.Next) {
-		if (i < 32 && CanVote(C.PlayerOwner)) {
+		if (i < 32 && C.Channel != none && CanVote(C.PlayerOwner)) {
 			Info.SetPlayerInfoPRI(i, C.PlayerOwner.PlayerReplicationInfo);
-			Info.SetPlayerInfoHasVoted(i, C.bHasVoted);
+			Info.SetPlayerInfoHasVoted(i, C.Channel.bHasVoted);
 			i++;
-		} else if (C.bHasVoted) {
-			C.ClearVote();
+		} else if (C.Channel.bHasVoted) {
+			C.Channel.ClearVote();
 		}
 	}
 
@@ -297,26 +297,28 @@ function UpdatePlayerVoteInformation() {
 }
 
 function HandleKickVoting() {
-	local VS_PlayerChannel C;
-	local VS_PlayerChannel Other;
+	local VS_ChannelContainer C;
+	local VS_ChannelContainer Other;
 	local int VotingPlayers;
 	local int i;
 
 	for (C = ChannelList; C != none; C = C.Next) {
 		if (CanVote(C.PlayerOwner)) {
 			VotingPlayers++;
-		} else {
-			for (i = C.IWantToKick.Length - 1; i >= 0; i--) {
-				Other = FindChannelForPRI(C.IWantToKick[i]);
-				if (Other != none)
-					Other.KickVotesAgainstMe--;
+		} else if (C.Channel != none) {
+			for (i = C.Channel.IWantToKick.Length - 1; i >= 0; i--) {
+				Other = FindChannelForPRI(C.Channel.IWantToKick[i]);
+				if (Other != none && Other.Channel != none)
+					Other.Channel.KickVotesAgainstMe--;
 			}
-			C.IWantToKick.Remove(0, C.IWantToKick.Length);
+			C.Channel.IWantToKick.Remove(0, C.Channel.IWantToKick.Length);
 		}
 	}
 
 	for (C = ChannelList; C != none; C = C.Next) {
-		if (C.KickVotesAgainstMe > Settings.KickVoteThreshold * VotingPlayers) {
+		if (C.Channel == none)
+			continue;
+		if (C.Channel.KickVotesAgainstMe > Settings.KickVoteThreshold * VotingPlayers) {
 			BroadcastLocalizedMessage2(
 				class'VS_Msg_LocalMessage', 11,
 				C.PlayerOwner.PlayerReplicationInfo.PlayerName
@@ -331,11 +333,11 @@ function HandleKickVoting() {
 function CheckMidGameVoting() {
 	local int NumVotes;
 	local int NumPlayers;
-	local VS_PlayerChannel C;
+	local VS_ChannelContainer C;
 	local Pawn P;
 
 	for (C = ChannelList; C != none; C = C.Next)
-		if (C.PlayerOwner != none && C.bHasVoted)
+		if (C.PlayerOwner != none && C.Channel != none && C.Channel.bHasVoted)
 			NumVotes++;
 
 	NumPlayers = 1; // to round up later
@@ -525,13 +527,14 @@ function TallyVotes() {
 	local float TiedCandidatesFraction;
 	local float RandomCandidate;
 	local VS_Map M;
-	local VS_PlayerChannel C;
+	local VS_ChannelContainer C;
 
 	BestScore = 0;
 	CountTiedCandidates = 0;
 
 	for (C = ChannelList; C != none; C = C.Next)
-		C.DumpLog();
+		if (C.Channel != none)
+			C.Channel.DumpLog();
 
 	for (i = 0; i < Info.NumCandidates; i++) {
 		Info.DumpCandidate(i);

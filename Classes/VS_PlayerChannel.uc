@@ -1,6 +1,5 @@
 class VS_PlayerChannel extends Info;
 
-var VS_PlayerChannel Next;
 var PlayerPawn PlayerOwner;
 var VS_Info Info; // Info Info
 

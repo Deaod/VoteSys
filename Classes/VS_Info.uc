@@ -147,6 +147,7 @@ function RemMapVoteUnsafe(string Preset, string MapName) {
 
 function KickPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target) {
 	local PlayerPawn P;
+	local VS_ChannelContainer ChCont;
 	local VS_PlayerChannel TCh;
 
 	if (Origin == none || Target == none)
@@ -172,7 +173,9 @@ function KickPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target) {
 			VoteSys.KickPlayer(P, "Admin Kick (VoteSys)");
 		}
 	} else {
-		TCh = VoteSys.FindChannelForPRI(Target);
+		ChCont = VoteSys.FindChannelForPRI(Target);
+		if (ChCont != none)
+			TCh = ChCont.Channel;
 		if (TCh != none) {
 			if (Origin.ToggleKick(Target)) {
 				TCh.KickVotesAgainstMe++;
