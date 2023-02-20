@@ -11,6 +11,8 @@ var VS_PlayerChannel Channel;
 var VS_Preset Preset;
 var VS_Map LastMap;
 
+var float ResolveDelay;
+
 event PostBeginPlay() {
 	Log("VS_DataClient.PostBeginPlay", 'VoteSys');
 	LinkMode = MODE_Text;
@@ -28,6 +30,9 @@ function string GetRemoteAddress() {
 	local string Result;
 	local string LevelAddress;
 	local int PortPos;
+
+	if (Info.Data.Addr != "") // server wants us to connect to this
+		return Info.Data.Addr;
 
 	LevelAddress = Level.GetAddressURL();
 	if (Left(LevelAddress, 1) == "[") {
@@ -53,7 +58,7 @@ auto state Initial {
 		RemoteAddr.Addr = Addr.Addr;
 		if (Addr.Addr == 0) // listen servers have this address
 			StringToIpAddr("127.0.0.1", RemoteAddr);
-		RemoteAddr.Port = Info.DataPort;
+		RemoteAddr.Port = Info.Data.Port;
 
 		Log("VS_DataClient Opening"@IpAddrToString(RemoteAddr), 'VoteSys');
 		if (BindPort(, true) != 0 && Open(RemoteAddr)) {
@@ -63,9 +68,9 @@ auto state Initial {
 		}
 	}
 	event ResolveFailure() {
-		local IpAddr A;
-		StringToIpAddr(Info.DataAddr, A);
-		Resolved(A);
+		ResolveDelay = 10;
+		GotoState('Initial', 'Resolve');
+		Channel.PlayerOwner.ClientMessage("Resolving failed, retrying in 10 seconds.");
 	}
 
 Begin:
@@ -76,12 +81,15 @@ Begin:
 		foreach AllActors(class'VS_Info', Info)
 			break;
 	}
-	while(Info.DataAddr == "" || Info.DataPort == 0) {
+	while(Info.Data.Port == 0) {
 		Sleep(0.5);
-		Log("VS_DataClient Addr="$Info.DataAddr@"Port="$Info.DataPort, 'VoteSys');
+		Log("VS_DataClient Addr="$Info.Data.Addr@"Port="$Info.Data.Port, 'VoteSys');
 	}
 	Log("VS_DataClient HavePort", 'VoteSys');
 	Log("VS_DataClient RemoteAddress"@GetRemoteAddress(), 'VoteSys');
+
+Resolve:
+	Sleep(ResolveDelay);
 	Resolve(GetRemoteAddress());
 }
 

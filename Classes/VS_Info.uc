@@ -1,9 +1,12 @@
 class VS_Info extends ReplicationInfo;
 
 var MutVoteSys VoteSys;
-var string DataAddr;
-var int    DataPort;
-var int    MinimumMapRepeatDistance;
+struct ConnectionData {
+	var string Addr;
+	var int    Port;
+};
+var ConnectionData Data;
+var int MinimumMapRepeatDistance;
 
 struct MapCandidateData {
 	var() string Preset;
@@ -29,8 +32,7 @@ var PlayerVoteSysInfo PlayerInfo[32];
 
 replication {
 	unreliable if (Role == ROLE_Authority)
-		DataAddr,
-		DataPort,
+		Data,
 		MinimumMapRepeatDistance,
 		NumCandidates,
 		Candidates,

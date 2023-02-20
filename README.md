@@ -41,7 +41,7 @@ MinimumMapRepeatDistance=0
 KickVoteThreshold=0.6
 DefaultTimeMessageClass=Botpack.TimeMessage
 DefaultPreset=DM/Team DeathMatch
-ServerAddress=127.0.0.1
+ServerAddress=
 DataPort=0
 ClientDataPort=0
 bManageServerPackages=False
@@ -97,7 +97,7 @@ Empty by default.
 
 #### ServerAddress
 
-Specifies the IP address thats used by clients should the clients be unable to determine the IP address of the server.
+Specifies the address that clients will connect to for VoteSys data transfer. If empty, clients will reuse the address they connected to.
 
 Empty by default.
 

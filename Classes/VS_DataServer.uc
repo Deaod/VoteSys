@@ -6,7 +6,6 @@ var VS_Info Info;
 var VS_ServerSettings Settings;
 
 event PostBeginPlay() {
-	local IpAddr A;
 	local int Prt;
 
 	foreach AllActors(class'MutVoteSys', VoteSys)
@@ -31,26 +30,18 @@ event PostBeginPlay() {
 	foreach AllActors(class'VS_Info', Info)
 		break;
 
-	if (StringToIpAddr(Settings.ServerAddress, A)) {
-		Log("VS_DataServer UseLocalAddr", 'VoteSys');
-		Info.DataAddr = Settings.ServerAddress;
-	} else {
-		Log("VS_DataServer DetermineAddr", 'VoteSys');
-		GetLocalIP(A);
-		Info.DataAddr = IpAddrToString(A);
-		Info.DataAddr = Left(Info.DataAddr, Len(Info.DataAddr)-2); // -2 to cut off Port specifier (:0)
-	}
+	Info.Data.Addr = Settings.ServerAddress;
 	if (Settings.ClientDataPort == 0 || Settings.DataPort != Prt) {
 		// Either the admin didnt specify a port clients should use,
 		// or we didnt get the port we wanted (likely because its in use).
 		// Anyway, we should use the port we actually bound to.
-		Info.DataPort = Prt;
+		Info.Data.Port = Prt;
 	} else {
 		// we bound to the port we wanted and the admin specified a port clients should use.
-		Info.DataPort = Settings.ClientDataPort;
+		Info.Data.Port = Settings.ClientDataPort;
 	}
 
-	Log("VS_DataServer Addr="$Info.DataAddr@"Port="$Info.DataPort, 'VoteSys');
+	Log("VS_DataServer Addr="$Info.Data.Addr@"Port="$Info.Data.Port, 'VoteSys');
 }
 
 defaultproperties {
