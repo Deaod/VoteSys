@@ -38,8 +38,13 @@ var string CurrentPreset;
 var VS_Preset VotedPreset;
 var VS_Map VotedMap;
 
-var VS_Package TempPkg;
+var Object BannedPlayersDummy;
+var VS_BannedPlayers BannedPlayers;
 var array<string> BannedAddresses;
+
+var VS_AceHandler AceHandler;
+
+var VS_Package TempPkg;
 
 event PostBeginPlay() {
 	super.PostBeginPlay();
@@ -47,6 +52,11 @@ event PostBeginPlay() {
 	SettingsDummy = new(none, 'VoteSys') class 'Object';
 	Settings = new (SettingsDummy, 'ServerSettings') class'VS_ServerSettings';
 	Settings.SaveConfig();
+
+	BannedPlayersDummy = new(none, 'VoteSysBans') class'Object';
+	BannedPlayers = new(BannedPlayersDummy, 'BannedPlayers') class'VS_BannedPlayers';
+
+	AceHandler = Spawn(class'VS_AceHandler');
 
 	if ((Level.EngineVersion$Level.GetPropertyText("EngineRevision")) < "469c" && Settings.bManageServerPackages) {
 		GetDefaultServerPackages();
@@ -87,21 +97,31 @@ function VS_ChannelContainer FindChannelForPRI(PlayerReplicationInfo PRI) {
 	return FindChannel(Pawn(PRI.Owner));
 }
 
-function CreateChannel(Pawn P) {
+function CreateChannel(PlayerPawn P) {
 	local VS_ChannelContainer C;
-	local PlayerPawn PP;
-	
-	if (P.IsA('PlayerPawn') == false)
-		return;
+	local Actor Ace;
+	local Actor AceCheck;
 
-	PP = PlayerPawn(P);
-	if (PP != none && IsAddressBanned(PP.GetPlayerNetworkAddress())) {
-		KickPlayer(PP, "Temp Banned (VoteSys)");
+	Ace = AceHandler.GetACE();
+	if (Ace != none) {
+		AceCheck = AceHandler.GetFirstAceCheck(Ace);
+		while(AceCheck != none) {
+			if (P.PlayerReplicationInfo.PlayerId == AceHandler.GetAceCheckPlayerId(AceCheck))
+				break;
+			
+			AceCheck = AceHandler.GetNextAceCheck(AceCheck);
+		}
+		if (AceCheck == none)
+			return; // retry later
+	}
+
+	if (P != none && IsPlayerBanned(P, AceCheck)) {
+		KickPlayer(P, "Temp Banned (VoteSys)");
 		return;
 	}
 
 	C = Spawn(class'VS_ChannelContainer');
-	C.Initialize(PP);
+	C.Initialize(P, AceCheck);
 	C.Next = ChannelList;
 	ChannelList = C;
 }
@@ -129,28 +149,51 @@ function string StripPort(string Address) {
 	return Left(Address,i);
 }
 
-function KickBanPlayer(PlayerPawn P, string Reason) {
+function KickBanPlayer(PlayerPawn Admin, PlayerPawn P, string Reason) {
 	local string IP;
 	local int j;
+	local VS_ChannelContainer C;
+	local Actor Chk;
 
-	IP = P.GetPlayerNetworkAddress();
-	if (Level.Game.CheckIPPolicy(IP)) {
-		IP = StripPort(IP);
-		Log(P.PlayerReplicationInfo.PlayerName@"("$IP$") was banned from the server:"@Reason,'AdminAction');
-		Log("Adding IP Ban for: "$IP);
-		for (j = 0; j<ArrayCount(Level.Game.IPPolicies); j++)
-			if (Level.Game.IPPolicies[j] == "")
-				break;
-		if (j < ArrayCount(Level.Game.IPPolicies))
-			Level.Game.IPPolicies[j] = "DENY,"$IP;
-		Level.Game.SaveConfig();
+	C = FindChannel(P);
+	if (C != none) {
+		Chk = C.AceCheck;
+	} else if (AceHandler.GetACE() != none) {
+		Admin.ClientMessage("Banning"@P.PlayerReplicationInfo.PlayerName@"failed, please try again in a few seconds");
+		return;
 	}
+
+	if (Chk != none) {
+		BannedPlayers.BanPlayer(
+			AceHandler.GetAceCheckHWHash(Chk),
+			P.PlayerReplicationInfo.PlayerName,
+			Admin.PlayerReplicationInfo.PlayerName);
+	} else {
+		IP = P.GetPlayerNetworkAddress();
+		if (Level.Game.CheckIPPolicy(IP)) {
+			IP = StripPort(IP);
+			Log(P.PlayerReplicationInfo.PlayerName@"("$IP$") was banned from the server:"@Reason,'AdminAction');
+			Log("Adding IP Ban for: "$IP);
+			for (j = 0; j<ArrayCount(Level.Game.IPPolicies); j++)
+				if (Level.Game.IPPolicies[j] == "")
+					break;
+			if (j < ArrayCount(Level.Game.IPPolicies))
+				Level.Game.IPPolicies[j] = "DENY,"$IP;
+			Level.Game.SaveConfig();
+		}
+	}
+
 	P.Destroy();
 }
 
-function bool IsAddressBanned(string Address) {
+function bool IsPlayerBanned(PlayerPawn P, Actor AceCheck) {
 	local int i;
+	local string Address;
 
+	if (AceCheck != none && BannedPlayers.IsPlayerBanned(AceHandler.GetAceCheckHWHash(AceCheck)))
+		return true;
+
+	Address = P.GetPlayerNetworkAddress();
 	for (i = 0; i < BannedAddresses.Length; i++)
 		if (Address == BannedAddresses[i])
 			return true;
@@ -158,12 +201,24 @@ function bool IsAddressBanned(string Address) {
 	return false;
 }
 
-function TempBanAddress(string Address) {
-	if (IsAddressBanned(Address))
+function TempBanPlayer(PlayerPawn P) {
+	local VS_ChannelContainer C;
+	local Actor Chk;
+
+	C = FindChannel(P);
+
+	if (C != none)
+		Chk = C.AceCheck;
+
+	if (IsPlayerBanned(P, Chk))
 		return;
 
-	BannedAddresses.Insert(BannedAddresses.Length, 1);
-	BannedAddresses[BannedAddresses.Length - 1] = Address;
+	if (Chk != none) {
+		BannedPlayers.TempBanPlayer(AceHandler.GetAceCheckHWHash(Chk), P.PlayerReplicationInfo.PlayerName, "KickVote");
+	} else {
+		BannedAddresses.Insert(BannedAddresses.Length, 1);
+		BannedAddresses[BannedAddresses.Length - 1] = P.GetPlayerNetworkAddress();
+	}
 }
 
 function BroadcastLocalizedMessage2(
@@ -272,7 +327,7 @@ function CreateMissingPlayerChannels() {
 
 	for (P = Level.PawnList; P != none; P = P.NextPawn)
 		if (P.IsA('PlayerPawn') && FindChannel(P) == none)
-			CreateChannel(P);
+			CreateChannel(PlayerPawn(P));
 }
 
 function UpdatePlayerVoteInformation() {
@@ -324,7 +379,7 @@ function HandleKickVoting() {
 				C.PlayerOwner.PlayerReplicationInfo.PlayerName
 			);
 
-			TempBanAddress(C.PlayerOwner.GetPlayerNetworkAddress());
+			TempBanPlayer(C.PlayerOwner);
 			KickPlayer(C.PlayerOwner, "Kick Vote Successful (VoteSys)");
 		}
 	}
