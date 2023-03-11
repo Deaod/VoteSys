@@ -399,11 +399,13 @@ function CheckMidGameVoting() {
 		if (P.IsA('PlayerPawn') && P.IsA('Spectator') == false)
 			NumPlayers++;
 
-	if (NumPlayers <= 1 || NumVotes < NumPlayers/2) // rounding up here
+	if (NumPlayers <= 1 || NumVotes < int(Settings.MidGameVoteThreshold * NumPlayers)) // rounding up here
 		return;
 
 	GameState = GS_Voting;
-	TimeCounter = Settings.VoteTimeLimit;
+	TimeCounter = Settings.MidGameVoteTimeLimit;
+	if (TimeCounter <= 0)
+		TimeCounter = Settings.VoteTimeLimit;
 	BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 4);
 	OpenVoteMenuForAll();
 	AnnounceCountdown(TimeCounter);
@@ -932,7 +934,7 @@ function LoadConfig() {
 			ProbeDepth++;
 			continue;
 		}
-		
+
 		ProbeDepth = 0;
 
 		if (PresetList == none) {

@@ -37,6 +37,8 @@ In addition there are INI files that dont contain configuration, but are used to
 [ServerSettings]
 GameEndedVoteDelay=5
 VoteTimeLimit=30
+MidGameVoteThreshold=0.5
+MidGameVoteTimeLimit=30
 MinimumMapRepeatDistance=0
 KickVoteThreshold=0.6
 DefaultTimeMessageClass=Botpack.TimeMessage
@@ -64,11 +66,27 @@ DefaultActors=IpServer.UdpServerUplink MasterServerAddress=unreal.epicgames.com 
 
 #### GameEndedVoteDelay
 
-Number of seconds to wait before opening the map vote menu at the end of the game. Defaults to 5.
+Number of seconds to wait before opening the map vote menu at the end of the game.
+
+Defaults to 5.
 
 #### VoteTimeLimit
 
-Number of seconds players have to vote for the next map. Defaults to 30.
+Number of seconds players have to vote for the next map.
+
+Defaults to 30.
+
+#### MidGameVoteThreshold
+
+Fraction of eligible players that have to have voted before mid-game voting is initiated.
+
+Defaults to 0.5.
+
+#### MidGameVoteTimeLimit
+
+Number of seconds players have to vote for the next map while the current map is still being played. If 0 or less, VoteTimeLimit will be used instead.
+
+Defaults to 0.
 
 #### MinimumRepeatDistance
 
@@ -92,7 +110,7 @@ Defaults to Botpack.TimeMessage.
 
 #### DefaultPreset
 
-Specifies the preset thats selected by default should the server not know what preset was voted last. If empty, the first detected detected preset will be selected as default preset.
+Specifies the preset thats selected by default should the server not know what preset was voted last. If empty, the first detected preset will be selected as default preset.
 
 Empty by default.
 
