@@ -46,6 +46,7 @@ DataPort=0
 ClientDataPort=0
 bManageServerPackages=False
 bUseServerActorsCompatibilityMode=False
+PresetProbeDepth=1
 DefaultPackages=SoldierSkins
 DefaultPackages=CommandoSkins
 DefaultPackages=FCommandoSkins
@@ -144,6 +145,14 @@ If False, VoteSys will spawn the presets Actors itself.
 Defaults to False.
 
 Only set to True if you want to use at least one ServerActor that does not work correctly without this option set to True, but does work correctly when activated statically through the ServerActors list.
+
+#### PresetProbeDepth
+
+Controls how many consecutive presets must have an empty `PresetName` before VoteSys stops probing. Settings lower than 1 will be reset to 1.
+
+If you have gaps in your list of presets, you can modify this setting to skip over those gaps.
+
+1 by default.
 
 #### DefaultPackages
 

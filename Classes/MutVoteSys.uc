@@ -914,17 +914,26 @@ function LoadConfig() {
 	local VS_PresetConfig PC;
 	local VS_Preset P;
 	local int i;
+	local int ProbeDepth;
+
+	// fix problematic settings
+	if (Settings.PresetProbeDepth < 1)
+		Settings.PresetProbeDepth = 1;
 
 	PresetConfigDummy = new(XLevel, 'VoteSysPresets')  class'Object';
 	MapListDummy      = new(XLevel, 'VoteSysMapLists') class'Object';
 	i = 0;
 
-	while(true) {
+	for (i = 0; ProbeDepth < Settings.PresetProbeDepth; i++) {
 		SetPropertyText("PresetNameDummy", "VS_PresetConfig"$i);
 		PC = new(PresetConfigDummy, PresetNameDummy) class'VS_PresetConfig';
 		Log("Try Loading"@PC.Name, 'VoteSys');
-		if (PC.PresetName == "")
-			break;
+		if (PC.PresetName == "") {
+			ProbeDepth++;
+			continue;
+		}
+		
+		ProbeDepth = 0;
 
 		if (PresetList == none) {
 			P = LoadPreset(PC);
@@ -937,9 +946,7 @@ function LoadConfig() {
 
 		if (DefaultPresetRef == none || (P != none && Len(Settings.DefaultPreset) > 0 && P.GetFullName() == Settings.DefaultPreset))
 			DefaultPresetRef = P;
-
-		i++;
-	}
+	};
 
 	if (PresetList == none) {
 		Level.Game.SetPropertyText("bDontRestart", "False");

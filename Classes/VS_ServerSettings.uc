@@ -12,6 +12,7 @@ var config int DataPort;
 var config int ClientDataPort;
 var config bool bManageServerPackages;
 var config bool bUseServerActorsCompatibilityMode;
+var config int PresetProbeDepth;
 var config array<string> DefaultPackages;
 var config array<string> DefaultActors;
 
@@ -27,4 +28,5 @@ defaultproperties {
 	ClientDataPort=0
 	bManageServerPackages=False
 	bUseServerActorsCompatibilityMode=False
+	PresetProbeDepth=1
 }
