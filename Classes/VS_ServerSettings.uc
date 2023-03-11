@@ -9,6 +9,7 @@ var config int MinimumMapRepeatDistance;
 var config float KickVoteThreshold;
 var config string DefaultTimeMessageClass;
 var config string DefaultPreset;
+var config string DefaultMap;
 var config string ServerAddress;
 var config int DataPort;
 var config int ClientDataPort;

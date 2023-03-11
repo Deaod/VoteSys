@@ -43,6 +43,7 @@ MinimumMapRepeatDistance=0
 KickVoteThreshold=0.6
 DefaultTimeMessageClass=Botpack.TimeMessage
 DefaultPreset=DM/Team DeathMatch
+DefaultMap=DM-Deck16
 ServerAddress=
 DataPort=0
 ClientDataPort=0
@@ -111,6 +112,12 @@ Defaults to Botpack.TimeMessage.
 #### DefaultPreset
 
 Specifies the preset thats selected by default should the server not know what preset was voted last. If empty, the first detected preset will be selected as default preset.
+
+Empty by default.
+
+#### DefaultMap
+
+Specifies the map that VoteSys should switch to when using `DefaultPreset`. If empty, a random map will be selected. Map must be part of the map list for `DefaultPreset`, otherwise it will be treated as if no map was specified.
 
 Empty by default.
 

@@ -610,7 +610,9 @@ function TallyVotes() {
 			Level.Game.SetPropertyText("bDontRestart", "False");
 			return;
 		}
-		M = SelectRandomMapFromList(DefaultPresetRef.MapList);
+		M = Info.ResolveMapOfPreset(DefaultPresetRef, Settings.DefaultMap);
+		if (M == none)
+			M = SelectRandomMapFromList(DefaultPresetRef.MapList);
 		if (M == none)
 			return;
 
