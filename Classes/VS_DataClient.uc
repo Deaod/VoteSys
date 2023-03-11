@@ -130,7 +130,7 @@ function NextVariable(out string L) {
 	Pos = InStr(L, "/");
 
 	if (Pos >= 0)
-		L = Mid(L, Pos);
+		L = Mid(L, Pos+1);
 	else
 		L = "";
 }
