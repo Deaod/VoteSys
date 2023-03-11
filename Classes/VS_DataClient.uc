@@ -124,15 +124,28 @@ function string DecodeString(out string S) {
 	return Result $ S;
 }
 
+function NextVariable(out string L) {
+	local int Pos;
+
+	Pos = InStr(L, "/");
+
+	if (Pos >= 0)
+		L = Mid(L, Pos);
+	else
+		L = "";
+}
+
 function VS_Preset ParsePreset(string Line) {
 	local VS_Preset P;
 
 	P = new(none) class'VS_Preset';
 
 	Line = Mid(Line, 8);
-	P.PresetName = DecodeString(Line); Line = Mid(Line, 1);
-	P.Abbreviation = DecodeString(Line); Line = Mid(Line, 1);
-	P.Category = DecodeString(Line);
+	//                         |   Parse Content    | Skip /
+	P.PresetName               = DecodeString(Line); NextVariable(Line);
+	P.Abbreviation             = DecodeString(Line); NextVariable(Line);
+	P.Category                 = DecodeString(Line); NextVariable(Line);
+	P.MinimumMapRepeatDistance = int(Line);
 
 	return P;
 }

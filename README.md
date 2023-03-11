@@ -179,6 +179,7 @@ Mutators=
 Parameters=?MaxPlayers=8
 GameSettings=bTournament=True
 bDisabled=False
+MinimumMapRepeatDistance=2
 
 [VS_PresetConfig2]
 PresetName=2v2v2v2 TDM
@@ -187,6 +188,7 @@ Category=DM
 InheritsFrom=DM/Team DeathMatch
 GameSettings=MaxTeams=4
 Mutators=Botpack.InstaGibDM
+MinimumMapRepeatDistance=4
 ```
 
 Each preset is a different section inside VoteSysPresets.ini (e.g. `[VS_PresetConfig0]`, `[VS_PresetConfig1]`, etc.). Each preset section needs to start with VS_PresetConfig, followed by a number. The number needs to start from 0 and can go as high as you want. You can not leave out numbers.
@@ -202,9 +204,11 @@ Each preset has a `Name`, a `Category` and an `Abbreviation`.
 
 You can inherit from an arbitrary number of other presets.
 
-You can inherit `Game`, `Mutators`, `Parameters`, and `GameSettings`. Other elements cannot be inherited.
+You can inherit `Game`, `Mutators`, `Parameters`, `GameSettings`, and `MinimumMapRepeatDistance`. Other elements cannot be inherited.
 
 If you dont specify a value for `Game` in the current preset, the first non-empty value in the list of presets you inherit from will be used.
+
+If you dont specify a value, or if you specify a negative value for `MinimumMapRepeatDistance` in the current preset, the first non-empty and non-negative value in the list of presets you inherit from will be used.
 
 For `Mutators`, `Parameters`, and `GameSettings` the values will be combined in the same order you specified the base presets. If you specify any addition values in the current preset, they will be added at the end.
 
@@ -255,6 +259,10 @@ If `True` the preset will not be shown to users and will not be eligible to beco
 This setting does not need to be mentioned explicitly. Its default value will be used if it is not mentioned.
 
 Default is `False`.
+
+#### MinimumMapRepeatDistance
+
+Specifying this setting allows you to override the server-wide setting on a per-preset basis. If not specified and not inherited from other presets, the server-wide setting will be used.
 
 ### VoteSysMapLists.ini
 ```ini

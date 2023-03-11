@@ -6,7 +6,6 @@ struct ConnectionData {
 	var int    Port;
 };
 var ConnectionData Data;
-var int MinimumMapRepeatDistance;
 
 struct MapCandidateData {
 	var() string Preset;
@@ -33,7 +32,6 @@ var PlayerVoteSysInfo PlayerInfo[32];
 replication {
 	unreliable if (Role == ROLE_Authority)
 		Data,
-		MinimumMapRepeatDistance,
 		NumCandidates,
 		Candidates,
 		PlayerInfo;

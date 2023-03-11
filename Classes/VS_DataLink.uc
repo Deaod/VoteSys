@@ -83,7 +83,7 @@ Begin:
 		if (TempPreset.bDisabled)
 			continue;
 
-		SendBuffer = "/PRESET/"$EncodeString(TempPreset.PresetName)$"/"$EncodeString(TempPreset.Abbreviation)$"/"$EncodeString(TempPreset.Category)$Chr(13)$Chr(10);
+		SendBuffer = "/PRESET/"$EncodeString(TempPreset.PresetName)$"/"$EncodeString(TempPreset.Abbreviation)$"/"$EncodeString(TempPreset.Category)$"/"$TempPreset.MinimumMapRepeatDistance$Chr(13)$Chr(10);
 		while (true) {
 			SendBuffer = Mid(SendBuffer, SendText(SendBuffer));
 			if (Len(SendBuffer) <= 0)

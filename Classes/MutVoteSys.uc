@@ -72,7 +72,6 @@ event PostBeginPlay() {
 	LoadHistory();
 	Info = Spawn(class'VS_Info', self);
 	Info.VoteSys = self;
-	Info.MinimumMapRepeatDistance = Settings.MinimumMapRepeatDistance;
 	DataServer = Spawn(class'VS_DataServer', self);
 	ChatObserver = Level.Spawn(class'VS_ChatObserver');
 	ChatObserver.VoteSys = self;
@@ -960,6 +959,7 @@ function VS_Preset LoadPreset(VS_PresetConfig PC) {
 	P.PresetName   = PC.PresetName;
 	P.Abbreviation = PC.Abbreviation;
 	P.Category     = PC.Category;
+	P.MinimumMapRepeatDistance = PC.MinimumMapRepeatDistance;
 
 	for (i = 0; i < PC.InheritFrom.Length; i++) {
 		if (PC.InheritFrom[i] == "")
@@ -973,6 +973,8 @@ function VS_Preset LoadPreset(VS_PresetConfig PC) {
 
 		if (P.Game == none)
 			P.Game = Base.Game;
+		if (P.MinimumMapRepeatDistance < 0)
+			P.MinimumMapRepeatDistance = Base.MinimumMapRepeatDistance;
 
 		P.AppendMutator(Base.Mutators);
 		P.AppendParameter(Base.Parameters);
@@ -984,6 +986,8 @@ function VS_Preset LoadPreset(VS_PresetConfig PC) {
 		P.Game = Game;
 
 	P.bDisabled = PC.bDisabled;
+	if (P.MinimumMapRepeatDistance < 0)
+		P.MinimumMapRepeatDistance = Settings.MinimumMapRepeatDistance;
 
 	if (P.Game == none && P.bDisabled == false) {
 		Log("    Forcibly disabling '"$P.GetFullName()$"' because it has no gamemode.", 'VoteSys');

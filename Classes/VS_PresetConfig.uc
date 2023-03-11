@@ -21,3 +21,9 @@ var config array<string> Parameters;
 var config array<string> GameSettings;
 /** Disabled presets are not shown to users and cannot be voted for */
 var config bool bDisabled;
+/** Overrides the server setting of the same name, if the value is 0 or greater */
+var config int MinimumMapRepeatDistance;
+
+defaultproperties {
+	MinimumMapRepeatDistance=-1
+}
