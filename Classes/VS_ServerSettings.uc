@@ -28,6 +28,7 @@ defaultproperties {
 	KickVoteThreshold=0.6
 	DefaultTimeMessageClass="Botpack.TimeMessage"
 	DefaultPreset=
+	DefaultMap=
 	ServerAddress=
 	DataPort=0
 	ClientDataPort=0

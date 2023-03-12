@@ -16,6 +16,7 @@ var localized string ErrStillLoading;
 var localized string ErrNoRootWindow;
 var localized string ErrCreateDialog;
 var localized string ErrWrongConsole;
+var localized string ErrMapLoadFailed;
 
 static function string GetString(
 	optional int Switch,
@@ -29,22 +30,23 @@ static function string GetString(
 	Params = VS_Msg_ParameterContainer(OptionalObject);
 
 	switch(Switch) {
-		case 1: Result = default.MsgNobodyVoted; break;
-		case 2: Result = default.MsgVotesTied; break;
-		case 3: Result = default.MsgHaveWinner; break;
-		case 4: Result = default.MsgMidGame; break;
-		case 5: Result = default.MsgGameEnded; break;
-		case 6: Result = default.MsgPlayerVoted; break;
-		case 7: Result = default.MsgAdminForceTravel; break;
-		case 8: Result = default.MsgAdminKickPlayer; break;
-		case 9: Result = default.MsgAdminBanPlayer; break;
-		case 10:Result = default.MsgKickVotePlaced; break;
-		case 11:Result = default.MsgKickVoteSuccessful; break;
+		case 1:  Result = default.MsgNobodyVoted; break;
+		case 2:  Result = default.MsgVotesTied; break;
+		case 3:  Result = default.MsgHaveWinner; break;
+		case 4:  Result = default.MsgMidGame; break;
+		case 5:  Result = default.MsgGameEnded; break;
+		case 6:  Result = default.MsgPlayerVoted; break;
+		case 7:  Result = default.MsgAdminForceTravel; break;
+		case 8:  Result = default.MsgAdminKickPlayer; break;
+		case 9:  Result = default.MsgAdminBanPlayer; break;
+		case 10: Result = default.MsgKickVotePlaced; break;
+		case 11: Result = default.MsgKickVoteSuccessful; break;
 
 		case -1: Result = default.ErrStillLoading; break;
 		case -2: Result = default.ErrNoRootWindow; break;
 		case -3: Result = default.ErrCreateDialog; break;
 		case -4: Result = default.ErrWrongConsole; break;
+		case -5: Result = default.ErrMapLoadFailed; break;
 
 		default:
 			return "";
@@ -100,4 +102,5 @@ defaultproperties {
 	ErrNoRootWindow="Failed to create VoteMenu window (Root does not exist)"
 	ErrCreateDialog="Failed to create VoteMenu window (Could not create Dialog)"
 	ErrWrongConsole="Failed to create VoteMenu window (Console not a WindowConsole)"
+	ErrMapLoadFailed="Loading map {1} failed, randomly selecting {2}"
 }

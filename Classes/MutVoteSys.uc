@@ -584,6 +584,7 @@ function TallyVotes() {
 	local float RandomCandidate;
 	local VS_Map M;
 	local VS_ChannelContainer C;
+	local string OldMapName;
 
 	BestScore = 0;
 	CountTiedCandidates = 0;
@@ -618,31 +619,41 @@ function TallyVotes() {
 
 		VotedPreset = DefaultPresetRef;
 		VotedMap = M;
+	} else {
+		TiedCandidatesFraction = 1.0 / CountTiedCandidates;
+		RandomCandidate = FRand(); // [0..1] // inclusive at both ends
 
-		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 1, VotedMap.MapName@"("$VotedPreset.Abbreviation$")");
-		return;
-	}
-
-	TiedCandidatesFraction = 1.0 / CountTiedCandidates;
-	RandomCandidate = FRand(); // [0..1] // inclusive at both ends
-
-	for (i = 0; i < Info.NumCandidates; i++) {
-		if (Info.GetCandidateVotes(i) == BestScore) {
-			RandomCandidate -= TiedCandidatesFraction;
-			if (RandomCandidate <= 0.0) {
-				// this is the one
-				break;
+		for (i = 0; i < Info.NumCandidates; i++) {
+			if (Info.GetCandidateVotes(i) == BestScore) {
+				RandomCandidate -= TiedCandidatesFraction;
+				if (RandomCandidate <= 0.0) {
+					// this is the one
+					break;
+				}
 			}
 		}
+
+		VotedPreset = Info.GetCandidateInternalPreset(i);
+		VotedMap = Info.GetCandidateInternalMap(i);
 	}
 
-	VotedPreset = Info.GetCandidateInternalPreset(i);
-	VotedMap = Info.GetCandidateInternalMap(i);
-
-	if (CountTiedCandidates > 1) {
+	if (CountTiedCandidates == 0) {
+		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 1, VotedMap.MapName@"("$VotedPreset.Abbreviation$")");
+	} else if (CountTiedCandidates > 1) {
 		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 2, VotedMap.MapName@"("$VotedPreset.Abbreviation$")");
 	} else {
 		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 3, VotedMap.MapName@"("$VotedPreset.Abbreviation$")");
+	}
+
+	// Object MyLevel is what the game natively loads from maps when switching
+	// to them.
+	// Without it, the map wont load at all. Checking that that object exists
+	// should be enough for us.
+	while (DynamicLoadObject(VotedMap.MapName$".MyLevel", class'Object', true) == none) {
+		Log(VotedMap.MapName@"failed to load", 'VoteSys');
+		OldMapName = VotedMap.MapName;
+		VotedMap = SelectRandomMapFromList(VotedPreset.MapList);
+		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', -5, OldMapName, VotedMap.MapName);
 	}
 }
 
