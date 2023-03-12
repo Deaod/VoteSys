@@ -186,7 +186,7 @@ function UpdateActivePreset(VS_Info Info) {
 		MapListBox.Items.Clear();
 		if (ActivePreset != none) {
 			for (M = ActivePreset.MapList; M != none; M = M.Next)
-				MapListBox.AppendMap(M, (M.Sequence == 0) || (Channel.MaxMapSequenceNumber - M.Sequence >= ActivePreset.MinimumMapRepeatDistance));
+				MapListBox.AppendMap(M, (M.Sequence == 0) || (ActivePreset.MaxSequenceNumber - M.Sequence >= ActivePreset.MinimumMapRepeatDistance));
 			MapListBox.Sort();
 		}
 	}

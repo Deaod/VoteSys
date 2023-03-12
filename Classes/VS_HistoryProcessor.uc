@@ -25,11 +25,16 @@ event Tick(float Delta) {
 		Pre = History.Entry[ProcessedEntry].PresetName;
 		Map = History.Entry[ProcessedEntry].MapName;
 
-		for (P = PresetList; P != none; P = P.Next)
-			if (P.bDisabled == false && P.Category == Cat && P.PresetName == Pre)
-				for (M = P.MapList; M != none; M = M.Next)
-					if (M.MapName == Map)
+		for (P = PresetList; P != none; P = P.Next) {
+			if (P.bDisabled == false && P.Category == Cat && P.PresetName == Pre) {
+				for (M = P.MapList; M != none; M = M.Next) {
+					if (M.MapName == Map) {
 						M.Sequence = History.Entry[ProcessedEntry].Sequence;
+						P.MaxSequenceNumber = Max(P.MaxSequenceNumber, M.Sequence);
+					}
+				}
+			}
+		}
 
 		ProcessedEntry++;
 	}

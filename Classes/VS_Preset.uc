@@ -10,6 +10,7 @@ var string          Mutators;
 var string          Parameters;
 var string          GameSettings;
 var bool            bDisabled;
+var int             MaxSequenceNumber;
 var int             MinimumMapRepeatDistance;
 
 function AppendMutator(string Mut) {

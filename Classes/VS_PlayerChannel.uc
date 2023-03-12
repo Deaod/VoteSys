@@ -227,10 +227,6 @@ simulated function FocusPreset(string Ref) {
 }
 
 simulated function AddMap(VS_Map M) {
-	if (M != none) {
-		MaxMapSequenceNumber = Max(MaxMapSequenceNumber, M.Sequence);
-	}
-
 	if (LatestPreset.MapList == none) {
 		LatestPreset.MapList = M;
 	} else {

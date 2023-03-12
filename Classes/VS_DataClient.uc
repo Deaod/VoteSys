@@ -145,6 +145,7 @@ function VS_Preset ParsePreset(string Line) {
 	P.PresetName               = DecodeString(Line); NextVariable(Line);
 	P.Abbreviation             = DecodeString(Line); NextVariable(Line);
 	P.Category                 = DecodeString(Line); NextVariable(Line);
+	P.MaxSequenceNumber        = int(Line);          NextVariable(Line);
 	P.MinimumMapRepeatDistance = int(Line);
 
 	return P;

@@ -525,7 +525,7 @@ function TravelTo(VS_Preset P, VS_Map M) {
 	TD.SaveConfig();
 
 	if (bChangeMapImmediately == false) {
-		History.InsertVote(P.Category, P.PresetName, M.MapName);
+		History.InsertVote(P, M.MapName);
 		History.SaveConfig();
 	}
 
