@@ -180,13 +180,19 @@ function UpdateActiveCategory() {
 
 function UpdateActivePreset(VS_Info Info) {
 	local VS_Map M;
+	local bool bEnable;
 
 	if (Presets.SelectedPreset != ActivePreset) {
 		ActivePreset = Presets.SelectedPreset;
 		MapListBox.Items.Clear();
 		if (ActivePreset != none) {
-			for (M = ActivePreset.MapList; M != none; M = M.Next)
-				MapListBox.AppendMap(M, (M.Sequence == 0) || (ActivePreset.MaxSequenceNumber - M.Sequence >= ActivePreset.MinimumMapRepeatDistance));
+			for (M = ActivePreset.MapList; M != none; M = M.Next) {
+				bEnable = 
+					(M.Sequence == 0) ||
+					(ActivePreset.MaxSequenceNumber - M.Sequence >= ActivePreset.MinimumMapRepeatDistance) ||
+					(GetPlayerOwner().PlayerReplicationInfo.bAdmin);
+				MapListBox.AppendMap(M, bEnable);
+			}
 			MapListBox.Sort();
 		}
 	}

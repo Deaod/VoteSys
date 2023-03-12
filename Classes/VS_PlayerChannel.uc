@@ -260,8 +260,12 @@ function ServerVote(string Category, string PresetName, string MapName) {
 	if (P == none || M == none)
 		return;
 
-	if (VotePreset == P && VoteMap == M && PlayerOwner.PlayerReplicationInfo.bAdmin == false)
-		return;
+	if (PlayerOwner.PlayerReplicationInfo.bAdmin == false) {
+		if (VotePreset == P && VoteMap == M)
+			return;
+		if (P.MaxSequenceNumber - M.Sequence < P.MinimumMapRepeatDistance)
+			return;
+	}
 
 	if (bHasVoted)
 		I.RemMapVote(self, VotePreset, VoteMap);
