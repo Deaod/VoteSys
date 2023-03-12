@@ -4,6 +4,7 @@ var VS_PlayerChannel Channel;
 
 var VS_UI_CategoryTabItem ActiveCategory;
 var VS_Preset ActivePreset;
+var bool bAdmin, bWasAdmin;
 
 var VS_UI_CategoryTabControl CategoryTabs;
 var VS_UI_PresetComboBox Presets;
@@ -77,6 +78,9 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	super.BeforePaint(C, MouseX, MouseY);
 
 	Info = Channel.VoteInfo();
+
+	bWasAdmin = bAdmin;
+	bAdmin = GetPlayerOwner().PlayerReplicationInfo.bAdmin;
 
 	UpdateActiveCategory();
 	UpdateActivePreset(Info);
@@ -182,7 +186,7 @@ function UpdateActivePreset(VS_Info Info) {
 	local VS_Map M;
 	local bool bEnable;
 
-	if (Presets.SelectedPreset != ActivePreset) {
+	if (Presets.SelectedPreset != ActivePreset || bWasAdmin != bAdmin) {
 		ActivePreset = Presets.SelectedPreset;
 		MapListBox.Items.Clear();
 		if (ActivePreset != none) {
@@ -190,7 +194,7 @@ function UpdateActivePreset(VS_Info Info) {
 				bEnable = 
 					(M.Sequence == 0) ||
 					(ActivePreset.MaxSequenceNumber - M.Sequence >= ActivePreset.MinimumMapRepeatDistance) ||
-					(GetPlayerOwner().PlayerReplicationInfo.bAdmin);
+					(bAdmin);
 				MapListBox.AppendMap(M, bEnable);
 			}
 			MapListBox.Sort();
