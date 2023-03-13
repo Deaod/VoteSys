@@ -39,6 +39,7 @@ GameEndedVoteDelay=5
 VoteTimeLimit=30
 MidGameVoteThreshold=0.5
 MidGameVoteTimeLimit=30
+VoteEndCondition=VEC_TimerOnly
 MinimumMapRepeatDistance=0
 KickVoteThreshold=0.6
 DefaultTimeMessageClass=Botpack.TimeMessage
@@ -88,6 +89,19 @@ Defaults to 0.5.
 Number of seconds players have to vote for the next map while the current map is still being played. If 0 or less, VoteTimeLimit will be used instead.
 
 Defaults to 0.
+
+#### VoteEndCondition
+
+Controls how votes can end. Supported values are:
+
+* `VEC_TimerOnly`  
+Votes always end after the timer runs out
+* `VEC_TimerOrAllVotesIn`  
+Votes end after the timer runs out, or sooner if all eligible voters have cast their vote
+* `VEC_TimerOrResultDetermined`  
+Votes end after the timer runs out, or sooner if the outstanding votes can no longer influence the result.
+
+Defaults to `VEC_TimerOnly`.
 
 #### MinimumRepeatDistance
 

@@ -663,10 +663,41 @@ function CheckVotedMap() {
 	}
 }
 
+function bool CheckVoteEndConditions() {
+	local Pawn P;
+	local VS_ChannelContainer C;
+	local int NumVoters;
+	local int NumVotes;
+
+	if (TimeCounter <= 0)
+		return true;
+
+	if (Settings.VoteEndCondition == 0 /* VEC_TimerOnly */)
+		return false;
+
+	for (P = Level.PawnList; P != none; P = P.NextPawn)
+		if (P.IsA('PlayerPawn') && CanVote(PlayerPawn(P)) && P.IsA('Spectator') == false)
+			NumVoters++;
+
+	for (C = ChannelList; C != none; C = C.Next)
+		if (C.PlayerOwner != none && C.Channel != none && C.Channel.bHasVoted)
+			NumVotes++;
+
+	if (Settings.VoteEndCondition == 1 /* VEC_TimerOrAllVotesIn */) {
+		if (NumVotes == NumVoters)
+			return true;
+	} else if (Settings.VoteEndCondition == 2 /* VEC_TimerOrResultDetermined */) {
+		if (Info.GetCandidateVotes(0) - Info.GetCandidateVotes(1) > NumVoters - NumVotes)
+			return true;
+	}
+
+	return false;
+}
+
 function TickVoteTime() {
 	TimeCounter--;
 	AnnounceCountdown(TimeCounter);
-	if (TimeCounter > 0)
+	if (CheckVoteEndConditions())
 		return;
 
 	GameState = GS_VoteEnded;

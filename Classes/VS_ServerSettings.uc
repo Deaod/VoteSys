@@ -1,10 +1,17 @@
 class VS_ServerSettings extends Object
 	perobjectconfig;
 
+enum EVoteEndCond {
+	VEC_TimerOnly,
+	VEC_TimerOrAllVotesIn,
+	VEC_TimerOrResultDetermined
+};
+
 var config int GameEndedVoteDelay;
 var config int VoteTimeLimit;
 var config float MidGameVoteThreshold;
 var config int MidGameVoteTimeLimit;
+var config EVoteEndCond VoteEndCondition;
 var config int MinimumMapRepeatDistance;
 var config float KickVoteThreshold;
 var config string DefaultTimeMessageClass;
@@ -24,6 +31,7 @@ defaultproperties {
 	VoteTimeLimit=30
 	MidGameVoteThreshold=0.5
 	MidGameVoteTimeLimit=0
+	VoteEndCondition=VEC_TimerOnly
 	MinimumMapRepeatDistance=0
 	KickVoteThreshold=0.6
 	DefaultTimeMessageClass="Botpack.TimeMessage"
