@@ -32,6 +32,20 @@ In addition there are INI files that dont contain configuration, but are used to
 * VoteSysTemp.ini
 * VoteSysHistory.ini
 
+### Full Preset Names
+
+Sometimes during configuration, you will be asked to refer to presets using their full names. A full preset name is `"<Category>/<PresetName>"`.
+
+For example, given the following preset:
+```ini
+[VS_PresetConfig0]
+PresetName=Custom Preset Name
+Category=My Category
+...
+```
+
+its full preset name is `"My Category/Custom Preset Name"`.
+
 ### VoteSys.ini
 ```ini
 [ServerSettings]
@@ -125,7 +139,7 @@ Defaults to Botpack.TimeMessage.
 
 #### DefaultPreset
 
-Specifies the preset thats selected by default should the server not know what preset was voted last. If empty, the first detected preset will be selected as default preset.
+Specifies the preset thats selected by default should the server not know what preset was voted last. Uses a [full preset name](#full-preset-name). If empty, the first detected preset will be selected as default preset.
 
 Empty by default.
 
@@ -250,7 +264,8 @@ Each preset has a `Name`, a `Category` and an `Abbreviation`.
 #### Inheriting From Other Preset
 `InheritsFrom` is used to inherit certain elements from other presets. You can only inherit from presets that are located above the current preset according to the number after `VS_ConfigPreset` inside the section title.
 
-You can inherit from an arbitrary number of other presets.
+You can inherit from an arbitrary number of other presets.  
+Refer to other preset using their [full preset names](#full-preset-name).
 
 You can inherit `Game`, `Mutators`, `Parameters`, `GameSettings`, and `MinimumMapRepeatDistance`. Other elements cannot be inherited.
 
