@@ -549,6 +549,7 @@ function AdminForceTravelTo(VS_Preset P, VS_Map M) {
 	TimeCounter = 5;
 	VotedPreset = P;
 	VotedMap = M;
+	CheckVotedMap();
 	CloseVoteMenuForAll();
 }
 
@@ -584,7 +585,6 @@ function TallyVotes() {
 	local float RandomCandidate;
 	local VS_Map M;
 	local VS_ChannelContainer C;
-	local string OldMapName;
 
 	BestScore = 0;
 	CountTiedCandidates = 0;
@@ -644,6 +644,12 @@ function TallyVotes() {
 	} else {
 		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 3, VotedMap.MapName@"("$VotedPreset.Abbreviation$")");
 	}
+
+	CheckVotedMap();
+}
+
+function CheckVotedMap() {
+	local string OldMapName;
 
 	// Object MyLevel is what the game natively loads from maps when switching
 	// to them.
