@@ -405,7 +405,7 @@ function CheckMidGameVoting() {
 
 	NumPlayers = 1; // to round up later
 	for (P = Level.PawnList; P != none; P = P.NextPawn)
-		if (P.IsA('PlayerPawn') && P.IsA('Spectator') == false)
+		if (P.IsA('PlayerPawn') && CanVote(PlayerPawn(P)) && P.IsA('Spectator') == false)
 			NumPlayers++;
 
 	if (NumPlayers > 0)
