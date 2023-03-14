@@ -408,7 +408,7 @@ function CheckMidGameVoting() {
 		if (P.IsA('PlayerPawn') && CanVote(PlayerPawn(P)) && P.IsA('Spectator') == false)
 			NumPlayers++;
 
-	if (NumPlayers > 0)
+	if (NumPlayers > 1)
 		IdleTime = 0;
 
 	if (NumPlayers <= 1 || NumVotes < int(Settings.MidGameVoteThreshold * NumPlayers)) // rounding up here
