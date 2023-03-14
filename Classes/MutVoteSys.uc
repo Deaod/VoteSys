@@ -29,7 +29,9 @@ enum EGameState {
 
 var EGameState GameState;
 var int TimeCounter;
+var int IdleTime;
 var bool bChangeMapImmediately;
+var bool bIsDefaultMap;
 var class<CriticalEventPlus> TimeMessageClass;
 
 var VS_Preset DefaultPresetRef;
@@ -291,7 +293,6 @@ function OpenVoteMenu(PlayerPawn P) {
 
 event Timer() {
 	if (bChangeMapImmediately) {
-		bChangeMapImmediately = false;
 		SetTimer(0.0, false);
 		GameState = GS_VoteEnded;
 		TallyVotes();
@@ -304,6 +305,7 @@ event Timer() {
 	HandleKickVoting();
 	switch(GameState) {
 		case GS_Playing:
+			CheckIdleTimeout();
 			CheckMidGameVoting();
 			CheckGameEnded();
 			break;
@@ -318,6 +320,13 @@ event Timer() {
 			break;
 		case GS_Travelling:
 			break;
+	}
+}
+
+function CheckIdleTimeout() {
+	IdleTime++;
+	if (bIsDefaultMap == false && Settings.IdleTimeout > 1 && IdleTime >= Settings.IdleTimeout) {
+		QueueImmediateMapChange();
 	}
 }
 
@@ -398,6 +407,9 @@ function CheckMidGameVoting() {
 	for (P = Level.PawnList; P != none; P = P.NextPawn)
 		if (P.IsA('PlayerPawn') && P.IsA('Spectator') == false)
 			NumPlayers++;
+
+	if (NumPlayers > 0)
+		IdleTime = 0;
 
 	if (NumPlayers <= 1 || NumVotes < int(Settings.MidGameVoteThreshold * NumPlayers)) // rounding up here
 		return;
@@ -517,6 +529,7 @@ function TravelTo(VS_Preset P, VS_Map M) {
 	TD = new(TempDataDummy, 'Data') class'VS_TempData';
 
 	TD.bNoColdStart = true;
+	TD.bDefaultMap = bChangeMapImmediately;
 	TD.PresetName = P.PresetName;
 	TD.Category = P.Category;
 	TD.Mutators = Mutators;
@@ -735,6 +748,7 @@ function ApplyVotedPreset() {
 		// crash during gameplay (outside map change) or deliberate restart
 		QueueImmediateMapChange();
 	}
+	bIsDefaultMap = TD.bDefaultMap;
 
 	if (TD.PresetName != "")
 		CurrentPreset = TD.Category$"/"$TD.PresetName;

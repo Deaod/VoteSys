@@ -65,6 +65,7 @@ ClientDataPort=0
 bManageServerPackages=False
 bUseServerActorsCompatibilityMode=False
 PresetProbeDepth=1
+IdleTimeout=0
 DefaultPackages=SoldierSkins
 DefaultPackages=CommandoSkins
 DefaultPackages=FCommandoSkins
@@ -206,6 +207,14 @@ Controls how many consecutive presets must have an empty `PresetName` before Vot
 If you have gaps in your list of presets, you can modify this setting to skip over those gaps.
 
 1 by default.
+
+#### IdleTimeout
+
+How long in seconds the server will wait before switching to DefaultPreset if there are no players on the server (spectators dont count).
+
+If the value is 1 or less the server will wait indefinitely.
+
+0 by default.
 
 #### DefaultPackages
 

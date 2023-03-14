@@ -7,40 +7,52 @@ enum EVoteEndCond {
 	VEC_TimerOrResultDetermined
 };
 
-var config int GameEndedVoteDelay;
-var config int VoteTimeLimit;
 var config float MidGameVoteThreshold;
 var config int MidGameVoteTimeLimit;
+var config int GameEndedVoteDelay;
+var config int VoteTimeLimit;
 var config EVoteEndCond VoteEndCondition;
-var config int MinimumMapRepeatDistance;
+
 var config float KickVoteThreshold;
-var config string DefaultTimeMessageClass;
+
 var config string DefaultPreset;
 var config string DefaultMap;
+
 var config string ServerAddress;
 var config int DataPort;
 var config int ClientDataPort;
+
 var config bool bManageServerPackages;
 var config bool bUseServerActorsCompatibilityMode;
-var config int PresetProbeDepth;
 var config array<string> DefaultPackages;
 var config array<string> DefaultActors;
 
+var config string DefaultTimeMessageClass;
+var config int IdleTimeout;
+var config int MinimumMapRepeatDistance;
+var config int PresetProbeDepth;
+
 defaultproperties {
-	GameEndedVoteDelay=5
-	VoteTimeLimit=30
 	MidGameVoteThreshold=0.5
 	MidGameVoteTimeLimit=0
+	GameEndedVoteDelay=5
+	VoteTimeLimit=30
 	VoteEndCondition=VEC_TimerOnly
-	MinimumMapRepeatDistance=0
+
 	KickVoteThreshold=0.6
-	DefaultTimeMessageClass="Botpack.TimeMessage"
+
 	DefaultPreset=
 	DefaultMap=
+
 	ServerAddress=
 	DataPort=0
 	ClientDataPort=0
+	
 	bManageServerPackages=False
 	bUseServerActorsCompatibilityMode=False
+
+	DefaultTimeMessageClass="Botpack.TimeMessage"
+	IdleTimeout=0
+	MinimumMapRepeatDistance=0
 	PresetProbeDepth=1
 }
