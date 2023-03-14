@@ -140,7 +140,7 @@ Defaults to Botpack.TimeMessage.
 
 #### DefaultPreset
 
-Specifies the preset thats selected by default should the server not know what preset was voted last. Uses a [full preset name](#full-preset-name). If empty, the first detected preset will be selected as default preset.
+Specifies the preset thats selected by default should the server not know what preset was voted last. Uses a [full preset name](#full-preset-names). If empty, the first detected preset will be selected as default preset.
 
 Empty by default.
 
@@ -274,7 +274,7 @@ Each preset has a `Name`, a `Category` and an `Abbreviation`.
 `InheritsFrom` is used to inherit certain elements from other presets. You can only inherit from presets that are located above the current preset according to the number after `VS_ConfigPreset` inside the section title.
 
 You can inherit from an arbitrary number of other presets.  
-Refer to other preset using their [full preset names](#full-preset-name).
+Refer to other preset using their [full preset names](#full-preset-names).
 
 You can inherit `Game`, `Mutators`, `Parameters`, `GameSettings`, and `MinimumMapRepeatDistance`. Other elements cannot be inherited.
 
