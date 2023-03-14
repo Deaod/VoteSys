@@ -937,7 +937,8 @@ function CreateServerActor(string ActorLine) {
 	local int Pos;
 
 	Elements = SplitList(ActorLine, " ");
-	C = class<Actor>(DynamicLoadObject(Elements[0], class'Class'));
+	if (Elements[0] != "")
+		C = class<Actor>(DynamicLoadObject(Elements[0], class'Class'));
 	if (C != none)
 		A = Level.Game.Spawn(C);
 
@@ -973,7 +974,8 @@ function ApplyGameSetting(string Setting) {
 	Key = Left(Setting, Pos);
 	Value = Mid(Setting, Pos+1);
 
-	Level.Game.SetPropertyText(Key, Value);
+	if (Key != "")
+		Level.Game.SetPropertyText(Key, Value);
 }
 
 function LoadConfig() {

@@ -9,7 +9,7 @@ final function Actor GetACE() {
 			if (AceActor.IsA('IACEActor'))
 				break;
 
-		if (AceActor.IsA('IACEActor') == false)
+		if (AceActor == none || AceActor.IsA('IACEActor') == false)
 			AceActor = Level;
 	} else if (AceActor == Level) {
 		return none;
