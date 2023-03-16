@@ -710,7 +710,7 @@ function bool CheckVoteEndConditions() {
 function TickVoteTime() {
 	TimeCounter--;
 	AnnounceCountdown(TimeCounter);
-	if (CheckVoteEndConditions())
+	if (CheckVoteEndConditions() == false)
 		return;
 
 	GameState = GS_VoteEnded;
