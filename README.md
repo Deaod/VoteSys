@@ -66,6 +66,8 @@ bManageServerPackages=False
 bUseServerActorsCompatibilityMode=False
 PresetProbeDepth=1
 IdleTimeout=0
+bChangeGameNameForPresets=False
+bAlwaysUseDefaultMap=False
 DefaultPackages=SoldierSkins
 DefaultPackages=CommandoSkins
 DefaultPackages=FCommandoSkins
@@ -231,6 +233,13 @@ By default no entries for this variable exists.
 #### bChangeGameNameForPresets
 
 If true, changes the `GameName` property of the gamemode to the full preset name.
+
+Defaults to false.
+
+#### bAlwaysUseDefaultMap
+
+If true, uses the `DefaultMap` setting whenever switching maps without any votes by players.  
+If false, only uses the `DefaultMap` setting when recovering from crashes or server restarts.
 
 Defaults to false.
 

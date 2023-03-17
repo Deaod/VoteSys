@@ -32,6 +32,7 @@ var config int IdleTimeout;
 var config int MinimumMapRepeatDistance;
 var config int PresetProbeDepth;
 var config bool bChangeGameNameForPresets;
+var config bool bAlwaysUseDefaultMap;
 
 defaultproperties {
 	MidGameVoteThreshold=0.5
@@ -57,4 +58,5 @@ defaultproperties {
 	MinimumMapRepeatDistance=0
 	PresetProbeDepth=1
 	bChangeGameNameForPresets=False
+	bAlwaysUseDefaultMap=False
 }
