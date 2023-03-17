@@ -523,8 +523,6 @@ function TravelTo(VS_Preset P, VS_Map M) {
 	if (InStr(Mutators, "MutVoteSys") == -1)
 		Mutators = string(self.Class)$","$Mutators;
 
-	Url = M.MapName$"?Game="$P.Game$"?Mutator="$Mutators$P.Parameters;
-
 	TempDataDummy = new(none, 'VoteSysTemp') class'Object';
 	TD = new(TempDataDummy, 'Data') class'VS_TempData';
 
@@ -554,7 +552,9 @@ function TravelTo(VS_Preset P, VS_Map M) {
 		SetServerActors(Actors);
 	}
 
-	ServerTravel(Url);
+	Url = M.MapName$"?Game="$P.Game$"?Mutator="$Mutators$P.Parameters;
+
+	ServerTravel(Url, M.MapName);
 }
 
 // See Engine.LevelInfo.ServerTravel
@@ -562,13 +562,13 @@ function TravelTo(VS_Preset P, VS_Map M) {
 // servers. So instead of handing the full URL to GameInfo.ProcessServerTravel,
 // we just give it nothing as URL and rely on TRAVEL_Relative doing the right
 // thing.
-function ServerTravel(string URL) {
+function ServerTravel(string ServerURL, string ClientURL) {
 	if (Level.NextURL == "") {
 		Level.SetTimer(0.0, false);
 		Level.bNextItems = false;
-		Level.NextURL = URL;
+		Level.NextURL = ServerURL;
 		if (Level.Game != none)
-			Level.Game.ProcessServerTravel("", false);
+			Level.Game.ProcessServerTravel(ClientURL, false);
 		else
 			Level.NextSwitchCountdown = 0;
 	}
