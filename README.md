@@ -228,6 +228,12 @@ Filled in automatically after bUseServerActorsCompatibilityMode is set to True. 
 
 By default no entries for this variable exists.
 
+#### bChangeGameNameForPresets
+
+If true, changes the `GameName` property of the gamemode to the full preset name.
+
+Defaults to false.
+
 ### VoteSysPresets.ini
 ```ini
 [VS_PresetConfig0]

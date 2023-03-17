@@ -31,6 +31,7 @@ var config string DefaultTimeMessageClass;
 var config int IdleTimeout;
 var config int MinimumMapRepeatDistance;
 var config int PresetProbeDepth;
+var config bool bChangeGameNameForPresets;
 
 defaultproperties {
 	MidGameVoteThreshold=0.5
@@ -47,7 +48,7 @@ defaultproperties {
 	ServerAddress=
 	DataPort=0
 	ClientDataPort=0
-	
+
 	bManageServerPackages=False
 	bUseServerActorsCompatibilityMode=False
 
@@ -55,4 +56,5 @@ defaultproperties {
 	IdleTimeout=0
 	MinimumMapRepeatDistance=0
 	PresetProbeDepth=1
+	bChangeGameNameForPresets=False
 }

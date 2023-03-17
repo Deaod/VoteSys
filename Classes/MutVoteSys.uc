@@ -769,6 +769,8 @@ function ApplyVotedPreset() {
 
 	if (TD.PresetName != "")
 		CurrentPreset = TD.Category$"/"$TD.PresetName;
+	if (Settings.bChangeGameNameForPresets && CurrentPreset != "")
+		Level.Game.GameName = CurrentPreset;
 	if (Settings.bUseServerActorsCompatibilityMode == false)
 		CreateServerActors(TD.Actors);
 	ApplyGameSettings(TD.GameSettings);
