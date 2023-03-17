@@ -554,7 +554,24 @@ function TravelTo(VS_Preset P, VS_Map M) {
 		SetServerActors(Actors);
 	}
 
-	Level.ServerTravel(Url, false);
+	ServerTravel(Url);
+}
+
+// See Engine.LevelInfo.ServerTravel
+// Clients dont need to know about the URL, since were not making them switch
+// servers. So instead of handing the full URL to GameInfo.ProcessServerTravel,
+// we just give it nothing as URL and rely on TRAVEL_Relative doing the right
+// thing.
+function ServerTravel(string URL) {
+	if (Level.NextURL == "") {
+		Level.SetTimer(0.0, false);
+		Level.bNextItems = false;
+		Level.NextURL = URL;
+		if (Level.Game != none)
+			Level.Game.ProcessServerTravel("", false);
+		else
+			Level.NextSwitchCountdown = 0;
+	}
 }
 
 function AdminForceTravelTo(VS_Preset P, VS_Map M) {
