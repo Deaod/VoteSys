@@ -1031,7 +1031,9 @@ function LoadConfig() {
 				P = P.Next;
 		}
 
-		if (DefaultPresetRef == none || (P != none && Len(Settings.DefaultPreset) > 0 && P.GetFullName() == Settings.DefaultPreset))
+		if ((DefaultPresetRef == none) ||
+			(P != none && Settings.DefaultPreset != "" && P.GetFullName() == Settings.DefaultPreset) ||
+			(P != none && Settings.DefaultPreset == "" && CurrentPreset != "" && P.GetFullName() == CurrentPreset))
 			DefaultPresetRef = P;
 	};
 
