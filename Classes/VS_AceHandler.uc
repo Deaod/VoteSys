@@ -1,7 +1,6 @@
 class VS_AceHandler extends Actor;
 
 var Actor AceActor;
-var Actor AceCheck;
 
 final function Actor GetACE() {
 	if (AceActor == none) {
@@ -16,16 +15,6 @@ final function Actor GetACE() {
 	} else {
 		return AceActor;
 	}
-}
-
-final function Actor GetFirstAceCheck(Actor ACE) {
-	SetPropertyText("AceCheck", ACE.GetPropertyText("CheckList"));
-	return AceCheck;
-}
-
-final function Actor GetNextAceCheck(Actor AceChk) {
-	SetPropertyText("AceCheck", AceChk.GetPropertyText("NextCheck"));
-	return AceCheck;
 }
 
 final function int GetAceCheckPlayerId(Actor AceChk) {

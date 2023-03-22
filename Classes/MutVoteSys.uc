@@ -105,15 +105,14 @@ function CreateChannel(PlayerPawn P) {
 
 	Ace = AceHandler.GetACE();
 	if (Ace != none) {
-		AceCheck = AceHandler.GetFirstAceCheck(Ace);
-		while(AceCheck != none) {
-			if (P.PlayerReplicationInfo.PlayerId == AceHandler.GetAceCheckPlayerId(AceCheck))
+		foreach AllActors(class'Actor', AceCheck)
+			if (AceCheck.IsA('IACECheck') && AceHandler.GetAceCheckHWHash(AceCheck) != "" && P.PlayerReplicationInfo.PlayerId == AceHandler.GetAceCheckPlayerId(AceCheck))
 				break;
-			
-			AceCheck = AceHandler.GetNextAceCheck(AceCheck);
-		}
-		if (AceCheck == none)
+
+		if (AceCheck == none || AceHandler.GetAceCheckHWHash(AceCheck) == "") {
+			Log("No ACECheck object found for player"@P.PlayerReplicationInfo.PlayerId, 'VoteSys');
 			return; // retry later
+		}
 	}
 
 	if (P != none && IsPlayerBanned(P, AceCheck)) {
