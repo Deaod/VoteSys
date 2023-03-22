@@ -703,7 +703,7 @@ function bool CheckVoteEndConditions() {
 	if (TimeCounter <= 0)
 		return true;
 
-	if (Settings.VoteEndCondition == 0 /* VEC_TimerOnly */)
+	if (Settings.VoteEndCondition == VEC_TimerOnly)
 		return false;
 
 	for (P = Level.PawnList; P != none; P = P.NextPawn)
@@ -714,10 +714,10 @@ function bool CheckVoteEndConditions() {
 		if (C.PlayerOwner != none && C.Channel != none && C.Channel.bHasVoted)
 			NumVotes++;
 
-	if (Settings.VoteEndCondition == 1 /* VEC_TimerOrAllVotesIn */) {
+	if (Settings.VoteEndCondition == VEC_TimerOrAllVotesIn) {
 		if (NumVotes == NumVoters)
 			return true;
-	} else if (Settings.VoteEndCondition == 2 /* VEC_TimerOrResultDetermined */) {
+	} else if (Settings.VoteEndCondition == VEC_TimerOrResultDetermined) {
 		if (Info.GetCandidateVotes(0) - Info.GetCandidateVotes(1) > NumVoters - NumVotes)
 			return true;
 	}
@@ -770,8 +770,18 @@ function ApplyVotedPreset() {
 
 	if (TD.PresetName != "")
 		CurrentPreset = TD.Category$"/"$TD.PresetName;
-	if (Settings.bChangeGameNameForPresets && CurrentPreset != "")
-		Level.Game.GameName = CurrentPreset;
+	if (CurrentPreset != "") {
+		switch(Settings.GameNameMode) {
+			case GNM_DoNotModify:
+				break;
+			case GNM_PresetName:
+				Level.Game.GameName = TD.PresetName;
+				break;
+			case GNM_CategoryAndPresetName:
+				Level.Game.GameName = CurrentPreset;
+				break;
+		}
+	}
 	if (Settings.bUseServerActorsCompatibilityMode == false)
 		CreateServerActors(TD.Actors);
 	ApplyGameSettings(TD.GameSettings);

@@ -7,6 +7,12 @@ enum EVoteEndCond {
 	VEC_TimerOrResultDetermined
 };
 
+enum EGameNameMode {
+	GNM_DoNotModify,
+	GNM_PresetName,
+	GNM_CategoryAndPresetName
+};
+
 var config float MidGameVoteThreshold;
 var config int MidGameVoteTimeLimit;
 var config int GameEndedVoteDelay;
@@ -31,7 +37,7 @@ var config string DefaultTimeMessageClass;
 var config int IdleTimeout;
 var config int MinimumMapRepeatDistance;
 var config int PresetProbeDepth;
-var config bool bChangeGameNameForPresets;
+var config EGameNameMode GameNameMode;
 var config bool bAlwaysUseDefaultMap;
 
 defaultproperties {
@@ -57,6 +63,6 @@ defaultproperties {
 	IdleTimeout=0
 	MinimumMapRepeatDistance=0
 	PresetProbeDepth=1
-	bChangeGameNameForPresets=False
+	GameNameMode=GNM_DoNotModify
 	bAlwaysUseDefaultMap=False
 }

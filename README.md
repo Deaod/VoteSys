@@ -66,7 +66,7 @@ bManageServerPackages=False
 bUseServerActorsCompatibilityMode=False
 PresetProbeDepth=1
 IdleTimeout=0
-bChangeGameNameForPresets=False
+GameNameMode=GNM_DoNotModify
 bAlwaysUseDefaultMap=False
 DefaultPackages=SoldierSkins
 DefaultPackages=CommandoSkins
@@ -230,11 +230,14 @@ Filled in automatically after bUseServerActorsCompatibilityMode is set to True. 
 
 By default no entries for this variable exists.
 
-#### bChangeGameNameForPresets
+#### GameNameMode
 
-If true, changes the `GameName` property of the gamemode to the full preset name.
+Controls how the GameName property of game modes is changed by VoteSys. Valid values are:
+* `GNM_DoNotModify` - VoteSys will not modify GameName
+* `GNM_PresetName` - VoteSys will write the name of the current preset into GameName
+* `GNM_CategoryAndPresetName` - VoteSys will write the full preset name into GameName
 
-Defaults to false.
+Defaults to `GNM_DoNotModify`.
 
 #### bAlwaysUseDefaultMap
 
