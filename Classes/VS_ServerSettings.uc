@@ -38,6 +38,7 @@ var config int IdleTimeout;
 var config int MinimumMapRepeatDistance;
 var config int PresetProbeDepth;
 var config EGameNameMode GameNameMode;
+var config bool bAlwaysUseDefaultPreset;
 var config bool bAlwaysUseDefaultMap;
 
 defaultproperties {
@@ -64,5 +65,6 @@ defaultproperties {
 	MinimumMapRepeatDistance=0
 	PresetProbeDepth=1
 	GameNameMode=GNM_DoNotModify
+	bAlwaysUseDefaultPreset=True
 	bAlwaysUseDefaultMap=False
 }

@@ -640,14 +640,18 @@ function TallyVotes() {
 			Level.Game.SetPropertyText("bDontRestart", "False");
 			return;
 		}
-		if (Settings.bAlwaysUseDefaultMap || bChangeMapImmediately)
-			M = Info.ResolveMapOfPreset(DefaultPresetRef, Settings.DefaultMap);
+		if (Settings.bAlwaysUseDefaultPreset || bChangeMapImmediately) {
+			VotedPreset = DefaultPresetRef;
+		} else {
+			VotedPreset = Info.ResolvePreset(CurrentPreset);
+		}
+
+		if ((Settings.bAlwaysUseDefaultPreset && Settings.bAlwaysUseDefaultMap) || bChangeMapImmediately)
+			M = Info.ResolveMapOfPreset(VotedPreset, Settings.DefaultMap);
 		if (M == none)
-			M = SelectRandomMapFromList(DefaultPresetRef.MapList);
+			M = SelectRandomMapFromList(VotedPreset.MapList);
 		if (M == none)
 			return;
-
-		VotedPreset = DefaultPresetRef;
 		VotedMap = M;
 	} else {
 		TiedCandidatesFraction = 1.0 / CountTiedCandidates;
