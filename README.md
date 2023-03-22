@@ -243,7 +243,7 @@ Defaults to `GNM_DoNotModify`.
 #### bAlwaysUseDefaultPreset
 
 If true, uses `DefaultPreset` setting whenever switching maps without any votes by players.  
-If false, only uses `DefaultPreset` setting when recovering from crashes or server restarts.
+If false, only uses `DefaultPreset` setting when recovering from crashes or server restarts. Uses the the current preset instead if no player voted at the end of a match.
 
 Defaults to true.
 
@@ -251,6 +251,8 @@ Defaults to true.
 
 If true, uses the `DefaultMap` setting whenever switching maps without any votes by players.  
 If false, only uses the `DefaultMap` setting when recovering from crashes or server restarts.
+
+If `bAlwaysUseDefaultPreset` is false, this setting has no effect in order to avoid switching to maps that do not exist for the automatically selected preset.
 
 Defaults to false.
 
