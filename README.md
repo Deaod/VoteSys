@@ -274,7 +274,7 @@ MinimumMapRepeatDistance=2
 PresetName=2v2v2v2 TDM
 Abbreviation=xTDM
 Category=DM
-InheritsFrom=DM/Team DeathMatch
+InheritFrom=DM/Team DeathMatch
 GameSettings=MaxTeams=4
 Mutators=Botpack.InstaGibDM
 MinimumMapRepeatDistance=4
@@ -289,7 +289,7 @@ Each preset has a `Name`, a `Category` and an `Abbreviation`.
 `Name` may not be blank.
 
 #### Inheriting From Other Preset
-`InheritsFrom` is used to inherit certain elements from other presets. You can only inherit from presets that are located above the current preset according to the number after `VS_ConfigPreset` inside the section title.
+`InheritFrom` is used to inherit certain elements from other presets. You can only inherit from presets that are located above the current preset according to the number after `VS_ConfigPreset` inside the section title.
 
 You can inherit from an arbitrary number of other presets.  
 Refer to other preset using their [full preset names](#full-preset-names).
