@@ -33,6 +33,8 @@ Selecting a map clears any current selection in the candidate list.
 Double-clicking votes for the map and preset combination.  
 Alternatively, you can vote for a map/preset combination by selecting a map in the list and pressing the "Vote" button.
 
+The "Random" button will place your vote for a map randomly selected from the list you're currently viewing.
+
 ### Map Screenshot Preview
 
 After hovering over a map in the map list for half a second, a window showing the screenshot of the map will appear.

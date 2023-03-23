@@ -16,6 +16,8 @@ var VS_UI_MapListBox MapListBox;
 
 var UWindowSmallButton VoteButton;
 var localized string VoteButtonText;
+var UWindowSmallButton RandomButton;
+var localized string RandomButtonText;
 
 var VS_UI_CandidateListBox VoteListBox;
 var VS_UI_PlayerListBox PlayerListBox;
@@ -48,8 +50,10 @@ function Created() {
 	MapFilter.SetText(MapFilterText);
 
 	MapListBox = VS_UI_MapListBox(CreateControl(class'VS_UI_MapListBox', 10, TabsHeight + 50, 180, 284));
-	VoteButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 10, TabsHeight + 338, 180, 12));
+	VoteButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 10, TabsHeight + 338, 88, 12));
 	VoteButton.SetText(VoteButtonText);
+	RandomButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 102, TabsHeight + 338, 88, 12));
+	RandomButton.SetText(RandomButtonText);
 
 	VoteListBox = VS_UI_CandidateListBox(CreateControl(class'VS_UI_CandidateListBox', 200, TabsHeight + 10, 400, 100));
 	PlayerListBox = VS_UI_PlayerListBox(CreateControl(class'VS_UI_PlayerListBox', 480, TabsHeight + 120, 120, 214));
@@ -287,7 +291,17 @@ function Notify(UWindowDialogControl C, byte E) {
 	} else if (C == MapFilter && E == DE_Change) {
 		LastMapFilterEditTime = GetLevel().TimeSeconds;
 		bMapFilterApplied = false;
+	} else if (C == RandomButton && E == DE_Click) {
+		if (ActivePreset != none)
+			Channel.Vote(ActivePreset, VS_UI_MapListItem(MapListBox.Items.FindEntry(int(MapListBox.Items.Count() * BetterFRand()))).MapRef);
 	}
+}
+
+// returns a value within [0..1)
+// ~23 bits of randomness, probably sourced from two consecutive calls to C
+// runtime's rand().
+function float BetterFRand() {
+	return class'IntConverter'.static.ToFloat(0x3f800000 | ((Rand(MaxInt) & 0x7FF) << 12) | (Rand(MaxInt) & 0xFFF)) - 1.0;
 }
 
 function SendChat() {
@@ -343,6 +357,7 @@ function Close(optional bool bByParent) {
 defaultproperties {
 	MapFilterText="Filter Maps By Name"
 	VoteButtonText="Vote"
+	RandomButtonText="Random"
 	ChatSayText="Say"
 	ChatTeamSayText="TeamSay"
 

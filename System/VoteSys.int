@@ -6,15 +6,6 @@ PresetColumnHeader="Preset"
 MapColumnHeader="Map"
 VotesColumnHeader="Votes"
 
-[VS_UI_Window]
-WindowTitle="VoteSys Menu"
-
-[VS_UI_ClientWindow]
-MapFilterText="Filter Maps By Name"
-VoteButtonText="Vote"
-ChatSayText="Say"
-ChatTeamSayText="TeamSay"
-
 [VS_Msg_LocalMessage]
 MsgNobodyVoted="Nobody voted, randomly selecting {1}"
 MsgVotesTied="Tied, randomly selecting {1}"
@@ -32,6 +23,16 @@ ErrNoRootWindow="Failed to create VoteMenu window (Root does not exist)"
 ErrCreateDialog="Failed to create VoteMenu window (Could not create Dialog)"
 ErrWrongConsole="Failed to create VoteMenu window (Console not a WindowConsole)"
 ErrMapLoadFailed="Loading map {1} failed, randomly selecting {2}"
+
+[VS_UI_Window]
+WindowTitle="VoteSys Menu"
+
+[VS_UI_ClientWindow]
+MapFilterText="Filter Maps By Name"
+VoteButtonText="Vote"
+RandomButtonText="Random"
+ChatSayText="Say"
+ChatTeamSayText="TeamSay"
 
 [VS_UI_PlayerMenu]
 PlayerIdText="ID:"
