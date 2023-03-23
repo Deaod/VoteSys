@@ -180,6 +180,7 @@ function UpdateActiveCategory() {
 		if (ActiveCategory != none) {
 			for (P = ActiveCategory.PresetList; P != none; P = P.Next)
 				Presets.AddPreset(P.Preset);
+			Presets.List.Items.Sort();
 			if (ActiveCategory.SelectedPreset != none)
 				Presets.FocusPreset(ActiveCategory.SelectedPreset.PresetName);
 		}
