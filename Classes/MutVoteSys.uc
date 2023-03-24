@@ -1122,6 +1122,9 @@ function VS_Preset LoadPreset(VS_PresetConfig PC) {
 function VS_Map LoadMapList(class<GameInfo> Game, name ListName) {
 	local VS_MapListConfig MC;
 	local VS_MapList ML;
+	local VS_MapList MLIgnore;
+	local VS_Map IgnoreList;
+	local VS_Map IgnoreTemp;
 	local string FirstMap;
 	local string MapName;
 	local int i;
@@ -1140,9 +1143,39 @@ function VS_Map LoadMapList(class<GameInfo> Game, name ListName) {
 		ML = new(MapListDummy) class'VS_MapList';
 		ML.ListName = string(ListName);
 
+		MLIgnore = new(MapListDummy) class'VS_MapList';
+
+		for (i = 0; i < MC.IgnoreMap.Length; i++)
+			if (MC.IgnoreMap[i] != "") {
+				MapName = MC.IgnoreMap[i];
+				if (Right(MapName, 4) ~= ".unr")
+					MapName = Left(MapName, Len(MapName) - 4);
+				MLIgnore.AppendMap(MapName);
+			}
+
+		for (i = 0; i < MC.IgnoreList.Length; i++) {
+			if (MC.IgnoreList[i] == '')
+				continue;
+
+			IgnoreTemp = LoadMapList(Game, MC.IgnoreList[i]);
+			if (IgnoreTemp == none)
+				continue; // no maps to ignore from this IgnoreList
+			do {
+				MLIgnore.AppendMap(IgnoreTemp.MapName);
+
+				IgnoreTemp = IgnoreTemp.Next;
+			} until(IgnoreTemp == none);
+		}
+
+		IgnoreList = MLIgnore.DuplicateList();
+
 		for (i = 0; i < MC.Map.Length; i++)
-			if (MC.Map[i] != "")
-				ML.AppendMap(MC.Map[i]);
+			if (MC.Map[i] != "") {
+				MapName = MC.Map[i];
+				if (Right(MapName, 4) ~= ".unr")
+					MapName = Left(MapName, Len(MapName) - 4);
+				ML.AppendMap(MapName);
+			}
 
 		for (i = 0; i < MC.IncludeMapsWithPrefix.Length; i++) {
 			if (MC.IncludeMapsWithPrefix[i] == "")
@@ -1154,7 +1187,8 @@ function VS_Map LoadMapList(class<GameInfo> Game, name ListName) {
 			MapName = FirstMap;
 
 			do {
-				ML.AppendMap(Left(MapName, Len(MapName) - 4)); // we dont care about extension
+				if (!IsMapInMapList(MapName, IgnoreList))
+					ML.AppendMap(Left(MapName, Len(MapName) - 4)); // we dont care about extension
 
 				MapName = GetMapName(MC.IncludeMapsWithPrefix[i], MapName, 1);
 			} until(MapName == FirstMap);
@@ -1190,6 +1224,23 @@ function VS_Map LoadMapList(class<GameInfo> Game, name ListName) {
 	} until(MapName == FirstMap);
 
 	return ML.DuplicateList();
+}
+
+function bool IsMapInMapList(string MapName, VS_Map ML) {
+	if (ML == none)
+		return False;
+
+	if (Right(MapName, 4) ~= ".unr")
+		MapName = Left(MapName, Len(MapName) - 4);
+
+	do {
+		if (MapName == ML.MapName)
+			return True;
+
+		ML = ML.Next;
+	} until(ML == none);
+
+	return False;
 }
 
 function LoadHistory() {
