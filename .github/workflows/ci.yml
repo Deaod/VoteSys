@@ -27,15 +27,18 @@ jobs:
 
       - name: Determine Package Name
         run: |
+          $ref = "${{ github.ref }}"
+          $repoName = "${{ github.event.repository.name }}"
+          $sha = "${{ github.sha }}"
           if ("${{ github.ref_type }}" -eq "tag") {
-            echo ("PKG_NAME=${{ github.event.repository.name }}_"+"${{ github.ref }}".SubString(10)) >> $env:GITHUB_ENV
-            echo ("PKG_VER="+"${{ github.ref }}".SubString(10)) >> $env:GITHUB_ENV
-          } elseif ("${{ github.ref }}".StartsWith("refs/pull/")) {
-            echo ("PKG_NAME=${{ github.event.repository.name }}_pr_"+"${{ github.ref }}".SubString(10, $length - 16)) >> $env:GITHUB_ENV
-            echo ("PKG_VER=pr_"+"${{ github.ref }}".SubString(10, $length - 16)) >> $env:GITHUB_ENV
+            echo ("PKG_NAME="+$repoName+"_"+$ref.SubString(10)) >> $env:GITHUB_ENV
+            echo ("PKG_VER="+$ref.SubString(10)) >> $env:GITHUB_ENV
+          } elseif ($ref.StartsWith("refs/pull/")) {
+            echo ("PKG_NAME="+$repoName+"_pr_"+$ref.SubString(10, $ref.Length - 16)) >> $env:GITHUB_ENV
+            echo ("PKG_VER=pr_"+$ref.SubString(10, $ref.Length - 16)) >> $env:GITHUB_ENV
           } else {
-            echo ("PKG_NAME=${{ github.event.repository.name }}_"+"${{ github.ref }}".SubString(11)+"-"+"${{ github.sha }}".SubString(0,8)) >> $env:GITHUB_ENV
-            echo ("PKG_VER="+"${{ github.ref }}".SubString(11)+"-"+"${{ github.sha }}".SubString(0,8)) >> $env:GITHUB_ENV
+            echo ("PKG_NAME="+$repoName+"_"+$ref.SubString(11)+"-"+$sha.SubString(0,8)) >> $env:GITHUB_ENV
+            echo ("PKG_VER="+$ref.SubString(11)+"-"+$sha.SubString(0,8)) >> $env:GITHUB_ENV
           }
 
       - name: Save Package Name In File
