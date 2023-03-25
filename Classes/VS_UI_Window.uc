@@ -17,8 +17,8 @@ function Created() {
 
 function BeforePaint(Canvas C, float X, float Y) {
 	if (bPlaced == false) {
-		WinLeft = FMax((C.SizeX - WinWidth) / 2.0, 0.0);
-		WinTop = FMax((C.SizeY - WinHeight) / 2.0, 0.0);
+		WinLeft = FMax((C.SizeX/Root.GUIScale - WinWidth) / 2.0, 0.0);
+		WinTop = FMax((C.SizeY/Root.GUIScale - WinHeight) / 2.0, 0.0);
 		bPlaced = true;
 	}
 

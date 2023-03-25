@@ -8,9 +8,12 @@ var string SendBuffer;
 var VS_Preset TempPreset;
 var VS_Map TempMap;
 
+var string CRLF;
+
 event PostBeginPlay() {
 	LinkMode = MODE_Text;
 	ReceiveMode = RMODE_Event;
+	CRLF = Chr(13)$Chr(10);
 
 	foreach AllActors(class'MutVoteSys', VoteSys)
 		break;
@@ -22,7 +25,7 @@ event Closed() {
 
 function bool SendLine(string Line) {
 	// Len+2 to account for cr-lf at the end
-	return SendText(Line$Chr(13)$Chr(10)) == Len(Line) + 2;
+	return SendText(Line$CRLF) == Len(Line) + 2;
 }
 
 // This functions needs to survive unknown commands without errors
@@ -41,7 +44,7 @@ event ReceivedLine(string Text) {
 
 	Text = Buffer$Text;
 
-	for(Pos = InStr(Text, "\r\n"); Pos > -1; Pos = InStr(Text, "\r\n")) {
+	for(Pos = InStr(Text, CRLF); Pos > -1; Pos = InStr(Text, CRLF)) {
 		ParseLine(Left(Text, Pos));
 
 		Text = Mid(Text, Pos+2);
@@ -83,7 +86,7 @@ Begin:
 		if (TempPreset.bDisabled)
 			continue;
 
-		SendBuffer = "/PRESET/"$EncodeString(TempPreset.PresetName)$"/"$EncodeString(TempPreset.Abbreviation)$"/"$EncodeString(TempPreset.Category)$"/"$TempPreset.MaxSequenceNumber$"/"$TempPreset.MinimumMapRepeatDistance$Chr(13)$Chr(10);
+		SendBuffer = "/PRESET/"$EncodeString(TempPreset.PresetName)$"/"$EncodeString(TempPreset.Abbreviation)$"/"$EncodeString(TempPreset.Category)$"/"$TempPreset.MaxSequenceNumber$"/"$TempPreset.MinimumMapRepeatDistance$CRLF;
 		while (true) {
 			SendBuffer = Mid(SendBuffer, SendText(SendBuffer));
 			if (Len(SendBuffer) <= 0)
@@ -91,7 +94,7 @@ Begin:
 			Sleep(0);
 		}
 		for (TempMap = TempPreset.MapList; TempMap != none; TempMap = TempMap.Next) {
-			SendBuffer = "/MAP/"$EncodeString(TempMap.MapName)$"/"$TempMap.Sequence$Chr(13)$Chr(10);
+			SendBuffer = "/MAP/"$EncodeString(TempMap.MapName)$"/"$TempMap.Sequence$CRLF;
 			while (true) {
 				SendBuffer = Mid(SendBuffer, SendText(SendBuffer));
 				if (Len(SendBuffer) <= 0)
@@ -101,7 +104,7 @@ Begin:
 		}
 	}
 
-	SendBuffer = "/END/"$EncodeString(VoteSys.CurrentPreset)$Chr(13)$Chr(10);
+	SendBuffer = "/END/"$EncodeString(VoteSys.CurrentPreset)$CRLF;
 	while (true) {
 		SendBuffer = Mid(SendBuffer, SendText(SendBuffer));
 		if (Len(SendBuffer) <= 0)
@@ -112,7 +115,7 @@ Begin:
 }
 
 function HandleError() {
-	SendLine("/RECONNECT");
+	SendLine("/RECONNECT"$CRLF);
 	Close();
 }
 
