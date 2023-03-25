@@ -1127,7 +1127,11 @@ function VS_Map LoadMapList(class<GameInfo> Game, name ListName) {
 	local string FirstMap;
 	local string MapName;
 
-	Log("    Loading List '"$ListName$"' for"@Game, 'VoteSys');
+	if (Game != none) {
+		Log("    Loading List '"$ListName$"' for"@Game, 'VoteSys');
+	} else {
+		Log("    Loading List '"$ListName$"'", 'VoteSys');
+	}
 
 	// Use specified map list
 	if (ListName != '') {
@@ -1142,20 +1146,23 @@ function VS_Map LoadMapList(class<GameInfo> Game, name ListName) {
 
 		AddMapsToMapList(MC.IgnoreMap, MLIgnore, none);
 		AddMapPrefixesToMapList(MC.IgnoreMapsWithPrefix, MLIgnore, none);
-		AddMapListsToMapList(MC.IgnoreList, MLIgnore, Game, none);
+		AddMapListsToMapList(MC.IgnoreList, MLIgnore, none);
 
-		IgnoreList = MLIgnore.DuplicateList();
+		IgnoreList = MLIgnore.First;
 
 		ML = new(MapListDummy) class'VS_MapList';
 		ML.ListName = string(ListName);
 
 		AddMapsToMapList(MC.Map, ML, IgnoreList);
 		AddMapPrefixesToMapList(MC.IncludeMapsWithPrefix, ML, IgnoreList);
-		AddMapListsToMapList(MC.IncludeList, ML, Game, IgnoreList);
+		AddMapListsToMapList(MC.IncludeList, ML, IgnoreList);
 
 		if (ML.First != none)
 			return ML.DuplicateList();
 	}
+
+	if (Game == none)
+		return none;
 
 	// If no map list specified, or no maps in map list, use all maps available for game type.
 	// As before, see if the list already exists for the specified game type.
@@ -1185,6 +1192,12 @@ function VS_Map LoadMapList(class<GameInfo> Game, name ListName) {
 	return ML.DuplicateList();
 }
 
+function string CleanMapName(string MapName) {
+	if (Right(MapName, 4) ~= ".unr")
+		MapName = Left(MapName, Len(MapName) - 4); // we dont care about extension
+	return MapName;
+}
+
 function AddMapsToMapList(array<string> MapArray, VS_MapList MapList, VS_Map IgnoreList) {
 	local string MapName;
 	local int i;
@@ -1192,10 +1205,8 @@ function AddMapsToMapList(array<string> MapArray, VS_MapList MapList, VS_Map Ign
 	for (i = 0; i < MapArray.Length; i++)
 		if (MapArray[i] != "") {
 			MapName = MapArray[i];
-			if (Right(MapName, 4) ~= ".unr")
-				MapName = Left(MapName, Len(MapName) - 4); // we dont care about extension
 			if (!IsMapInMapList(MapName, IgnoreList))
-				MapList.AppendMap(MapName);
+				MapList.AppendMap(CleanMapName(MapName));
 		}
 }
 
@@ -1215,14 +1226,14 @@ function AddMapPrefixesToMapList(array<string> MapPrefixArray, VS_MapList MapLis
 
 		do {
 			if (!IsMapInMapList(MapName, IgnoreList))
-				MapList.AppendMap(Left(MapName, Len(MapName) - 4)); // we dont care about extension
+				MapList.AppendMap(CleanMapName(MapName));
 
 			MapName = GetMapName(MapPrefixArray[i], MapName, 1);
 		} until(MapName == FirstMap);
 	}
 }
 
-function AddMapListsToMapList(array<name> MapListArray, VS_MapList MapList, class<GameInfo> Game, VS_Map IgnoreList) {
+function AddMapListsToMapList(array<name> MapListArray, VS_MapList MapList, VS_Map IgnoreList) {
 	local VS_Map IncludeList;
 	local int i;
 
@@ -1230,7 +1241,7 @@ function AddMapListsToMapList(array<name> MapListArray, VS_MapList MapList, clas
 		if (MapListArray[i] == '')
 			continue;
 
-		IncludeList = LoadMapList(Game, MapListArray[i]);
+		IncludeList = LoadMapList(none, MapListArray[i]);
 		if (IncludeList == none)
 			continue; // no maps from this list
 		do {
@@ -1246,8 +1257,7 @@ function bool IsMapInMapList(string MapName, VS_Map ML) {
 	if (ML == none)
 		return False;
 
-	if (Right(MapName, 4) ~= ".unr")
-		MapName = Left(MapName, Len(MapName) - 4);
+	MapName = CleanMapName(MapName);
 
 	do {
 		if (MapName == ML.MapName)
