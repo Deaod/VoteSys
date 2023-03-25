@@ -1122,11 +1122,16 @@ function VS_Preset LoadPreset(VS_PresetConfig PC) {
 function VS_Map LoadMapList(class<GameInfo> Game, name ListName) {
 	local VS_MapListConfig MC;
 	local VS_MapList ML;
+	local VS_MapList MLIgnore;
+	local VS_Map IgnoreList;
 	local string FirstMap;
 	local string MapName;
-	local int i;
 
-	Log("    Loading List '"$ListName$"' for"@Game, 'VoteSys');
+	if (Game != none) {
+		Log("    Loading List '"$ListName$"' for"@Game, 'VoteSys');
+	} else {
+		Log("    Loading List '"$ListName$"'", 'VoteSys');
+	}
 
 	// Use specified map list
 	if (ListName != '') {
@@ -1137,32 +1142,27 @@ function VS_Map LoadMapList(class<GameInfo> Game, name ListName) {
 
 		MC = new(MapListDummy, ListName) class'VS_MapListConfig';
 
+		MLIgnore = new(MapListDummy) class'VS_MapList';
+
+		AddMapsToMapList(MC.IgnoreMap, MLIgnore, none);
+		AddMapPrefixesToMapList(MC.IgnoreMapsWithPrefix, MLIgnore, none);
+		AddMapListsToMapList(MC.IgnoreList, MLIgnore, none);
+
+		IgnoreList = MLIgnore.First;
+
 		ML = new(MapListDummy) class'VS_MapList';
 		ML.ListName = string(ListName);
 
-		for (i = 0; i < MC.Map.Length; i++)
-			if (MC.Map[i] != "")
-				ML.AppendMap(MC.Map[i]);
-
-		for (i = 0; i < MC.IncludeMapsWithPrefix.Length; i++) {
-			if (MC.IncludeMapsWithPrefix[i] == "")
-				continue;
-
-			FirstMap = GetMapName(MC.IncludeMapsWithPrefix[i], "", 0);
-			if (FirstMap == "")
-				continue; // no maps with this prefix
-			MapName = FirstMap;
-
-			do {
-				ML.AppendMap(Left(MapName, Len(MapName) - 4)); // we dont care about extension
-
-				MapName = GetMapName(MC.IncludeMapsWithPrefix[i], MapName, 1);
-			} until(MapName == FirstMap);
-		}
+		AddMapsToMapList(MC.Map, ML, IgnoreList);
+		AddMapPrefixesToMapList(MC.IncludeMapsWithPrefix, ML, IgnoreList);
+		AddMapListsToMapList(MC.IncludeList, ML, IgnoreList);
 
 		if (ML.First != none)
 			return ML.DuplicateList();
 	}
+
+	if (Game == none)
+		return none;
 
 	// If no map list specified, or no maps in map list, use all maps available for game type.
 	// As before, see if the list already exists for the specified game type.
@@ -1190,6 +1190,83 @@ function VS_Map LoadMapList(class<GameInfo> Game, name ListName) {
 	} until(MapName == FirstMap);
 
 	return ML.DuplicateList();
+}
+
+function string CleanMapName(string MapName) {
+	if (Right(MapName, 4) ~= ".unr")
+		MapName = Left(MapName, Len(MapName) - 4); // we dont care about extension
+	return MapName;
+}
+
+function AddMapsToMapList(array<string> MapArray, VS_MapList MapList, VS_Map IgnoreList) {
+	local string MapName;
+	local int i;
+
+	for (i = 0; i < MapArray.Length; i++)
+		if (MapArray[i] != "") {
+			MapName = MapArray[i];
+			if (!IsMapInMapList(MapName, IgnoreList))
+				MapList.AppendMap(CleanMapName(MapName));
+		}
+}
+
+function AddMapPrefixesToMapList(array<string> MapPrefixArray, VS_MapList MapList, VS_Map IgnoreList) {
+	local string FirstMap;
+	local string MapName;
+	local int i;
+
+	for (i = 0; i < MapPrefixArray.Length; i++) {
+		if (MapPrefixArray[i] == "")
+			continue;
+
+		FirstMap = GetMapName(MapPrefixArray[i], "", 0);
+		if (FirstMap == "")
+			continue; // no maps with this prefix
+		MapName = FirstMap;
+
+		do {
+			if (!IsMapInMapList(MapName, IgnoreList))
+				MapList.AppendMap(CleanMapName(MapName));
+
+			MapName = GetMapName(MapPrefixArray[i], MapName, 1);
+		} until(MapName == FirstMap);
+	}
+}
+
+function AddMapListsToMapList(array<name> MapListArray, VS_MapList MapList, VS_Map IgnoreList) {
+	local VS_Map IncludeList;
+	local int i;
+
+	for (i = 0; i < MapListArray.Length; i++) {
+		if (MapListArray[i] == '')
+			continue;
+
+		IncludeList = LoadMapList(none, MapListArray[i]);
+		if (IncludeList == none)
+			continue; // no maps from this list
+		do {
+			if (!IsMapInMapList(IncludeList.MapName, IgnoreList))
+				MapList.AppendMap(IncludeList.MapName);
+
+			IncludeList = IncludeList.Next;
+		} until(IncludeList == none);
+	}
+}
+
+function bool IsMapInMapList(string MapName, VS_Map ML) {
+	if (ML == none)
+		return False;
+
+	MapName = CleanMapName(MapName);
+
+	do {
+		if (MapName == ML.MapName)
+			return True;
+
+		ML = ML.Next;
+	} until(ML == none);
+
+	return False;
 }
 
 function LoadHistory() {

@@ -372,17 +372,34 @@ Map=DM-Agony
 Map=DM-StalwartXL
 Map=DM-Morpheus
 
+[CustomMapListNoAgony]
+IncludeList=CustomMapList
+IgnoreMap=DM-Agony
+
+[DMMapsNotInCustomMapList]
+IncludeMapsWithPrefix=DM-
+IgnoreList=CustomMapList
+
 [BTMaps]
 Map=CTF-AwesomeBTMap
 IncludeMapsWithPrefix=CTF-BT+
 IncludeMapsWithPrefix=CTF-BT-
+
+[CTFbutNotVCTFNorBTMaps]
+IncludeMapsWithPrefix=CTF-
+IgnoreMapsWithPrefix=CTF-XV-
+IgnoreList=BTMaps
 ```
+Map lists are specified in this file. To build the map list, VoteSys will first gather up all included maps, and then will remove any ignored maps. Ignored maps will always take precedence over included ones, and the ordering of included vs. ignored ones will not make a difference. If you want to include a map that was previously ignored, you can make another map list that includes it and the map list in question.
 
-#### Map
-Specify individual maps to add to the map list.
+#### Map/IgnoreMap
+Specify individual maps to add or remove from the map list.
 
-#### IncludeMapsWithPrefix
-Adds all maps that match any of the specified prefixes to the map list.
+#### IncludeMapsWithPrefix/IgnoreMapsWithPrefix
+Adds or removes all maps that match a specified prefix from the map list.
+
+#### IncludeList/IgnoreList
+Adds or removes all maps in another map list from the map list.
 
 ## Build
 In order to build this mutator, you need to be using UT99 v469c.
