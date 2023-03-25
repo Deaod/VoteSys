@@ -177,6 +177,8 @@ function ParseLine(string Line) {
 		Log(Line, 'VoteSys');
 		Channel.AddPreset(none);
 		Channel.FocusPreset(ParsePresetRef(Line));
+	} else if (Left(Line, 5) == "/PONG") {
+		// nothing to do
 	} else {
 		Log(Left(Line, Len(Line)), 'VoteSys');
 	}
@@ -207,7 +209,7 @@ event Closed() {
 
 event Timer() {
 	if (IsConnected())
-		SendText("/PING");
+		SendText("/PING"$CRLF);
 }
 
 defaultproperties {
