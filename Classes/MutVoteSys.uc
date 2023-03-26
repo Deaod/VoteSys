@@ -1105,7 +1105,7 @@ function VS_Preset LoadPreset(VS_PresetConfig PC) {
 	}
 
 	if (P.bDisabled == false)
-		P.MapList = LoadMapList(P.Game, PC.MapListName);
+		P.MapList = LoadMapList(P.Game, PC.MapListName).DuplicateList();
 
 	for (i = 0; i < PC.Mutators.Length; i++)
 		P.AppendMutator(PC.Mutators[i]);
@@ -1119,13 +1119,8 @@ function VS_Preset LoadPreset(VS_PresetConfig PC) {
 	return P;
 }
 
-function VS_Map LoadMapList(class<GameInfo> Game, name ListName) {
-	local VS_MapListConfig MC;
+function VS_MapList LoadMapList(class<GameInfo> Game, name ListName) {
 	local VS_MapList ML;
-	local VS_MapList MLIgnore;
-	local VS_Map IgnoreList;
-	local string FirstMap;
-	local string MapName;
 
 	if (Game != none) {
 		Log("    Loading List '"$ListName$"' for"@Game, 'VoteSys');
@@ -1133,63 +1128,102 @@ function VS_Map LoadMapList(class<GameInfo> Game, name ListName) {
 		Log("    Loading List '"$ListName$"'", 'VoteSys');
 	}
 
-	// Use specified map list
-	if (ListName != '') {
-		// dont recreate if it already exists
-		for (ML = MapLists; ML != none; ML = ML.Next)
-			if (ML.ListName == string(ListName))
-				return ML.DuplicateList();
-
-		MC = new(MapListDummy, ListName) class'VS_MapListConfig';
-
-		MLIgnore = new(MapListDummy) class'VS_MapList';
-
-		AddMapsToMapList(MC.IgnoreMap, MLIgnore, none);
-		AddMapPrefixesToMapList(MC.IgnoreMapsWithPrefix, MLIgnore, none);
-		AddMapListsToMapList(MC.IgnoreList, MLIgnore, none);
-
-		IgnoreList = MLIgnore.First;
-
-		ML = new(MapListDummy) class'VS_MapList';
-		ML.ListName = string(ListName);
-
-		AddMapsToMapList(MC.Map, ML, IgnoreList);
-		AddMapPrefixesToMapList(MC.IncludeMapsWithPrefix, ML, IgnoreList);
-		AddMapListsToMapList(MC.IncludeList, ML, IgnoreList);
-
-		if (ML.First != none)
-			return ML.DuplicateList();
-	}
+	ML = LoadMapListByName(ListName);
+	if (ML != none)
+		return ML;
 
 	if (Game == none)
 		return none;
 
 	// If no map list specified, or no maps in map list, use all maps available for game type.
 	// As before, see if the list already exists for the specified game type.
-	for (ML = MapLists; ML != none; ML = ML.Next)
-		if (ML.Game == Game)
-			return ML.DuplicateList();
+	ML = LoadMapListByPrefix(Game.default.MapPrefix);
+
+	ML.RemoveMap(Game.default.MapPrefix$"-Tutorial");
+
+	return ML;
+}
+
+function VS_MapList LoadMapListByName(name ListName) {
+	local VS_MapListConfig MC;
+	local VS_MapList ML;
+	local VS_MapList MLIgnore;
+
+	// Use specified map list
+	if (ListName == '')
+		return none;
+
+	// dont recreate if it already exists
+	ML = FindMapListByName(string(ListName));
+	if (ML != none)
+		return ML;
+
+	MC = new(MapListDummy, ListName) class'VS_MapListConfig';
+
+	MLIgnore = new(MapListDummy) class'VS_MapList';
+
+	AddAllMapsToMapList(MC.IgnoreMap, MLIgnore);
+	AddMapPrefixesToMapList(MC.IgnoreMapsWithPrefix, MLIgnore, none);
+	AddMapListsToMapList(MC.IgnoreList, MLIgnore, none);
+
+	ML = new(MapListDummy) class'VS_MapList';
+	ML.ListName = string(ListName);
+
+	AddMapsToMapList(MC.Map, ML, MLIgnore);
+	AddMapPrefixesToMapList(MC.IncludeMapsWithPrefix, ML, MLIgnore);
+	AddMapListsToMapList(MC.IncludeList, ML, MLIgnore);
+
+	return ML;
+}
+
+function VS_MapList LoadMapListByPrefix(string Prefix) {
+	local VS_MapList ML;
+	local string FirstMap;
+	local string MapName;
+
+	if (Prefix == "")
+		return none;
+
+	ML = FindMapListByPrefix(Prefix);
+	if (ML != none)
+		return ML;
 
 	ML = new(MapListDummy) class'VS_MapList';
 	ML.Next = MapLists;
 	MapLists = ML;
-	ML.Game = Game;
-	
-	FirstMap = GetMapName(Game.default.MapPrefix, "", 0);
+	ML.Prefix = Prefix;
+
+	FirstMap = GetMapName(Prefix, "", 0);
 	if (FirstMap == "")
-		return none; // no maps for this game type
+		return none; // no maps with this prefix
 	MapName = FirstMap;
 
 	do {
-		// ignore tutorial maps for game types
-		if (!(Left(MapName, Len(MapName) - 4) ~= (Game.default.MapPrefix$"-Tutorial"))) {
-			ML.AppendMap(Left(MapName, Len(MapName) - 4)); // we dont care about extension
-		}
-
-		MapName = GetMapName(Game.default.MapPrefix, MapName, 1);
+		ML.AddMap(Left(MapName, Len(MapName) - 4)); // we dont care about extension
+		MapName = GetMapName(Prefix, MapName, 1);
 	} until(MapName == FirstMap);
 
-	return ML.DuplicateList();
+	return ML;
+}
+
+function VS_MapList FindMapListByName(string ListName) {
+	local VS_MapList ML;
+
+	for (ML = MapLists; ML != none; ML = ML.Next)
+		if (ML.ListName == ListName)
+			return ML;
+
+	return none;
+}
+
+function VS_MapList FindMapListByPrefix(string Prefix) {
+	local VS_MapList ML;
+
+	for (ML = MapLists; ML != none; ML = ML.Next)
+		if (ML.Prefix == Prefix)
+			return ML;
+
+	return none;
 }
 
 function string CleanMapName(string MapName) {
@@ -1198,75 +1232,53 @@ function string CleanMapName(string MapName) {
 	return MapName;
 }
 
-function AddMapsToMapList(array<string> MapArray, VS_MapList MapList, VS_Map IgnoreList) {
+function AddMapsToMapList(array<string> MapArray, VS_MapList MapList, VS_MapList IgnoredMaps) {
 	local string MapName;
 	local int i;
 
-	for (i = 0; i < MapArray.Length; i++)
-		if (MapArray[i] != "") {
-			MapName = MapArray[i];
-			if (!IsMapInMapList(MapName, IgnoreList))
-				MapList.AppendMap(CleanMapName(MapName));
-		}
-}
-
-function AddMapPrefixesToMapList(array<string> MapPrefixArray, VS_MapList MapList, VS_Map IgnoreList) {
-	local string FirstMap;
-	local string MapName;
-	local int i;
-
-	for (i = 0; i < MapPrefixArray.Length; i++) {
-		if (MapPrefixArray[i] == "")
-			continue;
-
-		FirstMap = GetMapName(MapPrefixArray[i], "", 0);
-		if (FirstMap == "")
-			continue; // no maps with this prefix
-		MapName = FirstMap;
-
-		do {
-			if (!IsMapInMapList(MapName, IgnoreList))
-				MapList.AppendMap(CleanMapName(MapName));
-
-			MapName = GetMapName(MapPrefixArray[i], MapName, 1);
-		} until(MapName == FirstMap);
+	if (IgnoredMaps == none) {
+		AddAllMapsToMapList(MapArray, MapList);
+	} else {
+		for (i = 0; i < MapArray.Length; i++)
+			if (MapArray[i] != "") {
+				MapName = CleanMapName(MapArray[i]);
+				if (IgnoredMaps.HaveMap(MapName) == false)
+					MapList.AddMap(MapName);
+			}
 	}
 }
 
-function AddMapListsToMapList(array<name> MapListArray, VS_MapList MapList, VS_Map IgnoreList) {
-	local VS_Map IncludeList;
+function AddAllMapsToMapList(array<string> MapArray, VS_MapList MapList) {
+	local int i;
+
+	for (i = 0; i < MapArray.Length; i++)
+		if (MapArray[i] != "")
+			MapList.AddMap(CleanMapName(MapArray[i]));
+}
+
+function AddMapPrefixesToMapList(array<string> MapPrefixArray, VS_MapList MapList, VS_MapList IgnoredMaps) {
+	local VS_MapList ML;
+	local int i;
+
+	for (i = 0; i < MapPrefixArray.Length; i++) {
+		ML = LoadMapListByPrefix(MapPrefixArray[i]);
+		if (ML != none)
+			AddMapsToMapList(ML.Maps, MapList, IgnoredMaps);
+	}
+}
+
+function AddMapListsToMapList(array<name> MapListArray, VS_MapList MapList, VS_MapList IgnoredMaps) {
+	local VS_MapList IncludeList;
 	local int i;
 
 	for (i = 0; i < MapListArray.Length; i++) {
 		if (MapListArray[i] == '')
 			continue;
 
-		IncludeList = LoadMapList(none, MapListArray[i]);
-		if (IncludeList == none)
-			continue; // no maps from this list
-		do {
-			if (!IsMapInMapList(IncludeList.MapName, IgnoreList))
-				MapList.AppendMap(IncludeList.MapName);
-
-			IncludeList = IncludeList.Next;
-		} until(IncludeList == none);
+		IncludeList = LoadMapListByName(MapListArray[i]);
+		if (IncludeList != none)
+			AddMapsToMapList(IncludeList.Maps, MapList, IgnoredMaps);
 	}
-}
-
-function bool IsMapInMapList(string MapName, VS_Map ML) {
-	if (ML == none)
-		return False;
-
-	MapName = CleanMapName(MapName);
-
-	do {
-		if (MapName == ML.MapName)
-			return True;
-
-		ML = ML.Next;
-	} until(ML == none);
-
-	return False;
 }
 
 function LoadHistory() {

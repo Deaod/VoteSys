@@ -1,41 +1,78 @@
 class VS_MapList extends Object;
 
 var VS_MapList Next;
-var class<GameInfo> Game;
+var string Prefix;
 var string ListName;
-var VS_Map First;
-var VS_Map Last;
+var array<string> Maps;
 
-function AppendMap(string MapName) {
-	if (Last == none) {
-		Last = new class'VS_Map';
-		First = Last;
-	} else {
-		Last.Next = new class'VS_Map';
-		Last = Last.Next;
+// Finds either the exact index of the MapName in the Maps array or the first
+// index that returns true for (Maps[Index] > MapName)
+function int FindIndexForMap(string MapName) {
+	local int F, C;
+	local int Index;
+	local string CompMap;
+
+	MapName = Caps(MapName);
+	F = 0;
+	C = Maps.Length - 1;
+
+	while(F <= C) {
+		CompMap = Caps(Maps[Index]);
+		Index = F + ((C - F) / 2);
+		if (CompMap < MapName)
+			F = Index+1;
+		else if (CompMap > MapName)
+			C = Index-1;
+		else
+			return Index;
 	}
-	Last.MapName = MapName;
+
+	return Index;
+}
+
+function bool HaveMap(string MapName) {
+	return Maps[FindIndexForMap(MapName)] ~= MapName;
+}
+
+function AddMap(string MapName) {
+	local int i;
+
+	i = FindIndexForMap(MapName);
+	if (Maps[i] ~= MapName)
+		return;
+
+	Maps.Insert(i, 1);
+	Maps[i] = MapName;
+}
+
+function RemoveMap(string MapName) {
+	local int i;
+
+	i = FindIndexForMap(MapName);
+	if (Maps[i] ~= MapName)
+		Maps.Remove(i, 1);
 }
 
 function VS_Map DuplicateList() {
-	local VS_Map C;
+	local int i;
 	local VS_Map F;
 	local VS_Map M;
 
-	if (First == none)
+	if (Maps.Length == 0)
 		return none;
 
 	F = new(Outer) class'VS_Map';
 	M = F;
+	i = 0;
 
-	for (C = First; C != none; C = C.Next) {
-		M.MapName = C.MapName;
-		if (C.Next != none) {
-			M.Next = new(Outer) class'VS_Map';
-			M = M.Next;
-		} else {
-			return F;
-		}
+	while (true) {
+		M.MapName = Maps[i];
+		
+		if (++i >= Maps.Length)
+			break;
+
+		M.Next = new(Outer) class'VS_Map';
+		M = M.Next;
 	}
 
 	return F;
