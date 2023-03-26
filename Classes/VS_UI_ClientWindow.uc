@@ -202,7 +202,6 @@ function UpdateActivePreset(VS_Info Info) {
 					(bAdmin);
 				MapListBox.AppendMap(M, bEnable);
 			}
-			MapListBox.Sort();
 		}
 	}
 }
