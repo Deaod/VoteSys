@@ -622,7 +622,7 @@ function TallyVotes() {
 		if (C.Channel != none)
 			C.Channel.DumpLog();
 
-	for (i = 0; i < Info.NumCandidates; i++) {
+	for (i = 0; i < Info.MaxCandidates; i++) {
 		Info.DumpCandidate(i);
 		Score = Info.GetCandidateVotes(i);
 		if (Score > BestScore) {
