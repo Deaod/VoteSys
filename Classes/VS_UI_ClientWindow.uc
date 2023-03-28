@@ -1,5 +1,7 @@
 class VS_UI_ClientWindow extends UWindowDialogClientWindow;
 
+#exec TEXTURE IMPORT Name="Gear" File="Textures/Gear.pcx" MIPS=OFF FLAGS=2
+
 var VS_PlayerChannel Channel;
 
 var VS_UI_CategoryTabItem ActiveCategory;
@@ -29,6 +31,7 @@ var localized string ChatSayText;
 var localized string ChatTeamSayText;
 
 var UWindowSmallCloseButton CloseButton;
+var VS_UI_IconButton SettingsButton;
 
 var float PrevMouseX, PrevMouseY;
 var float LastMouseMoveTime;
@@ -65,7 +68,9 @@ function Created() {
 	ChatSay = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 425, TabsHeight + 338, 45, 12));
 	ChatSay.SetText(ChatSayText);
 
-	CloseButton = UWindowSmallCloseButton(CreateControl(class'UWindowSmallCloseButton', 480, TabsHeight + 338, 120, 12));
+	CloseButton = UWindowSmallCloseButton(CreateControl(class'UWindowSmallCloseButton', 480, TabsHeight + 338, 100, 12));
+	SettingsButton = VS_UI_IconButton(CreateControl(class'VS_UI_IconButton', 584, TabsHeight+338, 16, 12));
+	SettingsButton.Icon = texture'Gear';
 
 	MapScreenshotWindow = VS_UI_ScreenshotWindow(Root.CreateWindow(class'VS_UI_ScreenshotWindow', 0,0,130,130, self));
 	MapScreenshotWindow.HideWindow();
