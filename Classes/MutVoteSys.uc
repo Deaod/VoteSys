@@ -814,6 +814,8 @@ function AddClassToPackageMap(string ClassName, out array<string> PkgMap) {
 	local string P;
 	local class C;
 
+	if (ClassName == "")
+		return;
 	C = class(DynamicLoadObject(ClassName, class'Class'));
 	if (C == none)
 		return;
