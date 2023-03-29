@@ -31,7 +31,12 @@ function int FindIndexForMap(string MapName) {
 }
 
 function bool HaveMap(string MapName) {
-	return Maps[FindIndexForMap(MapName)] ~= MapName;
+	local int Index;
+
+	Index = FindIndexForMap(MapName);
+	if (Index >= Maps.Length)
+		return false;
+	return Maps[Index] ~= MapName;
 }
 
 function AddMap(string MapName) {
