@@ -477,6 +477,9 @@ function array<string> SplitList(string List, string Delimiter) {
 	local int Pos, DLen;
 	local array<string> Result;
 
+	if (List == "")
+		return Result;
+
 	DLen = Len(Delimiter);
 
 	Pos = InStr(List, Delimiter);
