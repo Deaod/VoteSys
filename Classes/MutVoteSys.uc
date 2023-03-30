@@ -254,8 +254,8 @@ function Mutate(string Command, PlayerPawn Sender) {
 		OpenVoteMenu(Sender);
 	} else if (Command ~= "votesys dumpplayerinfo") {
 		for (i = 0; i < 32; i++)
-			if (Info.GetPlayerInfoPRI(i) != none)
-				Sender.ClientMessage("["$i$"]=(PRI="$Info.GetPlayerInfoPRI(i)$",bHasVoted="$Info.GetPlayerInfoHasVoted(i)$")");
+			if (Info.PlayerInfo[i] != none)
+				Sender.ClientMessage("["$i$"]=(PRI="$Info.PlayerInfo[i].PRI$",bHasVoted="$Info.PlayerInfo[i].bHasVoted$")");
 	}
 
 	super.Mutate(Command, Sender);
@@ -343,24 +343,17 @@ function UpdatePlayerVoteInformation() {
 
 	i = 0;
 	for (C = ChannelList; C != none; C = C.Next) {
-		if (i == (int(Level.TimeSeconds/Level.TimeDilation) & 31))
-			Info.UpdatePlayerInfo__Seq(i);
+		if (i < arraycount(Info.PlayerInfo) && C.Channel != none) {
+			C.PlayerInfo.PRI = C.PlayerOwner.PlayerReplicationInfo;
+			C.PlayerInfo.bHasVoted = C.Channel.bHasVoted;
+			C.PlayerInfo.bCanVote = CanVote(C.PlayerOwner);
+			C.PlayerInfo.bIsPlayer = C.PlayerOwner != none && C.PlayerOwner.Player != none;
 
-		if (i < 32 && C.Channel != none) {
-			if (CanVote(C.PlayerOwner)) {
-				Info.SetPlayerInfoPRI(i, C.PlayerOwner.PlayerReplicationInfo);
-				Info.SetPlayerInfoHasVoted(i, C.Channel.bHasVoted);
-				i++;
-			} else if (C.Channel.bHasVoted) {
+			if (C.PlayerInfo.bCanVote == false && C.Channel.bHasVoted)
 				C.Channel.ClearVote();
-			}
 		}
 	}
 
-	while (i < 32) {
-		Info.SetPlayerInfoPRI(i, none);
-		i++;
-	}
 }
 
 function HandleKickVoting() {

@@ -2,5 +2,9 @@ class VS_UI_PlayerListItem extends UWindowListBoxItem;
 
 var bool bHover;
 
-var PlayerReplicationInfo PRI;
-var bool bHasVoted;
+var VS_PlayerInfo PlayerInfo;
+
+function bool ShowThisItem() {
+	return PlayerInfo != none && PlayerInfo.bIsPlayer;
+}
+

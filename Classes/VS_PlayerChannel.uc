@@ -399,11 +399,11 @@ simulated function DumpPlayerList() {
 
 	Info = VoteInfo();
 	for (i = 0; i < 32; i++)
-		if (Info.GetPlayerInfoPRI(i) != none)
-			PlayerOwner.ClientMessage("["$i$"]=(PRI="$Info.GetPlayerInfoPRI(i)$",bHasVoted="$Info.GetPlayerInfoHasVoted(i)$")");
+		if (Info.PlayerInfo[i] != none)
+			PlayerOwner.ClientMessage("["$i$"]=(PRI="$Info.PlayerInfo[i].PRI$",bHasVoted="$Info.PlayerInfo[i].bHasVoted$")");
 
 	for (Item = VS_UI_PlayerListItem(VS_UI_ClientWindow(VoteMenuDialog.ClientArea).PlayerListBox.Items.Next); Item != none; Item = VS_UI_PlayerListItem(Item.Next)) {
-		PlayerOwner.ClientMessage(string(Item.PRI));
+		PlayerOwner.ClientMessage(string(Item.PlayerInfo.PRI));
 	}
 }
 

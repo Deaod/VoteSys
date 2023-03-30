@@ -22,20 +22,28 @@ var MapCandidateData Candidates[MaxCandidates];
 var InternalCandidateData CandidatesInternal[MaxCandidates];
 var int NumCandidates;
 
-struct PlayerVoteSysInfo {
-	var() PlayerReplicationInfo PRI;
-	var() bool bHasVoted;
-	var() byte __Seq;
-};
-
-var PlayerVoteSysInfo PlayerInfo[32];
+var VS_PlayerInfo PlayerInfo[60];
 
 replication {
 	unreliable if (Role == ROLE_Authority)
 		Data,
 		NumCandidates,
-		Candidates,
-		PlayerInfo;
+		Candidates;
+}
+
+simulated event PostBeginPlay() {
+	SetTimer(0.2, true);
+}
+
+simulated event Timer() {
+	local int i;
+	local VS_PlayerInfo P;
+
+	foreach AllActors(class'VS_PlayerInfo', P)
+		PlayerInfo[i++] = P;
+	
+	while(i < arraycount(PlayerInfo))
+		PlayerInfo[i++] = none;
 }
 
 function AddMapVote(VS_PlayerChannel Origin, VS_Preset P, VS_Map M) {
@@ -292,28 +300,6 @@ final function DumpCandidate(int Index) {
 		Line = Line@"''";
 
 	Log(Line, 'VoteSys');
-}
-
-//
-
-simulated final function PlayerReplicationInfo GetPlayerInfoPRI(int Index) {
-	return PlayerInfo[Index].PRI;
-}
-
-simulated final function bool GetPlayerInfoHasVoted(int Index) {
-	return PlayerInfo[Index].bHasVoted;
-}
-
-final function SetPlayerInfoPRI(int Index, PlayerReplicationInfo PRI) {
-	PlayerInfo[Index].PRI = PRI;
-}
-
-final function SetPlayerInfoHasVoted(int Index, bool bHasVoted) {
-	PlayerInfo[Index].bHasVoted = bHasVoted;
-}
-
-final function UpdatePlayerInfo__Seq(int Index) {
-	PlayerInfo[Index].__Seq = PlayerInfo[Index].__Seq + 1;
 }
 
 defaultproperties {

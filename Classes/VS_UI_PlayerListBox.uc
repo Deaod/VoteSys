@@ -71,8 +71,8 @@ function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H
 	C.DrawColor.g = 255;
 	C.DrawColor.b = 255;
 
-	DummyCheckbox.bChecked = I.bHasVoted;
-	DummyCheckbox.bDisabled = false;
+	DummyCheckbox.bChecked = I.PlayerInfo.bHasVoted;
+	DummyCheckbox.bDisabled = I.PlayerInfo.bCanVote == false;
 	DummyCheckbox.BeforePaint(C, 0, 0);
 	DummyCheckbox.ImageX = X+CheckboxOffsetX;
 	DummyCheckbox.ImageY = Y+CheckboxOffsetY;
@@ -83,12 +83,18 @@ function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H
 	C.DrawColor.r = 0;
 	C.DrawColor.g = 0;
 	C.DrawColor.b = 0;
-	ClipText(C, X+PlayerNameOffsetX, Y+PlayerNameOffsetY, I.PRI.PlayerName);
+	ClipText(C, X+PlayerNameOffsetX, Y+PlayerNameOffsetY, I.PlayerInfo.PRI.PlayerName);
 
-	if (GRI != none && GRI.bTeamGame && I.PRI.bIsSpectator == false && I.PRI.Team < 4 && Len(I.PRI.TeamName) > 0)
-		C.DrawColor = class'ChallengeTeamHUD'.default.TeamColor[I.PRI.Team];
+	if (GRI != none &&
+		GRI.bTeamGame &&
+		(I.PlayerInfo.PRI.bIsSpectator == false || I.PlayerInfo.PRI.bWaitingPlayer) &&
+		I.PlayerInfo.PRI.Team < 4 &&
+		Len(I.PlayerInfo.PRI.TeamName) > 0
+	) {
+		C.DrawColor = class'ChallengeTeamHUD'.default.TeamColor[I.PlayerInfo.PRI.Team];
+	}
 
-	ClipText(C, X+PlayerNameOffsetX, Y+PlayerNameOffsetY, I.PRI.PlayerName);
+	ClipText(C, X+PlayerNameOffsetX, Y+PlayerNameOffsetY, I.PlayerInfo.PRI.PlayerName);
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
@@ -204,7 +210,7 @@ function RMouseDown(float MouseX, float MouseY) {
 
 	// ContextMenu.PRI MUST be set before ShowWindow is invoked,
 	// ShowWindow renames the ContextMenu items depending on PRI
-	ContextMenu.PRI = I.PRI;
+	ContextMenu.PRI = I.PlayerInfo.PRI;
 	ContextMenu.ShowWindow();
 }
 

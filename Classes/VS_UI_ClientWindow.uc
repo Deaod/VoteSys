@@ -233,31 +233,32 @@ function UpdateCandidateList(VS_Info Info) {
 function UpdatePlayerList(VS_Info Info) {
 	local int i;
 	local VS_UI_PlayerListItem PLI, TempPLI;
-	local PlayerReplicationInfo PRI;
+	local VS_PlayerInfo PlayerInfo;
 
 	i = 0;
 
 	// update existing items
 	PLI = VS_UI_PlayerListItem(PlayerListBox.Items.Next);
-	PRI = Info.GetPlayerInfoPRI(i);
-	while(PRI != none && PLI != none) {
-		PLI.PRI = PRI;
-		PLI.bHasVoted = Info.GetPlayerInfoHasVoted(i);
+	while(i < arraycount(Info.PlayerInfo) && PLI != none) {
+		PlayerInfo = Info.PlayerInfo[i];
+		if (PlayerInfo != none && PlayerInfo.PRI != none) {
+			PLI.PlayerInfo = PlayerInfo;
+			PLI = VS_UI_PlayerListItem(PLI.Next);
+		}
 
 		i++;
-		PLI = VS_UI_PlayerListItem(PLI.Next);
-		PRI = Info.GetPlayerInfoPRI(i);
 	}
 
 	// add new items for new players
-	while(PRI != none) {
-		PLI = VS_UI_PlayerListItem(PlayerListBox.Items.Append(class'VS_UI_PlayerListItem'));
-		PLI.PRI = PRI;
-		PLI.bHasVoted = Info.GetPlayerInfoHasVoted(i);
+	while(i < arraycount(Info.PlayerInfo)) {
+		PlayerInfo = Info.PlayerInfo[i];
+		if (PlayerInfo != none && PlayerInfo.PRI != none) {
+			PLI = VS_UI_PlayerListItem(PlayerListBox.Items.Append(class'VS_UI_PlayerListItem'));
+			PLI.PlayerInfo = PlayerInfo;
+			PLI = VS_UI_PlayerListItem(PLI.Next);
+		}
 
 		i++;
-		PLI = VS_UI_PlayerListItem(PLI.Next);
-		PRI = Info.GetPlayerInfoPRI(i);
 	}
 
 	// remove superfluous items
