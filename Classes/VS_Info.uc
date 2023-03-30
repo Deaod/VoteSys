@@ -25,6 +25,7 @@ var int NumCandidates;
 struct PlayerVoteSysInfo {
 	var() PlayerReplicationInfo PRI;
 	var() bool bHasVoted;
+	var() byte __Seq;
 };
 
 var PlayerVoteSysInfo PlayerInfo[32];
@@ -309,6 +310,10 @@ final function SetPlayerInfoPRI(int Index, PlayerReplicationInfo PRI) {
 
 final function SetPlayerInfoHasVoted(int Index, bool bHasVoted) {
 	PlayerInfo[Index].bHasVoted = bHasVoted;
+}
+
+final function UpdatePlayerInfo__Seq(int Index) {
+	PlayerInfo[Index].__Seq = PlayerInfo[Index].__Seq + 1;
 }
 
 defaultproperties {

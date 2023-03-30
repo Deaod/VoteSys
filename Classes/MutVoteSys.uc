@@ -343,12 +343,17 @@ function UpdatePlayerVoteInformation() {
 
 	i = 0;
 	for (C = ChannelList; C != none; C = C.Next) {
-		if (i < 32 && C.Channel != none && CanVote(C.PlayerOwner)) {
-			Info.SetPlayerInfoPRI(i, C.PlayerOwner.PlayerReplicationInfo);
-			Info.SetPlayerInfoHasVoted(i, C.Channel.bHasVoted);
-			i++;
-		} else if (C.Channel.bHasVoted) {
-			C.Channel.ClearVote();
+		if (i == (int(Level.TimeSeconds/Level.TimeDilation) & 31))
+			Info.UpdatePlayerInfo__Seq(i);
+
+		if (i < 32 && C.Channel != none) {
+			if (CanVote(C.PlayerOwner)) {
+				Info.SetPlayerInfoPRI(i, C.PlayerOwner.PlayerReplicationInfo);
+				Info.SetPlayerInfoHasVoted(i, C.Channel.bHasVoted);
+				i++;
+			} else if (C.Channel.bHasVoted) {
+				C.Channel.ClearVote();
+			}
 		}
 	}
 
