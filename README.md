@@ -221,15 +221,19 @@ If the value is 1 or less the server will wait indefinitely.
 
 #### DefaultPackages
 
-Filled in automatically after bManageServerPackages is set to True. While that setting is True, edit this list to change the static ServerPackages.
+Filled in automatically after `bManageServerPackages` is set to True. While that setting is True, edit this list to change the static `ServerPackages`.
 
-By default no entries for this variable exists.
+The format for this variable matches that of `ServerPackages` in the UT INI: One package per line. You cannot combine multiple packages in a single `DefaultPackages` entry.
+
+By default no entries for this variable exist.
 
 #### DefaultActors
 
-Filled in automatically after bUseServerActorsCompatibilityMode is set to True. While this setting is True, edit this list to change the static ServerActors.
+Filled in automatically after `bUseServerActorsCompatibilityMode` is set to True. While this setting is True, edit this list to change the static `ServerActors`.
 
-By default no entries for this variable exists.
+The format for this variable matches that of `ServerActors` in the UT INI: One Actor per line. You cannot combine multiple actors in a single `DefaultActors` entry.
+
+By default no entries for this variable exist.
 
 #### GameNameMode
 
@@ -350,6 +354,17 @@ GameSettings=Variable2=Value2
 is equivalent to
 ```
 GameSettings=Variable1=Value1,Variable2=Value2
+```
+
+#### Packages
+Can be used to specify additional packages that need to exist on clients. This setting has no effect if `bManageServerPackages` is False.
+```
+Packages=Package1
+Packages=Package2
+```
+is equivalent to
+```
+Packages=Package1,Package2
 ```
 
 #### bDisabled

@@ -43,7 +43,7 @@ function AddMap(string MapName) {
 	local int i;
 
 	i = FindIndexForMap(MapName);
-	if (Maps[i] ~= MapName)
+	if (i < Maps.Length && Maps[i] ~= MapName)
 		return;
 
 	Maps.Insert(i, 1);

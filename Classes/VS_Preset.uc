@@ -9,6 +9,7 @@ var VS_Map          MapList;
 var string          Mutators;
 var string          Parameters;
 var string          GameSettings;
+var string          Packages;
 var bool            bDisabled;
 var int             MaxSequenceNumber;
 var int             MinimumMapRepeatDistance;
@@ -36,6 +37,17 @@ function AppendGameSetting(string Setting) {
 		GameSettings = Setting;
 	} else {
 		GameSettings = GameSettings$","$Setting;
+	}
+}
+
+function AppendPackage(string Pkg) {
+	if (Pkg == "")
+		return;
+
+	if (Packages == "") {
+		Packages = Pkg;
+	} else {
+		Packages = Packages$","$Pkg;
 	}
 }
 

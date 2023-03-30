@@ -537,6 +537,7 @@ function TravelTo(VS_Preset P, VS_Map M) {
 	TD.Mutators = Mutators;
 	TD.Actors = ActorsList;
 	TD.GameSettings = P.GameSettings;
+	TD.Packages = P.Packages;
 	TD.SaveConfig();
 
 	if (bChangeMapImmediately == false) {
@@ -548,6 +549,7 @@ function TravelTo(VS_Preset P, VS_Map M) {
 		Pkgs = Settings.DefaultPackages;
 		AddClassesToPackageMap(TD.Mutators, Pkgs);
 		AddClassesToPackageMap(TD.Actors, Pkgs);
+		MergeListIntoArray(TD.Packages, Pkgs);
 		SetServerPackages(Pkgs);
 	}
 	if (Settings.bUseServerActorsCompatibilityMode) {
@@ -797,6 +799,7 @@ function ApplyVotedPreset() {
 	if ((Level.EngineVersion$Level.GetPropertyText("EngineRevision")) >= "469c" && Settings.bManageServerPackages) {
 		AddClassesToPackageMap(TD.Mutators, Pkgs);
 		AddClassesToPackageMap(TD.Actors, Pkgs);
+		MergeListIntoArray(TD.Packages, Pkgs);
 		for (i = 0; i < Pkgs.Length; i++)
 			if (IsInPackageMap(Pkgs[i], true) == false)
 				AddToPackageMap(Pkgs[i]);
@@ -1122,6 +1125,9 @@ function VS_Preset LoadPreset(VS_PresetConfig PC) {
 
 	for (i = 0; i < PC.GameSettings.Length; i++)
 		P.AppendGameSetting(PC.GameSettings[i]);
+
+	for (i = 0; i < PC.Packages.Length; i++)
+		P.AppendPackage(PC.Packages[i]);
 
 	return P;
 }

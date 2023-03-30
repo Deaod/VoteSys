@@ -19,6 +19,8 @@ var config array<string> Mutators;
 var config array<string> Parameters;
 /** Comma-separated list of game type settings to change */
 var config array<string> GameSettings;
+/** Comma-separated list of additional packages for this preset */
+var config array<string> Packages;
 /** Disabled presets are not shown to users and cannot be voted for */
 var config bool bDisabled;
 /** Overrides the server setting of the same name, if the value is 0 or greater */
