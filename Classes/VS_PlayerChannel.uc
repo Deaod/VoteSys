@@ -398,7 +398,7 @@ simulated function DumpPlayerList() {
 	local VS_UI_PlayerListItem Item;
 
 	Info = VoteInfo();
-	for (i = 0; i < 32; i++)
+	for (i = 0; i < arraycount(Info.PlayerInfo); i++)
 		if (Info.PlayerInfo[i] != none)
 			PlayerOwner.ClientMessage("["$i$"]=(PRI="$Info.PlayerInfo[i].PRI$",bHasVoted="$Info.PlayerInfo[i].bHasVoted$")");
 
