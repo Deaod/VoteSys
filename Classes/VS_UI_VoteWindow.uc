@@ -43,17 +43,17 @@ function Close(optional bool bByParent) {
 }
 
 function AddPreset(VS_Preset P) {
-	VS_UI_ClientWindow(ClientArea).Channel = Channel;
-	VS_UI_ClientWindow(ClientArea).AddPreset(P);
+	VS_UI_VoteClientWindow(ClientArea).Channel = Channel;
+	VS_UI_VoteClientWindow(ClientArea).AddPreset(P);
 }
 
 function FocusPreset(VS_Preset P) {
-	VS_UI_ClientWindow(ClientArea).FocusPreset(P);
+	VS_UI_VoteClientWindow(ClientArea).FocusPreset(P);
 }
 
 defaultproperties
 {
-	ClientClass=class'VS_UI_ClientWindow'
+	ClientClass=class'VS_UI_VoteClientWindow'
 	WindowTitle="VoteSys Menu"
 	bStatusBar=False
 }

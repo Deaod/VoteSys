@@ -27,7 +27,7 @@ ErrCreateDialog="Failed to create VoteMenu window (Could not create Dialog)"
 ErrWrongConsole="Failed to create VoteMenu window (Console not a WindowConsole)"
 ErrMapLoadFailed="Loading map {1} failed, randomly selecting {2}"
 
-[VS_UI_ClientWindow]
+[VS_UI_VoteClientWindow]
 MapFilterText="Filter Maps By Name"
 VoteButtonText="Vote"
 RandomButtonText="Random"

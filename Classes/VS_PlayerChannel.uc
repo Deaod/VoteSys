@@ -389,7 +389,7 @@ simulated function ChatMessage(PlayerReplicationInfo PRI, string Msg) {
 	if (VoteMenuDialog == none)
 		return;
 
-	VS_UI_ClientWindow(VoteMenuDialog.ClientArea).ChatArea.AddChat(PRI, Msg);
+	VS_UI_VoteClientWindow(VoteMenuDialog.ClientArea).ChatArea.AddChat(PRI, Msg);
 }
 
 simulated function DumpPlayerList() {
@@ -402,7 +402,7 @@ simulated function DumpPlayerList() {
 		if (Info.PlayerInfo[i] != none)
 			PlayerOwner.ClientMessage("["$i$"]=(PRI="$Info.PlayerInfo[i].PRI$",bHasVoted="$Info.PlayerInfo[i].bHasVoted$")");
 
-	for (Item = VS_UI_PlayerListItem(VS_UI_ClientWindow(VoteMenuDialog.ClientArea).PlayerListBox.Items.Next); Item != none; Item = VS_UI_PlayerListItem(Item.Next)) {
+	for (Item = VS_UI_PlayerListItem(VS_UI_VoteClientWindow(VoteMenuDialog.ClientArea).PlayerListBox.Items.Next); Item != none; Item = VS_UI_PlayerListItem(Item.Next)) {
 		PlayerOwner.ClientMessage(string(Item.PlayerInfo.PRI));
 	}
 }
