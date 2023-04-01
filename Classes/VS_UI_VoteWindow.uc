@@ -1,4 +1,4 @@
-class VS_UI_Window extends UWindowFramedWindow;
+class VS_UI_VoteWindow extends UWindowFramedWindow;
 
 var bool bPlaced;
 var VS_ClientSettings Settings;

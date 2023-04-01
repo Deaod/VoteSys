@@ -6,7 +6,7 @@ var VS_Info Info; // Info Info
 var VS_DataClient DataClient;
 
 var VS_Preset PresetList;
-var VS_UI_Window VoteMenuDialog;
+var VS_UI_VoteWindow VoteMenuDialog;
 var bool bOpenVoteMenuAfterTyping;
 
 var Object SettingsDummy;
@@ -99,8 +99,8 @@ simulated function TryCreateVoteMenuDialog() {
 		if (C.Root == none)
 			return;
 
-		VoteMenuDialog = VS_UI_Window(C.Root.CreateWindow(
-			class'VS_UI_Window',
+		VoteMenuDialog = VS_UI_VoteWindow(C.Root.CreateWindow(
+			class'VS_UI_VoteWindow',
 			Settings.MenuX,
 			Settings.MenuY,
 			0,0 // Size set internally
@@ -134,8 +134,8 @@ simulated function CreateVoteMenuDialog() {
 			return;
 		}
 
-		VoteMenuDialog = VS_UI_Window(C.Root.CreateWindow(
-			class'VS_UI_Window',
+		VoteMenuDialog = VS_UI_VoteWindow(C.Root.CreateWindow(
+			class'VS_UI_VoteWindow',
 			Settings.MenuX,
 			Settings.MenuY,
 			0,0 // Size set internally
