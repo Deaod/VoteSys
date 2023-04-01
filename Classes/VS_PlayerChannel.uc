@@ -7,7 +7,9 @@ var VS_DataClient DataClient;
 
 var VS_Preset PresetList;
 var VS_UI_VoteWindow VoteMenuDialog;
+var VS_UI_SettingsWindow SettingsDialog;
 var bool bOpenVoteMenuAfterTyping;
+var bool bOpenSettingsAfterTyping;
 
 var Object SettingsDummy;
 var VS_ClientSettings Settings;
@@ -37,7 +39,8 @@ replication {
 		ClientApplyKickVote,
 		DumpPlayerList,
 		ShowVoteMenu,
-		HideVoteMenu;
+		HideVoteMenu,
+		ShowSettings;
 
 	reliable if (Role == ROLE_Authority && ((bDemoRecording == false) || (bClientDemoRecording && bClientDemoNetFunc) || (Level.NetMode == NM_Standalone)))
 		LocalizeMessage, ChatMessage;
@@ -70,6 +73,11 @@ simulated event Tick(float Delta) {
 	if (bOpenVoteMenuAfterTyping && PlayerOwner.Player.Console.IsInState('Typing') == false) {
 		bOpenVoteMenuAfterTyping = false;
 		ShowVoteMenu();
+	}
+
+	if (bOpenSettingsAfterTyping && PlayerOwner.Player.Console.IsInState('Typing') == false) {
+		bOpenSettingsAfterTyping = false;
+		ShowSettings();
 	}
 }
 
@@ -124,13 +132,13 @@ simulated function CreateVoteMenuDialog() {
 		C = WindowConsole(PlayerOwner.Player.Console);
 
 	if (C == none) {
-		LocalizeMessage(class'VS_Msg_LocalMessage', -4);
+		LocalizeMessage(class'VS_Msg_LocalMessage', -4, "VoteMenu");
 		return;
 	}
 
 	if (VoteMenuDialog == none) {
 		if (C.Root == none) {
-			LocalizeMessage(class'VS_Msg_LocalMessage', -2);
+			LocalizeMessage(class'VS_Msg_LocalMessage', -2, "VoteMenu");
 			return;
 		}
 
@@ -145,7 +153,7 @@ simulated function CreateVoteMenuDialog() {
 		VoteMenuDialog.HideWindow();
 
 		if (VoteMenuDialog == none) {
-			LocalizeMessage(class'VS_Msg_LocalMessage', -3);
+			LocalizeMessage(class'VS_Msg_LocalMessage', -3, "VoteMenu");
 			return;
 		}
 	}
@@ -166,7 +174,7 @@ simulated function ShowVoteMenu() {
 		C = WindowConsole(PlayerOwner.Player.Console);
 
 	if (C == none) {
-		LocalizeMessage(class'VS_Msg_LocalMessage', -4);
+		LocalizeMessage(class'VS_Msg_LocalMessage', -4, "VoteMenu");
 		return;
 	}
 
@@ -185,12 +193,66 @@ simulated function ShowVoteMenu() {
 	}
 
 	if (VoteMenuDialog == none) {
-		LocalizeMessage(class'VS_Msg_LocalMessage', -3);
+		LocalizeMessage(class'VS_Msg_LocalMessage', -3, "VoteMenu");
 		return;
 	}
 
 	VoteMenuDialog.bLeaveOnscreen = true;
 	VoteMenuDialog.ShowWindow();
+}
+
+simulated function ShowSettings() {
+	local WindowConsole C;
+
+	if (PlayerOwner == none)
+		PlayerOwner = PlayerPawn(Owner);
+
+	if (PlayerOwner.Player != none)
+		C = WindowConsole(PlayerOwner.Player.Console);
+
+	if (C == none) {
+		LocalizeMessage(class'VS_Msg_LocalMessage', -4, "Settings");
+		return;
+	}
+
+	if (C.IsInState('Typing')) {
+		// delay until after player is done typing on the console
+		bOpenSettingsAfterTyping = true;
+		return;
+	}
+
+	if (C.bShowConsole) {
+		// console is already open, no need to do anything
+	} else {
+		// probably a hotkey that called this function
+		C.bQuickKeyEnable = True;
+		C.LaunchUWindow();
+	}
+
+	if (SettingsDialog == none) {
+		if (C.Root == none) {
+			LocalizeMessage(class'VS_Msg_LocalMessage', -2, "Settings");
+			return;
+		}
+
+		SettingsDialog = VS_UI_SettingsWindow(C.Root.CreateWindow(
+			class'VS_UI_SettingsWindow',
+			Settings.MenuX,
+			Settings.MenuY,
+			0,0 // Size set internally
+		));
+		SettingsDialog.Channel = self;
+		SettingsDialog.Settings = Settings;
+		SettingsDialog.HideWindow();
+
+		if (SettingsDialog == none) {
+			LocalizeMessage(class'VS_Msg_LocalMessage', -3, "Settings");
+			return;
+		}
+	}
+
+	SettingsDialog.bLeaveOnscreen = true;
+	SettingsDialog.ShowWindow();
 }
 
 simulated function HideVoteMenu() {

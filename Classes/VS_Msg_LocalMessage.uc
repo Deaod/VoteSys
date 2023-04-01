@@ -99,8 +99,8 @@ defaultproperties {
 	MsgKickVoteSuccessful="{1} was kicked"
 
 	ErrStillLoading="Vote Menu data is still being transferred, please try again"
-	ErrNoRootWindow="Failed to create VoteMenu window (Root does not exist)"
-	ErrCreateDialog="Failed to create VoteMenu window (Could not create Dialog)"
-	ErrWrongConsole="Failed to create VoteMenu window (Console not a WindowConsole)"
+	ErrNoRootWindow="Failed to create {1} window (Root does not exist)"
+	ErrCreateDialog="Failed to create {1} window (Could not create Dialog)"
+	ErrWrongConsole="Failed to create {1} window (Console not a WindowConsole)"
 	ErrMapLoadFailed="Loading map {1} failed, randomly selecting {2}"
 }

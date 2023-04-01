@@ -317,6 +317,8 @@ function Notify(UWindowDialogControl C, byte E) {
 	} else if (C == RandomButton && E == DE_Click) {
 		if (ActivePreset != none)
 			Channel.Vote(ActivePreset, VS_UI_MapListItem(MapListBox.Items.FindEntry(int(MapListBox.Items.Count() * BetterFRand()))).MapRef);
+	} else if (C == SettingsButton && E == DE_Click) {
+		Channel.ShowSettings();
 	}
 }
 

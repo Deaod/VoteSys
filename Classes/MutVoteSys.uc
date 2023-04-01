@@ -252,6 +252,8 @@ function Mutate(string Command, PlayerPawn Sender) {
 		return;
 	} else if (Command ~= "bdbmapvote votemenu") {
 		OpenVoteMenu(Sender);
+	} else if (Command ~= "votesys settings") {
+		OpenSettings(Sender);
 	} else if (Command ~= "votesys dumpplayerinfo") {
 		for (i = 0; i < 32; i++)
 			if (Info.PlayerInfo[i] != none)
@@ -288,6 +290,18 @@ function OpenVoteMenu(PlayerPawn P) {
 	}
 
 	C.Channel.ShowVoteMenu();
+}
+
+function OpenSettings(PlayerPawn P) {
+	local VS_ChannelContainer C;
+
+	C = FindChannel(P);
+	if (C == none || C.Channel == none) {
+		Log("Could not find Channel for"@P.PlayerReplicationInfo.PlayerName@"("$P.PlayerReplicationInfo.PlayerId$")", 'VoteSys');
+		return;
+	}
+
+	C.Channel.ShowSettings();
 }
 
 event Timer() {
