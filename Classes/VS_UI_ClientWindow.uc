@@ -21,6 +21,7 @@ var localized string VoteButtonText;
 var UWindowSmallButton RandomButton;
 var localized string RandomButtonText;
 
+var int CandidateMark;
 var VS_UI_CandidateListBox VoteListBox;
 var VS_UI_PlayerListBox PlayerListBox;
 
@@ -212,21 +213,37 @@ function UpdateActivePreset(VS_Info Info) {
 }
 
 function UpdateCandidateList(VS_Info Info) {
-	local int i;
 	local VS_UI_CandidateListItem VLI;
+	local VS_Candidate C;
+	local int NumCandidates;
 
-	while(Info.NumCandidates > VoteListBox.Items.Count())
+	CandidateMark++;
+
+	for (C = Info.FirstCandidate; C != none; C = C.Next) {
+		if (C.Mark == CandidateMark) {
+			// Theres a loop in the candidate list
+			// Dont update candidate list this tick and hope replication catches up
+			return;
+		}
+		C.Mark = CandidateMark;
+		NumCandidates++;
+	}
+
+	while(NumCandidates > VoteListBox.Items.Count())
 		VoteListBox.Items.Append(class'VS_UI_CandidateListItem');
 
-	while(Info.NumCandidates < VoteListBox.Items.Count())
+	while(NumCandidates < VoteListBox.Items.Count())
 		VoteListBox.Items.Last.Remove();
 
-	i = 0;
-	for (VLI = VS_UI_CandidateListItem(VoteListBox.Items.Next); VLI != none; VLI = VS_UI_CandidateListItem(VLI.Next)) {
-		VLI.Preset = Info.GetCandidatePreset(i);
-		VLI.MapName = Info.GetCandidateMapName(i);
-		VLI.Votes = Info.GetCandidateVotes(i);
-		i++;
+	C = Info.FirstCandidate;
+	VLI = VS_UI_CandidateListItem(VoteListBox.Items.Next);
+	while (VLI != none && C != none) {
+		VLI.Preset = C.Preset;
+		VLI.MapName = C.MapName;
+		VLI.Votes = C.Votes;
+
+		C = C.Next;
+		VLI = VS_UI_CandidateListItem(VLI.Next);
 	}
 }
 

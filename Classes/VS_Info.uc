@@ -7,28 +7,16 @@ struct ConnectionData {
 };
 var ConnectionData Data;
 
-struct MapCandidateData {
-	var() string Preset;
-	var() string MapName;
-	var() int Votes;
-};
-struct InternalCandidateData {
-	var() VS_Preset Preset;
-	var() VS_Map MapRef;
-};
-
-const MaxCandidates = 32;
-var MapCandidateData Candidates[MaxCandidates];
-var InternalCandidateData CandidatesInternal[MaxCandidates];
-var int NumCandidates;
+var VS_Candidate FirstCandidate;
+var VS_Candidate LastCandidate;
 
 var VS_PlayerInfo PlayerInfo[60];
 
 replication {
 	unreliable if (Role == ROLE_Authority)
 		Data,
-		NumCandidates,
-		Candidates;
+		FirstCandidate,
+		LastCandidate;
 }
 
 simulated event PostBeginPlay() {
@@ -47,8 +35,6 @@ simulated event Timer() {
 }
 
 function AddMapVote(VS_PlayerChannel Origin, VS_Preset P, VS_Map M) {
-	local int InternalIndex;
-
 	if (VoteSys.CanVote(Origin.PlayerOwner)) {
 		if (Origin.PlayerOwner.PlayerReplicationInfo.bAdmin) {
 			VoteSys.BroadcastLocalizedMessage2(
@@ -63,94 +49,45 @@ function AddMapVote(VS_PlayerChannel Origin, VS_Preset P, VS_Map M) {
 				Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
 				M.MapName@"("$P.Abbreviation$")"
 			);
-			InternalIndex = AddMapVoteUnsafe(P.GetFullName(), M.MapName);
-			if (InternalIndex >= 0) {
-				CandidatesInternal[InternalIndex].Preset = P;
-				CandidatesInternal[InternalIndex].MapRef = M;
-			}
+			AddMapVoteInternal(P, M);
 		}
 	}
 }
 
-function int AddMapVoteUnsafe(string Preset, string MapName) {
-	local int i;
-	local int Result;
-	local MapCandidateData Tmp;
-	local InternalCandidateData TmpInt;
+function AddMapVoteInternal(VS_Preset P, VS_Map M) {
+	local VS_Candidate C;
 
-	Result = -1;
-
-	for (i = 0; i < MaxCandidates; i++) {
-		if (Candidates[i].Preset == Preset && Candidates[i].MapName == MapName) {
-			Candidates[i].Votes += 1;
-			Result = -1;
-			break;
-		}
-
-		if (Candidates[i].Preset == "" && Candidates[i].MapName == "") {
-			Candidates[i].Preset = Preset;
-			Candidates[i].MapName = MapName;
-			Candidates[i].Votes = 1;
-			NumCandidates += 1;
-			Result = i;
+	for (C = FirstCandidate; C != none; C = C.Next) {
+		if (C.PresetRef == P && C.MapRef == M) {
+			C.Votes += 1;
 			break;
 		}
 	}
 
-	if (i >= MaxCandidates)
-		return Result;
-
-	while(i > 0 && Candidates[i-1].Votes < Candidates[i].Votes) {
-		Tmp = Candidates[i-1];
-		Candidates[i-1] = Candidates[i];
-		Candidates[i] = Tmp;
-
-		TmpInt = CandidatesInternal[i-1];
-		CandidatesInternal[i-1] = CandidatesInternal[i];
-		CandidatesInternal[i] = TmpInt;
-
-		i--;
+	if (C == none) {
+		C = Spawn(class'VS_Candidate');
+		C.Append(self);
+		C.Fill(P, M);
+		C.Votes = 1;
 	}
 
-	return Result;
+	C.SortInList();
 }
 
 function RemMapVote(VS_PlayerChannel Origin, VS_Preset P, VS_Map M) {
-	RemMapVoteUnsafe(P.GetFullName(), M.MapName);
-}
+	local VS_Candidate C;
 
-function RemMapVoteUnsafe(string Preset, string MapName) {
-	local int i;
-	local MapCandidateData Tmp;
-	local InternalCandidateData TmpInt;
-
-	for (i = 0; i < MaxCandidates; i++) {
-		if (Candidates[i].Preset == Preset && Candidates[i].MapName == MapName) {
-			Candidates[i].Votes -= 1;
-			if (Candidates[i].Votes == 0) {
-				NumCandidates -= 1;
-				Candidates[i] = Candidates[NumCandidates];
-				Candidates[NumCandidates].Preset = "";
-				Candidates[NumCandidates].MapName = "";
-				Candidates[NumCandidates].Votes = 0;
-				CandidatesInternal[i] = CandidatesInternal[NumCandidates];
-				CandidatesInternal[NumCandidates].Preset = none;
-				CandidatesInternal[NumCandidates].MapRef = none;
+	for (C = FirstCandidate; C != none; C = C.Next) {
+		if (C.PresetRef == P && C.MapRef == M) {
+			C.Votes -= 1;
+			if (C.Votes == 0) {
+				C.Remove();
+				C.Destroy();
+			} else {
+				C.SortInList();
 			}
-			break;
+			return;
 		}
-	}
-
-	while(i+1 < MaxCandidates && Candidates[i].Votes < Candidates[i+1].Votes) {
-		Tmp = Candidates[i+1];
-		Candidates[i+1] = Candidates[i];
-		Candidates[i] = Tmp;
-
-		TmpInt = CandidatesInternal[i+1];
-		CandidatesInternal[i+1] = CandidatesInternal[i];
-		CandidatesInternal[i] = TmpInt;
-
-		i++;
 	}
 }
 
@@ -223,14 +160,6 @@ function BanPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target) {
 	}
 }
 
-function int FindCandidateIndex(string Preset, string MapName) {
-	local int Index;
-	for (Index = 0; Index < MaxCandidates; Index++)
-		if (Candidates[Index].Preset == Preset && Candidates[Index].MapName == MapName)
-			return Index;
-	return -1;
-}
-
 function VS_Preset ResolvePresetSeparate(string Category, string PresetName) {
 	local VS_Preset P;
 
@@ -264,44 +193,7 @@ function VS_Map ResolveMapOfPreset(VS_Preset P, string MapName) {
 	return none;
 }
 
-simulated final function string GetCandidatePreset(int Index) {
-	return Candidates[Index].Preset;
-}
-
-simulated final function string GetCandidateMapName(int Index) {
-	return Candidates[Index].MapName;
-}
-
-simulated final function int GetCandidateVotes(int Index) {
-	return Candidates[Index].Votes;
-}
-
-final function VS_Preset GetCandidateInternalPreset(int Index) {
-	return CandidatesInternal[Index].Preset;
-}
-
-final function VS_Map GetCandidateInternalMap(int Index) {
-	return CandidatesInternal[Index].MapRef;
-}
-
-final function DumpCandidate(int Index) {
-	local string Line;
-
-	Line = string(Index)@"|"@Candidates[Index].Votes;
-
-	if (CandidatesInternal[Index].Preset != none)
-		Line = Line@"'"$CandidatesInternal[Index].Preset.GetFullName()$"'";
-	else
-		Line = Line@"''";
-
-	if (CandidatesInternal[Index].MapRef != none)
-		Line = Line@"'"$CandidatesInternal[Index].MapRef.MapName$"'";
-	else
-		Line = Line@"''";
-
-	Log(Line, 'VoteSys');
-}
-
 defaultproperties {
 	RemoteRole=ROLE_SimulatedProxy
+	NetUpdateFrequency=10
 }

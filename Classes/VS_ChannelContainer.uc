@@ -10,7 +10,7 @@ function Initialize(PlayerPawn P, Actor AceChk) {
 	PlayerOwner = P;
 	Channel = Spawn(class'VS_PlayerChannel', P);
 	Channel.PlayerOwner = P;
-	PlayerInfo = Spawn(class'VS_PlayerInfo');
+	PlayerInfo = Spawn(class'VS_PlayerInfo', P);
 	PlayerInfo.PRI = P.PlayerReplicationInfo;
 	AceCheck = AceChk;
 }

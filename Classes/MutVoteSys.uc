@@ -610,13 +610,13 @@ function VS_Map SelectRandomMapFromList(VS_Map MapList) {
 }
 
 function TallyVotes() {
-	local int i, Score;
 	local int BestScore;
 	local int CountTiedCandidates;
 	local float TiedCandidatesFraction;
 	local float RandomCandidate;
 	local VS_Map M;
 	local VS_ChannelContainer C;
+	local VS_Candidate Cd;
 
 	BestScore = 0;
 	CountTiedCandidates = 0;
@@ -625,18 +625,11 @@ function TallyVotes() {
 		if (C.Channel != none)
 			C.Channel.DumpLog();
 
-	for (i = 0; i < Info.MaxCandidates; i++) {
-		Info.DumpCandidate(i);
-		Score = Info.GetCandidateVotes(i);
-		if (Score > BestScore) {
-			BestScore = Score;
-			CountTiedCandidates = 1;
-		} else if (Score > 0 && Score == BestScore) {
-			CountTiedCandidates++;
-		}
-	}
 
-	if (CountTiedCandidates == 0) {
+	for (Cd = Info.FirstCandidate; Cd != none; Cd = Cd.Next)
+		Cd.Dump();
+
+	if (Info.FirstCandidate == none || Info.FirstCandidate.Votes == 0) {
 		// nobody voted
 		if (DefaultPresetRef == none) {
 			// cant do anything, let the game handle this
@@ -657,21 +650,27 @@ function TallyVotes() {
 			return;
 		VotedMap = M;
 	} else {
+		CountTiedCandidates = 0;
+		Cd = Info.FirstCandidate;
+		BestScore = Cd.Votes;
+		while(Cd != none && Cd.Votes == BestScore) {
+			CountTiedCandidates++;
+			Cd = Cd.Next;
+		}
+
 		TiedCandidatesFraction = 1.0 / CountTiedCandidates;
 		RandomCandidate = FRand(); // [0..1] // inclusive at both ends
 
-		for (i = 0; i < Info.NumCandidates; i++) {
-			if (Info.GetCandidateVotes(i) == BestScore) {
-				RandomCandidate -= TiedCandidatesFraction;
-				if (RandomCandidate <= 0.0) {
-					// this is the one
-					break;
-				}
+		for (Cd = Info.FirstCandidate; Cd != none; Cd = Cd.Next) {
+			RandomCandidate -= TiedCandidatesFraction;
+			if (RandomCandidate <= 0.0) {
+				// this is the one
+				break;
 			}
 		}
 
-		VotedPreset = Info.GetCandidateInternalPreset(i);
-		VotedMap = Info.GetCandidateInternalMap(i);
+		VotedPreset = Cd.PresetRef;
+		VotedMap = Cd.MapRef;
 	}
 
 	if (CountTiedCandidates == 0) {
@@ -703,6 +702,8 @@ function CheckVotedMap() {
 function bool CheckVoteEndConditions() {
 	local Pawn P;
 	local VS_ChannelContainer C;
+	local int VotesFirst;
+	local int VotesSecond;
 	local int NumVoters;
 	local int NumVotes;
 
@@ -724,7 +725,13 @@ function bool CheckVoteEndConditions() {
 		if (NumVotes == NumVoters)
 			return true;
 	} else if (Settings.VoteEndCondition == VEC_TimerOrResultDetermined) {
-		if (Info.GetCandidateVotes(0) - Info.GetCandidateVotes(1) > NumVoters - NumVotes)
+		if (Info.FirstCandidate != none) {
+			VotesFirst = Info.FirstCandidate.Votes;
+			if (Info.FirstCandidate.Next != none)
+				VotesSecond = Info.FirstCandidate.Next.Votes;
+		}
+
+		if (VotesFirst - VotesSecond > NumVoters - NumVotes)
 			return true;
 	}
 
