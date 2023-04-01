@@ -263,7 +263,7 @@ function ServerVote(string Category, string PresetName, string MapName) {
 	if (PlayerOwner.PlayerReplicationInfo.bAdmin == false) {
 		if (VotePreset == P && VoteMap == M)
 			return;
-		if (P.MaxSequenceNumber - M.Sequence < P.MinimumMapRepeatDistance)
+		if (M.Sequence > 0 && P.MaxSequenceNumber - M.Sequence < P.MinimumMapRepeatDistance)
 			return;
 	}
 
