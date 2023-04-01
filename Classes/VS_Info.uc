@@ -28,7 +28,8 @@ simulated event Timer() {
 	local VS_PlayerInfo P;
 
 	foreach AllActors(class'VS_PlayerInfo', P)
-		PlayerInfo[i++] = P;
+		if (i < arraycount(PlayerInfo))
+			PlayerInfo[i++] = P;
 	
 	while(i < arraycount(PlayerInfo))
 		PlayerInfo[i++] = none;
