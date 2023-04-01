@@ -66,7 +66,7 @@ function Created() {
 	ChatEdit = UWindowEditControl(CreateControl(class'UWindowEditControl', 200, TabsHeight + 338, 220, 12));
 	ChatEdit.EditBoxWidth = ChatEdit.WinWidth;
 	ChatEdit.SetHistory(true);
-	ChatSay = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 425, TabsHeight + 338, 45, 12));
+	ChatSay = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 424, TabsHeight + 338, 46, 12));
 	ChatSay.SetText(ChatSayText);
 
 	CloseButton = UWindowSmallCloseButton(CreateControl(class'UWindowSmallCloseButton', 480, TabsHeight + 338, 100, 12));
