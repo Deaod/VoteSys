@@ -81,7 +81,7 @@ function RemMapVote(VS_PlayerChannel Origin, VS_Preset P, VS_Map M) {
 	for (C = FirstCandidate; C != none; C = C.Next) {
 		if (C.PresetRef == P && C.MapRef == M) {
 			C.Votes -= 1;
-			if (bRetainCandidates == false && C.Votes == 0) {
+			if (VoteSys.Settings.bRetainCandidates == false && C.Votes == 0) {
 				C.Remove();
 				C.Destroy();
 			} else {
