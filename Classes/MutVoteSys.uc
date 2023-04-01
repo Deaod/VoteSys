@@ -700,7 +700,6 @@ function CheckVotedMap() {
 }
 
 function bool CheckVoteEndConditions() {
-	local Pawn P;
 	local VS_ChannelContainer C;
 	local int VotesFirst;
 	local int VotesSecond;
@@ -713,13 +712,14 @@ function bool CheckVoteEndConditions() {
 	if (Settings.VoteEndCondition == VEC_TimerOnly)
 		return false;
 
-	for (P = Level.PawnList; P != none; P = P.NextPawn)
-		if (P.IsA('PlayerPawn') && CanVote(PlayerPawn(P)) && P.IsA('Spectator') == false)
-			NumVoters++;
-
-	for (C = ChannelList; C != none; C = C.Next)
-		if (C.PlayerOwner != none && C.Channel != none && C.Channel.bHasVoted)
-			NumVotes++;
+	for (C = ChannelList; C != none; C = C.Next) {
+		if (C.PlayerInfo != none) {
+			if (C.PlayerInfo.bIsPlayer)
+				NumVoters++;
+			if (C.PlayerInfo.bHasVoted)
+				NumVotes++;
+		}
+	}
 
 	if (Settings.VoteEndCondition == VEC_TimerOrAllVotesIn) {
 		if (NumVotes == NumVoters)
