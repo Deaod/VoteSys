@@ -18,6 +18,7 @@ var config int MidGameVoteTimeLimit;
 var config int GameEndedVoteDelay;
 var config int VoteTimeLimit;
 var config EVoteEndCond VoteEndCondition;
+var config bool bRetainCandidates; 
 
 var config float KickVoteThreshold;
 

@@ -54,6 +54,7 @@ VoteTimeLimit=30
 MidGameVoteThreshold=0.5
 MidGameVoteTimeLimit=30
 VoteEndCondition=VEC_TimerOnly
+bRetainCandidates=False
 MinimumMapRepeatDistance=0
 KickVoteThreshold=0.6
 DefaultTimeMessageClass=Botpack.TimeMessage
@@ -120,6 +121,12 @@ Votes end after the timer runs out, or sooner if all eligible voters have cast t
 Votes end after the timer runs out, or sooner if the outstanding votes can no longer influence the result.
 
 Defaults to `VEC_TimerOnly`.
+
+#### bRetainCandidates
+
+If true, candidates that no longer have any votes for them get retained. If false, candidates with no votes disappear from the list.
+
+Defaults to false.
 
 #### MinimumRepeatDistance
 
