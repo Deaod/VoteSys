@@ -357,14 +357,23 @@ function UpdatePlayerVoteInformation() {
 
 	i = 0;
 	for (C = ChannelList; C != none; C = C.Next) {
-		if (i < arraycount(Info.PlayerInfo) && C.Channel != none) {
-			C.PlayerInfo.PRI = C.PlayerOwner.PlayerReplicationInfo;
-			C.PlayerInfo.bHasVoted = C.Channel.bHasVoted;
-			C.PlayerInfo.bCanVote = CanVote(C.PlayerOwner);
-			C.PlayerInfo.bIsPlayer = C.PlayerOwner != none && C.PlayerOwner.Player != none;
-
-			if (C.PlayerInfo.bCanVote == false && C.Channel.bHasVoted)
-				C.Channel.ClearVote();
+		if (i < arraycount(Info.PlayerInfo) && C.PlayerInfo != none) {
+			if (C.PlayerOwner != none) {
+				C.PlayerInfo.PRI = C.PlayerOwner.PlayerReplicationInfo;
+				C.PlayerInfo.bIsPlayer = C.PlayerOwner.Player != none;
+			} else {
+				C.PlayerInfo.PRI = none;
+				C.PlayerInfo.bIsPlayer = false;
+			}
+			if (C.Channel != none) {
+				C.PlayerInfo.bHasVoted = C.Channel.bHasVoted;
+				C.PlayerInfo.bCanVote = CanVote(C.PlayerOwner);
+				if (C.PlayerInfo.bCanVote == false && C.Channel.bHasVoted)
+					C.Channel.ClearVote();
+			} else {
+				C.PlayerInfo.bHasVoted = false;
+				C.PlayerInfo.bCanVote = false;
+			}
 		}
 	}
 
