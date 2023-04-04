@@ -27,6 +27,9 @@ function int FindIndexForMap(string MapName) {
 			return Index;
 	}
 
+	if (Index < Maps.Length && Caps(Maps[Index]) < Caps(MapName))
+		Index += 1;
+
 	return Index;
 }
 
@@ -46,8 +49,6 @@ function AddMap(string MapName) {
 	if (i < Maps.Length && Maps[i] ~= MapName)
 		return;
 
-	if (i < Maps.Length && Caps(Maps[i]) < Caps(MapName))
-		i += 1;
 	Maps.Insert(i, 1);
 	Maps[i] = MapName;
 }
@@ -56,7 +57,7 @@ function RemoveMap(string MapName) {
 	local int i;
 
 	i = FindIndexForMap(MapName);
-	if (Maps[i] ~= MapName)
+	if (i < Maps.Length && Maps[i] ~= MapName)
 		Maps.Remove(i, 1);
 }
 
