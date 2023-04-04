@@ -1275,7 +1275,7 @@ function AddMapsToMapList(array<string> MapArray, VS_MapList MapList, VS_MapList
 	local string MapName;
 	local int i;
 
-	if (IgnoredMaps == none) {
+	if (IgnoredMaps == none || IgnoredMaps.Maps.Length == 0) {
 		AddAllMapsToMapList(MapArray, MapList);
 	} else {
 		for (i = 0; i < MapArray.Length; i++)

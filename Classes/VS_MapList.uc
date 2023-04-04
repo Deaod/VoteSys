@@ -17,8 +17,8 @@ function int FindIndexForMap(string MapName) {
 	C = Maps.Length - 1;
 
 	while(F <= C) {
-		CompMap = Caps(Maps[Index]);
 		Index = F + ((C - F) / 2);
+		CompMap = Caps(Maps[Index]);
 		if (CompMap < MapName)
 			F = Index+1;
 		else if (CompMap > MapName)
@@ -46,6 +46,8 @@ function AddMap(string MapName) {
 	if (i < Maps.Length && Maps[i] ~= MapName)
 		return;
 
+	if (i < Maps.Length && Caps(Maps[i]) < Caps(MapName))
+		i += 1;
 	Maps.Insert(i, 1);
 	Maps[i] = MapName;
 }
