@@ -20,15 +20,12 @@ function int FindIndexForMap(string MapName) {
 		Index = F + ((C - F) / 2);
 		CompMap = Caps(Maps[Index]);
 		if (CompMap < MapName)
-			F = Index+1;
+			F = ++Index;
 		else if (CompMap > MapName)
 			C = Index-1;
 		else
 			return Index;
 	}
-
-	if (Index < Maps.Length && Caps(Maps[Index]) < Caps(MapName))
-		Index += 1;
 
 	return Index;
 }

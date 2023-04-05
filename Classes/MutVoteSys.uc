@@ -1236,7 +1236,7 @@ function VS_MapList LoadMapListByPrefix(string Prefix) {
 	MapName = FirstMap;
 
 	do {
-		ML.AddMap(CleanMapName(MapName));
+		ML.AddMap(Left(MapName, Len(MapName) - 4)); // we dont care about extension
 		MapName = GetMapName(Prefix, MapName, 1);
 	} until(MapName == FirstMap);
 
