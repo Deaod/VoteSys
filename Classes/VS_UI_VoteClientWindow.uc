@@ -168,6 +168,7 @@ function ApplyTheme(byte Theme) {
 	if (T == none)
 		T = new class'VS_UI_ThemeBright';
 
+	Presets.Theme = T;
 	MapFilter.Theme = T;
 	MapListBox.Theme = T;
 	VoteListBox.Theme = T;
