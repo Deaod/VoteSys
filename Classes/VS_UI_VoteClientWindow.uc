@@ -125,7 +125,10 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 		if (MapScreenshotWindow.bWindowVisible)
 			MapScreenshotWindow.HideWindow();
 	}
-	if (((L.TimeSeconds - LastMouseMoveTime) > (L.TimeDilation * 0.5)) && (MapListBox.HoverItem != none)) {
+	if (((L.TimeSeconds - LastMouseMoveTime) > (L.TimeDilation * 0.5)) &&
+	    (MapListBox.HoverItem != none) &&
+	    (Presets.bListVisible == false)
+	) {
 		if (MapScreenshotWindow.bWindowVisible == false) {
 			MapScreenshotWindow.ShowWindow();
 
