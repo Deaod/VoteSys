@@ -15,6 +15,11 @@ function Created() {
 	WindowTitle = default.WindowTitle@"-"@class'VersionInfo'.default.PackageVersion;
 }
 
+function LoadSettings(VS_ClientSettings CS) {
+	Settings = CS;
+	VS_UI_VoteClientWindow(ClientArea).LoadSettings(CS);
+}
+
 function BeforePaint(Canvas C, float X, float Y) {
 	if (bPlaced == false) {
 		WinLeft = FMax((C.SizeX/Root.GUIScale - WinWidth) / 2.0, 0.0);

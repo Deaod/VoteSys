@@ -1,5 +1,6 @@
 class VS_UI_ChatArea extends UWindowDynamicTextArea;
 
+var VS_UI_ThemeBase Theme;
 var GameReplicationInfo GRI;
 
 function Paint(Canvas C, float MouseX, float MouseY) {
@@ -27,13 +28,8 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 	ContentLeft = LookAndFeel.MiscBevelL[BevelType].W;
 	ContentTop = LookAndFeel.MiscBevelT[BevelType].H;
 
-	C.DrawColor.R = 255;
-	C.DrawColor.G = 255;
-	C.DrawColor.B = 255;
-	DrawStretchedTexture(C, 0, 0, WinWidth - VSBWidth, WinHeight, Texture'WhiteTexture');
-	DrawMiscBevel(C, 0, 0, WinWidth - VSBWidth, WinHeight, LookAndFeel.Misc, BevelType);
-
-
+	Theme.DrawBox(C, self, 0, 0, WinWidth - VSBWidth, WinHeight);
+	
 	OrgX = C.OrgX; OrgY = C.OrgY;
 	ClipX = C.ClipX; ClipY = C.ClipY;
 	OldClipRegion = ClippingRegion;
@@ -47,7 +43,7 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 	ClippingRegion.W = ContentWidth;
 	ClippingRegion.H = COntentHeight;
 
-	C.DrawColor = TextColor;
+	C.DrawColor = Theme.Foreground;
 
 	if(AbsoluteFont != None)
 		C.Font = AbsoluteFont;
@@ -172,7 +168,7 @@ function float DrawTextLine2(Canvas C, UWindowDynamicTextRow L, float Y, float W
 
 	C.DrawColor = M.PlayerColor;
 	TextAreaClipText(C, X, Y, M.PlayerName);
-	C.DrawColor = TextColor;
+	C.DrawColor = Theme.Foreground;
 
 	return DefaultTextHeight;
 }

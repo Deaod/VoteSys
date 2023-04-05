@@ -1,5 +1,7 @@
 class VS_UI_PlayerListBox extends UWindowListBox;
 
+var VS_UI_ThemeBase Theme;
+
 var UWindowCheckbox DummyCheckbox;
 
 var float CheckboxOffsetX;
@@ -58,18 +60,23 @@ function UWindowListBoxItem GetItemAt(float MouseX, float MouseY) {
 
 function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H) {
 	local VS_UI_PlayerListItem I;
+	local color SavedColor;
 	I = VS_UI_PlayerListItem(Item);
 
 	if (I.bHover) {
-		C.DrawColor.r = 192;
-		C.DrawColor.g = 192;
-		C.DrawColor.b = 192;
+		C.DrawColor = Theme.HighlitBG;
 		DrawStretchedTexture(C, X, Y, W, H, Texture'WhiteTexture');
+		C.DrawColor = Theme.HighlitFG;
+	} else {
+		C.DrawColor = Theme.Foreground;
 	}
 
-	C.DrawColor.r = 255;
-	C.DrawColor.g = 255;
-	C.DrawColor.b = 255;
+	SavedColor = C.DrawColor;
+
+	C.DrawColor.R = 255;
+	C.DrawColor.G = 255;
+	C.DrawColor.B = 255;
+	C.DrawColor.A = 255;
 
 	DummyCheckbox.bChecked = I.PlayerInfo.bHasVoted;
 	DummyCheckbox.bDisabled = I.PlayerInfo.bCanVote == false;
@@ -80,9 +87,7 @@ function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H
 
 	C.Font = Root.Fonts[F_Normal];
 
-	C.DrawColor.r = 0;
-	C.DrawColor.g = 0;
-	C.DrawColor.b = 0;
+	C.DrawColor = SavedColor;
 	ClipText(C, X+PlayerNameOffsetX, Y+PlayerNameOffsetY, I.PlayerInfo.PRI.PlayerName);
 
 	if (GRI != none &&
@@ -146,11 +151,7 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 
 	BevelType = LookAndFeel.EditBoxBevel;
 
-	C.DrawColor.R = 255;
-	C.DrawColor.G = 255;
-	C.DrawColor.B = 255;
-	DrawStretchedTexture(C, 0, 0, WinWidth - VertSB.WinWidth, WinHeight, Texture'WhiteTexture');
-	DrawMiscBevel(C, 0, 0, WinWidth - VertSB.WinWidth, WinHeight, LookAndFeel.Misc, BevelType);
+	Theme.DrawBox(C, self, 0, 0, WinWidth - VertSB.WinWidth, WinHeight);
 
 	CurItem = Items.Next;
 	i = 0;

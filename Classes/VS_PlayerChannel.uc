@@ -116,7 +116,7 @@ simulated function TryCreateVoteMenuDialog() {
 		if (VoteMenuDialog == none)
 			return;
 		VoteMenuDialog.Channel = self;
-		VoteMenuDialog.Settings = Settings;
+		VoteMenuDialog.LoadSettings(Settings);
 		VoteMenuDialog.HideWindow();
 
 	}
@@ -149,7 +149,7 @@ simulated function CreateVoteMenuDialog() {
 			0,0 // Size set internally
 		));
 		VoteMenuDialog.Channel = self;
-		VoteMenuDialog.Settings = Settings;
+		VoteMenuDialog.LoadSettings(Settings);
 		VoteMenuDialog.HideWindow();
 
 		if (VoteMenuDialog == none) {

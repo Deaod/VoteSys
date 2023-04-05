@@ -1,5 +1,7 @@
 class VS_UI_EditControl extends UWindowEditControl;
 
+var VS_UI_ThemeBase Theme;
+
 function Created()
 {
 	local VS_UI_EditBox EB;
@@ -28,6 +30,13 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 
 	Text2 = Text;
 	Text = "";
-	super.Paint(C, MouseX, MouseY);
+	Theme.DrawBox(C, self, EditAreaDrawX, 0, EditBoxWidth, WinHeight);
+	super(UWindowDialogControl).Paint(C, MouseX, MouseY);
 	Text = Text2;
+}
+
+function BeforePaint(Canvas C, float MouseX, float MouseY) {
+	super.BeforePaint(C, MouseX, MouseY);
+	EditBox.TextColor = Theme.Foreground;
+	VS_UI_EditBox(EditBox).EmptyTextColor = Theme.InactiveFG;
 }

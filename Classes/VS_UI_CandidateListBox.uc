@@ -1,5 +1,7 @@
 class VS_UI_CandidateListBox extends UWindowListBox;
 
+var VS_UI_ThemeBase Theme;
+
 var VS_UI_CandidateListItem HoverItem;
 var localized string PresetColumnHeader;
 var localized string MapColumnHeader;
@@ -40,45 +42,21 @@ function UWindowListBoxItem GetItemAt(float MouseX, float MouseY) {
 
 function CalcColors(VS_UI_CandidateListItem Item, int Index, out color BG, out color FG, out color Sep) {
 	if (Item.bSelected) {
-		BG.r = 0;
-		BG.g = 0;
-		BG.b = 128;
-		FG.r = 255;
-		FG.g = 255;
-		FG.b = 255;
-		Sep.r = 128;
-		Sep.g = 128;
-		Sep.b = 128;
+		FG = Theme.SelectFG;
+		BG = Theme.SelectBG;
+		Sep = Theme.SelectSep;
 	} else if (Item.bHover) {
-		BG.r = 192;
-		BG.g = 192;
-		BG.b = 192;
-		FG.r = 0;
-		FG.g = 0;
-		FG.b = 0;
-		Sep.r = 32;
-		Sep.g = 32;
-		Sep.b = 32;
+		FG = Theme.HighlitFG;
+		BG = Theme.HighlitBG;
+		Sep = Theme.HighlitSep;
 	} else if ((Index & 1) != 0) {
-		BG.r = 224;
-		BG.g = 224;
-		BG.b = 224;
-		FG.r = 0;
-		FG.g = 0;
-		FG.b = 0;
-		Sep.r = 64;
-		Sep.g = 64;
-		Sep.b = 64;
+		FG = Theme.ForegroundAlt;
+		BG = Theme.BackgroundAlt;
+		Sep = Theme.SeparatorAlt;
 	} else {
-		BG.r = 255;
-		BG.g = 255;
-		BG.b = 255;
-		FG.r = 0;
-		FG.g = 0;
-		FG.b = 0;
-		Sep.r = 96;
-		Sep.g = 96;
-		Sep.b = 96;
+		FG = Theme.Foreground;
+		BG = Theme.Background;
+		Sep = Theme.Separator;
 	}
 }
 
@@ -162,20 +140,14 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 
 	BevelType = LookAndFeel.EditBoxBevel;
 
-	C.DrawColor.R = 255;
-	C.DrawColor.G = 255;
-	C.DrawColor.B = 255;
-	DrawStretchedTexture(C, 0, 0, WinWidth - VertSB.WinWidth, WinHeight, Texture'WhiteTexture');
-	DrawMiscBevel(C, 0, 0, WinWidth - VertSB.WinWidth, WinHeight, LookAndFeel.Misc, BevelType);
+	Theme.DrawBox(C, self, 0, 0, WinWidth - VertSB.WinWidth, WinHeight);
 
 	CurItem = Items.Next;
 	i = 0;
 	ItemWidth = WinWidth - VertSB.WinWidth - LookAndFeel.MiscBevelL[BevelType].W - LookAndFeel.MiscBevelR[BevelType].W;
 	YLimit = WinHeight - LookAndFeel.MiscBevelT[BevelType].H - LookAndFeel.MiscBevelB[BevelType].H - (ItemHeight + 1);
 
-	C.DrawColor.R = 160;
-	C.DrawColor.G = 160;
-	C.DrawColor.B = 160;
+	C.DrawColor = Theme.HighlitBG;
 	DrawStretchedTexture(
 		C,
 		LookAndFeel.MiscBevelL[BevelType].W,
@@ -185,9 +157,7 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 		Texture'WhiteTexture'
 	);
 
-	C.DrawColor.R = 96;
-	C.DrawColor.G = 96;
-	C.DrawColor.B = 96;
+	C.DrawColor = Theme.Separator;
 	DrawStretchedTexture(
 		C,
 		LookAndFeel.MiscBevelL[BevelType].W,
@@ -213,9 +183,7 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 		Texture'WhiteTexture'
 	);
 
-	C.DrawColor.R = 0;
-	C.DrawColor.G = 0;
-	C.DrawColor.B = 0;
+	C.DrawColor = Theme.Foreground;
 	C.StrLen(PresetColumnHeader, XL, YL);
 	XL /= Root.GUIScale;
 	ClipText(
@@ -259,9 +227,7 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 	ClippingRegion.W = ItemWidth;
 	ClippingRegion.H = YLimit;
 
-	C.DrawColor.R = 96;
-	C.DrawColor.G = 96;
-	C.DrawColor.B = 96;
+	C.DrawColor = Theme.Separator;
 	DrawStretchedTexture(C, 165, 0, 1, YLimit, Texture'WhiteTexture');
 	DrawStretchedTexture(C, 355, 0, 1, YLimit, Texture'WhiteTexture');
 	C.DrawColor.R = 255;

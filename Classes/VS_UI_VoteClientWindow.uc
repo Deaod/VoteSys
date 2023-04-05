@@ -3,6 +3,8 @@ class VS_UI_VoteClientWindow extends UWindowDialogClientWindow;
 #exec TEXTURE IMPORT Name="Gear" File="Textures/Gear.pcx" MIPS=OFF FLAGS=2
 
 var VS_PlayerChannel Channel;
+var VS_ClientSettings Settings;
+var int ActiveTheme;
 
 var VS_UI_CategoryTabItem ActiveCategory;
 var VS_Preset ActivePreset;
@@ -26,7 +28,7 @@ var VS_UI_CandidateListBox VoteListBox;
 var VS_UI_PlayerListBox PlayerListBox;
 
 var VS_UI_ChatArea ChatArea;
-var UWindowEditControl ChatEdit;
+var VS_UI_EditControl ChatEdit;
 var UWindowSmallButton ChatSay;
 var localized string ChatSayText;
 var localized string ChatTeamSayText;
@@ -63,7 +65,7 @@ function Created() {
 	PlayerListBox = VS_UI_PlayerListBox(CreateControl(class'VS_UI_PlayerListBox', 480, TabsHeight + 120, 120, 214));
 
 	ChatArea = VS_UI_ChatArea(CreateControl(class'VS_UI_ChatArea', 200, TabsHeight + 120, 270, 214));
-	ChatEdit = UWindowEditControl(CreateControl(class'UWindowEditControl', 200, TabsHeight + 338, 220, 12));
+	ChatEdit = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, TabsHeight + 338, 220, 12));
 	ChatEdit.EditBoxWidth = ChatEdit.WinWidth;
 	ChatEdit.SetHistory(true);
 	ChatSay = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 424, TabsHeight + 338, 46, 12));
@@ -77,6 +79,10 @@ function Created() {
 	MapScreenshotWindow.HideWindow();
 }
 
+function LoadSettings(VS_ClientSettings CS) {
+	Settings = CS;
+}
+
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	local VS_Info Info;
 	local LevelInfo L;
@@ -86,6 +92,11 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	local VS_UI_MapListItem M;
 
 	super.BeforePaint(C, MouseX, MouseY);
+
+	if (Settings.Theme != ActiveTheme) {
+		ActiveTheme = Settings.Theme;
+		ApplyTheme(ActiveTheme);
+	}
 
 	Info = Channel.VoteInfo();
 
@@ -143,6 +154,26 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 				M.bFilteredOut = false;
 		}
 	}
+}
+
+function ApplyTheme(byte Theme) {
+	local VS_UI_ThemeBase T;
+
+	if (Theme == 0) { // ETheme.TH_Bright
+		T = new class'VS_UI_ThemeBright';
+	} else if (Theme == 1) { // ETheme.TH_Dark
+		T = new class'VS_UI_ThemeDark';
+	}
+
+	if (T == none)
+		T = new class'VS_UI_ThemeBright';
+
+	MapFilter.Theme = T;
+	MapListBox.Theme = T;
+	VoteListBox.Theme = T;
+	PlayerListBox.Theme = T;
+	ChatArea.Theme = T;
+	ChatEdit.Theme = T;
 }
 
 function Paint(Canvas C, float MouseX, float MouseY) {
@@ -380,6 +411,8 @@ function Close(optional bool bByParent) {
 }
 
 defaultproperties {
+	ActiveTheme=-1
+	
 	MapFilterText="Filter Maps By Name"
 	VoteButtonText="Vote"
 	RandomButtonText="Random"

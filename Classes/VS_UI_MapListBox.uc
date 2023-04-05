@@ -1,5 +1,7 @@
 class VS_UI_MapListBox extends UWindowListBox;
 
+var VS_UI_ThemeBase Theme;
+
 var VS_UI_MapListItem HoverItem;
 
 function UWindowListBoxItem GetItemAt(float MouseX, float MouseY) {
@@ -45,29 +47,17 @@ function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H
 	local VS_UI_MapListItem I;
 	I = VS_UI_MapListItem(Item);
 	if (I.bEnabled == false) {
-		C.DrawColor.r = 128;
-		C.DrawColor.g = 128;
-		C.DrawColor.b = 128;
+		C.DrawColor = Theme.InactiveFG;
 	} else if (I.bSelected) {
-		C.DrawColor.r = 0;
-		C.DrawColor.g = 0;
-		C.DrawColor.b = 128;
+		C.DrawColor = Theme.SelectBG;
 		DrawStretchedTexture(C, X, Y, W, H, Texture'WhiteTexture');
-		C.DrawColor.r = 255;
-		C.DrawColor.g = 255;
-		C.DrawColor.b = 255;
+		C.DrawColor = Theme.SelectFG;
 	} else if (I.bHover) {
-		C.DrawColor.r = 192;
-		C.DrawColor.g = 192;
-		C.DrawColor.b = 192;
+		C.DrawColor = Theme.HighlitBG;
 		DrawStretchedTexture(C, X, Y, W, H, Texture'WhiteTexture');
-		C.DrawColor.r = 0;
-		C.DrawColor.g = 0;
-		C.DrawColor.b = 0;
+		C.DrawColor = Theme.HighlitFG;
 	} else {
-		C.DrawColor.r = 0;
-		C.DrawColor.g = 0;
-		C.DrawColor.b = 0;
+		C.DrawColor = Theme.Foreground;
 	}
 
 	C.Font = Root.Fonts[F_Normal];
@@ -118,11 +108,7 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 
 	BevelType = LookAndFeel.EditBoxBevel;
 
-	C.DrawColor.R = 255;
-	C.DrawColor.G = 255;
-	C.DrawColor.B = 255;
-	DrawStretchedTexture(C, 0, 0, WinWidth - VertSB.WinWidth, WinHeight, Texture'WhiteTexture');
-	DrawMiscBevel(C, 0, 0, WinWidth - VertSB.WinWidth, WinHeight, LookAndFeel.Misc, BevelType);
+	Theme.DrawBox(C, self, 0, 0, WinWidth - VertSB.WinWidth, WinHeight);
 
 	CurItem = Items.Next;
 	i = 0;
