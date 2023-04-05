@@ -17,10 +17,10 @@ function int FindIndexForMap(string MapName) {
 	C = Maps.Length - 1;
 
 	while(F <= C) {
-		CompMap = Caps(Maps[Index]);
 		Index = F + ((C - F) / 2);
+		CompMap = Caps(Maps[Index]);
 		if (CompMap < MapName)
-			F = Index+1;
+			F = ++Index;
 		else if (CompMap > MapName)
 			C = Index-1;
 		else
@@ -54,7 +54,7 @@ function RemoveMap(string MapName) {
 	local int i;
 
 	i = FindIndexForMap(MapName);
-	if (Maps[i] ~= MapName)
+	if (i < Maps.Length && Maps[i] ~= MapName)
 		Maps.Remove(i, 1);
 }
 
