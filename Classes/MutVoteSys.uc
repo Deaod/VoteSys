@@ -1178,6 +1178,8 @@ function VS_MapList LoadMapList(class<GameInfo> Game, name ListName) {
 	// As before, see if the list already exists for the specified game type.
 	ML = LoadMapListByPrefix(Game.default.MapPrefix);
 
+	ML.RemoveMap(Game.default.MapPrefix$"-Tutorial");
+
 	return ML;
 }
 
@@ -1239,12 +1241,6 @@ function VS_MapList LoadMapListByPrefix(string Prefix) {
 		ML.AddMap(Left(MapName, Len(MapName) - 4)); // we dont care about extension
 		MapName = GetMapName(Prefix, MapName, 1);
 	} until(MapName == FirstMap);
-
-	if (Right(Prefix, 1) == "-") {
-		ML.RemoveMap(Prefix$"Tutorial");
-	} else {
-		ML.RemoveMap(Prefix$"-Tutorial");
-	}
 
 	return ML;
 }
