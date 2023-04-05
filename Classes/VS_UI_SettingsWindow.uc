@@ -14,6 +14,11 @@ function Created() {
 	WinHeight = 400;
 }
 
+function LoadSettings(VS_ClientSettings CS) {
+	Settings = CS;
+	VS_UI_SettingsClientWindow(ClientArea).LoadSettings(CS);
+}
+
 function BeforePaint(Canvas C, float X, float Y) {
 	if (bPlaced == false) {
 		WinLeft = FMax((C.SizeX/Root.GUIScale - WinWidth) / 2.0, 0.0);

@@ -242,7 +242,6 @@ simulated function ShowSettings() {
 			0,0 // Size set internally
 		));
 		SettingsDialog.Channel = self;
-		SettingsDialog.Settings = Settings;
 		SettingsDialog.HideWindow();
 
 		if (SettingsDialog == none) {
@@ -252,6 +251,7 @@ simulated function ShowSettings() {
 	}
 
 	SettingsDialog.bLeaveOnscreen = true;
+	SettingsDialog.LoadSettings(Settings);
 	SettingsDialog.ShowWindow();
 }
 
