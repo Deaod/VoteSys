@@ -847,6 +847,11 @@ function AddClassesToPackageMap(string Classes, out array<string> PkgMap) {
 function AddClassToPackageMap(string ClassName, out array<string> PkgMap) {
 	local string P;
 	local class C;
+	local int Pos;
+
+	Pos = InStr(ClassName, " ");
+	if (Pos >= 0)
+		ClassName = Left(ClassName, Pos);
 
 	if (ClassName == "")
 		return;
@@ -892,8 +897,16 @@ function SortMutators(string CombinedList, out string Mutators, out string Actor
 		SortMutator(Classes[i], Mutators, Actors);
 }
 
-function SortMutator(string ClassName, out string Mutators, out string Actors) {
+function SortMutator(string Mut, out string Mutators, out string Actors) {
 	local class C;
+	local int Pos;
+	local string ClassName;
+
+	Pos = InStr(Mut, " ");
+	if (Pos >= 0)
+		ClassName = Left(Mut, Pos);
+	else
+		ClassName = Mut;
 
 	if (ClassName == "")
 		return;
@@ -910,9 +923,9 @@ function SortMutator(string ClassName, out string Mutators, out string Actors) {
 		}
 	} else if (InStr(Actors, ClassName) == -1) {
 		if (Len(Actors) <= 0) {
-			Actors = ClassName;
+			Actors = Mut;
 		} else {
-			Actors = Actors$","$ClassName;
+			Actors = Actors$","$Mut;
 		}
 	}
 }
