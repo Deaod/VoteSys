@@ -15,6 +15,14 @@ var config float MenuY;
 var config float SettingsX;
 var config float SettingsY;
 
+static final function ETheme IntToTheme(int A) {
+	switch(A) {
+		case 0: return TH_Bright;
+		case 1: return TH_Dark;
+	}
+	return default.Theme;
+}
+
 defaultproperties {
 	Theme=TH_Bright
 	

@@ -162,10 +162,13 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 function ApplyTheme(byte Theme) {
 	local VS_UI_ThemeBase T;
 
-	if (Theme == 0) { // ETheme.TH_Bright
-		T = new class'VS_UI_ThemeBright';
-	} else if (Theme == 1) { // ETheme.TH_Dark
-		T = new class'VS_UI_ThemeDark';
+	switch(Settings.IntToTheme(Theme)) {
+		case TH_Bright:
+			T = new class'VS_UI_ThemeBright';
+			break;
+		case TH_Dark:
+			T = new class'VS_UI_ThemeDark';
+			break;
 	}
 
 	if (T == none)
