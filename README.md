@@ -310,7 +310,7 @@ Each preset has a `Name`, a `Category` and an `Abbreviation`.
 `Name` may not be blank.
 
 #### Inheriting From Other Preset
-`InheritFrom` is used to inherit certain elements from other presets. You can only inherit from presets that are located above the current preset according to the number after `VS_ConfigPreset` inside the section title.
+`InheritFrom` is used to inherit certain elements from other presets.
 
 You can inherit from an arbitrary number of other presets.  
 Refer to other preset using their [full preset names](#full-preset-names).

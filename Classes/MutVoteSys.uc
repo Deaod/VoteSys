@@ -1073,31 +1073,32 @@ function LoadConfig() {
 		ProbeDepth = 0;
 
 		if (PresetList == none) {
-			P = LoadPreset(PC);
+			P = LoadPresetPassOne(PC);
 			PresetList = P;
 		} else {
-			P.Next = LoadPreset(PC);
+			P.Next = LoadPresetPassOne(PC);
 			if (P.Next != none)
 				P = P.Next;
 		}
+	};
 
-		if ((DefaultPresetRef == none) ||
+	for (P = PresetList; P != none; P = P.Next) {
+		LoadPresetPassTwo(P);
+
+		if ((DefaultPresetRef == none && P.bDisabled == false) ||
 			(P != none && Settings.DefaultPreset != "" && P.GetFullName() == Settings.DefaultPreset) ||
 			(P != none && Settings.DefaultPreset == "" && CurrentPreset != "" && P.GetFullName() == CurrentPreset))
 			DefaultPresetRef = P;
-	};
+	}
 
-	if (PresetList == none) {
+	if (DefaultPresetRef == none) {
 		Level.Game.SetPropertyText("bDontRestart", "False");
 		Destroy();
 	}
 }
 
-function VS_Preset LoadPreset(VS_PresetConfig PC) {
-	local class<GameInfo> Game;
+function VS_Preset LoadPresetPassOne(VS_PresetConfig PC) {
 	local VS_Preset P;
-	local VS_Preset Base;
-	local int i;
 
 	Log("Adding Preset '"$PC.Category$"/"$PC.PresetName$"' ("$PC.Abbreviation$")", 'VoteSys');
 
@@ -1105,6 +1106,29 @@ function VS_Preset LoadPreset(VS_PresetConfig PC) {
 	P.PresetName   = PC.PresetName;
 	P.Abbreviation = PC.Abbreviation;
 	P.Category     = PC.Category;
+	P.Storage      = PC;
+
+	return P;
+}
+
+function LoadPresetPassTwo(VS_Preset P) {
+	local VS_PresetConfig PC;
+	local class<GameInfo> Game;
+	local VS_Preset Base;
+	local int i;
+
+	if (P.bLoaded)
+		return;
+
+	if (P.bLoading) {
+		Log("    Preset '"$P.GetFullName()$"' is already being loaded. Circular reference detected.", 'VoteSys');
+		return;
+	}
+
+	Log("Loading Preset '"$P.GetFullName()$"'", 'VoteSys');
+
+	P.bLoading = true;
+	PC = P.Storage;
 	P.MinimumMapRepeatDistance = PC.MinimumMapRepeatDistance;
 
 	for (i = 0; i < PC.InheritFrom.Length; i++) {
@@ -1113,9 +1137,11 @@ function VS_Preset LoadPreset(VS_PresetConfig PC) {
 
 		Base = FindPreset(PC.InheritFrom[i]);
 		if (Base == none) {
-			Log("    Base '"$PC.InheritFrom[i]$"' does not exist. Make sure base presets are added before inheriting from them.", 'VoteSys');
+			Log("    Base '"$PC.InheritFrom[i]$"' does not exist.", 'VoteSys');
 			continue;
 		}
+		
+		LoadPresetPassTwo(Base);
 
 		if (P.Game == none)
 			P.Game = Base.Game;
@@ -1155,7 +1181,8 @@ function VS_Preset LoadPreset(VS_PresetConfig PC) {
 	for (i = 0; i < PC.Packages.Length; i++)
 		P.AppendPackage(PC.Packages[i]);
 
-	return P;
+	P.bLoaded = true;
+	P.bLoading = false;
 }
 
 function VS_Map LoadMapList(class<GameInfo> Game, name ListName) {
