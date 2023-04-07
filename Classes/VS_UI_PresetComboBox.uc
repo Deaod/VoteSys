@@ -1,6 +1,4 @@
-class VS_UI_PresetComboBox extends UWindowComboControl;
-
-var VS_UI_ThemeBase Theme;
+class VS_UI_PresetComboBox extends VS_UI_ComboControl;
 
 var VS_Preset SelectedPreset;
 
@@ -21,16 +19,6 @@ function FocusPreset(string PresetName) {
 			List.ExecuteItem(List.Selected);
 		}
 	}
-}
-
-function Paint(Canvas C, float MouseX, float MouseY) {
-	Theme.DrawBox(C, self, EditAreaDrawX, 0, EditBoxWidth, WinHeight);
-	super(UWindowDialogControl).Paint(C, MouseX, MouseY);
-}
-
-function BeforePaint(Canvas C, float MouseX, float MouseY) {
-	super.BeforePaint(C, MouseX, MouseY);
-	EditBox.TextColor = Theme.Foreground;
 }
 
 defaultproperties {
