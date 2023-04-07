@@ -1151,6 +1151,7 @@ function LoadPresetPassTwo(VS_Preset P) {
 		P.AppendMutator(Base.Mutators);
 		P.AppendParameter(Base.Parameters);
 		P.AppendGameSetting(Base.GameSettings);
+		P.AppendPackage(Base.Packages);
 	}
 
 	Game = class<GameInfo>(DynamicLoadObject(PC.Game, class'Class', true));
