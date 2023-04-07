@@ -39,7 +39,12 @@ function Close(optional bool bByParent) {
 	super.Close(bByParent);
 
 	if (Root.Console.IsInState('UWindow') && Root.Console.bShowConsole == false)
-		Root.Console.CloseUWindow();
+		if (Root.ActiveWindow == none ||
+			Root.ActiveWindow == UMenuRootWindow(Root).StatusBar ||
+			Root.ActiveWindow == UMenuRootWindow(Root).MenuBar
+		) {
+			Root.Console.CloseUWindow();
+		}
 
 	Settings.SettingsX = WinLeft;
 	Settings.SettingsY = WinTop;
