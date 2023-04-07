@@ -528,6 +528,8 @@ function MergeListIntoArray(string List, out array<string> Ar) {
 	Start = Ar.Length;
 	Ar.Insert(Start, L.Length);
 	for (i = 0; i < L.Length; i++) {
+		if (L[i] == "")
+			continue;
 		Ar[Start] = L[i];
 		Start++;
 	}
