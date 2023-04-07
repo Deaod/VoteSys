@@ -1141,7 +1141,7 @@ function VS_Preset LoadPreset(VS_PresetConfig PC) {
 	}
 
 	if (P.bDisabled == false)
-		P.MapList = LoadMapList(P.Game, PC.MapListName).DuplicateList();
+		P.MapList = LoadMapList(P.Game, PC.MapListName);
 
 	for (i = 0; i < PC.Mutators.Length; i++)
 		P.AppendMutator(PC.Mutators[i]);
@@ -1158,8 +1158,10 @@ function VS_Preset LoadPreset(VS_PresetConfig PC) {
 	return P;
 }
 
-function VS_MapList LoadMapList(class<GameInfo> Game, name ListName) {
+function VS_Map LoadMapList(class<GameInfo> Game, name ListName) {
 	local VS_MapList ML;
+	local bool bHaveTutorial;
+	local VS_Map Result;
 
 	if (Game != none) {
 		Log("    Loading List '"$ListName$"' for"@Game, 'VoteSys');
@@ -1169,7 +1171,7 @@ function VS_MapList LoadMapList(class<GameInfo> Game, name ListName) {
 
 	ML = LoadMapListByName(ListName);
 	if (ML != none)
-		return ML;
+		return ML.DuplicateList();
 
 	if (Game == none)
 		return none;
@@ -1178,9 +1180,11 @@ function VS_MapList LoadMapList(class<GameInfo> Game, name ListName) {
 	// As before, see if the list already exists for the specified game type.
 	ML = LoadMapListByPrefix(Game.default.MapPrefix);
 
-	ML.RemoveMap(Game.default.MapPrefix$"-Tutorial");
+	bHaveTutorial = ML.RemoveMap(Game.default.MapPrefix$"-Tutorial");
+	Result = ML.DuplicateList();
+	if (bHaveTutorial) ML.AddMap(Game.default.MapPrefix$"-Tutorial");
 
-	return ML;
+	return Result;
 }
 
 function VS_MapList LoadMapListByName(name ListName) {

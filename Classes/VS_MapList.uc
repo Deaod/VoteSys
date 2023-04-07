@@ -39,23 +39,27 @@ function bool HaveMap(string MapName) {
 	return Maps[Index] ~= MapName;
 }
 
-function AddMap(string MapName) {
+function bool AddMap(string MapName) {
 	local int i;
 
 	i = FindIndexForMap(MapName);
 	if (i < Maps.Length && Maps[i] ~= MapName)
-		return;
+		return false;
 
 	Maps.Insert(i, 1);
 	Maps[i] = MapName;
+	return true;
 }
 
-function RemoveMap(string MapName) {
+function bool RemoveMap(string MapName) {
 	local int i;
 
 	i = FindIndexForMap(MapName);
-	if (i < Maps.Length && Maps[i] ~= MapName)
+	if (i < Maps.Length && Maps[i] ~= MapName) {
 		Maps.Remove(i, 1);
+		return true;
+	}
+	return false;
 }
 
 function VS_Map DuplicateList() {
