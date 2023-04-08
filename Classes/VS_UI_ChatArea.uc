@@ -29,7 +29,7 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 	ContentTop = LookAndFeel.MiscBevelT[BevelType].H;
 
 	Theme.DrawBox(C, self, 0, 0, WinWidth - VSBWidth, WinHeight);
-	
+
 	OrgX = C.OrgX; OrgY = C.OrgY;
 	ClipX = C.ClipX; ClipY = C.ClipY;
 	OldClipRegion = ClippingRegion;
@@ -182,14 +182,13 @@ function AddChat(PlayerReplicationInfo PRI, string Message) {
 		foreach GetLevel().AllActors(class'GameReplicationInfo', GRI)
 			break;
 
-	if (GRI != none && GRI.bTeamGame && PRI.bIsSpectator == false && PRI.Team < 4 && Len(PRI.TeamName) > 0)
+	if (GRI != none && GRI.bTeamGame && (PRI.bIsSpectator == false || PRI.bWaitingPlayer) && PRI.Team < 4 && Len(PRI.TeamName) > 0)
 		M.PlayerColor = class'ChallengeTeamHUD'.default.TeamColor[PRI.Team];
 	else
-		M.PlayerColor = TextColor;
+		M.PlayerColor = Theme.Foreground;
 }
 
 defaultproperties {
 	MaxLines=500
-	TextColor=(R=0,G=0,B=0,A=255)
 	RowClass=class'VS_UI_ChatMessage'
 }
