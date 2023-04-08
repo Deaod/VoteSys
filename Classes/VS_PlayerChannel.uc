@@ -1,6 +1,7 @@
 class VS_PlayerChannel extends Info;
 
 var PlayerPawn PlayerOwner;
+var VS_PlayerInfo PInfo;
 var VS_Info Info; // Info Info
 
 var VS_DataClient DataClient;
@@ -79,6 +80,24 @@ simulated event Tick(float Delta) {
 		bOpenSettingsAfterTyping = false;
 		ShowSettings();
 	}
+}
+
+simulated function VS_PlayerInfo PlayerInfo() {
+	local int i;
+	local VS_Info Nfo;
+
+	if (PInfo != none)
+		return PInfo;
+
+	Nfo = VoteInfo();
+	for (i = 0; i < arraycount(Nfo.PlayerInfo); i++) {
+		if (PlayerOwner.PlayerReplicationInfo == Nfo.PlayerInfo[i].PRI) {
+			PInfo = Nfo.PlayerInfo[i];
+			return PInfo;
+		}
+	}
+
+	return none;
 }
 
 simulated function VS_Info VoteInfo() {
