@@ -1,21 +1,26 @@
 # VoteSys User Interface
 
+## Vote Menu
+
 ![Overview](Overview.png)
 
+### Dark Mode
 
-## Category Tabs
+![Dark Mode Overview](Docs/OverviewDark.png)
+
+### Category Tabs
 
 ![Category Tabs](CategoryHighlight.png)
 
 Each category has its own tab here. If the category of a preset is empty, it will appear in a tab called "Default".
 
-## Preset Dropdown
+### Preset Dropdown
 
 ![Preset Dropdown](PresetHighlight.png)
 
 Selects which map list to show. When first opening the voting menu, the category and preset that are currently in use are selected.
 
-## Map List Filter
+### Map List Filter
 
 ![Map List Filter](MapFilterHighlight.png)
 
@@ -23,7 +28,7 @@ Allows filtering the map list. Only maps containing the sequence of letters ente
 
 ![Map List Filter Applied](MapFilterApplied.png)
 
-## Map List
+### Map List
 
 ![Map List](MapListHighlight.png)
 
@@ -35,13 +40,13 @@ Alternatively, you can vote for a map/preset combination by selecting a map in t
 
 The "Random" button will place your vote for a map randomly selected from the list you're currently viewing.
 
-### Map Screenshot Preview
+#### Map Screenshot Preview
 
 After hovering over a map in the map list for half a second, a window showing the screenshot of the map will appear.
 
 ![Map Screenshot Window](MapPreview.png)
 
-## Candidate List
+### Candidate List
 
 ![Candidate List](CandidateListHighlight.png)
 
@@ -51,7 +56,19 @@ Selecting a candidate clears any current selection in the map list.
 Double-clicking a candidate adds your vote to it.  
 Alternatively, you can vote for a candidate by selecting one and pressing the "Vote" button.
 
-## Player List
+### Chat Area
+
+![Chat Area](ChatHighlight.png)
+
+Shows chat messages sent by other players. Does not show messages sent only to your own team.
+
+You can write a message in the field at the bottom and either press the "Say" button or press the "Enter" key.
+
+If you hold the "Ctrl" key while sending a message, it will be sent to your own team exclusively (and not show up in the chat area).
+
+You can recall past messages sent by you by pressing the Up arrow key repeatedly.
+
+### Player List
 
 ![Player List](PlayerListHighlight.png)
 
@@ -67,14 +84,24 @@ Selecting Kick in the menu without admin privileges places a vote to kick that p
 
 With admin privileges Kick will instantly kick the player and prevent players from the same IP from joining again for the duration of the current match.
 
-## Chat Area
+### Close Button
 
-![Chat Area](ChatHighlight.png)
+![Close Button](Docs/CloseButton.png)
 
-Shows chat messages sent by other players. Does not show messages sent only to your own team.
+The Close button does exactly what it says: It closes the vote menu.
 
-You can write a message in the field at the bottom and either press the "Say" button or press the "Enter" key.
+### Settings Button
 
-If you hold the "Ctrl" key while sending a message, it will be sent to your own team exclusively (and not show up in the chat area).
+![Settings Button](Docs/SettingsButton.png)
 
-You can recall past messages sent by you by pressing the Up arrow key repeatedly.
+The Settings button with the gear icon opens a settings menu. See [Settings Menu](#settings-menu).
+
+## Settings Menu
+
+### Client Settings
+
+![Client Settings](Docs/ClientSettings.png)
+
+Allows changing client-side settings.
+
+The Save button saves the current state of settings. The Close button closes the Settings Menu without saving.
