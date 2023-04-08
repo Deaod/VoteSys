@@ -19,7 +19,7 @@ final function bool FindPlayer(array<BannedPlayer> BanList, string HWHash, out i
 	while(F <= C) {
 		Index = F + ((C - F) / 2);
 		if (BanList[Index].HWHash < HWHash)
-			F = Index+1;
+			F = ++Index;
 		else if (BanList[Index].HWHash > HWHash)
 			C = Index-1;
 		else
