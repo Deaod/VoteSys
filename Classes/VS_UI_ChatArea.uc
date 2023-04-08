@@ -159,16 +159,18 @@ function float DrawTextLine2(Canvas C, UWindowDynamicTextRow L, float Y, float W
 	M = VS_UI_ChatMessage(L);
 
 	if(bHCenter) {
-		TextAreaTextSize(C, M.PlayerName$": "$M.Text, W, H);
+		TextAreaTextSize(C, M.LineText(), W, H);
 		X = int((Width - W) / 2);
 	} else {
 		X = 2;
 	}
-	TextAreaClipText(C, X, Y, M.PlayerName$": "$M.Text);
+	TextAreaClipText(C, X, Y, M.LineText());
 
-	C.DrawColor = M.PlayerColor;
-	TextAreaClipText(C, X, Y, M.PlayerName);
-	C.DrawColor = Theme.Foreground;
+	if (M.PlayerName != "") {
+		C.DrawColor = M.PlayerColor;
+		TextAreaClipText(C, X, Y, M.PlayerName);
+		C.DrawColor = Theme.Foreground;
+	}
 
 	return DefaultTextHeight;
 }
@@ -176,16 +178,25 @@ function float DrawTextLine2(Canvas C, UWindowDynamicTextRow L, float Y, float W
 function AddChat(PlayerReplicationInfo PRI, string Message) {
 	local VS_UI_ChatMessage M;
 	M = VS_UI_ChatMessage(AddText(Message));
-	M.PlayerName = PRI.PlayerName;
+	if (PRI != none)
+		M.PlayerName = PRI.PlayerName;
+	else
+		M.PlayerName = "";
 
 	if (GRI == none)
 		foreach GetLevel().AllActors(class'GameReplicationInfo', GRI)
 			break;
 
-	if (GRI != none && GRI.bTeamGame && (PRI.bIsSpectator == false || PRI.bWaitingPlayer) && PRI.Team < 4 && Len(PRI.TeamName) > 0)
+	if (GRI != none && GRI.bTeamGame &&
+		PRI != none &&
+		(PRI.bIsSpectator == false || PRI.bWaitingPlayer) &&
+		PRI.Team < 4 &&
+		Len(PRI.TeamName) > 0
+	) {
 		M.PlayerColor = class'ChallengeTeamHUD'.default.TeamColor[PRI.Team];
-	else
+	} else {
 		M.PlayerColor = Theme.Foreground;
+	}
 }
 
 defaultproperties {

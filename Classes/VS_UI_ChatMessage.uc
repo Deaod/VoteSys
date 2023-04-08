@@ -2,3 +2,9 @@ class VS_UI_ChatMessage extends UWindowDynamicTextRow;
 
 var string PlayerName;
 var color PlayerColor;
+
+function string LineText() {
+	if (PlayerName != "")
+		return PlayerName$": "$Text;
+	return Text;
+}
