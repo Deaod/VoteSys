@@ -104,7 +104,7 @@ function CreateChannel(PlayerPawn P) {
 	local Actor AceCheck;
 
 	Ace = AceHandler.GetACE();
-	if (Ace != none) {
+	if (Ace != none && P.IsA('Spectator') == false) {
 		foreach AllActors(class'Actor', AceCheck)
 			if (AceCheck.IsA('IACECheck') && AceHandler.GetAceCheckHWHash(AceCheck) != "" && P.PlayerReplicationInfo.PlayerId == AceHandler.GetAceCheckPlayerId(AceCheck))
 				break;
@@ -279,9 +279,6 @@ function CloseVoteMenuForAll() {
 
 function OpenVoteMenu(PlayerPawn P) {
 	local VS_ChannelContainer C;
-
-	if (CanVote(P) == false)
-		return;
 
 	C = FindChannel(P);
 	if (C == none || C.Channel == none) {
