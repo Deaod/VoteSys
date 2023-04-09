@@ -26,6 +26,7 @@ ErrNoRootWindow="Failed to create {1} window (Root does not exist)"
 ErrCreateDialog="Failed to create {1} window (Could not create Dialog)"
 ErrWrongConsole="Failed to create {1} window (Console not a WindowConsole)"
 ErrMapLoadFailed="Loading map {1} failed, randomly selecting {2}"
+ErrNoConnection="VoteSys has no connection to server, check server firewall"
 
 [VS_UI_VoteClientWindow]
 MapFilterText="Filter Maps By Name"
