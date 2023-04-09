@@ -86,6 +86,31 @@ DefaultActors=IpServer.UdpServerUplink MasterServerAddress=unreal.epicgames.com 
 
 ```
 
+1. [GameEndedVoteDelay](#gameendedvotedelay)
+1. [VoteTimeLimit](#votetimelimit)
+1. [MidGameVoteThreshold](#midgamevotethreshold)
+1. [MidGameVoteTimeLimit](#midgamevotetimelimit)
+1. [VoteEndCondition](#voteendcondition)
+1. [bRetainCandidates](#bretaincandidates)
+1. [MinimumRepeatDistance](#minimumrepeatdistance)
+1. [KickVoteThreshold](#kickvotethreshold)
+1. [DefaultTimeMessageClass](#defaulttimemessageclass)
+1. [DefaultPreset](#defaultpreset)
+1. [bAlwaysUseDefaultPreset](#balwaysusedefaultpreset)
+1. [DefaultMap](#defaultmap)
+1. [bAlwaysUseDefaultMap](#balwaysusedefaultmap)
+1. [ServerAddress](#serveraddress)
+1. [DataPort](#dataport)
+1. [ClientDataPort](#clientdataport)
+1. [bManageServerPackages](#bmanageserverpackages)
+1. [bUseServerPackagesCompatibilityMode](#buseserverpackagescompatibilitymode)
+1. [bUseServerActorsCompatibilityMode](#buseserveractorscompatibilitymode)
+1. [PresetProbeDepth](#presetprobedepth)
+1. [IdleTimeout](#idletimeout)
+1. [DefaultPackages](#defaultpackages)
+1. [DefaultActors](#defaultactors)
+1. [GameNameMode](#gamenamemode)
+
 #### GameEndedVoteDelay
 
 Number of seconds to wait before opening the map vote menu at the end of the game.
