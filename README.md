@@ -20,11 +20,11 @@ Clients must run at least UT v436.
 2. Add VoteSys mutator to URL when starting the server
 3. Add VoteSys to list of ServerPackages in INI
 4. If your server has a firewall:
-  1. Open a TCP port in it
-  2. Set [DataPort](#dataport) to the port you just opened
+    1. Open a TCP port in it
+    2. Set [DataPort](#dataport) to the port you just opened
 5. If you have proxy servers for players to connect to:
-  1. Set [ServerAddress](#serveraddress) to the actual address of your server
-  2. Set [DataPort](#dataport) to a port of your choice, if you did not set it already
+    1. Set [ServerAddress](#serveraddress) to the actual address of your server
+    2. Set [DataPort](#dataport) to a port of your choice, if you did not set it already
 
 ## Server Setup
 
@@ -200,9 +200,9 @@ Empty by default.
 
 #### DataPort
 
-Specifies the port on the server to listen on for connections by clients.
+Specifies the TCP port on the server to listen on for connections by clients.
 
-Use this if you are running behind a firewall and need to explicitly allow connections on specific ports.
+Use this if you are running behind a firewall and need to explicitly allow connections on specific TCP ports.
 
 Values less than 1024 should not really be used as they might fail to bind (check server log if you suspect this). 0 lets VoteSys grab a random port (greater than 1024).
 
