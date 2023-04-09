@@ -30,6 +30,7 @@ var config int DataPort;
 var config int ClientDataPort;
 
 var config bool bManageServerPackages;
+var config bool bUseServerPackagesCompatibilityMode;
 var config bool bUseServerActorsCompatibilityMode;
 var config array<string> DefaultPackages;
 var config array<string> DefaultActors;
@@ -59,6 +60,7 @@ defaultproperties {
 	ClientDataPort=0
 
 	bManageServerPackages=False
+	bUseServerPackagesCompatibilityMode=False
 	bUseServerActorsCompatibilityMode=False
 
 	DefaultTimeMessageClass="Botpack.TimeMessage"

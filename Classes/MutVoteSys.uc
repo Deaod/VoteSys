@@ -60,7 +60,12 @@ event PostBeginPlay() {
 
 	AceHandler = Spawn(class'VS_AceHandler');
 
-	if ((Level.EngineVersion$Level.GetPropertyText("EngineRevision")) < "469c" && Settings.bManageServerPackages) {
+	if (Settings.bManageServerPackages &&
+		(
+			Settings.bUseServerPackagesCompatibilityMode ||
+			(Level.EngineVersion$Level.GetPropertyText("EngineRevision")) < "469c"
+		)
+	) {
 		GetDefaultServerPackages();
 	}
 	if (Settings.bUseServerActorsCompatibilityMode) {
@@ -563,7 +568,12 @@ function TravelTo(VS_Preset P, VS_Map M) {
 		History.SaveConfig();
 	}
 
-	if ((Level.EngineVersion$Level.GetPropertyText("EngineRevision")) < "469c" && Settings.bManageServerPackages) {
+	if (Settings.bManageServerPackages &&
+		(
+			Settings.bUseServerPackagesCompatibilityMode ||
+			(Level.EngineVersion$Level.GetPropertyText("EngineRevision")) < "469c"
+		)
+	) {
 		Pkgs = Settings.DefaultPackages;
 		AddClassesToPackageMap(TD.Mutators, Pkgs);
 		AddClassesToPackageMap(TD.Actors, Pkgs);
@@ -821,7 +831,10 @@ function ApplyVotedPreset() {
 		CreateServerActors(TD.Actors);
 	ApplyGameSettings(TD.GameSettings);
 
-	if ((Level.EngineVersion$Level.GetPropertyText("EngineRevision")) >= "469c" && Settings.bManageServerPackages) {
+	if (Settings.bManageServerPackages &&
+		Settings.bUseServerPackagesCompatibilityMode == false &&
+		(Level.EngineVersion$Level.GetPropertyText("EngineRevision")) >= "469c"
+	) {
 		AddClassesToPackageMap(TD.Mutators, Pkgs);
 		AddClassesToPackageMap(TD.Actors, Pkgs);
 		MergeListIntoArray(TD.Packages, Pkgs);

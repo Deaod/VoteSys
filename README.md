@@ -64,6 +64,7 @@ ServerAddress=
 DataPort=0
 ClientDataPort=0
 bManageServerPackages=False
+bUseServerPackagesCompatibilityMode=False
 bUseServerActorsCompatibilityMode=False
 PresetProbeDepth=1
 IdleTimeout=0
@@ -200,6 +201,14 @@ Prior to 469c, automatically adjusting ServerPackages requires modifying the INI
 On 469c and later modifying the INI is no longer required.
 
 Only Packages that do **not** have the ServerSideOnly flag set are added to ServerPackages automatically.
+
+#### bUseServerPackagesCompatibilityMode
+
+If True, VoteSys will always use the INI (even on 469c or later servers) to change the ServerPackages.
+
+This setting is irrelevant if `bManageServerPackages` is False.
+
+Defaults to False.
 
 #### bUseServerActorsCompatibilityMode
 
