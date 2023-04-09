@@ -19,6 +19,12 @@ Clients must run at least UT v436.
 1. Make sure the VoteSys .u and .int files are in the System folder
 2. Add VoteSys mutator to URL when starting the server
 3. Add VoteSys to list of ServerPackages in INI
+4. If your server has a firewall:
+  1. Open a TCP port in it
+  2. Set [DataPort](#dataport) to the port you just opened
+5. If you have proxy servers for players to connect to:
+  1. Set [ServerAddress](#serveraddress) to the actual address of your server
+  2. Set [DataPort](#dataport) to a port of your choice, if you did not set it already
 
 ## Server Setup
 
