@@ -9,9 +9,11 @@ var Object SettingsDummy;
 var VS_ServerSettings Settings;
 
 var Object PresetConfigDummy;
+var Object PresetListDummy;
 var VS_Preset PresetList;
 var name PresetNameDummy;
 
+var Object MapConfigDummy;
 var Object MapListDummy;
 var VS_MapList MapLists;
 
@@ -1083,7 +1085,9 @@ function LoadConfig() {
 		Settings.PresetProbeDepth = 1;
 
 	PresetConfigDummy = new(XLevel, 'VoteSysPresets')  class'Object';
-	MapListDummy      = new(XLevel, 'VoteSysMapLists') class'Object';
+	PresetListDummy   = new(XLevel)                    class'Object';
+	MapConfigDummy    = new(XLevel, 'VoteSysMapLists') class'Object';
+	MapListDummy      = new(XLevel)                    class'Object';
 	i = 0;
 
 	for (i = 0; ProbeDepth < Settings.PresetProbeDepth; i++) {
@@ -1132,7 +1136,7 @@ function VS_Preset LoadPresetPassOne(VS_PresetConfig PC) {
 
 	Log("Adding Preset '"$PC.Category$"/"$PC.PresetName$"' ("$PC.Abbreviation$")", 'VoteSys');
 
-	P = new(PresetConfigDummy) class'VS_Preset';
+	P = new(PresetListDummy) class'VS_Preset';
 	P.PresetName   = PC.PresetName;
 	P.Abbreviation = PC.Abbreviation;
 	P.Category     = PC.Category;
@@ -1259,7 +1263,7 @@ function VS_MapList LoadMapListByName(name ListName) {
 	if (ML != none)
 		return ML;
 
-	MC = new(MapListDummy, ListName) class'VS_MapListConfig';
+	MC = new(MapConfigDummy, ListName) class'VS_MapListConfig';
 
 	MLIgnore = new(MapListDummy) class'VS_MapList';
 
