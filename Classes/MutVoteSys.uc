@@ -1117,6 +1117,10 @@ function LoadConfig() {
 			DefaultPresetRef = P;
 	}
 
+	PresetConfigDummy = none;
+	MapListDummy = none;
+	ConsoleCommand("OBJ GARBAGE");
+
 	if (DefaultPresetRef == none) {
 		Level.Game.SetPropertyText("bDontRestart", "False");
 		Destroy();
