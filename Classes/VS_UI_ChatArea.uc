@@ -167,7 +167,11 @@ function float DrawTextLine2(Canvas C, UWindowDynamicTextRow L, float Y, float W
 	TextAreaClipText(C, X, Y, M.LineText());
 
 	if (M.PlayerName != "") {
-		C.DrawColor = M.PlayerColor;
+		if(M.ColorRef == 0) {
+			C.DrawColor = M.PlayerColor;
+		} else if (M.ColorRef == 1) {
+			C.DrawColor = Theme.Foreground;
+		}
 		TextAreaClipText(C, X, Y, M.PlayerName);
 		C.DrawColor = Theme.Foreground;
 	}
@@ -193,8 +197,10 @@ function AddChat(PlayerReplicationInfo PRI, string Message) {
 		PRI.Team < 4 &&
 		Len(PRI.TeamName) > 0
 	) {
+		M.ColorRef = 0;
 		M.PlayerColor = class'ChallengeTeamHUD'.default.TeamColor[PRI.Team];
 	} else {
+		M.ColorRef = 1;
 		M.PlayerColor = Theme.Foreground;
 	}
 }
