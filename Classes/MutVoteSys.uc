@@ -1113,17 +1113,12 @@ function LoadConfig() {
 
 	for (P = PresetList; P != none; P = P.Next) {
 		LoadPresetPassTwo(P);
-		P.Storage = none;
 
 		if ((DefaultPresetRef == none && P.bDisabled == false) ||
 			(P != none && Settings.DefaultPreset != "" && P.GetFullName() == Settings.DefaultPreset) ||
 			(P != none && Settings.DefaultPreset == "" && CurrentPreset != "" && P.GetFullName() == CurrentPreset))
 			DefaultPresetRef = P;
 	}
-
-	PresetConfigDummy = none;
-	MapListDummy = none;
-	ConsoleCommand("OBJ GARBAGE");
 
 	if (DefaultPresetRef == none) {
 		Level.Game.SetPropertyText("bDontRestart", "False");
