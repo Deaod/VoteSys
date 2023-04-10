@@ -1109,6 +1109,7 @@ function LoadConfig() {
 
 	for (P = PresetList; P != none; P = P.Next) {
 		LoadPresetPassTwo(P);
+		P.Storage = none;
 
 		if ((DefaultPresetRef == none && P.bDisabled == false) ||
 			(P != none && Settings.DefaultPreset != "" && P.GetFullName() == Settings.DefaultPreset) ||
