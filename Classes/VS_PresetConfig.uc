@@ -7,6 +7,8 @@ var config string PresetName;
 var config string Abbreviation;
 /** Which Category to add this Preset to */
 var config string Category;
+/** Used to determine the order in which presets of a category are sorted */
+var config int    SortPriority;
 /** List of full preset names to inherit data from */
 var config array<string> InheritFrom;
 /** Which game type to use */

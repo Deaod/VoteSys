@@ -73,6 +73,20 @@ function string EncodeString(string S) {
 	return Result $ S $ "\"";
 }
 
+function string SerializePreset(VS_Preset P) {
+	local string Result;
+
+	Result = "/PRESET/";
+	Result = Result$EncodeString(P.PresetName)$"/";
+	Result = Result$EncodeString(P.Abbreviation)$"/";
+	Result = Result$EncodeString(P.Category)$"/";
+	Result = Result$P.MaxSequenceNumber$"/";
+	Result = Result$P.MinimumMapRepeatDistance$"/";
+	Result = Result$P.SortPriority$CRLF;
+
+	return Result;
+}
+
 state SendPresets {
 Begin:
 	foreach AllActors(class'MutVoteSys', VoteSys)
@@ -86,7 +100,7 @@ Begin:
 		if (TempPreset.bDisabled)
 			continue;
 
-		SendBuffer = "/PRESET/"$EncodeString(TempPreset.PresetName)$"/"$EncodeString(TempPreset.Abbreviation)$"/"$EncodeString(TempPreset.Category)$"/"$TempPreset.MaxSequenceNumber$"/"$TempPreset.MinimumMapRepeatDistance$CRLF;
+		SendBuffer = SerializePreset(TempPreset);
 		while (true) {
 			SendBuffer = Mid(SendBuffer, SendText(SendBuffer));
 			if (Len(SendBuffer) <= 0)

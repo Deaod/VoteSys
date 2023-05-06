@@ -11,7 +11,7 @@ function AddPreset(VS_Preset P) {
 	I.Preset = P;
 	I.Value = P.PresetName;
 	I.Value2 = P.Abbreviation;
-	I.SortWeight = 0;
+	I.SortWeight = P.SortPriority;
 }
 
 function Created() {

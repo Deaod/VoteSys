@@ -5,6 +5,7 @@ var VS_PresetConfig Storage;
 var string          PresetName;
 var string          Abbreviation;
 var string          Category;
+var int             SortPriority;
 var class<GameInfo> Game;
 var VS_Map          MapList;
 var string          Mutators;

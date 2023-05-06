@@ -1135,6 +1135,7 @@ function VS_Preset LoadPresetPassOne(VS_PresetConfig PC) {
 	P.PresetName   = PC.PresetName;
 	P.Abbreviation = PC.Abbreviation;
 	P.Category     = PC.Category;
+	P.SortPriority = PC.SortPriority;
 	P.Storage      = PC;
 
 	return P;

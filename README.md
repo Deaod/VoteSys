@@ -313,6 +313,7 @@ Defaults to false.
 PresetName=DeathMatch
 Abbreviation=DM
 Category=DM
+SortPriority=15
 Game=Botpack.DeathMatchPlus
 MapListName=CustomMapList
 Mutators=
@@ -323,6 +324,7 @@ GameSettings=
 PresetName=Team DeathMatch
 Abbreviation=TDM
 Category=DM
+SortPriority=30
 Game=Botpack.TeamGamePlus
 MapListName=
 Mutators=
@@ -362,6 +364,11 @@ If you dont specify a value for `Game` in the current preset, the first non-empt
 If you dont specify a value, or if you specify a negative value for `MinimumMapRepeatDistance` in the current preset, the first non-empty and non-negative value in the list of presets you inherit from will be used.
 
 For `Mutators`, `Parameters`, and `GameSettings` the values will be combined in the same order you specified the base presets. If you specify any addition values in the current preset, they will be added at the end.
+
+#### Sort Priority
+`SortPriority` can be used to make presets appear above others within a category. Higher values mean the preset will appear higher in the list.
+
+Default is 0.
 
 #### Game Type
 `Game` is used to identify the gametype for the preset. It must not be blank for enabled presets.
