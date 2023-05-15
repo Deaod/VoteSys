@@ -169,6 +169,9 @@ function ApplyTheme(byte Theme) {
 		case TH_Dark:
 			T = new class'VS_UI_ThemeDark';
 			break;
+		case TH_Black:
+			T = new class'VS_UI_ThemeBlack';
+			break;
 	}
 
 	if (T == none)

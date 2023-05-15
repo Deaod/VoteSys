@@ -46,6 +46,7 @@ PlayerBanMessage="Do you want to permanently ban {1}?"
 ThemeText="Theme"
 ThemeBright="Bright"
 ThemeDark="Dark"
+ThemeBlack="Black"
 SaveText="Save"
 
 [VS_UI_SettingsWindow]

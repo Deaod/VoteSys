@@ -7,6 +7,7 @@ var VS_UI_ComboControl Cmb_Theme;
 var localized string ThemeText;
 var localized string ThemeBright;
 var localized string ThemeDark;
+var localized string ThemeBlack;
 
 var UWindowSmallButton Btn_Save;
 var localized string SaveText;
@@ -20,6 +21,7 @@ function Created() {
 	Cmb_Theme.SetText(ThemeText);
 	Cmb_Theme.AddItem(ThemeBright);
 	Cmb_Theme.AddItem(ThemeDark);
+	Cmb_Theme.AddItem(ThemeBlack);
 	Cmb_Theme.SetEditable(false);
 
 	Btn_Save = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 298, 334, 40, 16));
@@ -63,6 +65,9 @@ function ApplyTheme(byte Theme) {
 		case TH_Dark:
 			T = new class'VS_UI_ThemeDark';
 			break;
+		case TH_Black:
+			T = new class'VS_UI_ThemeBlack';
+			break;
 	}
 
 	if (T == none)
@@ -77,6 +82,7 @@ defaultproperties {
 	ThemeText="Theme"
 	ThemeBright="Bright"
 	ThemeDark="Dark"
+	ThemeBlack="Black"
 
 	SaveText="Save"
 }

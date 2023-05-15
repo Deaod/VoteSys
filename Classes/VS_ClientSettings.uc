@@ -4,7 +4,8 @@ class VS_ClientSettings extends Object
 
 enum ETheme {
 	TH_Bright,
-	TH_Dark
+	TH_Dark,
+	TH_Black
 };
 
 var config ETheme Theme;
@@ -19,6 +20,7 @@ static final function ETheme IntToTheme(int A) {
 	switch(A) {
 		case 0: return TH_Bright;
 		case 1: return TH_Dark;
+		case 2: return TH_Black;
 	}
 	return default.Theme;
 }
