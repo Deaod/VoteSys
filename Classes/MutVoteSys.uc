@@ -423,15 +423,16 @@ function CheckMidGameVoting() {
 	local VS_ChannelContainer C;
 	local Pawn P;
 
-	for (C = ChannelList; C != none; C = C.Next)
-		if (C.PlayerOwner != none && C.Channel != none && C.Channel.bHasVoted)
-			NumVotes++;
-
 	NumPlayers = 1; // to round up later
-	for (P = Level.PawnList; P != none; P = P.NextPawn)
-		if (P.IsA('PlayerPawn') && CanVote(PlayerPawn(P)) && P.IsA('Spectator') == false)
-			NumPlayers++;
-
+	for (C = ChannelList; C != none; C = C.Next) {
+		if (C.PlayerInfo != none) {
+			if (C.PlayerInfo.bIsPlayer && C.PlayerInfo.bCanVote)
+				NumPlayers++;
+			if (C.PlayerInfo.bHasVoted)
+				NumVotes++;
+		}
+	}
+	
 	if (NumPlayers > 1)
 		IdleTime = 0;
 
