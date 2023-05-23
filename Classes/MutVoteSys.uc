@@ -748,7 +748,7 @@ function bool CheckVoteEndConditions() {
 
 	for (C = ChannelList; C != none; C = C.Next) {
 		if (C.PlayerInfo != none) {
-			if (C.PlayerInfo.bIsPlayer)
+			if (C.PlayerInfo.bIsPlayer && C.PlayerInfo.bCanVote)
 				NumVoters++;
 			if (C.PlayerInfo.bHasVoted)
 				NumVotes++;
