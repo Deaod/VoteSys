@@ -18,6 +18,7 @@ var localized string ErrCreateDialog;
 var localized string ErrWrongConsole;
 var localized string ErrMapLoadFailed;
 var localized string ErrNoConnection;
+var localized string ErrNotAllowed;
 
 static function string GetString(
 	optional int Switch,
@@ -49,6 +50,7 @@ static function string GetString(
 		case -4: Result = default.ErrWrongConsole; break;
 		case -5: Result = default.ErrMapLoadFailed; break;
 		case -6: Result = default.ErrNoConnection; break;
+		case -7: Result = default.ErrNotAllowed; break;
 
 		default:
 			return "";
@@ -106,4 +108,5 @@ defaultproperties {
 	ErrWrongConsole="Failed to create {1} window (Console not a WindowConsole)"
 	ErrMapLoadFailed="Loading map {1} failed, randomly selecting {2}"
 	ErrNoConnection="VoteSys has no connection to server, check server firewall"
+	ErrNotAllowed="Sorry, you are not allowed to vote"
 }

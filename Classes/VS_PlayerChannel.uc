@@ -336,8 +336,10 @@ function ServerVote(string Category, string PresetName, string MapName) {
 	local VS_Map M;
 	local VS_Info I;
 
-	if (PlayerOwner == none)
+	if (PlayerOwner == none || PlayerInfo().bCanVote == false) {
+		LocalizeMessage(class'VS_Msg_LocalMessage', -7);
 		return;
+	}
 
 	I = VoteInfo();
 	P = I.ResolvePresetSeparate(Category, PresetName);
@@ -371,8 +373,10 @@ function ServerVoteExisting(string Preset, string MapName) {
 	local VS_Preset P;
 	local VS_Map M;
 
-	if (PlayerOwner == none)
+	if (PlayerOwner == none || PlayerInfo().bCanVote == false) {
+		LocalizeMessage(class'VS_Msg_LocalMessage', -7);
 		return;
+	}
 
 	I = VoteInfo();
 	P = I.ResolvePresetCombined(Preset);
