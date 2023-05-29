@@ -261,10 +261,14 @@ function Mutate(string Command, PlayerPawn Sender) {
 		OpenVoteMenu(Sender);
 	} else if (Command ~= "votesys settings") {
 		OpenSettings(Sender);
-	} else if (Command ~= "votesys dumpplayerinfo") {
+	} else if (Command ~= "votesys dumpplayers server") {
 		for (i = 0; i < 32; i++)
 			if (Info.PlayerInfo[i] != none)
-				Sender.ClientMessage("["$i$"]=(PRI="$Info.PlayerInfo[i].PRI$",bHasVoted="$Info.PlayerInfo[i].bHasVoted$")");
+				Sender.ClientMessage("["$i$"]=("$Info.PlayerInfo[i].Dump()$")");
+	} else if (Command ~= "votesys dumpplayers client") {
+		C = FindChannel(Sender);
+		if (C != none && C.Channel != none)
+			C.Channel.DumpPlayerList();
 	}
 
 	super.Mutate(Command, Sender);

@@ -13,6 +13,27 @@ replication {
 		PRI;
 }
 
+simulated function string GetVariableText(string S) {
+	local string Result;
+
+	Result = GetPropertyText(S);
+	if (InStr(Result, ",") >= 0)
+		return "\""$Result$"\"";
+	return Result;
+}
+
+simulated function string GetVariable(string S) {
+	return S$"="@GetVariableText(S);
+}
+
+simulated function string Dump() {
+	return
+		GetVariable("PRI")$","$
+		GetVariable("bCanVote")$","$
+		GetVariable("bHasVoted")$","$
+		GetVariable("bIsPlayer");
+}
+
 defaultproperties {
 	NetUpdateFrequency=10
 }
