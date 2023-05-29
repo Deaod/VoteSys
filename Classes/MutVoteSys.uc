@@ -425,7 +425,6 @@ function CheckMidGameVoting() {
 	local int NumVotes;
 	local int NumPlayers;
 	local VS_ChannelContainer C;
-	local Pawn P;
 
 	NumPlayers = 1; // to round up later
 	for (C = ChannelList; C != none; C = C.Next) {
