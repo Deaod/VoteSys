@@ -201,7 +201,6 @@ function AddChat(PlayerReplicationInfo PRI, string Message) {
 		M.PlayerColor = class'ChallengeTeamHUD'.default.TeamColor[PRI.Team];
 	} else {
 		M.ColorRef = 1;
-		M.PlayerColor = Theme.Foreground;
 	}
 }
 
