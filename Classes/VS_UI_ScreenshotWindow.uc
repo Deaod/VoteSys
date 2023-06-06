@@ -18,13 +18,15 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 	BevelHT = LookAndFeel.BevelUpT.H * S;
 	BevelHB = LookAndFeel.BevelUpB.H * S;
 	DrawUpBevel(C, 0, 0, WinWidth, WinHeight, GetLookAndFeelTexture());
-	DrawStretchedTexture(C,
-		/*X*/BevelWL,
-		/*Y*/BevelHT,
-		/*W*/WinWidth - BevelWL - BevelWR,
-		/*H*/WinHeight - BevelHT - BevelHB,
-		Screenshot
-	);
+	
+	if (Screenshot != none)
+		DrawStretchedTexture(C,
+			/*X*/BevelWL,
+			/*Y*/BevelHT,
+			/*W*/WinWidth - BevelWL - BevelWR,
+			/*H*/WinHeight - BevelHT - BevelHB,
+			Screenshot
+		);
 }
 
 defaultproperties {
