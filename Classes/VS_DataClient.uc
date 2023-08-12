@@ -1,6 +1,7 @@
 class VS_DataClient extends TcpLink
 	transient;
 
+var Serialization S11N;
 var string Buffer;
 var string CRLF;
 
@@ -17,6 +18,7 @@ event PostBeginPlay() {
 	Log("VS_DataClient.PostBeginPlay", 'VoteSys');
 	LinkMode = MODE_Text;
 	ReceiveMode = RMODE_Event;
+	S11N = class'Serialization'.static.Instance();
 	CRLF = Chr(13)$Chr(10);
 	Channel = VS_PlayerChannel(Owner);
 
@@ -24,6 +26,11 @@ event PostBeginPlay() {
 
 	foreach AllActors(class'VS_Info', Info)
 		break;
+}
+
+final function bool SendLine(string Line) {
+	// Len+2 to account for cr-lf at the end
+	return SendText(Line$CRLF) == Len(Line) + 2;
 }
 
 function string GetRemoteAddress() {
@@ -93,86 +100,18 @@ Resolve:
 	Resolve(GetRemoteAddress());
 }
 
-function string DecodeString(out string S) {
-	local int i;
-	local string Result;
-
-	if (Left(S, 1) != "\"")
-		return "";
-
-	S = Mid(S, 1);
-
-	i = InStr(S, "\"");
-	while(i >= 0) {
-		if (i == 0) {
-			S = Mid(S, 1);
-			return Result;
-		}
-
-		if (Mid(S, i-1, 1) == "\\") {
-			Result = Result $ Left(S, i-1) $ "\"";
-			S = Mid(S, i+1);
-		} else {
-			Result = Result $ Left(S, i);
-			S = Mid(S, i+1);
-			return Result;
-		}
-
-		i = InStr(S, "\"");
-	}
-
-	return Result $ S;
-}
-
-function NextVariable(out string L) {
-	local int Pos;
-
-	Pos = InStr(L, "/");
-
-	if (Pos >= 0)
-		L = Mid(L, Pos+1);
-	else
-		L = "";
-}
-
-function VS_Preset ParsePreset(string Line) {
-	local VS_Preset P;
-
-	P = new(none) class'VS_Preset';
-
-	Line = Mid(Line, 8);
-	//                         |   Parse Content    | Skip /
-	P.PresetName               = DecodeString(Line); NextVariable(Line);
-	P.Abbreviation             = DecodeString(Line); NextVariable(Line);
-	P.Category                 = DecodeString(Line); NextVariable(Line);
-	P.MaxSequenceNumber        = int(Line);          NextVariable(Line);
-	P.MinimumMapRepeatDistance = int(Line);          NextVariable(Line);
-	P.SortPriority             = int(Line);
-
-	return P;
-}
-
-function VS_Map ParseMap(string Line) {
-	local VS_Map M;
-	M = new(none) class'VS_Map';
-	Line = Mid(Line, 5);
-	M.MapName = DecodeString(Line); Line = Mid(Line, 1);
-	M.Sequence = int(Line);
-	return M;
-}
-
 function string ParsePresetRef(string Line) {
 	Line = Mid(Line, 5);
-	return DecodeString(Line);
+	return S11N.DecodeString(Line);
 }
 
 function ParseLine(string Line) {
 	if (Left(Line, 8) == "/PRESET/") {
 		bTransferDone = false;
 		Log(Line, 'VoteSys');
-		Channel.AddPreset(ParsePreset(Line));
+		Channel.AddPreset(S11N.ParsePreset(Line));
 	} else if (Left(Line, 5) == "/MAP/") {
-		Channel.AddMap(ParseMap(Line));
+		Channel.AddMap(S11N.ParseMap(Line));
 	} else if (Left(Line, 4) == "/END") {
 		bTransferDone = true;
 		Log(Line, 'VoteSys');
@@ -202,11 +141,11 @@ event ReceivedText(string Text) {
 state Talking {
 Begin:
 	Log("VS_DataClient Connection Established", 'VoteSys');
-	SendText("/SENDPRESETS"$CRLF);
+	SendLine("/SENDPRESETS");
 
 	while(Channel.Cookie == 0)
 		Sleep(0);
-	SendText("/COOKIE/"$Channel.Cookie$CRLF);
+	SendLine("/COOKIE/"$Channel.Cookie);
 }
 
 event Closed() {
@@ -215,7 +154,7 @@ event Closed() {
 
 event Timer() {
 	if (IsConnected())
-		SendText("/PING"$CRLF);
+		SendLine("/PING");
 }
 
 defaultproperties {

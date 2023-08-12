@@ -8,6 +8,7 @@ var VS_ChannelContainer Channel;
 var string SendBuffer;
 var VS_Preset TempPreset;
 var VS_Map TempMap;
+var Serialization S11N;
 
 var string CRLF;
 
@@ -23,6 +24,7 @@ var string CommandParams;
 event PostBeginPlay() {
 	LinkMode = MODE_Text;
 	ReceiveMode = RMODE_Event;
+	S11N = class'Serialization'.static.Instance();
 	CRLF = Chr(13)$Chr(10);
 
 	foreach AllActors(class'MutVoteSys', VoteSys)
@@ -33,7 +35,7 @@ event Closed() {
 	Destroy();
 }
 
-function bool SendLine(string Line) {
+final function bool SendLine(string Line) {
 	// Len+2 to account for cr-lf at the end
 	return SendText(Line$CRLF) == Len(Line) + 2;
 }
@@ -70,6 +72,7 @@ function ParseLine(string Line) {
 		QueueCommand('SendPresets');
 	} else if (Left(Line, 8) == "/COOKIE/") {
 		Channel = VoteSys.FindChannelForCookie(int(Mid(Line, 8)));
+		Log("VS_DataLink Found Channel"@Channel, 'VoteSys');
 	}
 }
 
@@ -93,35 +96,6 @@ event Accepted() {
 	GotoState('Idle');
 }
 
-function string EncodeString(string S) {
-	local int i;
-	local string Result;
-
-	Result = "\"";
-	i = InStr(S, "\"");
-	while (i >= 0) {
-		Result = Result$Left(S, i)$"\\\"";
-		S = Mid(S, i+1);
-		i = InStr(S, "\"");
-	}
-
-	return Result $ S $ "\"";
-}
-
-function string SerializePreset(VS_Preset P) {
-	local string Result;
-
-	Result = "/PRESET/";
-	Result = Result$EncodeString(P.PresetName)$"/";
-	Result = Result$EncodeString(P.Abbreviation)$"/";
-	Result = Result$EncodeString(P.Category)$"/";
-	Result = Result$P.MaxSequenceNumber$"/";
-	Result = Result$P.MinimumMapRepeatDistance$"/";
-	Result = Result$P.SortPriority$CRLF;
-
-	return Result;
-}
-
 state SendPresets {
 Begin:
 	foreach AllActors(class'MutVoteSys', VoteSys)
@@ -135,20 +109,20 @@ Begin:
 		if (TempPreset.bDisabled)
 			continue;
 
-		SendText(SerializePreset(TempPreset));
+		SendLine(S11N.SerializePreset(TempPreset));
 		for (TempMap = TempPreset.MapList; TempMap != none; TempMap = TempMap.Next) {
-			SendText("/MAP/"$EncodeString(TempMap.MapName)$"/"$TempMap.Sequence$CRLF);
+			SendLine(S11N.SerializeMap(TempMap));
 		}
 	}
 
-	SendText("/END/"$EncodeString(VoteSys.CurrentPreset)$CRLF);
+	SendLine("/END/"$S11N.EncodeString(VoteSys.CurrentPreset));
 
 	Log("VS_DataLink SendPresets Done"@IpAddrToString(RemoteAddr), 'VoteSys');
 	GoToState('Idle');
 }
 
 function HandleError() {
-	SendText("/RECONNECT"$CRLF);
+	SendLine("/RECONNECT");
 	Close();
 }
 
