@@ -202,6 +202,7 @@ event ReceivedText(string Text) {
 state Talking {
 Begin:
 	Log("VS_DataClient Connection Established", 'VoteSys');
+	SendText("/SENDPRESETS"$CRLF);
 }
 
 event Closed() {
