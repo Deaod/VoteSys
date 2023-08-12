@@ -3,6 +3,7 @@ class VS_DataLink extends TcpLink
 
 var string Buffer;
 var MutVoteSys VoteSys;
+var VS_ChannelContainer Channel;
 
 var string SendBuffer;
 var VS_Preset TempPreset;
@@ -67,6 +68,8 @@ function ParseLine(string Line) {
 		SendLine("/PONG");
 	} else if (Line == "/SENDPRESETS") {
 		QueueCommand('SendPresets');
+	} else if (Left(Line, 8) == "/COOKIE/") {
+		Channel = VoteSys.FindChannelForCookie(int(Mid(Line, 8)));
 	}
 }
 

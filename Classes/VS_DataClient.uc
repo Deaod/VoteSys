@@ -203,6 +203,10 @@ state Talking {
 Begin:
 	Log("VS_DataClient Connection Established", 'VoteSys');
 	SendText("/SENDPRESETS"$CRLF);
+
+	while(Channel.Cookie == 0)
+		Sleep(0);
+	SendText("/COOKIE/"$Channel.Cookie$CRLF);
 }
 
 event Closed() {

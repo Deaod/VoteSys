@@ -101,6 +101,16 @@ function VS_ChannelContainer FindChannel(Pawn P) {
 	return none;
 }
 
+function VS_ChannelContainer FindChannelForCookie(int Cookie) {
+	local VS_ChannelContainer C;
+
+	for (C = ChannelList; C != none; C = C.Next)
+		if (C.Channel != none && C.Channel.Cookie == Cookie)
+			return C;
+
+	return none;
+}
+
 function VS_ChannelContainer FindChannelForPRI(PlayerReplicationInfo PRI) {
 	return FindChannel(Pawn(PRI.Owner));
 }
@@ -129,8 +139,30 @@ function CreateChannel(PlayerPawn P) {
 
 	C = Spawn(class'VS_ChannelContainer');
 	C.Initialize(P, AceCheck);
+	C.Channel.Cookie = CreateCookie();
 	C.Next = ChannelList;
 	ChannelList = C;
+}
+
+// returns true if Cookie is not in use yet
+function bool CheckCookie(int Cookie) {
+	local VS_ChannelContainer C;
+
+	for (C = ChannelList; C != none; C = C.Next)
+		if (C.Channel != none && C.Channel.Cookie == Cookie)
+			return false;
+
+	return true;
+}
+
+function int CreateCookie() {
+	local int Candidate;
+
+	do {
+		Candidate = (Rand(255) << 24) | (Rand(255) << 16) | (Rand(255) << 8) | Rand(255);
+	} until(Candidate != 0 && CheckCookie(Candidate));
+
+	return Candidate;
 }
 
 function KickPlayer(PlayerPawn P, string Reason) {

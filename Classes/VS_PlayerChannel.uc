@@ -3,6 +3,7 @@ class VS_PlayerChannel extends Info;
 var PlayerPawn PlayerOwner;
 var VS_PlayerInfo PInfo;
 var VS_Info Info; // Info Info
+var int Cookie;
 
 var VS_DataClient DataClient;
 
@@ -42,6 +43,9 @@ replication {
 		ShowVoteMenu,
 		HideVoteMenu,
 		ShowSettings;
+
+	reliable if (Role == ROLE_Authority && bNetOwner)
+		Cookie;
 
 	reliable if (Role == ROLE_Authority && ((bDemoRecording == false) || (bClientDemoRecording && bClientDemoNetFunc) || (Level.NetMode == NM_Standalone)))
 		LocalizeMessage, ChatMessage;
