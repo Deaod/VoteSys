@@ -20,10 +20,10 @@ function Created() {
 	Cmb_Theme.SetEditable(false);
 }
 
-function LoadSettings(VS_ClientSettings S) {
-	Settings = S;
+function LoadSettings(VS_PlayerChannel C) {
+	Settings = C.Settings;
 
-	Cmb_Theme.SetSelectedIndex(S.Theme);
+	Cmb_Theme.SetSelectedIndex(Settings.Theme);
 }
 
 function SaveSettings() {

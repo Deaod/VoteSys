@@ -14,7 +14,7 @@ function Created() {
 	Btn_Close = UWindowSmallCloseButton(CreateControl(class'UWindowSmallCloseButton', 342, 334, 40, 16));
 }
 
-function LoadSettings(VS_ClientSettings S) {}
+function LoadSettings(VS_PlayerChannel C) {}
 
 function SaveSettings() {}
 

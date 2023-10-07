@@ -14,9 +14,10 @@ function Created() {
 	WinHeight = 400;
 }
 
-function LoadSettings(VS_ClientSettings CS) {
-	Settings = CS;
-	VS_UI_SettingsClientWindow(ClientArea).LoadSettings(CS);
+function LoadSettings(VS_PlayerChannel C) {
+	Channel = C;
+	Settings = C.Settings;
+	VS_UI_SettingsClientWindow(ClientArea).LoadSettings(C);
 }
 
 function BeforePaint(Canvas C, float X, float Y) {
