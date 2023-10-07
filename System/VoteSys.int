@@ -48,6 +48,8 @@ ThemeText="Theme"
 ThemeBright="Bright"
 ThemeDark="Dark"
 ThemeBlack="Black"
+
+[VS_UI_SettingsPage]
 SaveText="Save"
 
 [VS_UI_SettingsWindow]

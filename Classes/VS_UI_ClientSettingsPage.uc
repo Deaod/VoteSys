@@ -1,4 +1,4 @@
-class VS_UI_ClientSettingsPage extends UWindowPageWindow;
+class VS_UI_ClientSettingsPage extends VS_UI_SettingsPage;
 
 var VS_ClientSettings Settings;
 var int ActiveTheme;
@@ -9,11 +9,6 @@ var localized string ThemeBright;
 var localized string ThemeDark;
 var localized string ThemeBlack;
 
-var UWindowSmallButton Btn_Save;
-var localized string SaveText;
-
-var UWindowSmallCloseButton Btn_Close;
-
 function Created() {
 	super.Created();
 
@@ -23,11 +18,6 @@ function Created() {
 	Cmb_Theme.AddItem(ThemeDark);
 	Cmb_Theme.AddItem(ThemeBlack);
 	Cmb_Theme.SetEditable(false);
-
-	Btn_Save = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 298, 334, 40, 16));
-	Btn_Save.SetText(SaveText);
-
-	Btn_Close = UWindowSmallCloseButton(CreateControl(class'UWindowSmallCloseButton', 342, 334, 40, 16));
 }
 
 function LoadSettings(VS_ClientSettings S) {
@@ -41,9 +31,7 @@ function SaveSettings() {
 }
 
 function Notify(UWindowDialogControl C, byte E) {
-	if (C == Btn_Save && E == DE_Click) {
-		SaveSettings();
-	}
+	super.Notify(C, E);
 }
 
 function BeforePaint(Canvas C, float X, float Y) {
@@ -83,6 +71,4 @@ defaultproperties {
 	ThemeBright="Bright"
 	ThemeDark="Dark"
 	ThemeBlack="Black"
-
-	SaveText="Save"
 }
