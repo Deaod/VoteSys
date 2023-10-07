@@ -136,6 +136,11 @@ event ReceivedText(string Text) {
 	}
 
 	Buffer = Text;
+
+	if (Len(Buffer) >= 0x10000) {
+		Log("More than 64KiB without line feed, discarding buffer", 'VoteSys');
+		Buffer = "";
+	}
 }
 
 state Talking {
