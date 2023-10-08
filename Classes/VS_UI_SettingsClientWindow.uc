@@ -31,10 +31,8 @@ function BeforePaint(Canvas C, float X, float Y) {
 function LoadSettings(VS_PlayerChannel C) {
 	Channel = C;
 
-	ClientSettingsPage.LoadSettings(Channel.Settings);
+	ClientSettingsPage.LoadSettings(Channel);
 
-	if (ServerSettingsPage != none) {
-		ServerSettingsPage.Channel = Channel;
-		ServerSettingsPage.LoadSettings(Channel.Settings);
-	}
+	if (ServerSettingsPage != none)
+		ServerSettingsPage.LoadSettings(Channel);
 }
