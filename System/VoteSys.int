@@ -45,6 +45,15 @@ PlayerBanText="&Ban"
 PlayerBanTitle="Ban Player"
 PlayerBanMessage="Do you want to permanently ban {1}?"
 
+[VS_UI_ServerSettingsPage]
+Text_SettingsState_New="Loading"
+Text_SettingsState_Complete="Loaded"
+Text_SettingsState_NotAdmin="Unauthorized"
+Text_MidGameVoteThreshold="Mid-Game Vote Threshold"
+Text_MidGameVoteTimeLimit="Mid-Game Vote Time Limit"
+Text_GameEndedVoteDelay="Game Ended Vote Delay"
+Text_VoteTimeLimit="Vote Time Limit"
+
 [VS_UI_ClientSettingsPage]
 ThemeText="Theme"
 ThemeBright="Bright"
