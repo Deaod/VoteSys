@@ -6,6 +6,7 @@ var VS_Info Info; // Info Info
 var int Cookie;
 
 var VS_DataClient DataClient;
+var VS_ServerSettings ServerSettings;
 
 var VS_Preset PresetList;
 var VS_UI_VoteWindow VoteMenuDialog;
@@ -460,6 +461,27 @@ function ServerBanPlayer(PlayerReplicationInfo PRI) {
 		return;
 
 	VoteInfo().BanPlayer(self, PRI);
+}
+
+simulated function VS_ServerSettings ReloadServerSettings() {
+	ServerSettings = none;
+	return GetServerSettings();
+}
+
+simulated function VS_ServerSettings GetServerSettings() {
+	Log("PlayerChannel GetServerSettings", 'VoteSys');
+	if (ServerSettings == none) {
+		ServerSettings = DataClient.GetServerSettings();
+	}
+	return ServerSettings;
+}
+
+simulated function SaveServerSettings() {
+	Log("PlayerChannel SaveServerSettings", 'VoteSys');
+	if (ServerSettings == none)
+		return;
+
+	DataClient.SaveServerSettings(ServerSettings);
 }
 
 simulated function LocalizeMessage(
