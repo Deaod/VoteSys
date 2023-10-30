@@ -11,6 +11,7 @@ var VS_Info Info;
 var VS_PlayerChannel Channel;
 var VS_Preset Preset;
 var VS_Map LastMap;
+var VS_ServerSettings ServerSettings;
 
 var float ResolveDelay;
 
@@ -105,6 +106,14 @@ function string ParsePresetRef(string Line) {
 	return S11N.DecodeString(Line);
 }
 
+function ParseServerSetting(string Line) {
+	local string Prop, Value;
+
+	S11N.ParseProperty(Mid(Line, 15), Prop, Value);
+	if (ServerSettings.SetPropertyText(Prop, Value))
+		Log("Successfully set property"@Prop, 'VoteSys');
+}
+
 function ParseLine(string Line) {
 	if (Left(Line, 8) == "/PRESET/") {
 		bTransferDone = false;
@@ -112,15 +121,25 @@ function ParseLine(string Line) {
 		Channel.AddPreset(S11N.ParsePreset(Line));
 	} else if (Left(Line, 5) == "/MAP/") {
 		Channel.AddMap(S11N.ParseMap(Line));
-	} else if (Left(Line, 4) == "/END") {
+	} else if (Left(Line, 5) == "/END/") {
 		bTransferDone = true;
 		Log(Line, 'VoteSys');
 		Channel.AddPreset(none);
 		Channel.FocusPreset(ParsePresetRef(Line));
+	} else if (Line == "/NOTADMIN/") {
+		ServerSettings.SState = S_NOTADMIN;
+		ServerSettings = none;
+	} else if (Left(Line, 15) == "/SERVERSETTING/") {
+		Log(Line, 'VoteSys');
+		if (ServerSettings != none)
+			ParseServerSetting(Line);
+	} else if (Line == "/ENDSERVERSETTINGS/") {
+		Log("VS_DataClient GetServerSettings Done", 'VoteSys');
+		ServerSettings.SState = S_COMPLETE;
 	} else if (Left(Line, 5) == "/PONG") {
 		// nothing to do
 	} else {
-		Log(Left(Line, Len(Line)), 'VoteSys');
+		Log("Unhandled->"$Line, 'VoteSys');
 	}
 }
 
@@ -160,6 +179,62 @@ event Closed() {
 event Timer() {
 	if (IsConnected())
 		SendLine("/PING");
+}
+
+function VS_ServerSettings GetServerSettings() {
+	Log("DataClient GetServerSettings", 'VoteSys');
+	if (int(Level.EngineVersion) < 469)
+		return none; // not supported without 469
+
+	Log("DataClient GetServerSettings Version OK", 'VoteSys');
+
+	if (ServerSettings == none) {
+		ServerSettings = new(none) class'VS_ServerSettings';
+		SendLine("/SENDSERVERSETTINGS/");
+		Log("VS_DataClient GetServerSettings Settings Requested", 'VoteSys');
+	}
+	return ServerSettings;
+}
+
+function SendServerSetting(VS_ServerSettings S, string SettingName) {
+	SendLine("/SAVESERVERSETTING/"$S11N.SerializeProperty(SettingName, ServerSettings.GetPropertyText(SettingName)));
+}
+
+function SaveServerSettings(VS_ServerSettings S) {
+	Log("DataClient SaveServerSettings", 'VoteSys');
+
+	if (S == none)
+		return;
+
+	Log("VS_DataClient SaveServerSettings", 'VoteSys');
+
+	SendServerSetting(S, "MidGameVoteThreshold");
+	SendServerSetting(S, "MidGameVoteTimeLimit");
+	SendServerSetting(S, "GameEndedVoteDelay");
+	SendServerSetting(S, "VoteTimeLimit");
+	SendServerSetting(S, "VoteEndCondition");
+	SendServerSetting(S, "bRetainCandidates");
+	SendServerSetting(S, "KickVoteThreshold");
+	SendServerSetting(S, "DefaultPreset");
+	SendServerSetting(S, "DefaultMap");
+	SendServerSetting(S, "ServerAddress");
+	SendServerSetting(S, "DataPort");
+	SendServerSetting(S, "ClientDataPort");
+	SendServerSetting(S, "bManageServerPackages");
+	SendServerSetting(S, "bUseServerPackagesCompatibilityMode");
+	SendServerSetting(S, "bUseServerActorsCompatibilityMode");
+	SendServerSetting(S, "DefaultPackages");
+	SendServerSetting(S, "DefaultActors");
+	SendServerSetting(S, "DefaultTimeMessageClass");
+	SendServerSetting(S, "IdleTimeout");
+	SendServerSetting(S, "MinimumMapRepeatDistance");
+	SendServerSetting(S, "PresetProbeDepth");
+	SendServerSetting(S, "GameNameMode");
+	SendServerSetting(S, "bAlwaysUseDefaultPreset");
+	SendServerSetting(S, "bAlwaysUseDefaultMap");
+	SendLine("/SAVESERVERSETTINGSFILE/");
+
+	Log("VS_DataClient SaveServerSettings Done", 'VoteSys');
 }
 
 defaultproperties {

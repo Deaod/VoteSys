@@ -73,6 +73,12 @@ function ParseLine(string Line) {
 	} else if (Left(Line, 8) == "/COOKIE/") {
 		Channel = VoteSys.FindChannelForCookie(int(Mid(Line, 8)));
 		Log("VS_DataLink Found Channel"@Channel, 'VoteSys');
+	} else if (Line == "/SENDSERVERSETTINGS/") {
+		QueueCommand('SendServerSettings');
+	} else if (Left(Line, 19) == "/SAVESERVERSETTING/") {
+		SaveServerSetting(Line);
+	} else if (Line == "/SAVESERVERSETTINGSFILE/") {
+		VoteSys.Settings.SaveConfig();
 	}
 }
 
@@ -124,6 +130,71 @@ Begin:
 
 	Log("VS_DataLink SendPresets Done"@IpAddrToString(RemoteAddr), 'VoteSys');
 	GoToState('Idle');
+}
+
+state SendServerSettings {
+	function SendServerSetting(string SettingName) {
+		SendLine("/SERVERSETTING/"$S11N.SerializeProperty(SettingName, VoteSys.Settings.GetPropertyText(SettingName)));
+	}
+
+Begin:
+	if (Channel == none ||
+		Channel.PlayerOwner == none ||
+		Channel.PlayerOwner.PlayerReplicationInfo == none ||
+		Channel.PlayerOwner.PlayerReplicationInfo.bAdmin == false
+	) {
+		SendLine("/NOTADMIN/");
+		GoToState('Idle');
+	}
+
+	Log("VS_DataLink SendServerSettings"@IpAddrToString(RemoteAddr), 'VoteSys');
+
+	SendServerSetting("MidGameVoteThreshold");
+	SendServerSetting("MidGameVoteTimeLimit");
+	SendServerSetting("GameEndedVoteDelay");
+	SendServerSetting("VoteTimeLimit");
+	SendServerSetting("VoteEndCondition");
+	SendServerSetting("bRetainCandidates");
+	SendServerSetting("KickVoteThreshold");
+	SendServerSetting("DefaultPreset");
+	SendServerSetting("DefaultMap");
+	SendServerSetting("ServerAddress");
+	SendServerSetting("DataPort");
+	SendServerSetting("ClientDataPort");
+	SendServerSetting("bManageServerPackages");
+	SendServerSetting("bUseServerPackagesCompatibilityMode");
+	SendServerSetting("bUseServerActorsCompatibilityMode");
+	SendServerSetting("DefaultPackages");
+	SendServerSetting("DefaultActors");
+	SendServerSetting("DefaultTimeMessageClass");
+	SendServerSetting("IdleTimeout");
+	SendServerSetting("MinimumMapRepeatDistance");
+	SendServerSetting("PresetProbeDepth");
+	SendServerSetting("GameNameMode");
+	SendServerSetting("bAlwaysUseDefaultPreset");
+	SendServerSetting("bAlwaysUseDefaultMap");
+	SendLine("/ENDSERVERSETTINGS/");
+
+	Log("VS_DataLink SendServerSettings Done"@IpAddrToString(RemoteAddr), 'VoteSys');
+	GoToState('Idle');
+}
+
+function SaveServerSetting(string Line) {
+	local string PropertyName;
+	local string PropertyValue;
+
+	if (Channel == none ||
+		Channel.PlayerOwner == none ||
+		Channel.PlayerOwner.PlayerReplicationInfo == none ||
+		Channel.PlayerOwner.PlayerReplicationInfo.bAdmin == false
+	) {
+		return;
+	}
+
+	S11N.ParseProperty(Mid(Line, 19), PropertyName, PropertyValue);
+
+	if (VoteSys.Settings.SetPropertyText(PropertyName, PropertyValue))
+		Log("Successfully set property"@PropertyName@"to"@PropertyValue, 'VoteSys');
 }
 
 function HandleError() {

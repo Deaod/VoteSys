@@ -43,6 +43,14 @@ var config EGameNameMode GameNameMode;
 var config bool bAlwaysUseDefaultPreset;
 var config bool bAlwaysUseDefaultMap;
 
+enum ESettingsState {
+	S_NEW,
+	S_COMPLETE,
+	S_NOTADMIN
+};
+
+var ESettingsState SState;
+
 defaultproperties {
 	MidGameVoteThreshold=0.5
 	MidGameVoteTimeLimit=0
