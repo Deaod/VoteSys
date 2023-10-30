@@ -53,7 +53,8 @@ function Created() {
 	Presets.EditBoxWidth = Presets.WinWidth;
 
 	MapFilter = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 10, TabsHeight + 30, 180, 12));
-	MapFilter.SetText(MapFilterText);
+	MapFilter.SetText("");
+	MapFilter.SetEmptyText(MapFilterText);
 
 	MapListBox = VS_UI_MapListBox(CreateControl(class'VS_UI_MapListBox', 10, TabsHeight + 50, 180, 284));
 	VoteButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 10, TabsHeight + 338, 88, 12));

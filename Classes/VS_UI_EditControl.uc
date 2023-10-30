@@ -2,8 +2,7 @@ class VS_UI_EditControl extends UWindowEditControl;
 
 var VS_UI_ThemeBase Theme;
 
-function Created()
-{
+function Created() {
 	local VS_UI_EditBox EB;
 
 	Super(UWindowDialogControl).Created();
@@ -19,20 +18,22 @@ function Created()
 	SetEditTextColor(LookAndFeel.EditBoxTextColor);
 }
 
-function SetText(string NewText)
-{
-	Text = NewText;
+function SetEmptyText(string NewText) {
 	VS_UI_EditBox(EditBox).EmptyText = NewText;
 }
 
 function Paint(Canvas C, float MouseX, float MouseY) {
-	local string Text2;
-
-	Text2 = Text;
-	Text = "";
 	Theme.DrawBox(C, self, EditAreaDrawX, 0, EditBoxWidth, WinHeight);
+
+	if(Text != "") {
+		C.DrawColor = TextColor;
+		ClipText(C, TextX, TextY, Text);
+		C.DrawColor.R = 255;
+		C.DrawColor.G = 255;
+		C.DrawColor.B = 255;
+	}
+
 	super(UWindowDialogControl).Paint(C, MouseX, MouseY);
-	Text = Text2;
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
