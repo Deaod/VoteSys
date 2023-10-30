@@ -67,6 +67,11 @@ final function NextVariable(out string L) {
 		L = "";
 }
 
+final function ParseProperty(string Line, out string PropertyName, out string PropertyValue) {
+	PropertyName  = DecodeString(Line); NextVariable(Line);
+	PropertyValue = DecodeString(Line);
+}
+
 final function VS_Preset ParsePreset(string Line) {
 	local VS_Preset P;
 
@@ -95,6 +100,10 @@ final function VS_Map ParseMap(string Line) {
 	M.Sequence = int(Line);
 
 	return M;
+}
+
+final function string SerializeProperty(string PropertyName, string PropertyValue) {
+	return EncodeString(PropertyName)$"/"$EncodeString(PropertyValue);
 }
 
 final function string SerializePreset(VS_Preset P) {
