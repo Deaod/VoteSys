@@ -1,7 +1,6 @@
 class VS_UI_ClientSettingsPage extends VS_UI_SettingsPage;
 
 var VS_ClientSettings Settings;
-var int ActiveTheme;
 
 var VS_UI_ComboControl Cmb_Theme;
 var localized string ThemeText;
@@ -21,6 +20,8 @@ function Created() {
 }
 
 function LoadSettings(VS_PlayerChannel C) {
+	super.LoadSettings(C);
+
 	Settings = C.Settings;
 
 	Cmb_Theme.SetSelectedIndex(Settings.Theme);
@@ -28,45 +29,15 @@ function LoadSettings(VS_PlayerChannel C) {
 
 function SaveSettings() {
 	Settings.Theme = Settings.IntToTheme(Cmb_Theme.GetSelectedIndex());
+
+	Settings.SaveConfig();
 }
 
-function Notify(UWindowDialogControl C, byte E) {
-	super.Notify(C, E);
-}
-
-function BeforePaint(Canvas C, float X, float Y) {
-	super.BeforePaint(C, X, Y);
-
-	if (ActiveTheme != Settings.Theme) {
-		ActiveTheme = Settings.Theme;
-		ApplyTheme(Settings.Theme);
-	}
-}
-
-function ApplyTheme(byte Theme) {
-	local VS_UI_ThemeBase T;
-
-	switch(Settings.IntToTheme(Theme)) {
-		case TH_Bright:
-			T = new class'VS_UI_ThemeBright';
-			break;
-		case TH_Dark:
-			T = new class'VS_UI_ThemeDark';
-			break;
-		case TH_Black:
-			T = new class'VS_UI_ThemeBlack';
-			break;
-	}
-
-	if (T == none)
-		T = new class'VS_UI_ThemeBright';
-
-	Cmb_Theme.Theme = T;
+function ApplyTheme() {
+	Cmb_Theme.Theme = Theme;
 }
 
 defaultproperties {
-	ActiveTheme=-1
-
 	ThemeText="Theme"
 	ThemeBright="Bright"
 	ThemeDark="Dark"
