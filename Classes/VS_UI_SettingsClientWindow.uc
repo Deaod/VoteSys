@@ -20,6 +20,7 @@ function BeforePaint(Canvas C, float X, float Y) {
 
 	if (bIsAdmin && ServerSettingsPage == none) {
 		ServerSettingsPage = VS_UI_ServerSettingsPage(AddPage("Server", class'VS_UI_ServerSettingsPage').Page);
+		ServerSettingsPage.LoadSettings(Channel);
 	} else if (bIsAdmin == false && ServerSettingsPage != none) {
 		DeletePage(ServerSettingsPage.OwnerTab);
 		ServerSettingsPage = none;
