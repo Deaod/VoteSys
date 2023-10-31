@@ -6,7 +6,7 @@
 
 ### Dark Mode
 
-![Dark Mode Overview](Docs/OverviewDark.png)
+![Dark Mode Overview](OverviewDark.png)
 
 ### Category Tabs
 
@@ -86,13 +86,13 @@ With admin privileges Kick will instantly kick the player and prevent players fr
 
 ### Close Button
 
-![Close Button](Docs/CloseButton.png)
+![Close Button](CloseButton.png)
 
 The Close button does exactly what it says: It closes the vote menu.
 
 ### Settings Button
 
-![Settings Button](Docs/SettingsButton.png)
+![Settings Button](SettingsButton.png)
 
 The Settings button with the gear icon opens a settings menu. See [Settings Menu](#settings-menu).
 
@@ -100,7 +100,7 @@ The Settings button with the gear icon opens a settings menu. See [Settings Menu
 
 ### Client Settings
 
-![Client Settings](Docs/ClientSettings.png)
+![Client Settings](ClientSettings.png)
 
 Allows changing client-side settings.
 
