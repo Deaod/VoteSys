@@ -20,6 +20,12 @@ var localized string Text_GameEndedVoteDelay;
 var VS_UI_EditControl Edt_VoteTimeLimit;
 var localized string Text_VoteTimeLimit;
 
+var VS_UI_ComboControl Cmb_VoteEndCondition;
+var localized string Text_VoteEndCondition;
+var localized string Text_VoteEndCondition_TimerOnly;
+var localized string Text_VoteEndCondition_TimerOrAllVotesIn;
+var localized string Text_VoteEndCondition_TimerOrResultDetermined;
+
 function LoadSettings(VS_PlayerChannel C) {
 	super.LoadSettings(C);
 
@@ -31,6 +37,7 @@ function LoadSettings(VS_PlayerChannel C) {
 	Edt_MidGameVoteTimeLimit.EditBox.SetEditable(bSettingsLoaded);
 	Edt_GameEndedVoteDelay.EditBox.SetEditable(bSettingsLoaded);
 	Edt_VoteTimeLimit.EditBox.SetEditable(bSettingsLoaded);
+	Cmb_VoteEndCondition.SetEnabled(bSettingsLoaded);
 }
 
 function LoadServerSettings() {
@@ -43,6 +50,7 @@ function LoadServerSettings() {
 	Edt_MidGameVoteTimeLimit.SetValue(string(Settings.MidGameVoteTimeLimit));
 	Edt_GameEndedVoteDelay.SetValue(string(Settings.GameEndedVoteDelay));
 	Edt_VoteTimeLimit.SetValue(string(Settings.VoteTimeLimit));
+	Cmb_VoteEndCondition.SetSelectedIndex(int(Settings.VoteEndCondition));
 
 	bSettingsLoaded = true;
 }
@@ -52,6 +60,7 @@ function SaveSettings() {
 	Settings.MidGameVoteTimeLimit = int(Edt_MidGameVoteTimeLimit.GetValue());
 	Settings.GameEndedVoteDelay = int(Edt_GameEndedVoteDelay.GetValue());
 	Settings.VoteTimeLimit = int(Edt_VoteTimeLimit.GetValue());
+	Settings.VoteEndCondition = Settings.IntToVoteEndCond(Cmb_VoteEndCondition.GetSelectedIndex());
 
 	Channel.SaveServerSettings();
 }
@@ -82,6 +91,13 @@ function Created() {
 	Edt_VoteTimeLimit.SetText(Text_VoteTimeLimit);
 	Edt_VoteTimeLimit.EditBoxWidth = 60;
 	Edt_VoteTimeLimit.SetNumericOnly(true);
+
+	Cmb_VoteEndCondition = VS_UI_ComboControl(CreateControl(class'VS_UI_ComboControl', 8, 88, 188, 16));
+	Cmb_VoteEndCondition.SetText(Text_VoteEndCondition);
+	Cmb_VoteEndCondition.AddItem(Text_VoteEndCondition_TimerOnly);
+	Cmb_VoteEndCondition.AddItem(Text_VoteEndCondition_TimerOrAllVotesIn);
+	Cmb_VoteEndCondition.AddItem(Text_VoteEndCondition_TimerOrResultDetermined);
+	Cmb_VoteEndCondition.SetEditable(false);
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
@@ -106,6 +122,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 			Edt_MidGameVoteTimeLimit.EditBox.SetEditable(bSettingsLoaded);
 			Edt_GameEndedVoteDelay.EditBox.SetEditable(bSettingsLoaded);
 			Edt_VoteTimeLimit.EditBox.SetEditable(bSettingsLoaded);
+			Cmb_VoteEndCondition.SetEnabled(bSettingsLoaded);
 		}
 	}
 }
@@ -115,6 +132,7 @@ function ApplyTheme() {
 	Edt_MidGameVoteTimeLimit.Theme = Theme;
 	Edt_GameEndedVoteDelay.Theme = Theme;
 	Edt_VoteTimeLimit.Theme = Theme;
+	Cmb_VoteEndCondition.Theme = Theme;
 }
 
 defaultproperties {
@@ -126,4 +144,8 @@ defaultproperties {
 	Text_MidGameVoteTimeLimit="Mid-Game Vote Time Limit"
 	Text_GameEndedVoteDelay="Game Ended Vote Delay"
 	Text_VoteTimeLimit="Vote Time Limit"
+	Text_VoteEndCondition="Vote End Rules"
+	Text_VoteEndCondition_TimerOnly="Timer Only"
+	Text_VoteEndCondition_TimerOrAllVotesIn="Everyone Voted"
+	Text_VoteEndCondition_TimerOrResultDetermined="Result Certain"
 }

@@ -51,6 +51,15 @@ enum ESettingsState {
 
 var ESettingsState SState;
 
+function EVoteEndCond IntToVoteEndCond(int v) {
+	switch(v) {
+		case 0: return VEC_TimerOnly;
+		case 1: return VEC_TimerOrAllVotesIn;
+		case 2: return VEC_TimerOrResultDetermined;
+	}
+	return VEC_TimerOnly;
+}
+
 defaultproperties {
 	MidGameVoteThreshold=0.5
 	MidGameVoteTimeLimit=0

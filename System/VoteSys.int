@@ -53,6 +53,10 @@ Text_MidGameVoteThreshold="Mid-Game Vote Threshold"
 Text_MidGameVoteTimeLimit="Mid-Game Vote Time Limit"
 Text_GameEndedVoteDelay="Game Ended Vote Delay"
 Text_VoteTimeLimit="Vote Time Limit"
+Text_VoteEndCondition="Vote End Rules"
+Text_VoteEndCondition_TimerOnly="Timer Only"
+Text_VoteEndCondition_TimerOrAllVotesIn="Everyone Voted"
+Text_VoteEndCondition_TimerOrResultDetermined="Result Certain"
 
 [VS_UI_ClientSettingsPage]
 ThemeText="Theme"
