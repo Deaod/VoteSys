@@ -60,6 +60,7 @@ Text_VoteEndCondition_TimerOrResultDetermined="Result Certain"
 Text_RetainCandidates="Retain Candidates"
 Text_KickVoteThreshold="Kick Vote Threshold"
 Text_DefaultPreset="Default Preset"
+Text_DefaultMap="Default Map"
 
 [VS_UI_ClientSettingsPage]
 ThemeText="Theme"
