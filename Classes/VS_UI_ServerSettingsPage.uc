@@ -32,6 +32,9 @@ var localized string Text_RetainCandidates;
 var VS_UI_EditControl Edt_KickVoteThreshold;
 var localized string Text_KickVoteThreshold;
 
+var VS_UI_EditControl Edt_DefaultPreset;
+var localized string Text_DefaultPreset;
+
 function LoadSettings(VS_PlayerChannel C) {
 	super.LoadSettings(C);
 
@@ -46,6 +49,7 @@ function LoadSettings(VS_PlayerChannel C) {
 	Cmb_VoteEndCondition.SetEnabled(bSettingsLoaded);
 	Chk_RetainCandidates.bDisabled = !bSettingsLoaded;
 	Edt_KickVoteThreshold.EditBox.SetEditable(bSettingsLoaded);
+	Edt_DefaultPreset.EditBox.SetEditable(bSettingsLoaded);
 }
 
 function LoadServerSettings() {
@@ -61,6 +65,7 @@ function LoadServerSettings() {
 	Cmb_VoteEndCondition.SetSelectedIndex(int(Settings.VoteEndCondition));
 	Chk_RetainCandidates.bChecked = Settings.bRetainCandidates;
 	Edt_KickVoteThreshold.SetValue(string(Settings.KickVoteThreshold));
+	Edt_DefaultPreset.SetValue(Settings.DefaultPreset);
 
 	bSettingsLoaded = true;
 }
@@ -76,6 +81,7 @@ function SaveSettings() {
 	Settings.VoteEndCondition = Settings.IntToVoteEndCond(Cmb_VoteEndCondition.GetSelectedIndex());
 	Settings.bRetainCandidates = Chk_RetainCandidates.bChecked;
 	Settings.KickVoteThreshold = float(Edt_KickVoteThreshold.GetValue());
+	Settings.DefaultPreset = Edt_DefaultPreset.GetValue();
 
 	Channel.SaveServerSettings();
 }
@@ -122,6 +128,10 @@ function Created() {
 	Edt_KickVoteThreshold.EditBoxWidth = 60;
 	Edt_KickVoteThreshold.SetNumericOnly(true);
 	Edt_KickVoteThreshold.SetNumericFloat(true);
+
+	Edt_DefaultPreset = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 8, 148, 188, 16));
+	Edt_DefaultPreset.SetText(Text_DefaultPreset);
+	Edt_DefaultPreset.EditBoxWidth = 100;
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
@@ -149,6 +159,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 			Cmb_VoteEndCondition.SetEnabled(bSettingsLoaded);
 			Chk_RetainCandidates.bDisabled = !bSettingsLoaded;
 			Edt_KickVoteThreshold.EditBox.SetEditable(bSettingsLoaded);
+			Edt_DefaultPreset.EditBox.SetEditable(bSettingsLoaded);
 		}
 	}
 }
@@ -161,6 +172,7 @@ function ApplyTheme() {
 	Cmb_VoteEndCondition.Theme = Theme;
 	//Chk_RetainCandidates // not themed
 	Edt_KickVoteThreshold.Theme = Theme;
+	Edt_DefaultPreset.Theme = Theme;
 }
 
 defaultproperties {
@@ -178,4 +190,5 @@ defaultproperties {
 	Text_VoteEndCondition_TimerOrResultDetermined="Result Certain"
 	Text_RetainCandidates="Retain Candidates"
 	Text_KickVoteThreshold="Kick Vote Threshold"
+	Text_DefaultPreset="Default Preset"
 }

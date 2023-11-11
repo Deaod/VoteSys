@@ -59,6 +59,7 @@ Text_VoteEndCondition_TimerOrAllVotesIn="Everyone Voted"
 Text_VoteEndCondition_TimerOrResultDetermined="Result Certain"
 Text_RetainCandidates="Retain Candidates"
 Text_KickVoteThreshold="Kick Vote Threshold"
+Text_DefaultPreset="Default Preset"
 
 [VS_UI_ClientSettingsPage]
 ThemeText="Theme"
