@@ -38,6 +38,9 @@ var localized string Text_DefaultPreset;
 var VS_UI_EditControl Edt_DefaultMap;
 var localized string Text_DefaultMap;
 
+var VS_UI_EditControl Edt_ServerAddress;
+var localized string Text_ServerAddress;
+
 function LoadSettings(VS_PlayerChannel C) {
 	super.LoadSettings(C);
 
@@ -54,6 +57,7 @@ function LoadSettings(VS_PlayerChannel C) {
 	Edt_KickVoteThreshold.EditBox.SetEditable(bSettingsLoaded);
 	Edt_DefaultPreset.EditBox.SetEditable(bSettingsLoaded);
 	Edt_DefaultMap.EditBox.SetEditable(bSettingsLoaded);
+	Edt_ServerAddress.EditBox.SetEditable(bSettingsLoaded);
 }
 
 function LoadServerSettings() {
@@ -71,6 +75,7 @@ function LoadServerSettings() {
 	Edt_KickVoteThreshold.SetValue(string(Settings.KickVoteThreshold));
 	Edt_DefaultPreset.SetValue(Settings.DefaultPreset);
 	Edt_DefaultMap.SetValue(Settings.DefaultMap);
+	Edt_ServerAddress.SetValue(Settings.ServerAddress);
 
 	bSettingsLoaded = true;
 }
@@ -88,6 +93,7 @@ function SaveSettings() {
 	Settings.KickVoteThreshold = float(Edt_KickVoteThreshold.GetValue());
 	Settings.DefaultPreset = Edt_DefaultPreset.GetValue();
 	Settings.DefaultMap = Edt_DefaultMap.GetValue();
+	Settings.ServerAddress = Edt_ServerAddress.GetValue();
 
 	Channel.SaveServerSettings();
 }
@@ -142,6 +148,10 @@ function Created() {
 	Edt_DefaultMap = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 8, 168, 188, 16));
 	Edt_DefaultMap.SetText(Text_DefaultMap);
 	Edt_DefaultMap.EditBoxWidth = 100;
+
+	Edt_ServerAddress = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 8, 188, 188, 16));
+	Edt_ServerAddress.SetText(Text_ServerAddress);
+	Edt_ServerAddress.EditBoxWidth = 100;
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
@@ -171,6 +181,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 			Edt_KickVoteThreshold.EditBox.SetEditable(bSettingsLoaded);
 			Edt_DefaultPreset.EditBox.SetEditable(bSettingsLoaded);
 			Edt_DefaultMap.EditBox.SetEditable(bSettingsLoaded);
+			Edt_ServerAddress.EditBox.SetEditable(bSettingsLoaded);
 		}
 	}
 }
@@ -185,6 +196,7 @@ function ApplyTheme() {
 	Edt_KickVoteThreshold.Theme = Theme;
 	Edt_DefaultPreset.Theme = Theme;
 	Edt_DefaultMap.Theme = Theme;
+	Edt_ServerAddress.Theme = Theme;
 }
 
 defaultproperties {
@@ -204,4 +216,5 @@ defaultproperties {
 	Text_KickVoteThreshold="Kick Vote Threshold"
 	Text_DefaultPreset="Default Preset"
 	Text_DefaultMap="Default Map"
+	Text_ServerAddress="Server Address"
 }
