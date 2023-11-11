@@ -57,6 +57,7 @@ Text_VoteEndCondition="Vote End Rules"
 Text_VoteEndCondition_TimerOnly="Timer Only"
 Text_VoteEndCondition_TimerOrAllVotesIn="Everyone Voted"
 Text_VoteEndCondition_TimerOrResultDetermined="Result Certain"
+Text_RetainCandidates="Retain Candidates"
 
 [VS_UI_ClientSettingsPage]
 ThemeText="Theme"
