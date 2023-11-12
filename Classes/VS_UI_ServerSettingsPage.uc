@@ -44,6 +44,9 @@ var localized string Text_ServerAddress;
 var VS_UI_EditControl Edt_DataPort;
 var localized string Text_DataPort;
 
+var VS_UI_EditControl Edt_ClientDataPort;
+var localized string Text_ClientDataPort;
+
 function LoadSettings(VS_PlayerChannel C) {
 	super.LoadSettings(C);
 
@@ -62,6 +65,7 @@ function LoadSettings(VS_PlayerChannel C) {
 	Edt_DefaultMap.EditBox.SetEditable(bSettingsLoaded);
 	Edt_ServerAddress.EditBox.SetEditable(bSettingsLoaded);
 	Edt_DataPort.EditBox.SetEditable(bSettingsLoaded);
+	Edt_ClientDataPort.EditBox.SetEditable(bSettingsLoaded);
 }
 
 function LoadServerSettings() {
@@ -81,6 +85,7 @@ function LoadServerSettings() {
 	Edt_DefaultMap.SetValue(Settings.DefaultMap);
 	Edt_ServerAddress.SetValue(Settings.ServerAddress);
 	Edt_DataPort.SetValue(string(Settings.DataPort));
+	Edt_ClientDataPort.SetValue(string(Settings.ClientDataPort));
 
 	bSettingsLoaded = true;
 }
@@ -100,6 +105,7 @@ function SaveSettings() {
 	Settings.DefaultMap = Edt_DefaultMap.GetValue();
 	Settings.ServerAddress = Edt_ServerAddress.GetValue();
 	Settings.DataPort = int(Edt_DataPort.GetValue());
+	Settings.ClientDataPort = int(Edt_ClientDataPort.GetValue());
 
 	Channel.SaveServerSettings();
 }
@@ -163,6 +169,11 @@ function Created() {
 	Edt_DataPort.SetText(Text_DataPort);
 	Edt_DataPort.EditBoxWidth = 60;
 	Edt_DataPort.SetNumericOnly(true);
+
+	Edt_ClientDataPort = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 8, 208, 188, 16));
+	Edt_ClientDataPort.SetText(Text_ClientDataPort);
+	Edt_ClientDataPort.EditBoxWidth = 60;
+	Edt_ClientDataPort.SetNumericOnly(true);
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
@@ -194,6 +205,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 			Edt_DefaultMap.EditBox.SetEditable(bSettingsLoaded);
 			Edt_ServerAddress.EditBox.SetEditable(bSettingsLoaded);
 			Edt_DataPort.EditBox.SetEditable(bSettingsLoaded);
+			Edt_ClientDataPort.EditBox.SetEditable(bSettingsLoaded);
 		}
 	}
 }
@@ -210,6 +222,7 @@ function ApplyTheme() {
 	Edt_DefaultMap.Theme = Theme;
 	Edt_ServerAddress.Theme = Theme;
 	Edt_DataPort.Theme = Theme;
+	Edt_ClientDataPort.Theme = Theme;
 }
 
 defaultproperties {
@@ -231,4 +244,5 @@ defaultproperties {
 	Text_DefaultMap="Default Map"
 	Text_ServerAddress="Server Address"
 	Text_DataPort="Data Port"
+	Text_ClientDataPort="Client Data Port"
 }
