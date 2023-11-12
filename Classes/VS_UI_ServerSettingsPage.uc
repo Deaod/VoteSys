@@ -170,7 +170,7 @@ function Created() {
 	Edt_DataPort.EditBoxWidth = 60;
 	Edt_DataPort.SetNumericOnly(true);
 
-	Edt_ClientDataPort = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 8, 208, 188, 16));
+	Edt_ClientDataPort = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 8, 228, 188, 16));
 	Edt_ClientDataPort.SetText(Text_ClientDataPort);
 	Edt_ClientDataPort.EditBoxWidth = 60;
 	Edt_ClientDataPort.SetNumericOnly(true);
