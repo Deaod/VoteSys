@@ -50,6 +50,9 @@ var localized string Text_ClientDataPort;
 var VS_UI_EditControl Edt_DefaultTimeMessageClass;
 var localized string Text_DefaultTimeMessageClass;
 
+var VS_UI_EditControl Edt_IdleTimeout;
+var localized string Text_IdleTimeout;
+
 function LoadSettings(VS_PlayerChannel C) {
 	super.LoadSettings(C);
 
@@ -74,6 +77,7 @@ function EnableInteraction(bool bEnable) {
 	Edt_DataPort.EditBox.SetEditable(bEnable);
 	Edt_ClientDataPort.EditBox.SetEditable(bEnable);
 	Edt_DefaultTimeMessageClass.EditBox.SetEditable(bEnable);
+	Edt_IdleTimeout.EditBox.SetEditable(bEnable);
 }
 
 function LoadServerSettings() {
@@ -95,6 +99,7 @@ function LoadServerSettings() {
 	Edt_DataPort.SetValue(string(Settings.DataPort));
 	Edt_ClientDataPort.SetValue(string(Settings.ClientDataPort));
 	Edt_DefaultTimeMessageClass.SetValue(Settings.DefaultTimeMessageClass);
+	Edt_IdleTimeout.SetValue(string(Settings.IdleTimeout));
 
 	bSettingsLoaded = true;
 }
@@ -116,6 +121,7 @@ function SaveSettings() {
 	Settings.DataPort = int(Edt_DataPort.GetValue());
 	Settings.ClientDataPort = int(Edt_ClientDataPort.GetValue());
 	Settings.DefaultTimeMessageClass = Edt_DefaultTimeMessageClass.GetValue();
+	Settings.IdleTimeout = int(Edt_IdleTimeout.GetValue());
 
 	Channel.SaveServerSettings();
 }
@@ -188,6 +194,11 @@ function Created() {
 	Edt_DefaultTimeMessageClass = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 8, 248, 188, 16));
 	Edt_DefaultTimeMessageClass.SetText(Text_DefaultTimeMessageClass);
 	Edt_DefaultTimeMessageClass.EditBoxWidth = 100;
+
+	Edt_IdleTimeout = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 8, 268, 188, 16));
+	Edt_IdleTimeout.SetText(Text_IdleTimeout);
+	Edt_IdleTimeout.EditBoxWidth = 60;
+	Edt_IdleTimeout.SetNumericOnly(true);
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
@@ -226,6 +237,7 @@ function ApplyTheme() {
 	Edt_DataPort.Theme = Theme;
 	Edt_ClientDataPort.Theme = Theme;
 	Edt_DefaultTimeMessageClass.Theme = Theme;
+	Edt_IdleTimeout.Theme = Theme;
 }
 
 defaultproperties {
@@ -249,4 +261,5 @@ defaultproperties {
 	Text_DataPort="Data Port"
 	Text_ClientDataPort="Client Data Port"
 	Text_DefaultTimeMessageClass="Time Msg Class"
+	Text_IdleTimeout="Idle Timeout"
 }
