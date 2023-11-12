@@ -54,18 +54,22 @@ function LoadSettings(VS_PlayerChannel C) {
 	LoadServerSettings();
 	Log("ServerSettingsPage LoadSettings", 'VoteSys');
 
-	Edt_MidGameVoteThreshold.EditBox.SetEditable(bSettingsLoaded);
-	Edt_MidGameVoteTimeLimit.EditBox.SetEditable(bSettingsLoaded);
-	Edt_GameEndedVoteDelay.EditBox.SetEditable(bSettingsLoaded);
-	Edt_VoteTimeLimit.EditBox.SetEditable(bSettingsLoaded);
-	Cmb_VoteEndCondition.SetEnabled(bSettingsLoaded);
-	Chk_RetainCandidates.bDisabled = !bSettingsLoaded;
-	Edt_KickVoteThreshold.EditBox.SetEditable(bSettingsLoaded);
-	Edt_DefaultPreset.EditBox.SetEditable(bSettingsLoaded);
-	Edt_DefaultMap.EditBox.SetEditable(bSettingsLoaded);
-	Edt_ServerAddress.EditBox.SetEditable(bSettingsLoaded);
-	Edt_DataPort.EditBox.SetEditable(bSettingsLoaded);
-	Edt_ClientDataPort.EditBox.SetEditable(bSettingsLoaded);
+	EnableInteraction(bSettingsLoaded);
+}
+
+function EnableInteraction(bool bEnable) {
+	Edt_MidGameVoteThreshold.EditBox.SetEditable(bEnable);
+	Edt_MidGameVoteTimeLimit.EditBox.SetEditable(bEnable);
+	Edt_GameEndedVoteDelay.EditBox.SetEditable(bEnable);
+	Edt_VoteTimeLimit.EditBox.SetEditable(bEnable);
+	Cmb_VoteEndCondition.SetEnabled(bEnable);
+	Chk_RetainCandidates.bDisabled = !bEnable;
+	Edt_KickVoteThreshold.EditBox.SetEditable(bEnable);
+	Edt_DefaultPreset.EditBox.SetEditable(bEnable);
+	Edt_DefaultMap.EditBox.SetEditable(bEnable);
+	Edt_ServerAddress.EditBox.SetEditable(bEnable);
+	Edt_DataPort.EditBox.SetEditable(bEnable);
+	Edt_ClientDataPort.EditBox.SetEditable(bEnable);
 }
 
 function LoadServerSettings() {
@@ -193,20 +197,8 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 
 	if (bSettingsLoaded == false) {
 		LoadServerSettings();
-		if (bSettingsLoaded) {
-			Edt_MidGameVoteThreshold.EditBox.SetEditable(bSettingsLoaded);
-			Edt_MidGameVoteTimeLimit.EditBox.SetEditable(bSettingsLoaded);
-			Edt_GameEndedVoteDelay.EditBox.SetEditable(bSettingsLoaded);
-			Edt_VoteTimeLimit.EditBox.SetEditable(bSettingsLoaded);
-			Cmb_VoteEndCondition.SetEnabled(bSettingsLoaded);
-			Chk_RetainCandidates.bDisabled = !bSettingsLoaded;
-			Edt_KickVoteThreshold.EditBox.SetEditable(bSettingsLoaded);
-			Edt_DefaultPreset.EditBox.SetEditable(bSettingsLoaded);
-			Edt_DefaultMap.EditBox.SetEditable(bSettingsLoaded);
-			Edt_ServerAddress.EditBox.SetEditable(bSettingsLoaded);
-			Edt_DataPort.EditBox.SetEditable(bSettingsLoaded);
-			Edt_ClientDataPort.EditBox.SetEditable(bSettingsLoaded);
-		}
+		if (bSettingsLoaded)
+			EnableInteraction(bSettingsLoaded);
 	}
 }
 
