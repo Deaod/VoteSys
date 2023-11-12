@@ -56,6 +56,9 @@ var localized string Text_IdleTimeout;
 var VS_UI_EditControl Edt_MinimumMapRepeatDistance;
 var localized string Text_MinimumMapRepeatDistance;
 
+var VS_UI_EditControl Edt_PresetProbeDepth;
+var localized string Text_PresetProbeDepth;
+
 function LoadSettings(VS_PlayerChannel C) {
 	super.LoadSettings(C);
 
@@ -82,6 +85,7 @@ function EnableInteraction(bool bEnable) {
 	Edt_DefaultTimeMessageClass.EditBox.SetEditable(bEnable);
 	Edt_IdleTimeout.EditBox.SetEditable(bEnable);
 	Edt_MinimumMapRepeatDistance.EditBox.SetEditable(bEnable);
+	Edt_PresetProbeDepth.EditBox.SetEditable(bEnable);
 }
 
 function LoadServerSettings() {
@@ -105,6 +109,7 @@ function LoadServerSettings() {
 	Edt_DefaultTimeMessageClass.SetValue(Settings.DefaultTimeMessageClass);
 	Edt_IdleTimeout.SetValue(string(Settings.IdleTimeout));
 	Edt_MinimumMapRepeatDistance.SetValue(string(Settings.MinimumMapRepeatDistance));
+	Edt_PresetProbeDepth.SetValue(string(Settings.PresetProbeDepth));
 
 	bSettingsLoaded = true;
 }
@@ -128,6 +133,7 @@ function SaveSettings() {
 	Settings.DefaultTimeMessageClass = Edt_DefaultTimeMessageClass.GetValue();
 	Settings.IdleTimeout = int(Edt_IdleTimeout.GetValue());
 	Settings.MinimumMapRepeatDistance = int(Edt_MinimumMapRepeatDistance.GetValue());
+	Settings.PresetProbeDepth = int(Edt_PresetProbeDepth.GetValue());
 
 	Channel.SaveServerSettings();
 }
@@ -210,6 +216,11 @@ function Created() {
 	Edt_MinimumMapRepeatDistance.SetText(Text_MinimumMapRepeatDistance);
 	Edt_MinimumMapRepeatDistance.EditBoxWidth = 60;
 	Edt_MinimumMapRepeatDistance.SetNumericOnly(true);
+
+	Edt_PresetProbeDepth = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 8, 308, 188, 16));
+	Edt_PresetProbeDepth.SetText(Text_PresetProbeDepth);
+	Edt_PresetProbeDepth.EditBoxWidth = 60;
+	Edt_PresetProbeDepth.SetNumericOnly(true);
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
@@ -250,6 +261,7 @@ function ApplyTheme() {
 	Edt_DefaultTimeMessageClass.Theme = Theme;
 	Edt_IdleTimeout.Theme = Theme;
 	Edt_MinimumMapRepeatDistance.Theme = Theme;
+	Edt_PresetProbeDepth.Theme = Theme;
 }
 
 defaultproperties {
@@ -275,4 +287,5 @@ defaultproperties {
 	Text_DefaultTimeMessageClass="Time Msg Class"
 	Text_IdleTimeout="Idle Timeout"
 	Text_MinimumMapRepeatDistance="Map Repeat Distance"
+	Text_PresetProbeDepth="Preset Probe Depth"
 }
