@@ -53,6 +53,9 @@ var localized string Text_DefaultTimeMessageClass;
 var VS_UI_EditControl Edt_IdleTimeout;
 var localized string Text_IdleTimeout;
 
+var VS_UI_EditControl Edt_MinimumMapRepeatDistance;
+var localized string Text_MinimumMapRepeatDistance;
+
 function LoadSettings(VS_PlayerChannel C) {
 	super.LoadSettings(C);
 
@@ -78,6 +81,7 @@ function EnableInteraction(bool bEnable) {
 	Edt_ClientDataPort.EditBox.SetEditable(bEnable);
 	Edt_DefaultTimeMessageClass.EditBox.SetEditable(bEnable);
 	Edt_IdleTimeout.EditBox.SetEditable(bEnable);
+	Edt_MinimumMapRepeatDistance.EditBox.SetEditable(bEnable);
 }
 
 function LoadServerSettings() {
@@ -100,6 +104,7 @@ function LoadServerSettings() {
 	Edt_ClientDataPort.SetValue(string(Settings.ClientDataPort));
 	Edt_DefaultTimeMessageClass.SetValue(Settings.DefaultTimeMessageClass);
 	Edt_IdleTimeout.SetValue(string(Settings.IdleTimeout));
+	Edt_MinimumMapRepeatDistance.SetValue(string(Settings.MinimumMapRepeatDistance));
 
 	bSettingsLoaded = true;
 }
@@ -122,6 +127,7 @@ function SaveSettings() {
 	Settings.ClientDataPort = int(Edt_ClientDataPort.GetValue());
 	Settings.DefaultTimeMessageClass = Edt_DefaultTimeMessageClass.GetValue();
 	Settings.IdleTimeout = int(Edt_IdleTimeout.GetValue());
+	Settings.MinimumMapRepeatDistance = int(Edt_MinimumMapRepeatDistance.GetValue());
 
 	Channel.SaveServerSettings();
 }
@@ -199,6 +205,11 @@ function Created() {
 	Edt_IdleTimeout.SetText(Text_IdleTimeout);
 	Edt_IdleTimeout.EditBoxWidth = 60;
 	Edt_IdleTimeout.SetNumericOnly(true);
+
+	Edt_MinimumMapRepeatDistance = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 8, 288, 188, 16));
+	Edt_MinimumMapRepeatDistance.SetText(Text_MinimumMapRepeatDistance);
+	Edt_MinimumMapRepeatDistance.EditBoxWidth = 60;
+	Edt_MinimumMapRepeatDistance.SetNumericOnly(true);
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
@@ -238,6 +249,7 @@ function ApplyTheme() {
 	Edt_ClientDataPort.Theme = Theme;
 	Edt_DefaultTimeMessageClass.Theme = Theme;
 	Edt_IdleTimeout.Theme = Theme;
+	Edt_MinimumMapRepeatDistance.Theme = Theme;
 }
 
 defaultproperties {
@@ -262,4 +274,5 @@ defaultproperties {
 	Text_ClientDataPort="Client Data Port"
 	Text_DefaultTimeMessageClass="Time Msg Class"
 	Text_IdleTimeout="Idle Timeout"
+	Text_MinimumMapRepeatDistance="Map Repeat Distance"
 }
