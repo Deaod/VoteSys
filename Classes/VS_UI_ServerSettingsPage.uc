@@ -170,6 +170,7 @@ function Created() {
 	Cmb_VoteEndCondition.AddItem(Text_VoteEndCondition_TimerOnly);
 	Cmb_VoteEndCondition.AddItem(Text_VoteEndCondition_TimerOrAllVotesIn);
 	Cmb_VoteEndCondition.AddItem(Text_VoteEndCondition_TimerOrResultDetermined);
+	Cmb_VoteEndCondition.EditBoxWidth = 100;
 	Cmb_VoteEndCondition.SetEditable(false);
 
 	Chk_RetainCandidates = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 8, 108, 188, 16));
