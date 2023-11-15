@@ -79,7 +79,7 @@ function VS_Map SelectRandomMapFromList() {
 	Result = MapList;
 	while (M.Next != none) {
 		M = M.Next;
-		if (M.Sequence > MaxSequenceNumber - MinimumMapRepeatDistance)
+		if (M.Sequence > 0 && M.Sequence > MaxSequenceNumber - MinimumMapRepeatDistance)
 			continue;
 		TargetCount += Target;
 		if (TargetCount >= 1.0) {
