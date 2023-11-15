@@ -30,6 +30,14 @@ function Fill(VS_Preset P, VS_Map M) {
 	MapName = M.MapName;
 }
 
+function FillRandom(VS_Preset P) {
+	PresetRef = P;
+	MapRef = none;
+
+	Preset = P.GetFullName();
+	MapName = class'VS_Info'.default.RandomMapNameIdentifier;
+}
+
 function Append(VS_Info I) {
 	Origin = I;
 

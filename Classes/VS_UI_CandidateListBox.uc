@@ -7,6 +7,8 @@ var localized string PresetColumnHeader;
 var localized string MapColumnHeader;
 var localized string VotesColumnHeader;
 
+var localized string RandomMapDisplayName;
+
 function UWindowListBoxItem GetItemAt(float MouseX, float MouseY) {
 	local float y;
 	local UWindowList CurItem;
@@ -64,6 +66,7 @@ function DrawCandidate(Canvas C, VS_UI_CandidateListItem Item, int Index, float 
 	local color BG, FG, Sep;
 	local Region OldClipRegion;
 	local float VW,VH;
+	local string MapName;
 
 	OldClipRegion = ClippingRegion;
 
@@ -75,24 +78,28 @@ function DrawCandidate(Canvas C, VS_UI_CandidateListItem Item, int Index, float 
 	C.DrawColor = FG;
 	C.Font = Root.Fonts[F_Normal];
 	ClippingRegion.W = FMin(163.0, ClippingRegion.W);
-	ClipText(C, X+2, Y, Item.Preset);
+	ClipText(C, X+2, Y, Item.Candidate.Preset);
 	ClippingRegion = OldClipRegion;
 
 	C.DrawColor = Sep;
 	DrawStretchedTexture(C, X+165, Y, 1, H, Texture'WhiteTexture');
 
+	MapName = Item.Candidate.MapName;
+	if (MapName == class'VS_Info'.default.RandomMapNameIdentifier)
+		MapName = RandomMapDisplayName;
+
 	C.DrawColor = FG;
 	ClippingRegion.W = FMin(353.0, ClippingRegion.W);
-	ClipText(C, X+168, Y, Item.MapName);
+	ClipText(C, X+168, Y, MapName);
 	ClippingRegion = OldClipRegion;
 
 	C.DrawColor = Sep;
 	DrawStretchedTexture(C, X+355, Y, 1, H, Texture'WhiteTexture');
 
 	C.DrawColor = FG;
-	C.StrLen(Item.Votes, VW, VH);
+	C.StrLen(Item.Candidate.Votes, VW, VH);
 	VW /= Root.GUIScale;
-	ClipText(C, X+W-VW-3, Y, Item.Votes);
+	ClipText(C, X+W-VW-3, Y, Item.Candidate.Votes);
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
@@ -269,4 +276,5 @@ defaultproperties {
 	PresetColumnHeader="Preset"
 	MapColumnHeader="Map"
 	VotesColumnHeader="Votes"
+	RandomMapDisplayName="<Random>"
 }

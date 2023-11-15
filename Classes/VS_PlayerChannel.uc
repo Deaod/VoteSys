@@ -20,10 +20,7 @@ var VS_ClientSettings Settings;
 var VS_Preset LatestPreset;
 var VS_Map LatestMap;
 
-// Player Voting Information
-var bool bHasVoted; // unreplicated, server-only
-var VS_Preset VotePreset; // unreplicated
-var VS_Map VoteMap; // unreplicated
+var VS_Candidate VotedFor;
 
 var int KickVotesAgainstMe;
 var array<PlayerReplicationInfo> IWantToKick;
@@ -35,7 +32,8 @@ replication {
 		ServerBanPlayer,
 		ServerKickPlayer,
 		ServerVote,
-		ServerVoteExisting;
+		ServerVoteExisting,
+		ServerVoteRandom;
 
 	reliable if (Role == ROLE_Authority)
 		ClientApplyKickVote,
@@ -45,7 +43,8 @@ replication {
 		ShowSettings;
 
 	reliable if (Role == ROLE_Authority && bNetOwner)
-		Cookie;
+		Cookie,
+		VotedFor;
 
 	reliable if (Role == ROLE_Authority && ((bDemoRecording == false) || (bClientDemoRecording && bClientDemoNetFunc) || (Level.NetMode == NM_Standalone)))
 		LocalizeMessage, ChatMessage;
@@ -330,9 +329,6 @@ simulated function Vote(VS_Preset P, VS_Map M) {
 		return;
 
 	ServerVote(P.Category, P.PresetName, M.MapName);
-
-	VotePreset = P;
-	VoteMap = M;
 }
 
 function ServerVote(string Category, string PresetName, string MapName) {
@@ -353,29 +349,23 @@ function ServerVote(string Category, string PresetName, string MapName) {
 		return;
 
 	if (PlayerOwner.PlayerReplicationInfo.bAdmin == false) {
-		if (VotePreset == P && VoteMap == M)
+		if (VotedFor.PresetRef == P && VotedFor.MapRef == M)
 			return;
 		if (M.Sequence > 0 && P.MaxSequenceNumber - M.Sequence < P.MinimumMapRepeatDistance)
 			return;
 	}
 
-	if (bHasVoted)
-		I.RemMapVote(self, VotePreset, VoteMap);
-	I.AddMapVote(self, P, M);
-
-	bHasVoted = true;
-	VotePreset = P;
-	VoteMap = M;
+	if (VotedFor != none)
+		I.RemCandidateVote(self, VotedFor);
+	VotedFor = I.AddMapVote(self, P, M);
 }
 
-simulated function VoteExisting(string Preset, string MapName) {
-	ServerVoteExisting(Preset, MapName);
+simulated function VoteExisting(VS_Candidate Candidate) {
+	ServerVoteExisting(Candidate);
 }
 
-function ServerVoteExisting(string Preset, string MapName) {
+function ServerVoteExisting(VS_Candidate Candidate) {
 	local VS_Info I;
-	local VS_Preset P;
-	local VS_Map M;
 
 	if (PlayerOwner == none || PlayerInfo().bCanVote == false) {
 		LocalizeMessage(class'VS_Msg_LocalMessage', -7);
@@ -383,30 +373,46 @@ function ServerVoteExisting(string Preset, string MapName) {
 	}
 
 	I = VoteInfo();
-	P = I.ResolvePresetCombined(Preset);
-	M = I.ResolveMapOfPreset(P, MapName);
 
-	if (P == none || M == none)
+	if (Candidate == none)
 		return;
 
-	if (VotePreset == P && VoteMap == M && PlayerOwner.PlayerReplicationInfo.bAdmin == false)
+	if (VotedFor == Candidate && PlayerOwner.PlayerReplicationInfo.bAdmin == false)
 		return;
 
-	if (bHasVoted)
-		I.RemMapVote(self, VotePreset, VoteMap);
-	I.AddMapVote(self, P, M);
+	if (VotedFor != none)
+		I.RemCandidateVote(self, VotedFor);
+	VotedFor = I.AddCandidateVote(self, Candidate);
+}
 
-	bHasVoted = true;
-	VotePreset = P;
-	VoteMap = M;
+simulated function VoteRandom(VS_Preset P) {
+	ServerVoteRandom(P.GetFullName());
+}
+
+function ServerVoteRandom(string FullPresetName) {
+	local VS_Info I;
+	local VS_Preset P;
+
+	if (PlayerOwner == none || PlayerInfo().bCanVote == false) {
+		LocalizeMessage(class'VS_Msg_LocalMessage', -7);
+		return;
+	}
+
+	I = VoteInfo();
+	P = I.ResolvePresetCombined(FullPresetName);
+
+	if (P == none)
+		return;
+
+	if (VotedFor != none)
+		I.RemCandidateVote(self, VotedFor);
+	VotedFor = I.AddRandomVote(self, P);
 }
 
 function ClearVote() {
-	if (bHasVoted) {
-		VoteInfo().RemMapVote(self, VotePreset, VoteMap);
-		bHasVoted = false;
-		VotePreset = none;
-		VoteMap = none;
+	if (VotedFor != none) {
+		VoteInfo().RemCandidateVote(self, VotedFor);
+		VotedFor = none;
 	}
 }
 
@@ -515,14 +521,14 @@ simulated function DumpLog() {
 	else
 		Line = Line@none;
 
-	Line = Line@"|"@bHasVoted;
-	if (VotePreset != none)
-		Line = Line@"'"$VotePreset.GetFullName()$"'";
+	Line = Line@"|"@(VotedFor != none);
+	if (VotedFor != none)
+		Line = Line@"'"$VotedFor.Preset$"'";
 	else
 		Line = Line@"''";
 
-	if (VoteMap != none)
-		Line = Line@"'"$VoteMap.MapName$"'";
+	if (VotedFor != none)
+		Line = Line@"'"$VotedFor.MapName$"'";
 	else
 		Line = Line@"''";
 

@@ -11,6 +11,7 @@ var VS_Candidate FirstCandidate;
 var VS_Candidate LastCandidate;
 
 var VS_PlayerInfo PlayerInfo[60];
+var string RandomMapNameIdentifier;
 
 replication {
 	unreliable if (Role == ROLE_Authority)
@@ -35,7 +36,7 @@ simulated event Timer() {
 		PlayerInfo[i++] = none;
 }
 
-function AddMapVote(VS_PlayerChannel Origin, VS_Preset P, VS_Map M) {
+function VS_Candidate AddMapVote(VS_PlayerChannel Origin, VS_Preset P, VS_Map M) {
 	if (VoteSys.CanVote(Origin.PlayerOwner)) {
 		if (Origin.PlayerOwner.PlayerReplicationInfo.bAdmin) {
 			VoteSys.BroadcastLocalizedMessage2(
@@ -44,18 +45,20 @@ function AddMapVote(VS_PlayerChannel Origin, VS_Preset P, VS_Map M) {
 				M.MapName@"("$P.Abbreviation$")"
 			);
 			VoteSys.AdminForceTravelTo(P, M);
+			return none;
 		} else {
 			VoteSys.BroadcastLocalizedMessage2(
 				class'VS_Msg_LocalMessage', 6,
 				Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
 				M.MapName@"("$P.Abbreviation$")"
 			);
-			AddMapVoteInternal(P, M);
+			return AddMapVoteInternal(P, M);
 		}
 	}
+	return none;
 }
 
-function AddMapVoteInternal(VS_Preset P, VS_Map M) {
+function VS_Candidate AddMapVoteInternal(VS_Preset P, VS_Map M) {
 	local VS_Candidate C;
 
 	for (C = FirstCandidate; C != none; C = C.Next) {
@@ -73,6 +76,85 @@ function AddMapVoteInternal(VS_Preset P, VS_Map M) {
 	}
 
 	C.SortInList();
+
+	return C;
+}
+
+function VS_Candidate AddCandidateVote(VS_PlayerChannel Origin, VS_Candidate Candidate) {
+	local VS_Preset P;
+	local VS_Map M;
+	if (VoteSys.CanVote(Origin.PlayerOwner)) {
+		if (Origin.PlayerOwner.PlayerReplicationInfo.bAdmin) {
+			P = Candidate.PresetRef;
+			M = Candidate.MapRef;
+			if (M == none)
+				M = P.SelectRandomMapFromList();
+				
+			VoteSys.BroadcastLocalizedMessage2(
+				class'VS_Msg_LocalMessage', 7,
+				Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
+				M.MapName@"("$P.Abbreviation$")"
+			);
+			VoteSys.AdminForceTravelTo(P, M);
+			return none;
+		} else {
+			VoteSys.BroadcastLocalizedMessage2(
+				class'VS_Msg_LocalMessage', 6,
+				Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
+			);
+			Candidate.Votes += 1;
+			Candidate.SortInList();
+			return Candidate;
+		}
+	}
+	return none;
+}
+
+function VS_Candidate AddRandomVote(VS_PlayerChannel Origin, VS_Preset P) {
+	local VS_Map M;
+
+	if (VoteSys.CanVote(Origin.PlayerOwner)) {
+		if (Origin.PlayerOwner.PlayerReplicationInfo.bAdmin) {
+			M = P.SelectRandomMapFromList();
+			VoteSys.BroadcastLocalizedMessage2(
+				class'VS_Msg_LocalMessage', 7,
+				Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
+				M.MapName@"("$P.Abbreviation$")"
+			);
+			VoteSys.AdminForceTravelTo(P, M);
+			return none;
+		} else {
+			VoteSys.BroadcastLocalizedMessage2(
+				class'VS_Msg_LocalMessage', 12,
+				Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
+				P.Abbreviation
+			);
+			return AddRandomVoteInternal(P);
+		}
+	}
+	return none;
+}
+
+function VS_Candidate AddRandomVoteInternal(VS_Preset P) {
+	local VS_Candidate C;
+
+	for (C = FirstCandidate; C != none; C = C.Next) {
+		if (C.PresetRef == P && C.MapName == RandomMapNameIdentifier) {
+			C.Votes += 1;
+			break;
+		}
+	}
+
+	if (C == none) {
+		C = Spawn(class'VS_Candidate');
+		C.Append(self);
+		C.FillRandom(P);
+		C.Votes = 1;
+	}
+
+	C.SortInList();
+
+	return C;
 }
 
 function RemMapVote(VS_PlayerChannel Origin, VS_Preset P, VS_Map M) {
@@ -89,6 +171,16 @@ function RemMapVote(VS_PlayerChannel Origin, VS_Preset P, VS_Map M) {
 			}
 			return;
 		}
+	}
+}
+
+function RemCandidateVote(VS_PlayerChannel Origin, VS_Candidate Candidate) {
+	Candidate.Votes -= 1;
+	if (VoteSys.Settings.bRetainCandidates == false && Candidate.Votes == 0) {
+		Candidate.Remove();
+		Candidate.Destroy();
+	} else {
+		Candidate.SortInList();
 	}
 }
 
@@ -195,6 +287,8 @@ function VS_Map ResolveMapOfPreset(VS_Preset P, string MapName) {
 }
 
 defaultproperties {
+	RandomMapNameIdentifier="<Random>"
+
 	RemoteRole=ROLE_SimulatedProxy
 	NetUpdateFrequency=10
 }

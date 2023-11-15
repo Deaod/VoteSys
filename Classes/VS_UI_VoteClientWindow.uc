@@ -279,9 +279,7 @@ function UpdateCandidateList(VS_Info Info) {
 	C = Info.FirstCandidate;
 	VLI = VS_UI_CandidateListItem(VoteListBox.Items.Next);
 	while (VLI != none && C != none) {
-		VLI.Preset = C.Preset;
-		VLI.MapName = C.MapName;
-		VLI.Votes = C.Votes;
+		VLI.Candidate = C;
 
 		C = C.Next;
 		VLI = VS_UI_CandidateListItem(VLI.Next);
@@ -335,12 +333,13 @@ function Notify(UWindowDialogControl C, byte E) {
 	) {
 		if (ActivePreset != none)
 			Channel.Vote(ActivePreset, VS_UI_MapListItem(MapListBox.SelectedItem).MapRef);
-	} else if ((C == VoteButton && E == DE_Click && VoteListBox.SelectedItem != none) ||
+	} else if (
+		(C == VoteButton  && E == DE_Click && VoteListBox.SelectedItem != none) ||
 		(C == VoteListBox && E == DE_DoubleClick)
 	) {
 		VLI = VS_UI_CandidateListItem(VoteListBox.SelectedItem);
 		if (VLI != none)
-			Channel.VoteExisting(VLI.Preset, VLI.MapName);
+			Channel.VoteExisting(VLI.Candidate);
 	} else if (C == VoteListBox && E == DE_Click) {
 		MapListBox.ClearSelection();
 	} else if (C == MapListBox && E == DE_Click) {
@@ -357,7 +356,7 @@ function Notify(UWindowDialogControl C, byte E) {
 		bMapFilterApplied = false;
 	} else if (C == RandomButton && E == DE_Click) {
 		if (ActivePreset != none)
-			Channel.Vote(ActivePreset, VS_UI_MapListItem(MapListBox.Items.FindEntry(int(MapListBox.Items.Count() * BetterFRand()))).MapRef);
+			Channel.VoteRandom(ActivePreset);
 	} else if (C == SettingsButton && E == DE_Click) {
 		Channel.ShowSettings();
 	}

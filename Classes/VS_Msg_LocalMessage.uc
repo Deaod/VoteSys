@@ -11,6 +11,7 @@ var localized string MsgAdminKickPlayer;
 var localized string MsgAdminBanPlayer;
 var localized string MsgKickVotePlaced;
 var localized string MsgKickVoteSuccessful;
+var localized string MsgPlayerVotedRandom;
 
 var localized string ErrStillLoading;
 var localized string ErrNoRootWindow;
@@ -43,6 +44,7 @@ static function string GetString(
 		case 9:  Result = default.MsgAdminBanPlayer; break;
 		case 10: Result = default.MsgKickVotePlaced; break;
 		case 11: Result = default.MsgKickVoteSuccessful; break;
+		case 12: Result = default.MsgPlayerVotedRandom; break;
 
 		case -1: Result = default.ErrStillLoading; break;
 		case -2: Result = default.ErrNoRootWindow; break;
@@ -101,6 +103,7 @@ defaultproperties {
 	MsgAdminBanPlayer="Admin {1} banned player {2} ({3})"
 	MsgKickVotePlaced="A player voted to kick {1}"
 	MsgKickVoteSuccessful="{1} was kicked"
+	MsgPlayerVotedRandom="{1} voted for random map ({2})"
 
 	ErrStillLoading="Vote Menu data is still being transferred, please try again"
 	ErrNoRootWindow="Failed to create {1} window (Root does not exist)"

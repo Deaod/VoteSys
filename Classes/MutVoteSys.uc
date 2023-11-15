@@ -406,9 +406,9 @@ function UpdatePlayerVoteInformation() {
 				C.PlayerInfo.bIsPlayer = false;
 			}
 			if (C.Channel != none) {
-				C.PlayerInfo.bHasVoted = C.Channel.bHasVoted;
+				C.PlayerInfo.bHasVoted = (C.Channel.VotedFor != none);
 				C.PlayerInfo.bCanVote = CanVote(C.PlayerOwner);
-				if (C.PlayerInfo.bCanVote == false && C.Channel.bHasVoted)
+				if (C.PlayerInfo.bCanVote == false && (C.Channel.VotedFor != none))
 					C.Channel.ClearVote();
 			} else {
 				C.PlayerInfo.bHasVoted = false;
@@ -716,7 +716,10 @@ function TallyVotes() {
 		}
 
 		VotedPreset = Cd.PresetRef;
-		VotedMap = Cd.MapRef;
+		M = Cd.MapRef;
+		if (M == none)
+			M = VotedPreset.SelectRandomMapFromList();
+		VotedMap = M;
 	}
 
 	if (CountTiedCandidates == 0) {
