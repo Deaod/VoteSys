@@ -64,3 +64,27 @@ function string GetDisplayCategory() {
 function string GetFullName() {
 	return Category$"/"$PresetName;
 }
+
+function VS_Map SelectRandomMapFromList() {
+	local float Target;
+	local float TargetCount;
+	local VS_Map M;
+	local VS_Map Result;
+
+	if (MapList == none)
+		return none;
+
+	Target = FRand();
+	M = MapList;
+	Result = MapList;
+	while (M.Next != none) {
+		M = M.Next;
+		TargetCount += Target;
+		if (TargetCount >= 1.0) {
+			TargetCount -= 1.0;
+			Result = Result.Next;
+		}
+	}
+
+	return Result;
+}

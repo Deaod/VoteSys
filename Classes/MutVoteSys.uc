@@ -655,30 +655,6 @@ function AdminForceTravelTo(VS_Preset P, VS_Map M) {
 	CloseVoteMenuForAll();
 }
 
-function VS_Map SelectRandomMapFromList(VS_Map MapList) {
-	local float Target;
-	local float TargetCount;
-	local VS_Map M;
-	local VS_Map Result;
-
-	if (MapList == none)
-		return none;
-
-	Target = FRand();
-	M = MapList;
-	Result = MapList;
-	while (M.Next != none) {
-		M = M.Next;
-		TargetCount += Target;
-		if (TargetCount >= 1.0) {
-			TargetCount -= 1.0;
-			Result = Result.Next;
-		}
-	}
-
-	return Result;
-}
-
 function TallyVotes() {
 	local int BestScore;
 	local int CountTiedCandidates;
@@ -715,7 +691,7 @@ function TallyVotes() {
 		if ((Settings.bAlwaysUseDefaultPreset && Settings.bAlwaysUseDefaultMap) || bChangeMapImmediately)
 			M = Info.ResolveMapOfPreset(VotedPreset, Settings.DefaultMap);
 		if (M == none)
-			M = SelectRandomMapFromList(VotedPreset.MapList);
+			M = VotedPreset.SelectRandomMapFromList();
 		if (M == none)
 			return;
 		VotedMap = M;
@@ -764,7 +740,7 @@ function CheckVotedMap() {
 	while (DynamicLoadObject(VotedMap.MapName$".MyLevel", class'Object', true) == none) {
 		Log(VotedMap.MapName@"failed to load", 'VoteSys');
 		OldMapName = VotedMap.MapName;
-		VotedMap = SelectRandomMapFromList(VotedPreset.MapList);
+		VotedMap = VotedPreset.SelectRandomMapFromList();
 		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', -5, OldMapName, VotedMap.MapName);
 	}
 }
