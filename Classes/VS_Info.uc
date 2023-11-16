@@ -98,10 +98,19 @@ function VS_Candidate AddCandidateVote(VS_PlayerChannel Origin, VS_Candidate Can
 			VoteSys.AdminForceTravelTo(P, M);
 			return none;
 		} else {
-			VoteSys.BroadcastLocalizedMessage2(
-				class'VS_Msg_LocalMessage', 6,
-				Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
-			);
+			if (Candidate.MapRef != none) {
+				VoteSys.BroadcastLocalizedMessage2(
+					class'VS_Msg_LocalMessage', 6,
+					Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
+					Candidate.MapRef.MapName@"("$Candidate.PresetRef.Abbreviation$")"
+				);
+			} else {
+				VoteSys.BroadcastLocalizedMessage2(
+					class'VS_Msg_LocalMessage', 12,
+					Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
+					Candidate.PresetRef.Abbreviation
+				);
+			}
 			Candidate.Votes += 1;
 			Candidate.SortInList();
 			return Candidate;
