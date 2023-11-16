@@ -141,31 +141,31 @@ function SaveSettings() {
 function Created() {
 	super.Created();
 
-	Lbl_SettingsState = UWindowLabelControl(CreateControl(class'UWindowLabelControl', 8, 334, 282, 16));
+	Lbl_SettingsState = UWindowLabelControl(CreateControl(class'UWindowLabelControl', 4, 334, 282, 16));
 	Lbl_SettingsState.Align = TA_Right;
 
-	Edt_MidGameVoteThreshold = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 8, 8, 188, 16));
+	Edt_MidGameVoteThreshold = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 8, 188, 16));
 	Edt_MidGameVoteThreshold.SetText(Text_MidGameVoteThreshold);
 	Edt_MidGameVoteThreshold.EditBoxWidth = 60;
 	Edt_MidGameVoteThreshold.SetNumericOnly(true);
 	Edt_MidGameVoteThreshold.SetNumericFloat(true);
 
-	Edt_MidGameVoteTimeLimit = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 8, 28, 188, 16));
+	Edt_MidGameVoteTimeLimit = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 28, 188, 16));
 	Edt_MidGameVoteTimeLimit.SetText(Text_MidGameVoteTimeLimit);
 	Edt_MidGameVoteTimeLimit.EditBoxWidth = 60;
 	Edt_MidGameVoteTimeLimit.SetNumericOnly(true);
 
-	Edt_GameEndedVoteDelay = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 8, 48, 188, 16));
+	Edt_GameEndedVoteDelay = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 48, 188, 16));
 	Edt_GameEndedVoteDelay.SetText(Text_GameEndedVoteDelay);
 	Edt_GameEndedVoteDelay.EditBoxWidth = 60;
 	Edt_GameEndedVoteDelay.SetNumericOnly(true);
 
-	Edt_VoteTimeLimit = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 8, 68, 188, 16));
+	Edt_VoteTimeLimit = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 68, 188, 16));
 	Edt_VoteTimeLimit.SetText(Text_VoteTimeLimit);
 	Edt_VoteTimeLimit.EditBoxWidth = 60;
 	Edt_VoteTimeLimit.SetNumericOnly(true);
 
-	Cmb_VoteEndCondition = VS_UI_ComboControl(CreateControl(class'VS_UI_ComboControl', 8, 88, 188, 16));
+	Cmb_VoteEndCondition = VS_UI_ComboControl(CreateControl(class'VS_UI_ComboControl', 4, 88, 188, 16));
 	Cmb_VoteEndCondition.SetText(Text_VoteEndCondition);
 	Cmb_VoteEndCondition.AddItem(Text_VoteEndCondition_TimerOnly);
 	Cmb_VoteEndCondition.AddItem(Text_VoteEndCondition_TimerOrAllVotesIn);
@@ -173,52 +173,52 @@ function Created() {
 	Cmb_VoteEndCondition.EditBoxWidth = 100;
 	Cmb_VoteEndCondition.SetEditable(false);
 
-	Chk_RetainCandidates = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 8, 108, 188, 16));
+	Chk_RetainCandidates = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 4, 108, 188, 16));
 	Chk_RetainCandidates.SetText(Text_RetainCandidates);
 
-	Edt_KickVoteThreshold = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 8, 128, 188, 16));
+	Edt_KickVoteThreshold = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 128, 188, 16));
 	Edt_KickVoteThreshold.SetText(Text_KickVoteThreshold);
 	Edt_KickVoteThreshold.EditBoxWidth = 60;
 	Edt_KickVoteThreshold.SetNumericOnly(true);
 	Edt_KickVoteThreshold.SetNumericFloat(true);
 
-	Edt_DefaultPreset = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 8, 148, 188, 16));
+	Edt_DefaultPreset = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 148, 188, 16));
 	Edt_DefaultPreset.SetText(Text_DefaultPreset);
 	Edt_DefaultPreset.EditBoxWidth = 100;
 
-	Edt_DefaultMap = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 8, 168, 188, 16));
+	Edt_DefaultMap = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 168, 188, 16));
 	Edt_DefaultMap.SetText(Text_DefaultMap);
 	Edt_DefaultMap.EditBoxWidth = 100;
 
-	Edt_ServerAddress = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 8, 188, 188, 16));
+	Edt_ServerAddress = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 188, 188, 16));
 	Edt_ServerAddress.SetText(Text_ServerAddress);
 	Edt_ServerAddress.EditBoxWidth = 100;
 
-	Edt_DataPort = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 8, 208, 188, 16));
+	Edt_DataPort = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 208, 188, 16));
 	Edt_DataPort.SetText(Text_DataPort);
 	Edt_DataPort.EditBoxWidth = 60;
 	Edt_DataPort.SetNumericOnly(true);
 
-	Edt_ClientDataPort = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 8, 228, 188, 16));
+	Edt_ClientDataPort = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 228, 188, 16));
 	Edt_ClientDataPort.SetText(Text_ClientDataPort);
 	Edt_ClientDataPort.EditBoxWidth = 60;
 	Edt_ClientDataPort.SetNumericOnly(true);
 
-	Edt_DefaultTimeMessageClass = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 8, 248, 188, 16));
+	Edt_DefaultTimeMessageClass = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 248, 188, 16));
 	Edt_DefaultTimeMessageClass.SetText(Text_DefaultTimeMessageClass);
 	Edt_DefaultTimeMessageClass.EditBoxWidth = 100;
 
-	Edt_IdleTimeout = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 8, 268, 188, 16));
+	Edt_IdleTimeout = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 268, 188, 16));
 	Edt_IdleTimeout.SetText(Text_IdleTimeout);
 	Edt_IdleTimeout.EditBoxWidth = 60;
 	Edt_IdleTimeout.SetNumericOnly(true);
 
-	Edt_MinimumMapRepeatDistance = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 8, 288, 188, 16));
+	Edt_MinimumMapRepeatDistance = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 288, 188, 16));
 	Edt_MinimumMapRepeatDistance.SetText(Text_MinimumMapRepeatDistance);
 	Edt_MinimumMapRepeatDistance.EditBoxWidth = 60;
 	Edt_MinimumMapRepeatDistance.SetNumericOnly(true);
 
-	Edt_PresetProbeDepth = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 8, 308, 188, 16));
+	Edt_PresetProbeDepth = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 308, 188, 16));
 	Edt_PresetProbeDepth.SetText(Text_PresetProbeDepth);
 	Edt_PresetProbeDepth.EditBoxWidth = 60;
 	Edt_PresetProbeDepth.SetNumericOnly(true);
