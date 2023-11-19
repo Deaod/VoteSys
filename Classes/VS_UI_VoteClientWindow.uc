@@ -133,7 +133,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 		if (MapScreenshotWindow.bWindowVisible == false) {
 			MapScreenshotWindow.ShowWindow();
 
-			T = Texture(DynamicLoadObject(MapListBox.HoverItem.MapRef.MapName$".Screenshot", class'Texture', true));
+			T = Texture(DynamicLoadObject(VS_UI_MapListItem(MapListBox.HoverItem).MapRef.MapName$".Screenshot", class'Texture', true));
 			if (T == none)
 				T = Texture'BlackTexture';
 			MapScreenshotWindow.Screenshot = T;

@@ -1,8 +1,6 @@
-class VS_UI_MapListItem extends UWindowListBoxItem;
+class VS_UI_MapListItem extends VS_UI_ListItem;
 
 var VS_Map MapRef;
-var bool bHover;
-var bool bEnabled;
 var bool bFilteredOut;
 
 function int Compare(UWindowList T, UWindowList B) {
@@ -14,9 +12,5 @@ function int Compare(UWindowList T, UWindowList B) {
 
 function bool ShowThisItem() {
 	return !bFilteredOut;
-}
-
-defaultproperties {
-	bEnabled=True
 }
 
