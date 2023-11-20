@@ -309,14 +309,14 @@ function Mutate(string Command, PlayerPawn Sender) {
 function OpenVoteMenuForAll() {
 	local VS_ChannelContainer C;
 	for (C = ChannelList; C != none; C = C.Next)
-		if (C.Channel != none && C.Channel.PlayerOwner != none)
+		if (C.Channel != none && C.PlayerInfo != none && C.PlayerInfo.bCanVote)
 			C.Channel.ShowVoteMenu();
 }
 
 function CloseVoteMenuForAll() {
 	local VS_ChannelContainer C;
 	for (C = ChannelList; C != none; C = C.Next)
-		if (C.Channel != none && C.Channel.PlayerOwner != none)
+		if (C.Channel != none && C.PlayerInfo != none && C.PlayerInfo.bCanVote)
 			C.Channel.HideVoteMenu();
 }
 
