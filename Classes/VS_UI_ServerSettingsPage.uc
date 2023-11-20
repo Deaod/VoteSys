@@ -71,6 +71,9 @@ var localized string Text_DefaultPackages;
 var UWindowCheckbox Chk_UseServerActorsCompatibilityMode;
 var localized string Text_UseServerActorsCompatibilityMode;
 
+var VS_UI_ArrayEditControl Adt_DefaultActors;
+var localized string Text_DefaultActors;
+
 function LoadSettings(VS_PlayerChannel C) {
 	super.LoadSettings(C);
 
@@ -102,6 +105,7 @@ function EnableInteraction(bool bEnable) {
 	Chk_UseServerPackagesCompatibilityMode.bDisabled = !bEnable;
 	Adt_DefaultPackages.EditBox.SetEditable(bEnable);
 	Chk_UseServerActorsCompatibilityMode.bDisabled = !bEnable;
+	Adt_DefaultActors.EditBox.SetEditable(bEnable);
 }
 
 function LoadServerSettings() {
@@ -130,6 +134,7 @@ function LoadServerSettings() {
 	Chk_UseServerPackagesCompatibilityMode.bChecked = Settings.bUseServerPackagesCompatibilityMode;
 	Adt_DefaultPackages.SetValue(Settings.GetPropertyText("DefaultPackages"));
 	Chk_UseServerActorsCompatibilityMode.bChecked = Settings.bUseServerActorsCompatibilityMode;
+	Adt_DefaultActors.SetValue(Settings.GetPropertyText("DefaultActors"));
 
 	bSettingsLoaded = true;
 }
@@ -158,6 +163,7 @@ function SaveSettings() {
 	Settings.bUseServerPackagesCompatibilityMode = Chk_UseServerPackagesCompatibilityMode.bChecked;
 	Settings.SetPropertyText("DefaultPackages", Adt_DefaultPackages.GetValue());
 	Settings.bUseServerActorsCompatibilityMode = Chk_UseServerActorsCompatibilityMode.bChecked;
+	Settings.SetPropertyText("DefaultActors", Adt_DefaultActors.GetValue());
 
 	Channel.SaveServerSettings();
 }
@@ -263,6 +269,10 @@ function Created() {
 
 	Chk_UseServerActorsCompatibilityMode = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 200, 68, 188, 16));
 	Chk_UseServerActorsCompatibilityMode.SetText(Text_UseServerActorsCompatibilityMode);
+
+	Adt_DefaultActors = VS_UI_ArrayEditControl(CreateControl(class'VS_UI_ArrayEditControl', 200, 88, 188, 16));
+	Adt_DefaultActors.SetText(Text_DefaultActors);
+	Adt_DefaultActors.EditBoxWidth = 100;
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
@@ -308,6 +318,7 @@ function ApplyTheme() {
 	//Chk_UseServerPackagesCompatibilityMode // not themed
 	Adt_DefaultPackages.SetTheme(Theme);
 	//Chk_UseServerActorsCompatibilityMode // not themed
+	Adt_DefaultActors.SetTheme(Theme);
 }
 
 defaultproperties {
@@ -338,4 +349,5 @@ defaultproperties {
 	Text_UseServerPackagesCompatibilityMode="Use Server Package Compat. Mode"
 	Text_DefaultPackages="Default Packages"
 	Text_UseServerActorsCompatibilityMode="Use Server Actors Compat. Mode"
+	Text_DefaultActors="Default Actors"
 }
