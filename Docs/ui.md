@@ -105,3 +105,9 @@ The Settings button with the gear icon opens a settings menu. See [Settings Menu
 Allows changing client-side settings.
 
 The Save button saves the current state of settings. The Close button closes the Settings Menu without saving.
+
+### Server Settings
+
+![Server Settings](ServerSettings.png)
+
+Allows changing server-side settings. Only visible when logged in as admin.
