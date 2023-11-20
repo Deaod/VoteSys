@@ -35,6 +35,9 @@ var localized string Text_KickVoteThreshold;
 var VS_UI_EditControl Edt_DefaultPreset;
 var localized string Text_DefaultPreset;
 
+var UWindowCheckbox Chk_AlwaysUseDefaultPreset;
+var localized string Text_AlwaysUseDefaultPreset;
+
 var VS_UI_EditControl Edt_DefaultMap;
 var localized string Text_DefaultMap;
 
@@ -99,6 +102,7 @@ function EnableInteraction(bool bEnable) {
 	Chk_RetainCandidates.bDisabled = !bEnable;
 	Edt_KickVoteThreshold.EditBox.SetEditable(bEnable);
 	Edt_DefaultPreset.EditBox.SetEditable(bEnable);
+	Chk_AlwaysUseDefaultPreset.bDisabled = !bEnable;
 	Edt_DefaultMap.EditBox.SetEditable(bEnable);
 	Edt_DefaultTimeMessageClass.EditBox.SetEditable(bEnable);
 	Edt_IdleTimeout.EditBox.SetEditable(bEnable);
@@ -129,6 +133,7 @@ function LoadServerSettings() {
 	Chk_RetainCandidates.bChecked = Settings.bRetainCandidates;
 	Edt_KickVoteThreshold.SetValue(string(Settings.KickVoteThreshold));
 	Edt_DefaultPreset.SetValue(Settings.DefaultPreset);
+	Chk_AlwaysUseDefaultPreset.bChecked = Settings.bAlwaysUseDefaultPreset;
 	Edt_DefaultMap.SetValue(Settings.DefaultMap);
 	Edt_DefaultTimeMessageClass.SetValue(Settings.DefaultTimeMessageClass);
 	Edt_IdleTimeout.SetValue(string(Settings.IdleTimeout));
@@ -159,6 +164,7 @@ function SaveSettings() {
 	Settings.bRetainCandidates = Chk_RetainCandidates.bChecked;
 	Settings.KickVoteThreshold = float(Edt_KickVoteThreshold.GetValue());
 	Settings.DefaultPreset = Edt_DefaultPreset.GetValue();
+	Settings.bAlwaysUseDefaultPreset = Chk_AlwaysUseDefaultPreset.bChecked;
 	Settings.DefaultMap = Edt_DefaultMap.GetValue();
 	Settings.DefaultTimeMessageClass = Edt_DefaultTimeMessageClass.GetValue();
 	Settings.IdleTimeout = int(Edt_IdleTimeout.GetValue());
@@ -224,6 +230,9 @@ function Created() {
 	Edt_DefaultPreset = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 148, 188, 16));
 	Edt_DefaultPreset.SetText(Text_DefaultPreset);
 	Edt_DefaultPreset.EditBoxWidth = 100;
+
+	Chk_AlwaysUseDefaultPreset = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 4, 168, 188, 16));
+	Chk_AlwaysUseDefaultPreset.SetText(Text_AlwaysUseDefaultPreset);
 
 	Edt_DefaultMap = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 188, 188, 16));
 	Edt_DefaultMap.SetText(Text_DefaultMap);
@@ -323,6 +332,7 @@ function ApplyTheme() {
 	//Chk_RetainCandidates // not themed
 	Edt_KickVoteThreshold.Theme = Theme;
 	Edt_DefaultPreset.Theme = Theme;
+	//Chk_AlwaysUseDefaultPreset // not themed
 	Edt_DefaultMap.Theme = Theme;
 	Edt_DefaultTimeMessageClass.Theme = Theme;
 	Edt_IdleTimeout.Theme = Theme;
@@ -355,6 +365,7 @@ defaultproperties {
 	Text_RetainCandidates="Retain Candidates"
 	Text_KickVoteThreshold="Kick Vote Threshold"
 	Text_DefaultPreset="Default Preset"
+	Text_AlwaysUseDefaultPreset="Always Use Default Preset"
 	Text_DefaultMap="Default Map"
 	Text_DefaultTimeMessageClass="Time Msg Class"
 	Text_IdleTimeout="Idle Timeout"
