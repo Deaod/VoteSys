@@ -38,15 +38,6 @@ var localized string Text_DefaultPreset;
 var VS_UI_EditControl Edt_DefaultMap;
 var localized string Text_DefaultMap;
 
-var VS_UI_EditControl Edt_ServerAddress;
-var localized string Text_ServerAddress;
-
-var VS_UI_EditControl Edt_DataPort;
-var localized string Text_DataPort;
-
-var VS_UI_EditControl Edt_ClientDataPort;
-var localized string Text_ClientDataPort;
-
 var VS_UI_EditControl Edt_DefaultTimeMessageClass;
 var localized string Text_DefaultTimeMessageClass;
 
@@ -80,6 +71,15 @@ var localized string Text_GameNameMode_DoNotModify;
 var localized string Text_GameNameMode_PresetName;
 var localized string Text_GameNameMode_CategoryAndPresetName;
 
+var VS_UI_EditControl Edt_ServerAddress;
+var localized string Text_ServerAddress;
+
+var VS_UI_EditControl Edt_DataPort;
+var localized string Text_DataPort;
+
+var VS_UI_EditControl Edt_ClientDataPort;
+var localized string Text_ClientDataPort;
+
 function LoadSettings(VS_PlayerChannel C) {
 	super.LoadSettings(C);
 
@@ -100,9 +100,6 @@ function EnableInteraction(bool bEnable) {
 	Edt_KickVoteThreshold.EditBox.SetEditable(bEnable);
 	Edt_DefaultPreset.EditBox.SetEditable(bEnable);
 	Edt_DefaultMap.EditBox.SetEditable(bEnable);
-	Edt_ServerAddress.EditBox.SetEditable(bEnable);
-	Edt_DataPort.EditBox.SetEditable(bEnable);
-	Edt_ClientDataPort.EditBox.SetEditable(bEnable);
 	Edt_DefaultTimeMessageClass.EditBox.SetEditable(bEnable);
 	Edt_IdleTimeout.EditBox.SetEditable(bEnable);
 	Edt_MinimumMapRepeatDistance.EditBox.SetEditable(bEnable);
@@ -113,6 +110,9 @@ function EnableInteraction(bool bEnable) {
 	Chk_UseServerActorsCompatibilityMode.bDisabled = !bEnable;
 	Adt_DefaultActors.SetEnabled(bEnable);
 	Cmb_GameNameMode.SetEnabled(bEnable);
+	Edt_ServerAddress.EditBox.SetEditable(bEnable);
+	Edt_DataPort.EditBox.SetEditable(bEnable);
+	Edt_ClientDataPort.EditBox.SetEditable(bEnable);
 }
 
 function LoadServerSettings() {
@@ -130,9 +130,6 @@ function LoadServerSettings() {
 	Edt_KickVoteThreshold.SetValue(string(Settings.KickVoteThreshold));
 	Edt_DefaultPreset.SetValue(Settings.DefaultPreset);
 	Edt_DefaultMap.SetValue(Settings.DefaultMap);
-	Edt_ServerAddress.SetValue(Settings.ServerAddress);
-	Edt_DataPort.SetValue(string(Settings.DataPort));
-	Edt_ClientDataPort.SetValue(string(Settings.ClientDataPort));
 	Edt_DefaultTimeMessageClass.SetValue(Settings.DefaultTimeMessageClass);
 	Edt_IdleTimeout.SetValue(string(Settings.IdleTimeout));
 	Edt_MinimumMapRepeatDistance.SetValue(string(Settings.MinimumMapRepeatDistance));
@@ -143,6 +140,9 @@ function LoadServerSettings() {
 	Chk_UseServerActorsCompatibilityMode.bChecked = Settings.bUseServerActorsCompatibilityMode;
 	Adt_DefaultActors.SetValue(Settings.GetPropertyText("DefaultActors"));
 	Cmb_GameNameMode.SetSelectedIndex(int(Settings.GameNameMode));
+	Edt_ServerAddress.SetValue(Settings.ServerAddress);
+	Edt_DataPort.SetValue(string(Settings.DataPort));
+	Edt_ClientDataPort.SetValue(string(Settings.ClientDataPort));
 
 	bSettingsLoaded = true;
 }
@@ -160,9 +160,6 @@ function SaveSettings() {
 	Settings.KickVoteThreshold = float(Edt_KickVoteThreshold.GetValue());
 	Settings.DefaultPreset = Edt_DefaultPreset.GetValue();
 	Settings.DefaultMap = Edt_DefaultMap.GetValue();
-	Settings.ServerAddress = Edt_ServerAddress.GetValue();
-	Settings.DataPort = int(Edt_DataPort.GetValue());
-	Settings.ClientDataPort = int(Edt_ClientDataPort.GetValue());
 	Settings.DefaultTimeMessageClass = Edt_DefaultTimeMessageClass.GetValue();
 	Settings.IdleTimeout = int(Edt_IdleTimeout.GetValue());
 	Settings.MinimumMapRepeatDistance = int(Edt_MinimumMapRepeatDistance.GetValue());
@@ -173,6 +170,9 @@ function SaveSettings() {
 	Settings.bUseServerActorsCompatibilityMode = Chk_UseServerActorsCompatibilityMode.bChecked;
 	Settings.SetPropertyText("DefaultActors", Adt_DefaultActors.GetValue());
 	Settings.GameNameMode = Settings.IntToGameNameMode(Cmb_GameNameMode.GetSelectedIndex());
+	Settings.ServerAddress = Edt_ServerAddress.GetValue();
+	Settings.DataPort = int(Edt_DataPort.GetValue());
+	Settings.ClientDataPort = int(Edt_ClientDataPort.GetValue());
 
 	Channel.SaveServerSettings();
 }
@@ -225,39 +225,25 @@ function Created() {
 	Edt_DefaultPreset.SetText(Text_DefaultPreset);
 	Edt_DefaultPreset.EditBoxWidth = 100;
 
-	Edt_DefaultMap = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 168, 188, 16));
+	Edt_DefaultMap = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 188, 188, 16));
 	Edt_DefaultMap.SetText(Text_DefaultMap);
 	Edt_DefaultMap.EditBoxWidth = 100;
 
-	Edt_ServerAddress = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 188, 188, 16));
-	Edt_ServerAddress.SetText(Text_ServerAddress);
-	Edt_ServerAddress.EditBoxWidth = 100;
-
-	Edt_DataPort = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 208, 188, 16));
-	Edt_DataPort.SetText(Text_DataPort);
-	Edt_DataPort.EditBoxWidth = 60;
-	Edt_DataPort.SetNumericOnly(true);
-
-	Edt_ClientDataPort = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 228, 188, 16));
-	Edt_ClientDataPort.SetText(Text_ClientDataPort);
-	Edt_ClientDataPort.EditBoxWidth = 60;
-	Edt_ClientDataPort.SetNumericOnly(true);
-
-	Edt_DefaultTimeMessageClass = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 248, 188, 16));
+	Edt_DefaultTimeMessageClass = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 228, 188, 16));
 	Edt_DefaultTimeMessageClass.SetText(Text_DefaultTimeMessageClass);
 	Edt_DefaultTimeMessageClass.EditBoxWidth = 100;
 
-	Edt_IdleTimeout = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 268, 188, 16));
+	Edt_IdleTimeout = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 248, 188, 16));
 	Edt_IdleTimeout.SetText(Text_IdleTimeout);
 	Edt_IdleTimeout.EditBoxWidth = 60;
 	Edt_IdleTimeout.SetNumericOnly(true);
 
-	Edt_MinimumMapRepeatDistance = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 288, 188, 16));
+	Edt_MinimumMapRepeatDistance = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 268, 188, 16));
 	Edt_MinimumMapRepeatDistance.SetText(Text_MinimumMapRepeatDistance);
 	Edt_MinimumMapRepeatDistance.EditBoxWidth = 60;
 	Edt_MinimumMapRepeatDistance.SetNumericOnly(true);
 
-	Edt_PresetProbeDepth = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 308, 188, 16));
+	Edt_PresetProbeDepth = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 288, 188, 16));
 	Edt_PresetProbeDepth.SetText(Text_PresetProbeDepth);
 	Edt_PresetProbeDepth.EditBoxWidth = 60;
 	Edt_PresetProbeDepth.SetNumericOnly(true);
@@ -290,6 +276,20 @@ function Created() {
 	Cmb_GameNameMode.AddItem(Text_GameNameMode_CategoryAndPresetName);
 	Cmb_GameNameMode.EditBoxWidth = 100;
 	Cmb_GameNameMode.SetEditable(false);
+
+	Edt_ServerAddress = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 128, 188, 16));
+	Edt_ServerAddress.SetText(Text_ServerAddress);
+	Edt_ServerAddress.EditBoxWidth = 100;
+
+	Edt_DataPort = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 148, 188, 16));
+	Edt_DataPort.SetText(Text_DataPort);
+	Edt_DataPort.EditBoxWidth = 60;
+	Edt_DataPort.SetNumericOnly(true);
+
+	Edt_ClientDataPort = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 168, 188, 16));
+	Edt_ClientDataPort.SetText(Text_ClientDataPort);
+	Edt_ClientDataPort.EditBoxWidth = 60;
+	Edt_ClientDataPort.SetNumericOnly(true);
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
@@ -324,9 +324,6 @@ function ApplyTheme() {
 	Edt_KickVoteThreshold.Theme = Theme;
 	Edt_DefaultPreset.Theme = Theme;
 	Edt_DefaultMap.Theme = Theme;
-	Edt_ServerAddress.Theme = Theme;
-	Edt_DataPort.Theme = Theme;
-	Edt_ClientDataPort.Theme = Theme;
 	Edt_DefaultTimeMessageClass.Theme = Theme;
 	Edt_IdleTimeout.Theme = Theme;
 	Edt_MinimumMapRepeatDistance.Theme = Theme;
@@ -337,6 +334,9 @@ function ApplyTheme() {
 	//Chk_UseServerActorsCompatibilityMode // not themed
 	Adt_DefaultActors.SetTheme(Theme);
 	Cmb_GameNameMode.Theme = Theme;
+	Edt_ServerAddress.Theme = Theme;
+	Edt_DataPort.Theme = Theme;
+	Edt_ClientDataPort.Theme = Theme;
 }
 
 defaultproperties {
@@ -356,9 +356,6 @@ defaultproperties {
 	Text_KickVoteThreshold="Kick Vote Threshold"
 	Text_DefaultPreset="Default Preset"
 	Text_DefaultMap="Default Map"
-	Text_ServerAddress="Server Address"
-	Text_DataPort="Data Port"
-	Text_ClientDataPort="Client Data Port"
 	Text_DefaultTimeMessageClass="Time Msg Class"
 	Text_IdleTimeout="Idle Timeout"
 	Text_MinimumMapRepeatDistance="Map Repeat Distance"
@@ -372,4 +369,7 @@ defaultproperties {
 	Text_GameNameMode_DoNotModify="Do Not Modify"
 	Text_GameNameMode_PresetName="Preset Name"
 	Text_GameNameMode_CategoryAndPresetName="Full Preset Name"
+	Text_ServerAddress="Server Address"
+	Text_DataPort="Data Port"
+	Text_ClientDataPort="Client Data Port"
 }
