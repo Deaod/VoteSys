@@ -4,6 +4,8 @@ var VS_UI_ThemeBase Theme;
 
 var VS_UI_ListItem HoverItem;
 
+const DE_VoteSys_ClickDone = 128;
+
 function UWindowListBoxItem GetItemAt(float MouseX, float MouseY) {
 	local float y;
 	local UWindowList CurItem;
@@ -146,6 +148,12 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 
 function DoubleClickItem(UWindowListBoxItem I) {
 	Notify(DE_DoubleClick);
+}
+
+function LMouseUp(float X, float Y) {
+	super.LMouseUp(X, Y);
+
+	Notify(DE_VoteSys_ClickDone);
 }
 
 function ClearSelection() {
