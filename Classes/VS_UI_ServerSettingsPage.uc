@@ -59,6 +59,9 @@ var localized string Text_MinimumMapRepeatDistance;
 var VS_UI_EditControl Edt_PresetProbeDepth;
 var localized string Text_PresetProbeDepth;
 
+var VS_UI_ArrayEditControl Adt_DefaultPackages;
+var localized string Text_DefaultPackages;
+
 function LoadSettings(VS_PlayerChannel C) {
 	super.LoadSettings(C);
 
@@ -86,6 +89,7 @@ function EnableInteraction(bool bEnable) {
 	Edt_IdleTimeout.EditBox.SetEditable(bEnable);
 	Edt_MinimumMapRepeatDistance.EditBox.SetEditable(bEnable);
 	Edt_PresetProbeDepth.EditBox.SetEditable(bEnable);
+	Adt_DefaultPackages.EditBox.SetEditable(bEnable);
 }
 
 function LoadServerSettings() {
@@ -110,6 +114,7 @@ function LoadServerSettings() {
 	Edt_IdleTimeout.SetValue(string(Settings.IdleTimeout));
 	Edt_MinimumMapRepeatDistance.SetValue(string(Settings.MinimumMapRepeatDistance));
 	Edt_PresetProbeDepth.SetValue(string(Settings.PresetProbeDepth));
+	Adt_DefaultPackages.SetValue(Settings.GetPropertyText("DefaultPackages"));
 
 	bSettingsLoaded = true;
 }
@@ -134,6 +139,7 @@ function SaveSettings() {
 	Settings.IdleTimeout = int(Edt_IdleTimeout.GetValue());
 	Settings.MinimumMapRepeatDistance = int(Edt_MinimumMapRepeatDistance.GetValue());
 	Settings.PresetProbeDepth = int(Edt_PresetProbeDepth.GetValue());
+	Settings.SetPropertyText("DefaultPackages", Adt_DefaultPackages.GetValue());
 
 	Channel.SaveServerSettings();
 }
@@ -222,6 +228,14 @@ function Created() {
 	Edt_PresetProbeDepth.SetText(Text_PresetProbeDepth);
 	Edt_PresetProbeDepth.EditBoxWidth = 60;
 	Edt_PresetProbeDepth.SetNumericOnly(true);
+
+	//
+	// Right Side
+	//
+
+	Adt_DefaultPackages = VS_UI_ArrayEditControl(CreateControl(class'VS_UI_ArrayEditControl', 200, 8, 188, 16));
+	Adt_DefaultPackages.SetText(Text_DefaultPackages);
+	Adt_DefaultPackages.EditBoxWidth = 100;
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
@@ -263,6 +277,7 @@ function ApplyTheme() {
 	Edt_IdleTimeout.Theme = Theme;
 	Edt_MinimumMapRepeatDistance.Theme = Theme;
 	Edt_PresetProbeDepth.Theme = Theme;
+	Adt_DefaultPackages.SetTheme(Theme);
 }
 
 defaultproperties {
@@ -289,4 +304,5 @@ defaultproperties {
 	Text_IdleTimeout="Idle Timeout"
 	Text_MinimumMapRepeatDistance="Map Repeat Distance"
 	Text_PresetProbeDepth="Preset Probe Depth"
+	Text_DefaultPackages="Default Packages"
 }
