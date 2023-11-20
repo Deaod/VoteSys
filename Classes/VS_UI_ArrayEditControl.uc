@@ -166,6 +166,24 @@ function BeforePaint(Canvas C, float X, float Y) {
 	EditBox.TextColor = Theme.Foreground;
 }
 
+function SetEnabled(bool bEnable) {
+	if (bEnabled == bEnable)
+		return;
+
+	if (bEnable) {
+		Button.bDisabled = false;
+		bCanEdit = bSavedCanEdit;
+		EditBox.SetEditable(bSavedEditBoxCanEdit);
+	} else {
+		bSavedCanEdit = bCanEdit;
+		bSavedEditBoxCanEdit = EditBox.bCanEdit;
+
+		Button.bDisabled = true;
+		bCanEdit = true;
+		EditBox.SetEditable(false);
+	}
+	bEnabled = bEnable;
+}
 
 function ClearValue() {
 	EditBox.Clear();

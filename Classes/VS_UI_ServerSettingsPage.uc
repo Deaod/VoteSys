@@ -103,9 +103,9 @@ function EnableInteraction(bool bEnable) {
 	Edt_PresetProbeDepth.EditBox.SetEditable(bEnable);
 	Chk_ManageServerPackages.bDisabled = !bEnable;
 	Chk_UseServerPackagesCompatibilityMode.bDisabled = !bEnable;
-	Adt_DefaultPackages.EditBox.SetEditable(bEnable);
+	Adt_DefaultPackages.SetEnabled(bEnable);
 	Chk_UseServerActorsCompatibilityMode.bDisabled = !bEnable;
-	Adt_DefaultActors.EditBox.SetEditable(bEnable);
+	Adt_DefaultActors.SetEnabled(bEnable);
 }
 
 function LoadServerSettings() {
