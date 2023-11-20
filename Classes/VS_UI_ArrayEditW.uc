@@ -4,7 +4,6 @@ var VS_UI_ArrayEditControl Owner;
 
 function SetOwner(VS_UI_ArrayEditControl O) {
 	local UWindowWindow P;
-	local float X, Y;
 
 	Owner = O;
 	VS_UI_ArrayEditCW(ClientArea).SetOwner(O);

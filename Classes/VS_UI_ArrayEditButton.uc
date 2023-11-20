@@ -15,7 +15,7 @@ function Click(float X, float Y) {
 }
 
 function BeforePaint(Canvas C, float X, float Y) {
-	local float W, H;
+	local float H;
 
 	C.Font = Root.Fonts[Font];
 	
