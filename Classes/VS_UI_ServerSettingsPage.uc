@@ -59,6 +59,9 @@ var localized string Text_MinimumMapRepeatDistance;
 var VS_UI_EditControl Edt_PresetProbeDepth;
 var localized string Text_PresetProbeDepth;
 
+var UWindowCheckbox Chk_ManageServerPackages;
+var localized string Text_ManageServerPackages;
+
 var VS_UI_ArrayEditControl Adt_DefaultPackages;
 var localized string Text_DefaultPackages;
 
@@ -89,6 +92,7 @@ function EnableInteraction(bool bEnable) {
 	Edt_IdleTimeout.EditBox.SetEditable(bEnable);
 	Edt_MinimumMapRepeatDistance.EditBox.SetEditable(bEnable);
 	Edt_PresetProbeDepth.EditBox.SetEditable(bEnable);
+	Chk_ManageServerPackages.bDisabled = !bEnable;
 	Adt_DefaultPackages.EditBox.SetEditable(bEnable);
 }
 
@@ -114,6 +118,7 @@ function LoadServerSettings() {
 	Edt_IdleTimeout.SetValue(string(Settings.IdleTimeout));
 	Edt_MinimumMapRepeatDistance.SetValue(string(Settings.MinimumMapRepeatDistance));
 	Edt_PresetProbeDepth.SetValue(string(Settings.PresetProbeDepth));
+	Chk_ManageServerPackages.bChecked = Settings.bManageServerPackages;
 	Adt_DefaultPackages.SetValue(Settings.GetPropertyText("DefaultPackages"));
 
 	bSettingsLoaded = true;
@@ -139,6 +144,7 @@ function SaveSettings() {
 	Settings.IdleTimeout = int(Edt_IdleTimeout.GetValue());
 	Settings.MinimumMapRepeatDistance = int(Edt_MinimumMapRepeatDistance.GetValue());
 	Settings.PresetProbeDepth = int(Edt_PresetProbeDepth.GetValue());
+	Settings.bManageServerPackages = Chk_ManageServerPackages.bChecked;
 	Settings.SetPropertyText("DefaultPackages", Adt_DefaultPackages.GetValue());
 
 	Channel.SaveServerSettings();
@@ -233,7 +239,10 @@ function Created() {
 	// Right Side
 	//
 
-	Adt_DefaultPackages = VS_UI_ArrayEditControl(CreateControl(class'VS_UI_ArrayEditControl', 200, 8, 188, 16));
+	Chk_ManageServerPackages = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 200, 8, 188, 16));
+	Chk_ManageServerPackages.SetText(Text_ManageServerPackages);
+
+	Adt_DefaultPackages = VS_UI_ArrayEditControl(CreateControl(class'VS_UI_ArrayEditControl', 200, 48, 188, 16));
 	Adt_DefaultPackages.SetText(Text_DefaultPackages);
 	Adt_DefaultPackages.EditBoxWidth = 100;
 }
@@ -277,6 +286,7 @@ function ApplyTheme() {
 	Edt_IdleTimeout.Theme = Theme;
 	Edt_MinimumMapRepeatDistance.Theme = Theme;
 	Edt_PresetProbeDepth.Theme = Theme;
+	//Chk_ManageServerPackages // not themed
 	Adt_DefaultPackages.SetTheme(Theme);
 }
 
@@ -304,5 +314,6 @@ defaultproperties {
 	Text_IdleTimeout="Idle Timeout"
 	Text_MinimumMapRepeatDistance="Map Repeat Distance"
 	Text_PresetProbeDepth="Preset Probe Depth"
+	Text_ManageServerPackages="Manage Server Packages"
 	Text_DefaultPackages="Default Packages"
 }
