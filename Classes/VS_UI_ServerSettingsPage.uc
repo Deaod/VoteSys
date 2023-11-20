@@ -41,6 +41,9 @@ var localized string Text_AlwaysUseDefaultPreset;
 var VS_UI_EditControl Edt_DefaultMap;
 var localized string Text_DefaultMap;
 
+var UWindowCheckbox Chk_AlwaysUseDefaultMap;
+var localized string Text_AlwaysUseDefaultMap;
+
 var VS_UI_EditControl Edt_DefaultTimeMessageClass;
 var localized string Text_DefaultTimeMessageClass;
 
@@ -104,6 +107,7 @@ function EnableInteraction(bool bEnable) {
 	Edt_DefaultPreset.EditBox.SetEditable(bEnable);
 	Chk_AlwaysUseDefaultPreset.bDisabled = !bEnable;
 	Edt_DefaultMap.EditBox.SetEditable(bEnable);
+	Chk_AlwaysUseDefaultMap.bDisabled = !bEnable;
 	Edt_DefaultTimeMessageClass.EditBox.SetEditable(bEnable);
 	Edt_IdleTimeout.EditBox.SetEditable(bEnable);
 	Edt_MinimumMapRepeatDistance.EditBox.SetEditable(bEnable);
@@ -135,6 +139,7 @@ function LoadServerSettings() {
 	Edt_DefaultPreset.SetValue(Settings.DefaultPreset);
 	Chk_AlwaysUseDefaultPreset.bChecked = Settings.bAlwaysUseDefaultPreset;
 	Edt_DefaultMap.SetValue(Settings.DefaultMap);
+	Chk_AlwaysUseDefaultMap.bChecked = Settings.bAlwaysUseDefaultMap;
 	Edt_DefaultTimeMessageClass.SetValue(Settings.DefaultTimeMessageClass);
 	Edt_IdleTimeout.SetValue(string(Settings.IdleTimeout));
 	Edt_MinimumMapRepeatDistance.SetValue(string(Settings.MinimumMapRepeatDistance));
@@ -166,6 +171,7 @@ function SaveSettings() {
 	Settings.DefaultPreset = Edt_DefaultPreset.GetValue();
 	Settings.bAlwaysUseDefaultPreset = Chk_AlwaysUseDefaultPreset.bChecked;
 	Settings.DefaultMap = Edt_DefaultMap.GetValue();
+	Settings.bAlwaysUseDefaultMap = Chk_AlwaysUseDefaultMap.bChecked;
 	Settings.DefaultTimeMessageClass = Edt_DefaultTimeMessageClass.GetValue();
 	Settings.IdleTimeout = int(Edt_IdleTimeout.GetValue());
 	Settings.MinimumMapRepeatDistance = int(Edt_MinimumMapRepeatDistance.GetValue());
@@ -237,6 +243,9 @@ function Created() {
 	Edt_DefaultMap = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 188, 188, 16));
 	Edt_DefaultMap.SetText(Text_DefaultMap);
 	Edt_DefaultMap.EditBoxWidth = 100;
+
+	Chk_AlwaysUseDefaultMap = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 4, 208, 188, 16));
+	Chk_AlwaysUseDefaultMap.SetText(Text_AlwaysUseDefaultMap);
 
 	Edt_DefaultTimeMessageClass = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 228, 188, 16));
 	Edt_DefaultTimeMessageClass.SetText(Text_DefaultTimeMessageClass);
@@ -334,6 +343,7 @@ function ApplyTheme() {
 	Edt_DefaultPreset.Theme = Theme;
 	//Chk_AlwaysUseDefaultPreset // not themed
 	Edt_DefaultMap.Theme = Theme;
+	//Chk_AlwaysUseDefaultMap // not themed
 	Edt_DefaultTimeMessageClass.Theme = Theme;
 	Edt_IdleTimeout.Theme = Theme;
 	Edt_MinimumMapRepeatDistance.Theme = Theme;
@@ -367,6 +377,7 @@ defaultproperties {
 	Text_DefaultPreset="Default Preset"
 	Text_AlwaysUseDefaultPreset="Always Use Default Preset"
 	Text_DefaultMap="Default Map"
+	Text_AlwaysUseDefaultMap="Always Use Default Map"
 	Text_DefaultTimeMessageClass="Time Msg Class"
 	Text_IdleTimeout="Idle Timeout"
 	Text_MinimumMapRepeatDistance="Map Repeat Distance"
