@@ -62,6 +62,9 @@ var localized string Text_PresetProbeDepth;
 var UWindowCheckbox Chk_ManageServerPackages;
 var localized string Text_ManageServerPackages;
 
+var UWindowCheckbox Chk_UseServerPackagesCompatibilityMode;
+var localized string Text_UseServerPackagesCompatibilityMode;
+
 var VS_UI_ArrayEditControl Adt_DefaultPackages;
 var localized string Text_DefaultPackages;
 
@@ -93,6 +96,7 @@ function EnableInteraction(bool bEnable) {
 	Edt_MinimumMapRepeatDistance.EditBox.SetEditable(bEnable);
 	Edt_PresetProbeDepth.EditBox.SetEditable(bEnable);
 	Chk_ManageServerPackages.bDisabled = !bEnable;
+	Chk_UseServerPackagesCompatibilityMode.bDisabled = !bEnable;
 	Adt_DefaultPackages.EditBox.SetEditable(bEnable);
 }
 
@@ -119,6 +123,7 @@ function LoadServerSettings() {
 	Edt_MinimumMapRepeatDistance.SetValue(string(Settings.MinimumMapRepeatDistance));
 	Edt_PresetProbeDepth.SetValue(string(Settings.PresetProbeDepth));
 	Chk_ManageServerPackages.bChecked = Settings.bManageServerPackages;
+	Chk_UseServerPackagesCompatibilityMode.bChecked = Settings.bUseServerPackagesCompatibilityMode;
 	Adt_DefaultPackages.SetValue(Settings.GetPropertyText("DefaultPackages"));
 
 	bSettingsLoaded = true;
@@ -145,6 +150,7 @@ function SaveSettings() {
 	Settings.MinimumMapRepeatDistance = int(Edt_MinimumMapRepeatDistance.GetValue());
 	Settings.PresetProbeDepth = int(Edt_PresetProbeDepth.GetValue());
 	Settings.bManageServerPackages = Chk_ManageServerPackages.bChecked;
+	Settings.bUseServerPackagesCompatibilityMode = Chk_UseServerPackagesCompatibilityMode.bChecked;
 	Settings.SetPropertyText("DefaultPackages", Adt_DefaultPackages.GetValue());
 
 	Channel.SaveServerSettings();
@@ -242,6 +248,9 @@ function Created() {
 	Chk_ManageServerPackages = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 200, 8, 188, 16));
 	Chk_ManageServerPackages.SetText(Text_ManageServerPackages);
 
+	Chk_UseServerPackagesCompatibilityMode = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 200, 28, 188, 16));
+	Chk_UseServerPackagesCompatibilityMode.SetText(Text_UseServerPackagesCompatibilityMode);
+
 	Adt_DefaultPackages = VS_UI_ArrayEditControl(CreateControl(class'VS_UI_ArrayEditControl', 200, 48, 188, 16));
 	Adt_DefaultPackages.SetText(Text_DefaultPackages);
 	Adt_DefaultPackages.EditBoxWidth = 100;
@@ -287,6 +296,7 @@ function ApplyTheme() {
 	Edt_MinimumMapRepeatDistance.Theme = Theme;
 	Edt_PresetProbeDepth.Theme = Theme;
 	//Chk_ManageServerPackages // not themed
+	//Chk_UseServerPackagesCompatibilityMode // not themed
 	Adt_DefaultPackages.SetTheme(Theme);
 }
 
@@ -315,5 +325,6 @@ defaultproperties {
 	Text_MinimumMapRepeatDistance="Map Repeat Distance"
 	Text_PresetProbeDepth="Preset Probe Depth"
 	Text_ManageServerPackages="Manage Server Packages"
+	Text_UseServerPackagesCompatibilityMode="Use Server Package Compat. Mode"
 	Text_DefaultPackages="Default Packages"
 }
