@@ -60,6 +60,15 @@ function EVoteEndCond IntToVoteEndCond(int v) {
 	return VEC_TimerOnly;
 }
 
+function EGameNameMode IntToGameNameMode(int v) {
+	switch(v) {
+		case 0: return GNM_DoNotModify;
+		case 1: return GNM_PresetName;
+		case 2: return GNM_CategoryAndPresetName;
+	}
+	return GNM_DoNotModify;
+}
+
 defaultproperties {
 	MidGameVoteThreshold=0.5
 	MidGameVoteTimeLimit=0

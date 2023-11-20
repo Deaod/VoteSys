@@ -74,6 +74,12 @@ var localized string Text_UseServerActorsCompatibilityMode;
 var VS_UI_ArrayEditControl Adt_DefaultActors;
 var localized string Text_DefaultActors;
 
+var VS_UI_ComboControl Cmb_GameNameMode;
+var localized string Text_GameNameMode;
+var localized string Text_GameNameMode_DoNotModify;
+var localized string Text_GameNameMode_PresetName;
+var localized string Text_GameNameMode_CategoryAndPresetName;
+
 function LoadSettings(VS_PlayerChannel C) {
 	super.LoadSettings(C);
 
@@ -106,6 +112,7 @@ function EnableInteraction(bool bEnable) {
 	Adt_DefaultPackages.SetEnabled(bEnable);
 	Chk_UseServerActorsCompatibilityMode.bDisabled = !bEnable;
 	Adt_DefaultActors.SetEnabled(bEnable);
+	Cmb_GameNameMode.SetEnabled(bEnable);
 }
 
 function LoadServerSettings() {
@@ -135,6 +142,7 @@ function LoadServerSettings() {
 	Adt_DefaultPackages.SetValue(Settings.GetPropertyText("DefaultPackages"));
 	Chk_UseServerActorsCompatibilityMode.bChecked = Settings.bUseServerActorsCompatibilityMode;
 	Adt_DefaultActors.SetValue(Settings.GetPropertyText("DefaultActors"));
+	Cmb_GameNameMode.SetSelectedIndex(int(Settings.GameNameMode));
 
 	bSettingsLoaded = true;
 }
@@ -164,6 +172,7 @@ function SaveSettings() {
 	Settings.SetPropertyText("DefaultPackages", Adt_DefaultPackages.GetValue());
 	Settings.bUseServerActorsCompatibilityMode = Chk_UseServerActorsCompatibilityMode.bChecked;
 	Settings.SetPropertyText("DefaultActors", Adt_DefaultActors.GetValue());
+	Settings.GameNameMode = Settings.IntToGameNameMode(Cmb_GameNameMode.GetSelectedIndex());
 
 	Channel.SaveServerSettings();
 }
@@ -273,6 +282,14 @@ function Created() {
 	Adt_DefaultActors = VS_UI_ArrayEditControl(CreateControl(class'VS_UI_ArrayEditControl', 200, 88, 188, 16));
 	Adt_DefaultActors.SetText(Text_DefaultActors);
 	Adt_DefaultActors.EditBoxWidth = 100;
+
+	Cmb_GameNameMode = VS_UI_ComboControl(CreateControl(class'VS_UI_ComboControl', 200, 108, 188, 16));
+	Cmb_GameNameMode.SetText(Text_GameNameMode);
+	Cmb_GameNameMode.AddItem(Text_GameNameMode_DoNotModify);
+	Cmb_GameNameMode.AddItem(Text_GameNameMode_PresetName);
+	Cmb_GameNameMode.AddItem(Text_GameNameMode_CategoryAndPresetName);
+	Cmb_GameNameMode.EditBoxWidth = 100;
+	Cmb_GameNameMode.SetEditable(false);
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
@@ -319,6 +336,7 @@ function ApplyTheme() {
 	Adt_DefaultPackages.SetTheme(Theme);
 	//Chk_UseServerActorsCompatibilityMode // not themed
 	Adt_DefaultActors.SetTheme(Theme);
+	Cmb_GameNameMode.Theme = Theme;
 }
 
 defaultproperties {
@@ -350,4 +368,8 @@ defaultproperties {
 	Text_DefaultPackages="Default Packages"
 	Text_UseServerActorsCompatibilityMode="Use Server Actors Compat. Mode"
 	Text_DefaultActors="Default Actors"
+	Text_GameNameMode="GameName Mode"
+	Text_GameNameMode_DoNotModify="Do Not Modify"
+	Text_GameNameMode_PresetName="Preset Name"
+	Text_GameNameMode_CategoryAndPresetName="Full Preset Name"
 }
