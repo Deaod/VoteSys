@@ -181,6 +181,10 @@ event Timer() {
 		SendLine("/PING");
 }
 
+function DiscardServerSettings() {
+	ServerSettings = none;
+}
+
 function VS_ServerSettings GetServerSettings() {
 	Log("DataClient GetServerSettings", 'VoteSys');
 	if (int(Level.EngineVersion) < 469)
@@ -197,7 +201,7 @@ function VS_ServerSettings GetServerSettings() {
 }
 
 function SendServerSetting(VS_ServerSettings S, string SettingName) {
-	SendLine("/SAVESERVERSETTING/"$S11N.SerializeProperty(SettingName, ServerSettings.GetPropertyText(SettingName)));
+	SendLine("/SAVESERVERSETTING/"$S11N.SerializeProperty(SettingName, S.GetPropertyText(SettingName)));
 }
 
 function SaveServerSettings(VS_ServerSettings S) {

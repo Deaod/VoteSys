@@ -28,6 +28,8 @@ function SaveSettings() {}
 function ApplyTheme() {}
 
 function Notify(UWindowDialogControl C, byte E) {
+	super.Notify(C, E);
+	
 	if (C == Btn_Save && E == DE_Click) {
 		SaveSettings();
 	}

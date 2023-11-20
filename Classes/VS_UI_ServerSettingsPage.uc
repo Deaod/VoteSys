@@ -3,6 +3,12 @@ class VS_UI_ServerSettingsPage extends VS_UI_SettingsPage;
 var VS_ServerSettings Settings;
 var bool bSettingsLoaded;
 
+var UWindowSmallButton Btn_RestartServer;
+var localized string Text_RestartServer;
+
+var UWindowSmallButton Btn_ReloadSettings;
+var localized string Text_ReloadSettings;
+
 var UWindowLabelControl Lbl_SettingsState;
 var localized string Text_SettingsState_New;
 var localized string Text_SettingsState_Complete;
@@ -192,7 +198,13 @@ function SaveSettings() {
 function Created() {
 	super.Created();
 
-	Lbl_SettingsState = UWindowLabelControl(CreateControl(class'UWindowLabelControl', 4, 334, 282, 16));
+	Btn_RestartServer = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 4, 334, 80, 16));
+	Btn_RestartServer.SetText(Text_RestartServer);
+
+	Btn_ReloadSettings = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 88, 334, 80, 16));
+	Btn_ReloadSettings.SetText(Text_ReloadSettings);
+
+	Lbl_SettingsState = UWindowLabelControl(CreateControl(class'UWindowLabelControl', 172, 334, 114, 16));
 	Lbl_SettingsState.Align = TA_Right;
 
 	Edt_MidGameVoteThreshold = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 8, 188, 16));
@@ -359,7 +371,23 @@ function ApplyTheme() {
 	Edt_ClientDataPort.Theme = Theme;
 }
 
+function Notify(UWindowDialogControl C, byte E) {
+	super.Notify(C, E);
+
+	if (E == DE_Click) {
+		if (C == Btn_RestartServer) {
+			GetPlayerOwner().ConsoleCommand("admin exit");
+		} else if (C == Btn_ReloadSettings) {
+			bSettingsLoaded = false;
+			Settings = Channel.ReloadServerSettings();
+			EnableInteraction(false);
+		}
+	}
+}
+
 defaultproperties {
+	Text_RestartServer="Restart Server"
+	Text_ReloadSettings="Reload Settings"
 	Text_SettingsState_New="Loading"
 	Text_SettingsState_Complete="Loaded"
 	Text_SettingsState_NotAdmin="Unauthorized"

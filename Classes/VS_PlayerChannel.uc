@@ -465,6 +465,7 @@ function ServerBanPlayer(PlayerReplicationInfo PRI) {
 
 simulated function VS_ServerSettings ReloadServerSettings() {
 	ServerSettings = none;
+	DataClient.DiscardServerSettings();
 	return GetServerSettings();
 }
 
