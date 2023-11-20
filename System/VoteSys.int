@@ -1,6 +1,46 @@
 [Public]
 Object=(Name=VoteSys.MutVoteSys,Class=Class,MetaClass=Engine.Mutator,Description="VoteSys,Enables voting for next map")
 
+[VS_UI_ServerSettingsPage]
+Text_RestartServer="Restart Server"
+Text_ReloadSettings="Reload Settings"
+Text_SettingsState_New="Loading"
+Text_SettingsState_Complete="Loaded"
+Text_SettingsState_NotAdmin="Unauthorized"
+Text_MidGameVoteThreshold="Mid-Game Vote Threshold"
+Text_MidGameVoteTimeLimit="Mid-Game Vote Time Limit"
+Text_GameEndedVoteDelay="Game Ended Vote Delay"
+Text_VoteTimeLimit="Vote Time Limit"
+Text_VoteEndCondition="Vote End Rules"
+Text_VoteEndCondition_TimerOnly="Timer Only"
+Text_VoteEndCondition_TimerOrAllVotesIn="Everyone Voted"
+Text_VoteEndCondition_TimerOrResultDetermined="Result Certain"
+Text_RetainCandidates="Retain Candidates"
+Text_KickVoteThreshold="Kick Vote Threshold"
+Text_DefaultPreset="Default Preset"
+Text_AlwaysUseDefaultPreset="Always Use Default Preset"
+Text_DefaultMap="Default Map"
+Text_AlwaysUseDefaultMap="Always Use Default Map"
+Text_DefaultTimeMessageClass="Time Msg Class"
+Text_IdleTimeout="Idle Timeout"
+Text_MinimumMapRepeatDistance="Map Repeat Distance"
+Text_PresetProbeDepth="Preset Probe Depth"
+Text_ManageServerPackages="Manage Server Packages"
+Text_UseServerPackagesCompatibilityMode="Use Server Package Compat. Mode"
+Text_DefaultPackages="Default Packages"
+Text_UseServerActorsCompatibilityMode="Use Server Actors Compat. Mode"
+Text_DefaultActors="Default Actors"
+Text_GameNameMode="GameName Mode"
+Text_GameNameMode_DoNotModify="Do Not Modify"
+Text_GameNameMode_PresetName="Preset Name"
+Text_GameNameMode_CategoryAndPresetName="Full Preset Name"
+Text_ServerAddress="Server Address"
+Text_DataPort="Data Port"
+Text_ClientDataPort="Client Data Port"
+
+[VS_UI_SettingsPage]
+SaveText="Save"
+
 [VS_UI_CandidateListBox]
 PresetColumnHeader="Preset"
 MapColumnHeader="Map"
@@ -45,31 +85,11 @@ PlayerBanText="&Ban"
 PlayerBanTitle="Ban Player"
 PlayerBanMessage="Do you want to permanently ban {1}?"
 
-[VS_UI_ServerSettingsPage]
-Text_SettingsState_New="Loading"
-Text_SettingsState_Complete="Loaded"
-Text_SettingsState_NotAdmin="Unauthorized"
-Text_MidGameVoteThreshold="Mid-Game Vote Threshold"
-Text_MidGameVoteTimeLimit="Mid-Game Vote Time Limit"
-Text_GameEndedVoteDelay="Game Ended Vote Delay"
-Text_VoteTimeLimit="Vote Time Limit"
-Text_VoteEndCondition="Vote End Rules"
-Text_VoteEndCondition_TimerOnly="Timer Only"
-Text_VoteEndCondition_TimerOrAllVotesIn="Everyone Voted"
-Text_VoteEndCondition_TimerOrResultDetermined="Result Certain"
-Text_RetainCandidates="Retain Candidates"
-Text_KickVoteThreshold="Kick Vote Threshold"
-Text_DefaultPreset="Default Preset"
-Text_DefaultMap="Default Map"
-
 [VS_UI_ClientSettingsPage]
 ThemeText="Theme"
 ThemeBright="Bright"
 ThemeDark="Dark"
 ThemeBlack="Black"
-
-[VS_UI_SettingsPage]
-SaveText="Save"
 
 [VS_UI_SettingsWindow]
 WindowTitle="VoteSys Settings"
