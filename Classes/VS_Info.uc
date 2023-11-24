@@ -166,23 +166,6 @@ function VS_Candidate AddRandomVoteInternal(VS_Preset P) {
 	return C;
 }
 
-function RemMapVote(VS_PlayerChannel Origin, VS_Preset P, VS_Map M) {
-	local VS_Candidate C;
-
-	for (C = FirstCandidate; C != none; C = C.Next) {
-		if (C.PresetRef == P && C.MapRef == M) {
-			C.Votes -= 1;
-			if (VoteSys.Settings.bRetainCandidates == false && C.Votes == 0) {
-				C.Remove();
-				C.Destroy();
-			} else {
-				C.SortInList();
-			}
-			return;
-		}
-	}
-}
-
 function RemCandidateVote(VS_PlayerChannel Origin, VS_Candidate Candidate) {
 	Candidate.Votes -= 1;
 	if (VoteSys.Settings.bRetainCandidates == false && Candidate.Votes == 0) {
