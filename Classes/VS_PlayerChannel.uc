@@ -328,10 +328,10 @@ simulated function Vote(VS_Preset P, VS_Map M) {
 	if (P == none || M == none)
 		return;
 
-	ServerVote(P.Category, P.PresetName, M.MapName);
+	ServerVote(P.GetFullName(), M.MapName);
 }
 
-function ServerVote(string Category, string PresetName, string MapName) {
+function ServerVote(string FullPresetName, string MapName) {
 	local VS_Preset P;
 	local VS_Map M;
 	local VS_Info I;
@@ -342,7 +342,7 @@ function ServerVote(string Category, string PresetName, string MapName) {
 	}
 
 	I = VoteInfo();
-	P = I.ResolvePresetSeparate(Category, PresetName);
+	P = I.ResolvePreset(FullPresetName);
 	M = I.ResolveMapOfPreset(P, MapName);
 
 	if (P == none || M == none)
@@ -399,7 +399,7 @@ function ServerVoteRandom(string FullPresetName) {
 	}
 
 	I = VoteInfo();
-	P = I.ResolvePresetCombined(FullPresetName);
+	P = I.ResolvePreset(FullPresetName);
 
 	if (P == none)
 		return;

@@ -245,17 +245,7 @@ function BanPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target) {
 	}
 }
 
-function VS_Preset ResolvePresetSeparate(string Category, string PresetName) {
-	local VS_Preset P;
-
-	for (P = VoteSys.PresetList; P != none; P = P.Next)
-		if (P.Category == Category && P.PresetName == PresetName && P.bDisabled == false)
-			return P;
-
-	return none;
-}
-
-function VS_Preset ResolvePresetCombined(string FullPresetName) {
+function VS_Preset ResolvePreset(string FullPresetName) {
 	local VS_Preset P;
 
 	for (P = VoteSys.PresetList; P != none; P = P.Next)

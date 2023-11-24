@@ -685,7 +685,7 @@ function TallyVotes() {
 		if (Settings.bAlwaysUseDefaultPreset || bChangeMapImmediately) {
 			VotedPreset = DefaultPresetRef;
 		} else {
-			VotedPreset = Info.ResolvePresetCombined(CurrentPreset);
+			VotedPreset = Info.ResolvePreset(CurrentPreset);
 		}
 
 		if ((Settings.bAlwaysUseDefaultPreset && Settings.bAlwaysUseDefaultMap) || bChangeMapImmediately)
