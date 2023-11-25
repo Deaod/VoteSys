@@ -416,21 +416,32 @@ function ClearVote() {
 	}
 }
 
-simulated function int WantsToKick(PlayerReplicationInfo PRI) {
-	local int i;
+simulated function bool WantsToKick(PlayerReplicationInfo PRI) {
+	local VS_PlayerInfo P;
 
-	for (i = 0; i < IWantToKick.Length; i++) 
-		if (IWantToKick[i] == PRI)
-			return i;
-	
-	return -1;
+	P = VoteInfo().GetPlayerInfoForPRI(PRI);
+	if (P != none)
+		return P.bLocalPlayerWantsToKick;
+
+	return false;
 }
 
-simulated function bool ToggleKick(PlayerReplicationInfo PRI) {
+simulated function ClientToggleKick(PlayerReplicationInfo PRI) {
+	local VS_PlayerInfo P;
+
+	P = VoteInfo().GetPlayerInfoForPRI(PRI);
+	if (P != none)
+		P.bLocalPlayerWantsToKick = !P.bLocalPlayerWantsToKick;
+}
+
+function bool ServerToggleKick(PlayerReplicationInfo PRI) {
 	local int Index;
 
-	Index = WantsToKick(PRI);
-	if (Index < 0) {
+	for (Index = 0; Index < IWantToKick.Length; Index++) 
+		if (IWantToKick[Index] == PRI)
+			break;
+
+	if (Index >= IWantToKick.Length) {
 		IWantToKick.Insert(0, 1);
 		IWantToKick[0] = PRI;
 		return true;
@@ -449,7 +460,7 @@ function ServerKickPlayer(PlayerReplicationInfo PRI) {
 }
 
 simulated function ClientApplyKickVote(PlayerReplicationInfo PRI) {
-	ToggleKick(PRI);
+	ClientToggleKick(PRI);
 }
 
 simulated function BanPlayer(PlayerReplicationInfo PRI) {

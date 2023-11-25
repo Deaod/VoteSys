@@ -36,6 +36,16 @@ simulated event Timer() {
 		PlayerInfo[i++] = none;
 }
 
+simulated function VS_PlayerInfo GetPlayerInfoForPRI(PlayerReplicationInfo PRI) {
+	local int i;
+
+	for (i = 0; i < arraycount(PlayerInfo); i++)
+		if (PlayerInfo[i].PRI == PRI)
+			return PlayerInfo[i];
+
+	return none;
+}
+
 function VS_Candidate AddMapVote(VS_PlayerChannel Origin, VS_Preset P, VS_Map M) {
 	if (VoteSys.CanVote(Origin.PlayerOwner)) {
 		if (Origin.PlayerOwner.PlayerReplicationInfo.bAdmin) {
@@ -208,7 +218,7 @@ function KickPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target) {
 		if (ChCont != none)
 			TCh = ChCont.Channel;
 		if (TCh != none) {
-			if (Origin.ToggleKick(Target)) {
+			if (Origin.ServerToggleKick(Target)) {
 				TCh.KickVotesAgainstMe++;
 				VoteSys.BroadcastLocalizedMessage2(
 					class'VS_Msg_LocalMessage', 10,

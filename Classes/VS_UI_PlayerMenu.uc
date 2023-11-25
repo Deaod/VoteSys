@@ -34,7 +34,7 @@ function ShowWindow() {
 	PlayerBan.SetCaption(PlayerBanText@PRI.PlayerName);
 
 	Ch = VS_UI_VoteClientWindow(OwnerWindow.OwnerWindow).Channel;
-	PlayerKick.bChecked = (Ch.WantsToKick(PRI) >= 0);
+	PlayerKick.bChecked = Ch.WantsToKick(PRI);
 
 	if (PlayerBanMB != none)
 		PlayerBanMB.Close();

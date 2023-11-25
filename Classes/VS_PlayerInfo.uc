@@ -4,6 +4,7 @@ var PlayerReplicationInfo PRI;
 var bool bCanVote;
 var bool bHasVoted;
 var bool bIsPlayer;
+var bool bLocalPlayerWantsToKick;
 
 replication {
 	reliable if (Role == ROLE_Authority)
@@ -31,7 +32,8 @@ simulated function string Dump() {
 		GetVariable("PRI")$","$
 		GetVariable("bCanVote")$","$
 		GetVariable("bHasVoted")$","$
-		GetVariable("bIsPlayer");
+		GetVariable("bIsPlayer")$","$
+		GetVariable("bLocalPlayerWantsToKick");
 }
 
 defaultproperties {
