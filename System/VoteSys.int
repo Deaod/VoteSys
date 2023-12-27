@@ -93,6 +93,10 @@ ThemeText="Theme"
 ThemeBright="Bright"
 ThemeDark="Dark"
 ThemeBlack="Black"
+MapListSortText="Sort Map List By"
+MapListSortName="Name"
+MapListSortRecency="Recency"
+MapListSortPlayCount="Play Count"
 
 [VS_UI_SettingsWindow]
 WindowTitle="VoteSys Settings"

@@ -8,7 +8,14 @@ enum ETheme {
 	TH_Black
 };
 
+enum EMapListSort {
+	MLS_Name,
+	MLS_Recency,
+	MLS_PlayCount
+};
+
 var config ETheme Theme;
+var config EMapListSort MapListSort;
 
 var config float MenuX;
 var config float MenuY;
@@ -25,8 +32,18 @@ static final function ETheme IntToTheme(int A) {
 	return default.Theme;
 }
 
+static final function EMapListSort IntToMapListSort(int A) {
+	switch(A) {
+		case 0: return MLS_Name;
+		case 1: return MLS_Recency;
+		case 2: return MLS_PlayCount;
+	}
+	return default.MapListSort;
+}
+
 defaultproperties {
 	Theme=TH_Bright
+	MapListSort=MLS_Name;
 	
 	MenuX=-1.0
 	MenuY=-1.0

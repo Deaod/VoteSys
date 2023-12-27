@@ -5,6 +5,7 @@ class VS_UI_VoteClientWindow extends UWindowDialogClientWindow;
 var VS_PlayerChannel Channel;
 var VS_ClientSettings Settings;
 var int ActiveTheme;
+var byte PreviousMapListSort;
 
 var VS_UI_CategoryTabItem ActiveCategory;
 var VS_Preset ActivePreset;
@@ -111,6 +112,8 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 
 	UpdateCandidateList(Info);
 	UpdatePlayerList(Info);
+
+	PreviousMapListSort = Settings.MapListSort;
 
 	CategoryTabs.WinWidth = WinWidth;
 
@@ -231,7 +234,11 @@ function UpdateActivePreset(VS_Info Info) {
 	local VS_Map M;
 	local bool bEnable;
 	
-	if (Presets.SelectedPreset != ActivePreset || bWasAdmin != bAdmin || NumPlayers != PreviousNumPlayers) {
+	if (Presets.SelectedPreset != ActivePreset ||
+		bWasAdmin != bAdmin ||
+		PreviousNumPlayers != NumPlayers ||
+		PreviousMapListSort != Settings.MapListSort
+	) {
 		ActivePreset = Presets.SelectedPreset;
 		MapListBox.Items.Clear();
 
@@ -246,6 +253,9 @@ function UpdateActivePreset(VS_Info Info) {
 				bEnable = true;
 			MapListBox.AppendMap(M, bEnable);
 		}
+
+		VS_UI_MapListItem(MapListBox.Items).SortMode = Settings.MapListSort;
+		MapListBox.Items.Sort();
 	}
 }
 
