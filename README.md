@@ -438,7 +438,7 @@ Specifying this setting allows you to override the server-wide setting on a per-
 [CustomMapList]
 Map=DM-Deck16][
 Map=DM-Agony
-Map=DM-StalwartXL
+Map=DM-StalwartXL,MinPlayers=4,MaxPlayers=8
 Map=DM-Morpheus
 
 [CustomMapListNoAgony]
@@ -463,6 +463,10 @@ Map lists are specified in this file. To build the map list, VoteSys will first 
 
 #### Map/IgnoreMap
 Specify individual maps to add or remove from the map list.
+
+You can append `,MinPlayers=` followed by a number in order to specify that at least this many players need to be on the server to vote for this map.  
+You can append `,MaxPlayers=` followed by a number in order to specify that at most this many players can be on the server to vote for this map. Values less than 1 are interpreted as unlimited.  
+You can append both at the same time in any order.
 
 #### IncludeMapsWithPrefix/IgnoreMapsWithPrefix
 Adds or removes all maps that match a specified prefix from the map list.

@@ -44,6 +44,8 @@ The "Random" button will place your vote for a random map of the currently selec
 
 After hovering over a map in the map list for half a second, a window showing the screenshot of the map will appear.
 
+This window will also show player limits, if specified.
+
 ![Map Screenshot Window](MapPreview.png)
 
 ### Candidate List

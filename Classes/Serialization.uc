@@ -95,9 +95,11 @@ final function VS_Map ParseMap(string Line) {
 	M = new(none) class'VS_Map';
 
 	Line = Mid(Line, 5);
-	//         |   Parse Content    | Skip /
-	M.MapName  = DecodeString(Line); NextVariable(Line);
-	M.Sequence = int(Line);
+	//           |   Parse Content    | Skip /
+	M.MapName    = DecodeString(Line); NextVariable(Line);
+	M.Sequence   = int(Line);          NextVariable(Line);
+	M.MinPlayers = int(Line);          NextVariable(Line);
+	M.MaxPlayers = int(Line);
 
 	return M;
 }
@@ -125,7 +127,9 @@ final function string SerializeMap(VS_Map M) {
 
 	Result = "/MAP/";
 	Result = Result$EncodeString(M.MapName)$"/";
-	Result = Result$M.Sequence;
+	Result = Result$M.Sequence$"/";
+	Result = Result$M.MinPlayers$"/";
+	Result = Result$M.MaxPlayers;
 
 	return Result;
 }

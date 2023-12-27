@@ -85,6 +85,9 @@ PlayerBanText="&Ban"
 PlayerBanTitle="Ban Player"
 PlayerBanMessage="Do you want to permanently ban {1}?"
 
+[VS_UI_ScreenshotWindow]
+TextPlayerCount="Players:"
+
 [VS_UI_ClientSettingsPage]
 ThemeText="Theme"
 ThemeBright="Bright"

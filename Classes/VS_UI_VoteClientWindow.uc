@@ -9,6 +9,7 @@ var int ActiveTheme;
 var VS_UI_CategoryTabItem ActiveCategory;
 var VS_Preset ActivePreset;
 var bool bAdmin, bWasAdmin;
+var int NumPlayers, PreviousNumPlayers;
 
 var VS_UI_CategoryTabControl CategoryTabs;
 var VS_UI_PresetComboBox Presets;
@@ -87,8 +88,6 @@ function LoadSettings(VS_ClientSettings CS) {
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	local VS_Info Info;
 	local LevelInfo L;
-	local Texture T;
-	local float Ratio;
 	local string Filter;
 	local VS_UI_MapListItem M;
 
@@ -103,6 +102,9 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 
 	bWasAdmin = bAdmin;
 	bAdmin = GetPlayerOwner().PlayerReplicationInfo.bAdmin;
+
+	PreviousNumPlayers = NumPlayers;
+	NumPlayers = GetPlayerOwner().GameReplicationInfo.NumPlayers;
 
 	UpdateActiveCategory();
 	UpdateActivePreset(Info);
@@ -132,18 +134,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	) {
 		if (MapScreenshotWindow.bWindowVisible == false) {
 			MapScreenshotWindow.ShowWindow();
-
-			T = Texture(DynamicLoadObject(VS_UI_MapListItem(MapListBox.HoverItem).MapRef.MapName$".Screenshot", class'Texture', true));
-			if (T == none)
-				T = Texture'BlackTexture';
-			MapScreenshotWindow.Screenshot = T;
-
-			Ratio = FMin(MapScreenshotWindow.WinWidth/T.USize, MapScreenshotWindow.WinHeight/T.VSize);
-
-			MapScreenshotWindow.WinLeft = Root.MouseX;
-			MapScreenshotWindow.WinTop = Root.MouseY + (20/Root.GUIScale);
-			MapScreenshotWindow.WinWidth = T.USize * Ratio;
-			MapScreenshotWindow.WinHeight = T.VSize * Ratio;
+			MapScreenshotWindow.SetUpFor(VS_UI_MapListItem(MapListBox.HoverItem).MapRef);
 		}
 	}
 
@@ -225,31 +216,35 @@ function UpdateActiveCategory() {
 		Presets.List.Selected = none;
 		Presets.SelectedPreset = none;
 
-		if (ActiveCategory != none) {
-			for (P = ActiveCategory.PresetList; P != none; P = P.Next)
-				Presets.AddPreset(P.Preset);
-			Presets.List.Items.Sort();
-			if (ActiveCategory.SelectedPreset != none)
-				Presets.FocusPreset(ActiveCategory.SelectedPreset.PresetName);
-		}
+		if (ActiveCategory == none)
+			return;
+			
+		for (P = ActiveCategory.PresetList; P != none; P = P.Next)
+			Presets.AddPreset(P.Preset);
+		Presets.List.Items.Sort();
+		if (ActiveCategory.SelectedPreset != none)
+			Presets.FocusPreset(ActiveCategory.SelectedPreset.PresetName);
 	}
 }
 
 function UpdateActivePreset(VS_Info Info) {
 	local VS_Map M;
 	local bool bEnable;
-
-	if (Presets.SelectedPreset != ActivePreset || bWasAdmin != bAdmin) {
+	
+	if (Presets.SelectedPreset != ActivePreset || bWasAdmin != bAdmin || NumPlayers != PreviousNumPlayers) {
 		ActivePreset = Presets.SelectedPreset;
 		MapListBox.Items.Clear();
-		if (ActivePreset != none) {
-			for (M = ActivePreset.MapList; M != none; M = M.Next) {
-				bEnable = 
-					(M.Sequence == 0) ||
-					(ActivePreset.MaxSequenceNumber - M.Sequence >= ActivePreset.MinimumMapRepeatDistance) ||
-					(bAdmin);
-				MapListBox.AppendMap(M, bEnable);
-			}
+
+		if (ActivePreset == none)
+			return;
+
+		for (M = ActivePreset.MapList; M != none; M = M.Next) {
+			bEnable = 
+				(M.Sequence == 0 || ActivePreset.MaxSequenceNumber - M.Sequence >= ActivePreset.MinimumMapRepeatDistance) &&
+				(NumPlayers >= M.MinPlayers && (NumPlayers <= M.MaxPlayers || M.MaxPlayers <= 0));
+			if (bAdmin)
+				bEnable = true;
+			MapListBox.AppendMap(M, bEnable);
 		}
 	}
 }

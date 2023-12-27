@@ -9,7 +9,6 @@ const DE_VoteSys_ClickDone = 128;
 function UWindowListBoxItem GetItemAt(float MouseX, float MouseY) {
 	local float y;
 	local UWindowList CurItem;
-	local VS_UI_ListItem Item;
 	local int i;
 	local float YLimit;
 	
@@ -31,13 +30,8 @@ function UWindowListBoxItem GetItemAt(float MouseX, float MouseY) {
 
 	for(y=LookAndFeel.MiscBevelT[LookAndFeel.EditBoxBevel].H;(y < YLimit) && (CurItem != none);CurItem = CurItem.Next) {
 		if (CurItem.ShowThisItem()) {
-			if (MouseY >= y && MouseY < y+ItemHeight) {
-				Item = VS_UI_ListItem(CurItem);
-				if (Item.bEnabled)
-					return Item;
-				else
-					return none;
-			}
+			if (MouseY >= y && MouseY < y+ItemHeight)
+				return VS_UI_ListItem(CurItem);
 			y = y + ItemHeight;
 		}
 	}
@@ -144,6 +138,14 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 	C.OrgX = OrgX; C.OrgY = OrgY;
 	C.ClipX = ClipX; C.ClipY = ClipY;
 	ClippingRegion = OldClipRegion;
+}
+
+function SetSelected(float X, float Y) {
+	local VS_UI_ListItem NewSelected;
+
+	NewSelected = VS_UI_ListItem(GetItemAt(X, Y));
+	if (NewSelected.bEnabled)
+		SetSelectedItem(NewSelected);
 }
 
 function DoubleClickItem(UWindowListBoxItem I) {

@@ -1279,15 +1279,17 @@ function VS_MapList LoadMapListByName(name ListName) {
 	MLIgnore = new(MapListDummy) class'VS_MapList';
 
 	AddAllMapsToMapList(MC.IgnoreMap, MLIgnore);
-	AddMapPrefixesToMapList(MC.IgnoreMapsWithPrefix, MLIgnore, none);
-	AddMapListsToMapList(MC.IgnoreList, MLIgnore, none);
+	AddMapPrefixesToMapList(MC.IgnoreMapsWithPrefix, MLIgnore);
+	AddMapListsToMapList(MC.IgnoreList, MLIgnore);
 
 	ML = new(MapListDummy) class'VS_MapList';
 	ML.ListName = string(ListName);
 
-	AddMapsToMapList(MC.Map, ML, MLIgnore);
-	AddMapPrefixesToMapList(MC.IncludeMapsWithPrefix, ML, MLIgnore);
-	AddMapListsToMapList(MC.IncludeList, ML, MLIgnore);
+	AddAllMapsToMapList(MC.Map, ML);
+	AddMapPrefixesToMapList(MC.IncludeMapsWithPrefix, ML);
+	AddMapListsToMapList(MC.IncludeList, ML);
+
+	ML.RemoveMapList(MLIgnore);
 
 	return ML;
 }
@@ -1342,48 +1344,26 @@ function VS_MapList FindMapListByPrefix(string Prefix) {
 	return none;
 }
 
-function string CleanMapName(string MapName) {
-	if (Right(MapName, 4) ~= ".unr")
-		MapName = Left(MapName, Len(MapName) - 4); // we dont care about extension
-	return MapName;
-}
-
-function AddMapsToMapList(array<string> MapArray, VS_MapList MapList, VS_MapList IgnoredMaps) {
-	local string MapName;
-	local int i;
-
-	if (IgnoredMaps == none || IgnoredMaps.Maps.Length == 0) {
-		AddAllMapsToMapList(MapArray, MapList);
-	} else {
-		for (i = 0; i < MapArray.Length; i++)
-			if (MapArray[i] != "") {
-				MapName = CleanMapName(MapArray[i]);
-				if (IgnoredMaps.HaveMap(MapName) == false)
-					MapList.AddMap(MapName);
-			}
-	}
-}
-
 function AddAllMapsToMapList(array<string> MapArray, VS_MapList MapList) {
 	local int i;
 
 	for (i = 0; i < MapArray.Length; i++)
 		if (MapArray[i] != "")
-			MapList.AddMap(CleanMapName(MapArray[i]));
+			MapList.AddMapFromConfig(MapArray[i]);
 }
 
-function AddMapPrefixesToMapList(array<string> MapPrefixArray, VS_MapList MapList, VS_MapList IgnoredMaps) {
+function AddMapPrefixesToMapList(array<string> MapPrefixArray, VS_MapList MapList) {
 	local VS_MapList ML;
 	local int i;
 
 	for (i = 0; i < MapPrefixArray.Length; i++) {
 		ML = LoadMapListByPrefix(MapPrefixArray[i]);
 		if (ML != none)
-			AddMapsToMapList(ML.Maps, MapList, IgnoredMaps);
+			MapList.AddMapList(ML);
 	}
 }
 
-function AddMapListsToMapList(array<name> MapListArray, VS_MapList MapList, VS_MapList IgnoredMaps) {
+function AddMapListsToMapList(array<name> MapListArray, VS_MapList MapList) {
 	local VS_MapList IncludeList;
 	local int i;
 
@@ -1393,7 +1373,7 @@ function AddMapListsToMapList(array<name> MapListArray, VS_MapList MapList, VS_M
 
 		IncludeList = LoadMapListByName(MapListArray[i]);
 		if (IncludeList != none)
-			AddMapsToMapList(IncludeList.Maps, MapList, IgnoredMaps);
+			MapList.AddMapList(IncludeList);
 	}
 }
 
