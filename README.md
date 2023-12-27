@@ -327,9 +327,11 @@ Category=DM
 SortPriority=30
 Game=Botpack.TeamGamePlus
 MapListName=
-Mutators=
+Mutators=UTPureRC7H.UTPure,UTPureRC7H.PureAutoPause
 Parameters=?MaxPlayers=8
+Parameters=?TimeLimit=15
 GameSettings=bTournament=True
+GameSettings=bAllowTranslocator=True
 bDisabled=False
 MinimumMapRepeatDistance=2
 
