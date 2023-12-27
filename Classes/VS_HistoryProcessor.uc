@@ -31,6 +31,7 @@ event Tick(float Delta) {
 					if (M.MapName == Map) {
 						M.Sequence = History.Entry[ProcessedEntry].Sequence;
 						P.MaxSequenceNumber = Max(P.MaxSequenceNumber, M.Sequence);
+						M.PlayCount = History.Entry[ProcessedEntry].NumVoted;
 					}
 				}
 			}
