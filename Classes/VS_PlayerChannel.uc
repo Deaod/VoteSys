@@ -335,6 +335,7 @@ function ServerVote(string FullPresetName, string MapName) {
 	local VS_Preset P;
 	local VS_Map M;
 	local VS_Info I;
+	local int NumPlayers;
 
 	if (PlayerOwner == none || PlayerInfo().bCanVote == false) {
 		LocalizeMessage(class'VS_Msg_LocalMessage', -7);
@@ -349,9 +350,14 @@ function ServerVote(string FullPresetName, string MapName) {
 		return;
 
 	if (PlayerOwner.PlayerReplicationInfo.bAdmin == false) {
+		NumPlayers = Level.Game.NumPlayers;
 		if (VotedFor.PresetRef == P && VotedFor.MapRef == M)
 			return;
 		if (M.Sequence > 0 && P.MaxSequenceNumber - M.Sequence < P.MinimumMapRepeatDistance)
+			return;
+		if (NumPlayers < P.MinPlayers || (NumPlayers > P.MaxPlayers && P.MaxPlayers > 0))
+			return;
+		if (NumPlayers < M.MinPlayers || (NumPlayers > M.MaxPlayers && M.MaxPlayers > 0))
 			return;
 	}
 

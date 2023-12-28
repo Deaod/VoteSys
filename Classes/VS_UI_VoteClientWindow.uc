@@ -117,6 +117,9 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 
 	CategoryTabs.WinWidth = WinWidth;
 
+	VoteButton.bDisabled = (ActivePreset == none);
+	RandomButton.bDisabled = (ActivePreset == none);
+
 	if (ChatEdit.EditBox.bControlDown)
 		ChatSay.SetText(ChatTeamSayText);
 	else
@@ -210,8 +213,12 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 
 function UpdateActiveCategory() {
 	local VS_UI_CategoryPresetWrapper P;
+	local bool bEnable;
 	
-	if (CategoryTabs.SelectedTab != ActiveCategory) {
+	if (CategoryTabs.SelectedTab != ActiveCategory ||
+		bWasAdmin != bAdmin || 
+		PreviousNumPlayers != NumPlayers
+	) {
 		if (ActiveCategory != none)
 			ActiveCategory.SelectedPreset = Presets.SelectedPreset;
 		ActiveCategory = VS_UI_CategoryTabItem(CategoryTabs.SelectedTab);
@@ -222,9 +229,16 @@ function UpdateActiveCategory() {
 		if (ActiveCategory == none)
 			return;
 			
-		for (P = ActiveCategory.PresetList; P != none; P = P.Next)
-			Presets.AddPreset(P.Preset);
+		for (P = ActiveCategory.PresetList; P != none; P = P.Next) {
+			bEnable = (NumPlayers >= P.Preset.MinPlayers) && (NumPlayers <= P.Preset.MaxPlayers || P.Preset.MaxPlayers <= 0);
+			if (bAdmin)
+				bEnable = true;
+			Presets.AddPreset(P.Preset, bEnable);
+		}
 		Presets.List.Items.Sort();
+
+		Presets.List.Selected = none;
+		Presets.SelectedPreset = none;
 		if (ActiveCategory.SelectedPreset != none)
 			Presets.FocusPreset(ActiveCategory.SelectedPreset.PresetName);
 	}

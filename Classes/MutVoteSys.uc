@@ -1175,6 +1175,8 @@ function LoadPresetPassTwo(VS_Preset P) {
 	P.bLoading = true;
 	PC = P.Storage;
 	P.MinimumMapRepeatDistance = PC.MinimumMapRepeatDistance;
+	P.MinPlayers = PC.MinPlayers;
+	P.MaxPlayers = PC.MaxPlayers;
 
 	for (i = 0; i < PC.InheritFrom.Length; i++) {
 		if (PC.InheritFrom[i] == "")
@@ -1192,6 +1194,10 @@ function LoadPresetPassTwo(VS_Preset P) {
 			P.Game = Base.Game;
 		if (P.MinimumMapRepeatDistance < 0)
 			P.MinimumMapRepeatDistance = Base.MinimumMapRepeatDistance;
+		if (P.MinPlayers < 0)
+			P.MinPlayers = Base.MinPlayers;
+		if (P.MaxPlayers < 0)
+			P.MaxPlayers = Base.MaxPlayers;
 
 		P.AppendMutator(Base.Mutators);
 		P.AppendParameter(Base.Parameters);

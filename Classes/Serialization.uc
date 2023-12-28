@@ -84,6 +84,8 @@ final function VS_Preset ParsePreset(string Line) {
 	P.Category                 = DecodeString(Line); NextVariable(Line);
 	P.MaxSequenceNumber        = int(Line);          NextVariable(Line);
 	P.MinimumMapRepeatDistance = int(Line);          NextVariable(Line);
+	P.MinPlayers               = int(Line);          NextVariable(Line);
+	P.MaxPlayers               = int(Line);          NextVariable(Line);
 	P.SortPriority             = int(Line);
 
 	return P;
@@ -118,6 +120,8 @@ final function string SerializePreset(VS_Preset P) {
 	Result = Result$EncodeString(P.Category)$"/";
 	Result = Result$P.MaxSequenceNumber$"/";
 	Result = Result$P.MinimumMapRepeatDistance$"/";
+	Result = Result$P.MinPlayers$"/";
+	Result = Result$P.MaxPlayers$"/";
 	Result = Result$P.SortPriority;
 
 	return Result;

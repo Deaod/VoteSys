@@ -27,7 +27,13 @@ var config array<string> Packages;
 var config bool bDisabled;
 /** Overrides the server setting of the same name, if the value is 0 or greater */
 var config int MinimumMapRepeatDistance;
+/** At least this many players have to be on the server to allow voting for this preset */
+var config int MinPlayers;
+/** At most this many players can be on the server to allow voting for this preset*/
+var config int MaxPlayers;
 
 defaultproperties {
 	MinimumMapRepeatDistance=-1
+	MinPlayers=-1
+	MaxPlayers=-1
 }

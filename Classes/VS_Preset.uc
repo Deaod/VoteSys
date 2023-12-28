@@ -17,6 +17,8 @@ var bool            bLoading;
 var bool            bLoaded;
 var int             MaxSequenceNumber;
 var int             MinimumMapRepeatDistance;
+var int             MinPlayers;
+var int             MaxPlayers;
 
 function AppendMutator(string Mut) {
 	if (Mut == "")

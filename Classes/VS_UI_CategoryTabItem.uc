@@ -9,6 +9,7 @@ function AddPreset(VS_Preset P){
 		PresetList = new(none) class'VS_UI_CategoryPresetWrapper';
 		PresetListLast = PresetList;
 		PresetList.Preset = P;
+		SelectedPreset = P;
 		return;
 	}
 
