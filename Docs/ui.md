@@ -18,7 +18,7 @@ Each category has its own tab here. If the category of a preset is empty, it wil
 
 ![Preset Dropdown](PresetHighlight.png)
 
-Selects which map list to show. When first opening the voting menu, the category and preset that are currently in use are selected.
+Selects which map list to show. When first opening the voting menu, the category and preset that are currently in use are selected. Grayed out presets have player limitations that prevent the preset from being voted for.
 
 ### Map List Filter
 
