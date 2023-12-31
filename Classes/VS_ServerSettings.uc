@@ -18,7 +18,8 @@ var config int MidGameVoteTimeLimit;
 var config int GameEndedVoteDelay;
 var config int VoteTimeLimit;
 var config EVoteEndCond VoteEndCondition;
-var config bool bRetainCandidates; 
+var config bool bRetainCandidates;
+var config array<string> MultiRoundGameModes;
 
 var config float KickVoteThreshold;
 
@@ -75,6 +76,8 @@ defaultproperties {
 	GameEndedVoteDelay=5
 	VoteTimeLimit=30
 	VoteEndCondition=VEC_TimerOnly
+	bRetainCandidates=False
+	MultiRoundGameModes="Botpack.Assault"
 
 	KickVoteThreshold=0.6
 

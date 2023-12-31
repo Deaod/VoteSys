@@ -32,6 +32,7 @@ enum EGameState {
 var EGameState GameState;
 var int TimeCounter;
 var int IdleTime;
+var bool bIsMultiRound;
 var bool bChangeMapImmediately;
 var bool bIsDefaultMap;
 var class<CriticalEventPlus> TimeMessageClass;
@@ -84,6 +85,22 @@ event PostBeginPlay() {
 	DataServer = Spawn(class'VS_DataServer', self);
 	ChatObserver = Level.Spawn(class'VS_ChatObserver');
 	ChatObserver.VoteSys = self;
+
+	ConfigureGameMode();
+}
+
+function ConfigureGameMode() {
+	local string GameClass, GameName;
+	local int i;
+
+	GameClass = string(Level.Game.Class);
+	GameName = string(Level.Game.Class.Name);
+	for (i = 0; i < Settings.MultiRoundGameModes.Length; i++)
+		if (GameClass ~= Settings.MultiRoundGameModes[i] || GameName ~= Settings.MultiRoundGameModes[i])
+			bIsMultiRound = true;
+
+	if (bIsMultiRound)
+		return;
 
 	Level.Game.SetPropertyText("bDontRestart", "True"); // Botpack.DeathMatchPlus and UnrealShare.DeathMatchGame
 }
@@ -518,6 +535,9 @@ function AnnounceCountdown(int SecondsLeft) {
 function CheckGameEnded() {
 	if (GameState >= GS_GameEnded || Level.Game.bGameEnded == false)
 		// mid-game voting or not ended yet
+		return;
+
+	if (bIsMultiRound && Level.Game.GetPropertyText("bDontRestart") ~= "False")
 		return;
 
 	GameState = GS_GameEnded;
