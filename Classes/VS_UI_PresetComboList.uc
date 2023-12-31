@@ -32,7 +32,7 @@ function ExecuteItem(UWindowComboListItem I) {
 }
 
 function SetSelected(float X, float Y) {
-	local VS_UI_PresetComboListItem NewSelected, Item;
+	local VS_UI_PresetComboListItem NewSelected;
 	local int i, Count;
 
 	Count = Items.Count();
