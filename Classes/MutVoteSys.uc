@@ -516,7 +516,7 @@ function AnnounceCountdown(int SecondsLeft) {
 }
 
 function CheckGameEnded() {
-	if (GameState >= GS_GameEnded || Level.Game.GameReplicationInfo.GameEndedComments == "")
+	if (GameState >= GS_GameEnded || Level.Game.bGameEnded == false)
 		// mid-game voting or not ended yet
 		return;
 
