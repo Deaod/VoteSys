@@ -618,6 +618,8 @@ function TravelTo(VS_Preset P, VS_Map M) {
 	local array<string> Pkgs;
 	local array<string> Actors;
 
+	Level.Game.ResetGame();
+
 	SortMutators(P.Mutators, Mutators, ActorsList);
 	if (InStr(Mutators, "MutVoteSys") == -1)
 		Mutators = string(self.Class)$","$Mutators;
