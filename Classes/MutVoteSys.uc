@@ -33,6 +33,7 @@ var EGameState GameState;
 var int TimeCounter;
 var int IdleTime;
 var bool bIsMultiRound;
+var bool bConfiguredTempData;
 var bool bChangeMapImmediately;
 var bool bIsDefaultMap;
 var class<CriticalEventPlus> TimeMessageClass;
@@ -533,12 +534,25 @@ function AnnounceCountdown(int SecondsLeft) {
 }
 
 function CheckGameEnded() {
+	local Object TempDataDummy;
+	local VS_TempData TD;
+
 	if (GameState >= GS_GameEnded || Level.Game.bGameEnded == false)
 		// mid-game voting or not ended yet
 		return;
 
-	if (bIsMultiRound && Level.Game.GetPropertyText("bDontRestart") ~= "False")
+	if (bIsMultiRound && Level.Game.GetPropertyText("bDontRestart") ~= "False") {
+		if (bConfiguredTempData == false) {
+			TempDataDummy = new(none, 'VoteSysTemp') class'Object';
+			TD = new(TempDataDummy, 'Data') class'VS_TempData';
+
+			TD.bNoColdStart = true;
+			TD.SaveConfig();
+
+			bConfiguredTempData = true;
+		}
 		return;
+	}
 
 	GameState = GS_GameEnded;
 	TimeCounter = Settings.GameEndedVoteDelay;
