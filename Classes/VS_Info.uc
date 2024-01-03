@@ -283,4 +283,5 @@ defaultproperties {
 
 	RemoteRole=ROLE_SimulatedProxy
 	NetUpdateFrequency=10
+	bAlwaysTick=True
 }

@@ -576,4 +576,5 @@ simulated function DumpLog() {
 
 defaultproperties {
 	RemoteRole=ROLE_SimulatedProxy
+	bAlwaysTick=True
 }

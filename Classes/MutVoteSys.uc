@@ -1449,4 +1449,5 @@ function VS_Preset FindPreset(string FullName) {
 
 defaultproperties {
 	GameState=GS_Playing
+	bAlwaysTick=True
 }

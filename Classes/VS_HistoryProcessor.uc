@@ -50,4 +50,5 @@ defaultproperties {
 	bHidden=True
 	RemoteRole=ROLE_None
 	DrawType=DT_None
+	bAlwaysTick=True
 }
