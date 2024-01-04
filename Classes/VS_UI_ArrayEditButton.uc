@@ -40,10 +40,10 @@ function Paint(Canvas C, float X, float Y) {
 
 	C.Font = Root.Fonts[Font];
 
-	Tex = GetButtonTexture();
+	Tex = GetButtonTexture2();
 	if (Tex != None) {
 		if (bUseRegion) {
-			R = GetButtonRegion();
+			R = GetButtonRegion2();
 			DrawStretchedTextureSegment(C, ImageX, ImageY, R.W*RegionScale, R.H*RegionScale, R.X, R.Y, R.W, R.H, Tex);
 		} else if ( bStretched ) {
 			DrawStretchedTexture(C, ImageX, ImageY, WinWidth, WinHeight, Tex);
@@ -63,3 +63,20 @@ function Paint(Canvas C, float X, float Y) {
 	}
 }
 
+// copy from 469 with different name to preserve compatibility
+function Texture GetButtonTexture2()
+{
+	if      ( bDisabled )     return DisabledTexture;
+	else if ( bMouseDown )    return DownTexture;
+	else if ( MouseIsOver() ) return OverTexture;
+	else                      return UpTexture;
+}
+
+// copy from 469 with different name to preserve compatibility
+function Region GetButtonRegion2()
+{
+	if      ( bDisabled )     return DisabledRegion;
+	else if ( bMouseDown )    return DownRegion;
+	else if ( MouseIsOver() ) return OverRegion;
+	else                      return UpRegion;
+}
