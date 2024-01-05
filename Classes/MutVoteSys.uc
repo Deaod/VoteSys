@@ -100,7 +100,7 @@ function ConfigureGameMode() {
 		if (GameClass ~= Settings.MultiRoundGameModes[i] || GameName ~= Settings.MultiRoundGameModes[i])
 			bIsMultiRound = true;
 
-	if (bIsMultiRound || Level.Game.IsA('Assault') == false)
+	if (bIsMultiRound || Level.Game.IsA('Assault'))
 		return;
 
 	Level.Game.SetPropertyText("bDontRestart", "True"); // Botpack.DeathMatchPlus and UnrealShare.DeathMatchGame
