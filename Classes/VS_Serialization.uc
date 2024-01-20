@@ -1,10 +1,10 @@
-class Serialization extends Object;
+class VS_Serialization extends Object;
 
 var string CRLF;
 
-static final function Serialization Instance() {
-	local Serialization Inst;
-	Inst = new(none, 'SerializationInstance') class'Serialization';
+static final function VS_Serialization Instance() {
+	local VS_Serialization Inst;
+	Inst = new(none, 'VS_SerializationInstance') class'VS_Serialization';
 	Inst.CRLF = Chr(13)$Chr(10);
 	return Inst;
 }

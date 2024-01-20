@@ -8,7 +8,7 @@ var VS_ChannelContainer Channel;
 var string SendBuffer;
 var VS_Preset TempPreset;
 var VS_Map TempMap;
-var Serialization S11N;
+var VS_Serialization S11N;
 
 var string CRLF;
 
@@ -24,7 +24,7 @@ var string CommandParams;
 event PostBeginPlay() {
 	LinkMode = MODE_Text;
 	ReceiveMode = RMODE_Event;
-	S11N = class'Serialization'.static.Instance();
+	S11N = class'VS_Serialization'.static.Instance();
 	CRLF = Chr(13)$Chr(10);
 
 	foreach AllActors(class'MutVoteSys', VoteSys)

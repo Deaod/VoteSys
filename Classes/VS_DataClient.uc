@@ -1,7 +1,7 @@
 class VS_DataClient extends TcpLink
 	transient;
 
-var Serialization S11N;
+var VS_Serialization S11N;
 var string Buffer;
 var string CRLF;
 
@@ -19,7 +19,7 @@ event PostBeginPlay() {
 	Log("VS_DataClient.PostBeginPlay", 'VoteSys');
 	LinkMode = MODE_Text;
 	ReceiveMode = RMODE_Event;
-	S11N = class'Serialization'.static.Instance();
+	S11N = class'VS_Serialization'.static.Instance();
 	CRLF = Chr(13)$Chr(10);
 	Channel = VS_PlayerChannel(Owner);
 
