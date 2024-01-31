@@ -100,7 +100,7 @@ function ConfigureGameMode() {
 		if (GameClass ~= Settings.MultiRoundGameModes[i] || GameName ~= Settings.MultiRoundGameModes[i])
 			bIsMultiRound = true;
 
-	if (bIsMultiRound || Level.Game.IsA('Assault'))
+	if (Level.Game.IsA('Assault') && Level.Game.GetPropertyText("bDefenseSet") ~= "False")
 		return;
 
 	Level.Game.SetPropertyText("bDontRestart", "True"); // Botpack.DeathMatchPlus and UnrealShare.DeathMatchGame
@@ -541,14 +541,12 @@ function CheckGameEnded() {
 		// mid-game voting or not ended yet
 		return;
 
-	if ((bIsMultiRound && Level.Game.GetPropertyText("bDontRestart") ~= "False") ||
-		// HACK HACK HACK
-		// Should there be another multi-round gamemode that behaves like
-		// Assault, extract this shit into a proxy actor that polls Level.Game
-		// for the actual end of a match.
-		// Or extend this condition with another gamemode, whatever ...
-		(Level.Game.IsA('Assault') && Level.Game.GetPropertyText("bDefenseSet") ~= "False")
-	) {
+	// HACK HACK HACK
+	// Should there be another multi-round gamemode that behaves like
+	// Assault, extract this shit into a proxy actor that polls Level.Game
+	// for the actual end of a match.
+	// Or extend this condition with another gamemode, whatever ...
+	if ((Level.Game.IsA('Assault') && Level.Game.GetPropertyText("bDefenseSet") ~= "False")) {
 		if (bConfiguredTempData == false) {
 			TempDataDummy = new(none, 'VoteSysTemp') class'Object';
 			TD = new(TempDataDummy, 'Data') class'VS_TempData';
