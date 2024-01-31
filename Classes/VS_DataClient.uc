@@ -218,7 +218,6 @@ function SaveServerSettings(VS_ServerSettings S) {
 	SendServerSetting(S, "VoteTimeLimit");
 	SendServerSetting(S, "VoteEndCondition");
 	SendServerSetting(S, "bRetainCandidates");
-	SendServerSetting(S, "MultiRoundGameModes");
 	SendServerSetting(S, "KickVoteThreshold");
 	SendServerSetting(S, "DefaultPreset");
 	SendServerSetting(S, "DefaultMap");

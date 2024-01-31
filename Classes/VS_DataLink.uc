@@ -155,7 +155,6 @@ Begin:
 	SendServerSetting("VoteTimeLimit");
 	SendServerSetting("VoteEndCondition");
 	SendServerSetting("bRetainCandidates");
-	SendServerSetting("MultiRoundGameModes");
 	SendServerSetting("KickVoteThreshold");
 	SendServerSetting("DefaultPreset");
 	SendServerSetting("DefaultMap");

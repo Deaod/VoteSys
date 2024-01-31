@@ -61,7 +61,6 @@ MidGameVoteThreshold=0.5
 MidGameVoteTimeLimit=30
 VoteEndCondition=VEC_TimerOnly
 bRetainCandidates=False
-MultiRoundGameModes=Botpack.Assault
 MinimumMapRepeatDistance=0
 KickVoteThreshold=0.6
 DefaultTimeMessageClass=Botpack.TimeMessage
@@ -99,7 +98,6 @@ DefaultActors=IpServer.UdpServerUplink MasterServerAddress=unreal.epicgames.com 
 1. [MidGameVoteTimeLimit](#midgamevotetimelimit)
 1. [VoteEndCondition](#voteendcondition)
 1. [bRetainCandidates](#bretaincandidates)
-1. [MultiRoundGameModes](#multiroundgamemodes)
 1. [MinimumRepeatDistance](#minimumrepeatdistance)
 1. [KickVoteThreshold](#kickvotethreshold)
 1. [DefaultTimeMessageClass](#defaulttimemessageclass)
@@ -161,14 +159,6 @@ Defaults to `VEC_TimerOnly`.
 If true, candidates that no longer have any votes for them get retained. If false, candidates with no votes disappear from the list.
 
 Defaults to false.
-
-#### MultiRoundGameModes
-
-List of game modes that are played over multiple rounds with restarts in between. You can specify either the full name of the gamemode class (Package.ClassName), or just the name of the class.
-
-VoteSys will not detect end of game until `bDontRestart` is set to `True` on the GameInfo object.
-
-List contains "Botpack.Assault" by default.
 
 #### MinimumRepeatDistance
 

@@ -32,7 +32,6 @@ enum EGameState {
 var EGameState GameState;
 var int TimeCounter;
 var int IdleTime;
-var bool bIsMultiRound;
 var bool bConfiguredTempData;
 var bool bChangeMapImmediately;
 var bool bIsDefaultMap;
@@ -91,15 +90,6 @@ event PostBeginPlay() {
 }
 
 function ConfigureGameMode() {
-	local string GameClass, GameName;
-	local int i;
-
-	GameClass = string(Level.Game.Class);
-	GameName = string(Level.Game.Class.Name);
-	for (i = 0; i < Settings.MultiRoundGameModes.Length; i++)
-		if (GameClass ~= Settings.MultiRoundGameModes[i] || GameName ~= Settings.MultiRoundGameModes[i])
-			bIsMultiRound = true;
-
 	if (Level.Game.IsA('Assault') && Level.Game.GetPropertyText("bDefenseSet") ~= "False")
 		return;
 

@@ -35,9 +35,6 @@ var localized string Text_VoteEndCondition_TimerOrResultDetermined;
 var UWindowCheckbox Chk_RetainCandidates;
 var localized string Text_RetainCandidates;
 
-var VS_UI_ArrayEditControl Adt_MultiRoundGameModes;
-var localized string Text_MultiRoundGameModes;
-
 var VS_UI_EditControl Edt_KickVoteThreshold;
 var localized string Text_KickVoteThreshold;
 
@@ -112,7 +109,6 @@ function EnableInteraction(bool bEnable) {
 	Edt_VoteTimeLimit.EditBox.SetEditable(bEnable);
 	Cmb_VoteEndCondition.SetEnabled(bEnable);
 	Chk_RetainCandidates.bDisabled = !bEnable;
-	Adt_MultiRoundGameModes.SetEnabled(bEnable);
 	Edt_KickVoteThreshold.EditBox.SetEditable(bEnable);
 	Edt_DefaultPreset.EditBox.SetEditable(bEnable);
 	Chk_AlwaysUseDefaultPreset.bDisabled = !bEnable;
@@ -145,7 +141,6 @@ function LoadServerSettings() {
 	Edt_VoteTimeLimit.SetValue(string(Settings.VoteTimeLimit));
 	Cmb_VoteEndCondition.SetSelectedIndex(int(Settings.VoteEndCondition));
 	Chk_RetainCandidates.bChecked = Settings.bRetainCandidates;
-	Adt_MultiRoundGameModes.SetValue(Settings.GetPropertyText("MultiRoundGameModes"));
 	Edt_KickVoteThreshold.SetValue(string(Settings.KickVoteThreshold));
 	Edt_DefaultPreset.SetValue(Settings.DefaultPreset);
 	Chk_AlwaysUseDefaultPreset.bChecked = Settings.bAlwaysUseDefaultPreset;
@@ -178,7 +173,6 @@ function SaveSettings() {
 	Settings.VoteTimeLimit = int(Edt_VoteTimeLimit.GetValue());
 	Settings.VoteEndCondition = Settings.IntToVoteEndCond(Cmb_VoteEndCondition.GetSelectedIndex());
 	Settings.bRetainCandidates = Chk_RetainCandidates.bChecked;
-	Settings.SetPropertyText("MultiRoundGameModes", Adt_MultiRoundGameModes.GetValue());
 	Settings.KickVoteThreshold = float(Edt_KickVoteThreshold.GetValue());
 	Settings.DefaultPreset = Edt_DefaultPreset.GetValue();
 	Settings.bAlwaysUseDefaultPreset = Chk_AlwaysUseDefaultPreset.bChecked;
@@ -245,45 +239,41 @@ function Created() {
 	Chk_RetainCandidates = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 4, 108, 188, 16));
 	Chk_RetainCandidates.SetText(Text_RetainCandidates);
 
-	Adt_MultiRoundGameModes = VS_UI_ArrayEditControl(CreateControl(class'VS_UI_ArrayEditControl', 4, 128, 188, 16));
-	Adt_MultiRoundGameModes.SetText(Text_MultiRoundGameModes);
-	Adt_MultiRoundGameModes.EditBoxWidth = 100;
-
-	Edt_KickVoteThreshold = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 148, 188, 16));
+	Edt_KickVoteThreshold = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 128, 188, 16));
 	Edt_KickVoteThreshold.SetText(Text_KickVoteThreshold);
 	Edt_KickVoteThreshold.EditBoxWidth = 60;
 	Edt_KickVoteThreshold.SetNumericOnly(true);
 	Edt_KickVoteThreshold.SetNumericFloat(true);
 
-	Edt_DefaultPreset = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 168, 188, 16));
+	Edt_DefaultPreset = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 148, 188, 16));
 	Edt_DefaultPreset.SetText(Text_DefaultPreset);
 	Edt_DefaultPreset.EditBoxWidth = 100;
 
-	Chk_AlwaysUseDefaultPreset = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 4, 188, 188, 16));
+	Chk_AlwaysUseDefaultPreset = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 4, 168, 188, 16));
 	Chk_AlwaysUseDefaultPreset.SetText(Text_AlwaysUseDefaultPreset);
 
-	Edt_DefaultMap = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 208, 188, 16));
+	Edt_DefaultMap = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 188, 188, 16));
 	Edt_DefaultMap.SetText(Text_DefaultMap);
 	Edt_DefaultMap.EditBoxWidth = 100;
 
-	Chk_AlwaysUseDefaultMap = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 4, 228, 188, 16));
+	Chk_AlwaysUseDefaultMap = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 4, 208, 188, 16));
 	Chk_AlwaysUseDefaultMap.SetText(Text_AlwaysUseDefaultMap);
 
-	Edt_DefaultTimeMessageClass = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 248, 188, 16));
+	Edt_DefaultTimeMessageClass = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 228, 188, 16));
 	Edt_DefaultTimeMessageClass.SetText(Text_DefaultTimeMessageClass);
 	Edt_DefaultTimeMessageClass.EditBoxWidth = 100;
 
-	Edt_IdleTimeout = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 268, 188, 16));
+	Edt_IdleTimeout = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 248, 188, 16));
 	Edt_IdleTimeout.SetText(Text_IdleTimeout);
 	Edt_IdleTimeout.EditBoxWidth = 60;
 	Edt_IdleTimeout.SetNumericOnly(true);
 
-	Edt_MinimumMapRepeatDistance = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 288, 188, 16));
+	Edt_MinimumMapRepeatDistance = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 268, 188, 16));
 	Edt_MinimumMapRepeatDistance.SetText(Text_MinimumMapRepeatDistance);
 	Edt_MinimumMapRepeatDistance.EditBoxWidth = 60;
 	Edt_MinimumMapRepeatDistance.SetNumericOnly(true);
 
-	Edt_PresetProbeDepth = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 308, 188, 16));
+	Edt_PresetProbeDepth = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 288, 188, 16));
 	Edt_PresetProbeDepth.SetText(Text_PresetProbeDepth);
 	Edt_PresetProbeDepth.EditBoxWidth = 60;
 	Edt_PresetProbeDepth.SetNumericOnly(true);
@@ -361,7 +351,6 @@ function ApplyTheme() {
 	Edt_VoteTimeLimit.Theme = Theme;
 	Cmb_VoteEndCondition.Theme = Theme;
 	//Chk_RetainCandidates // not themed
-	Adt_MultiRoundGameModes.SetTheme(Theme);
 	Edt_KickVoteThreshold.Theme = Theme;
 	Edt_DefaultPreset.Theme = Theme;
 	//Chk_AlwaysUseDefaultPreset // not themed
@@ -412,7 +401,6 @@ defaultproperties {
 	Text_VoteEndCondition_TimerOrAllVotesIn="Everyone Voted"
 	Text_VoteEndCondition_TimerOrResultDetermined="Result Certain"
 	Text_RetainCandidates="Retain Candidates"
-	Text_MultiRoundGameModes="Multi-Round Games"
 	Text_KickVoteThreshold="Kick Vote Threshold"
 	Text_DefaultPreset="Default Preset"
 	Text_AlwaysUseDefaultPreset="Always Use Default Preset"
