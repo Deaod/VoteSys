@@ -679,11 +679,13 @@ function ServerTravel(string ServerURL, string ClientURL) {
 
 function AdminForceTravelTo(VS_Preset P, VS_Map M) {
 	CloseVoteMenuForAll();
-	CheckVotedMap();
-	GameState = GS_VoteEnded;
-	TimeCounter = 5;
+	
 	VotedPreset = P;
 	VotedMap = M;
+	CheckVotedMap();
+	
+	GameState = GS_VoteEnded;
+	TimeCounter = 5;
 }
 
 function TallyVotes() {
