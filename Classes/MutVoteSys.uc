@@ -466,7 +466,7 @@ function CheckMidGameVoting() {
 	local int NumPlayers;
 	local VS_ChannelContainer C;
 
-	NumPlayers = 1; // to round up later
+	NumPlayers = 0;
 	for (C = ChannelList; C != none; C = C.Next) {
 		if (C.PlayerInfo != none) {
 			if (C.PlayerInfo.bIsPlayer && C.PlayerInfo.bCanVote)
@@ -476,10 +476,12 @@ function CheckMidGameVoting() {
 		}
 	}
 	
-	if (NumPlayers > 1)
-		IdleTime = 0;
+	if (NumPlayers <= 0)
+		return;
 
-	if (NumPlayers <= 1 || NumVotes < int(Settings.MidGameVoteThreshold * NumPlayers)) // rounding up here
+	IdleTime = 0;
+
+	if ((float(NumVotes) / float(NumPlayers)) < Settings.MidGameVoteThreshold)
 		return;
 
 	GameState = GS_Voting;
