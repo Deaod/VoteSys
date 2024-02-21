@@ -1,4 +1,4 @@
-class VS_UI_SettingsPage extends UWindowPageWindow;
+class VS_UIS_Page extends UWindowPageWindow;
 
 var VS_PlayerChannel Channel;
 

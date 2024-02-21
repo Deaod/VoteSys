@@ -38,7 +38,7 @@ Text_ServerAddress="Server Address"
 Text_DataPort="Data Port"
 Text_ClientDataPort="Client Data Port"
 
-[VS_UI_SettingsPage]
+[VS_UIS_Page]
 SaveText="Save"
 
 [VS_UI_CandidateListBox]
@@ -88,7 +88,7 @@ PlayerBanMessage="Do you want to permanently ban {1}?"
 [VS_UI_ScreenshotWindow]
 TextPlayerCount="Players:"
 
-[VS_UI_ClientSettingsPage]
+[VS_UIS_PageClient]
 ThemeText="Theme"
 ThemeBright="Bright"
 ThemeDark="Dark"
@@ -98,6 +98,6 @@ MapListSortName="Name"
 MapListSortRecency="Recency"
 MapListSortPlayCount="Play Count"
 
-[VS_UI_SettingsWindow]
+[VS_UIS_Window]
 WindowTitle="VoteSys Settings"
 

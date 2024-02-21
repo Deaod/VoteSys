@@ -1,4 +1,4 @@
-class VS_UI_SettingsWindow extends UWindowFramedWindow;
+class VS_UIS_Window extends UWindowFramedWindow;
 
 var bool bPlaced;
 var VS_ClientSettings Settings;
@@ -17,7 +17,7 @@ function Created() {
 function LoadSettings(VS_PlayerChannel C) {
 	Channel = C;
 	Settings = C.Settings;
-	VS_UI_SettingsClientWindow(ClientArea).LoadSettings(C);
+	VS_UIS_ClientWindow(ClientArea).LoadSettings(C);
 }
 
 function BeforePaint(Canvas C, float X, float Y) {
@@ -54,7 +54,7 @@ function Close(optional bool bByParent) {
 
 defaultproperties
 {
-	ClientClass=class'VS_UI_SettingsClientWindow'
+	ClientClass=class'VS_UIS_ClientWindow'
 	WindowTitle="VoteSys Settings"
 	bStatusBar=False
 }

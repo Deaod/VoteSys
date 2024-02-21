@@ -1,4 +1,4 @@
-class VS_UI_ClientSettingsPage extends VS_UI_SettingsPage;
+class VS_UIS_PageClient extends VS_UIS_Page;
 
 var VS_ClientSettings Settings;
 

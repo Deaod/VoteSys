@@ -1,14 +1,14 @@
-class VS_UI_SettingsClientWindow extends UWindowPageControl;
+class VS_UIS_ClientWindow extends UWindowPageControl;
 
 var VS_PlayerChannel Channel;
 
-var VS_UI_ClientSettingsPage ClientSettingsPage;
+var VS_UIS_PageClient ClientSettingsPage;
 var VS_UIS_PageVoting ServerSettingsPage;
 
 function Created() {
 	super.Created();
 
-	ClientSettingsPage = VS_UI_ClientSettingsPage(AddPage("Client", class'VS_UI_ClientSettingsPage').Page);
+	ClientSettingsPage = VS_UIS_PageClient(AddPage("Client", class'VS_UIS_PageClient').Page);
 }
 
 function BeforePaint(Canvas C, float X, float Y) {

@@ -10,7 +10,7 @@ var VS_ServerSettings ServerSettings;
 
 var VS_Preset PresetList;
 var VS_UI_VoteWindow VoteMenuDialog;
-var VS_UI_SettingsWindow SettingsDialog;
+var VS_UIS_Window SettingsDialog;
 var bool bOpenVoteMenuAfterTyping;
 var bool bOpenSettingsAfterTyping;
 
@@ -263,8 +263,8 @@ simulated function ShowSettings() {
 			return;
 		}
 
-		SettingsDialog = VS_UI_SettingsWindow(C.Root.CreateWindow(
-			class'VS_UI_SettingsWindow',
+		SettingsDialog = VS_UIS_Window(C.Root.CreateWindow(
+			class'VS_UIS_Window',
 			Settings.MenuX,
 			Settings.MenuY,
 			0,0 // Size set internally
