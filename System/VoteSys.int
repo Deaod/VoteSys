@@ -1,7 +1,7 @@
 [Public]
 Object=(Name=VoteSys.MutVoteSys,Class=Class,MetaClass=Engine.Mutator,Description="VoteSys,Enables voting for next map")
 
-[VS_UI_ServerSettingsPage]
+[VS_UIS_PageVoting]
 Text_RestartServer="Restart Server"
 Text_ReloadSettings="Reload Settings"
 Text_SettingsState_New="Loading"

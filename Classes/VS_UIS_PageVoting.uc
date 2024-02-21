@@ -1,4 +1,4 @@
-class VS_UI_ServerSettingsPage extends VS_UI_SettingsPage;
+class VS_UIS_PageVoting extends VS_UI_SettingsPage;
 
 var VS_ServerSettings Settings;
 var bool bSettingsLoaded;
