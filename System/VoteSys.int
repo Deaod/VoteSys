@@ -45,24 +45,10 @@ RandomButtonText="Random"
 ChatSayText="Say"
 ChatTeamSayText="TeamSay"
 
-[VS_UIS_PageAdminVoting]
-Text_MidGameVoteThreshold="Mid-Game Vote Threshold"
-Text_MidGameVoteTimeLimit="Mid-Game Vote Time Limit"
-Text_GameEndedVoteDelay="Game Ended Vote Delay"
-Text_VoteTimeLimit="Vote Time Limit"
-Text_VoteEndCondition="Vote End Rules"
-Text_VoteEndCondition_TimerOnly="Timer Only"
-Text_VoteEndCondition_TimerOrAllVotesIn="Everyone Voted"
-Text_VoteEndCondition_TimerOrResultDetermined="Result Certain"
-Text_RetainCandidates="Retain Candidates"
-Text_KickVoteThreshold="Kick Vote Threshold"
-Text_DefaultPreset="Default Preset"
-Text_AlwaysUseDefaultPreset="Always Use Default Preset"
-Text_DefaultMap="Default Map"
-Text_AlwaysUseDefaultMap="Always Use Default Map"
-Text_DefaultTimeMessageClass="Time Msg Class"
-Text_IdleTimeout="Idle Timeout"
-Text_MinimumMapRepeatDistance="Map Repeat Distance"
+[VS_UIV_Window]
+WindowTitle="VoteSys Menu"
+
+[VS_UIS_PageAdminSetup]
 Text_PresetProbeDepth="Preset Probe Depth"
 Text_ManageServerPackages="Manage Server Packages"
 Text_UseServerPackagesCompatibilityMode="Use Server Package Compat. Mode"
@@ -76,9 +62,11 @@ Text_GameNameMode_CategoryAndPresetName="Full Preset Name"
 Text_ServerAddress="Server Address"
 Text_DataPort="Data Port"
 Text_ClientDataPort="Client Data Port"
-
-[VS_UIV_Window]
-WindowTitle="VoteSys Menu"
+Text_DefaultPreset="Default Preset"
+Text_AlwaysUseDefaultPreset="Always Use Default Preset"
+Text_DefaultMap="Default Map"
+Text_AlwaysUseDefaultMap="Always Use Default Map"
+Text_IdleTimeout="Idle Timeout"
 
 [VS_UI_PlayerMenu]
 PlayerIdText="ID:"
@@ -86,6 +74,18 @@ PlayerKickText="&Kick"
 PlayerBanText="&Ban"
 PlayerBanTitle="Ban Player"
 PlayerBanMessage="Do you want to permanently ban {1}?"
+
+[VS_UIS_PageAdminVoting]
+Text_MidGameVoteThreshold="Mid-Game Vote Threshold"
+Text_MidGameVoteTimeLimit="Mid-Game Vote Time Limit"
+Text_GameEndedVoteDelay="Game Ended Vote Delay"
+Text_VoteTimeLimit="Vote Time Limit"
+Text_VoteEndCondition="Vote End Rules"
+Text_VoteEndCondition_TimerOnly="Timer Only"
+Text_VoteEndCondition_TimerOrAllVotesIn="Everyone Voted"
+Text_VoteEndCondition_TimerOrResultDetermined="Result Certain"
+Text_KickVoteThreshold="Kick Vote Threshold"
+Text_MinimumMapRepeatDistance="Map Repeat Distance"
 
 [VS_UI_ScreenshotWindow]
 TextPlayerCount="Players:"
@@ -102,4 +102,8 @@ MapListSortPlayCount="Play Count"
 
 [VS_UIS_Window]
 WindowTitle="VoteSys Settings"
+
+[VS_UIS_PageAdminUI]
+Text_RetainCandidates="Retain Candidates"
+Text_DefaultTimeMessageClass="Time Msg Class"
 
