@@ -13,6 +13,14 @@ enum EGameNameMode {
 	GNM_CategoryAndPresetName
 };
 
+// see UWindow.UWindowBase
+struct Region {
+	var() int X;
+	var() int Y;
+	var() int W;
+	var() int H;
+};
+
 var config float MidGameVoteThreshold;
 var config int MidGameVoteTimeLimit;
 var config int GameEndedVoteDelay;
@@ -42,6 +50,20 @@ var config int PresetProbeDepth;
 var config EGameNameMode GameNameMode;
 var config bool bAlwaysUseDefaultPreset;
 var config bool bAlwaysUseDefaultMap;
+
+var config string LogoTexture;
+var config Region LogoRegion;
+
+struct LogoButton {
+	var() string Label;
+	var() string LinkURL;
+};
+
+// these are not in an array because replicating them for admin UI would be more
+// difficult
+var config LogoButton LogoButton0;
+var config LogoButton LogoButton1;
+var config LogoButton LogoButton2;
 
 enum ESettingsState {
 	S_NEW,

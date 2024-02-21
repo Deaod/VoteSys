@@ -70,6 +70,8 @@ function ParseLine(string Line) {
 		SendLine("/PONG");
 	} else if (Line == "/SENDPRESETS") {
 		QueueCommand('SendPresets');
+	} else if (Line == "/SENDLOGO/") {
+		QueueCommand('SendLogo');
 	} else if (Left(Line, 8) == "/COOKIE/") {
 		Channel = VoteSys.FindChannelForCookie(int(Mid(Line, 8)));
 		Log("VS_DataLink Found Channel"@Channel, 'VoteSys');
@@ -132,6 +134,31 @@ Begin:
 	GoToState('Idle');
 }
 
+state SendLogo {
+Begin:
+	SendLine("/LOGO/"$S11N.EncodeString(VoteSys.Settings.LogoTexture)$
+		"/"$VoteSys.Settings.LogoRegion.X$
+		"/"$VoteSys.Settings.LogoRegion.Y$
+		"/"$VoteSys.Settings.LogoRegion.W$
+		"/"$VoteSys.Settings.LogoRegion.H
+	);
+
+	SendLine("/LOGOBUTTON/0/"$
+		S11N.EncodeString(VoteSys.Settings.LogoButton0.Label)$"/"$
+		S11N.EncodeString(VoteSys.Settings.LogoButton0.LinkURL)
+	);
+	SendLine("/LOGOBUTTON/1/"$
+		S11N.EncodeString(VoteSys.Settings.LogoButton1.Label)$"/"$
+		S11N.EncodeString(VoteSys.Settings.LogoButton1.LinkURL)
+	);
+	SendLine("/LOGOBUTTON/2/"$
+		S11N.EncodeString(VoteSys.Settings.LogoButton2.Label)$"/"$
+		S11N.EncodeString(VoteSys.Settings.LogoButton2.LinkURL)
+	);
+
+	GoToState('Idle');
+}
+
 state SendServerSettings {
 	function SendServerSetting(string SettingName) {
 		SendLine("/SERVERSETTING/"$S11N.SerializeProperty(SettingName, VoteSys.Settings.GetPropertyText(SettingName)));
@@ -173,6 +200,11 @@ Begin:
 	SendServerSetting("GameNameMode");
 	SendServerSetting("bAlwaysUseDefaultPreset");
 	SendServerSetting("bAlwaysUseDefaultMap");
+	SendServerSetting("LogoTexture");
+	SendServerSetting("LogoRegion");
+	SendServerSetting("LogoButton0");
+	SendServerSetting("LogoButton1");
+	SendServerSetting("LogoButton2");
 	SendLine("/ENDSERVERSETTINGS/");
 
 	Log("VS_DataLink SendServerSettings Done"@IpAddrToString(RemoteAddr), 'VoteSys');

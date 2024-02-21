@@ -77,6 +77,11 @@ IdleTimeout=0
 GameNameMode=GNM_DoNotModify
 bAlwaysUseDefaultPreset=True
 bAlwaysUseDefaultMap=False
+LogoTexture=UnrealShare.Epic
+LogoRegion=(X=0,Y=0,W=0,H=0)
+LogoButton0=(Label="GitHub",LinkURL="https://github.com/Deaod/VoteSys")
+LogoButton1=(Label="",LinkURL="")
+LogoButton2=(Label="Discord",LinkURL="https://discord.gg/5wWAGHRvMC")
 DefaultPackages=SoldierSkins
 DefaultPackages=CommandoSkins
 DefaultPackages=FCommandoSkins
@@ -116,6 +121,11 @@ DefaultActors=IpServer.UdpServerUplink MasterServerAddress=unreal.epicgames.com 
 1. [DefaultPackages](#defaultpackages)
 1. [DefaultActors](#defaultactors)
 1. [GameNameMode](#gamenamemode)
+1. [LogoTexture](#logotexture)
+1. [LogoRegion](#logoregion)
+1. [LogoButton0](#logobuttons)
+1. [LogoButton1](#logobuttons)
+1. [LogoButton2](#logobuttons)
 
 #### GameEndedVoteDelay
 
@@ -307,6 +317,25 @@ If `bAlwaysUseDefaultPreset` is false, this setting has no effect in order to av
 
 Defaults to false.
 
+#### LogoTexture
+
+If this refers to a valid texture, it is displayed to users as a logo instead of the chat interface until it is dismissed by the user. Users can dismiss the logo by pressing the X button in the top right of the logo.
+
+The space reserved for the logo is 270 pixels wide and 244 pixels high, with the bottom 16 pixels reserved for [logo buttons](#logobuttons). If you want to perfectly fill out the space, use `LogoRegion` to extract an image with that aspect ratio.
+
+#### LogoRegion
+
+Can be used to extract a region from a larger image. `X` and `Y` specify the top-left corner of the image, `W` and `H` specify the number of pixels to extract horizontally and vertically, respecitvely.
+
+If `X`, `Y`, `W`, and `H` are all 0, the full texture will be used as logo.
+
+#### LogoButtons
+
+In addition to a logo, up to three buttons can be displayed at the buttom of the logo area. These buttons have configurable labels and open configurable links.
+
+For buttons to be shown, `LogoTexture` must refer to a valid texture.  
+Each button will only be shown if `LinkURL` is not empty.
+
 ### VoteSysPresets.ini
 ```ini
 [VS_PresetConfig0]
@@ -487,7 +516,7 @@ Adds or removes all maps that match a specified prefix from the map list.
 Adds or removes all maps in another map list from the map list.
 
 ## Build
-In order to build this mutator, you need to be using UT99 v469c.
+In order to build this mutator, you need to be using UT99 v469c or later.
 
 1. Go to the installation directory of UT99 in a command shell
 2. Use `git clone https://github.com/Deaod/VoteSys` to clone the repo

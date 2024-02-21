@@ -315,6 +315,20 @@ simulated function FocusPreset(string Ref) {
 		VoteMenuDialog.FocusPreset(P);
 }
 
+simulated function ConfigureLogo(string Tex, int X, int Y, int W, int H) {
+	if (VoteMenuDialog == none)
+		CreateVoteMenuDialog();
+
+	VoteMenuDialog.ConfigureLogo(Tex, X, Y, W, H);
+}
+
+simulated function ConfigureLogoButton(int Index, string Label, string LinkURL) {
+	if (VoteMenuDialog == none)
+		CreateVoteMenuDialog();
+
+	VoteMenuDialog.ConfigureLogoButton(Index, Label, LinkURL);
+}
+
 simulated function AddMap(VS_Map M) {
 	if (LatestPreset.MapList == none) {
 		LatestPreset.MapList = M;

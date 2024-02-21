@@ -114,6 +114,32 @@ function ParseServerSetting(string Line) {
 		Log("Successfully set property"@Prop, 'VoteSys');
 }
 
+function ParseLogo(string Line) {
+	local string Tex;
+	local int X, Y, W, H;
+	Line = Mid(Line, 6);
+
+	Tex = S11N.DecodeString(Line); S11N.NextVariable(Line);
+	X   = int(Line);               S11N.NextVariable(Line);
+	Y   = int(Line);               S11N.NextVariable(Line);
+	W   = int(Line);               S11N.NextVariable(Line);
+	H   = int(Line);
+
+	Channel.ConfigureLogo(Tex, X, Y, W, H);
+}
+
+function ParseLogoButton(string Line) {
+	local int Index;
+	local string Label, LinkURL;
+	Line = Mid(Line, 12);
+
+	Index   = int(Line);               S11N.NextVariable(Line);
+	Label   = S11N.DecodeString(Line); S11N.NextVariable(Line);
+	LinkURL = S11N.DecodeString(Line);
+
+	Channel.ConfigureLogoButton(Index, Label, LinkURL);
+}
+
 function ParseLine(string Line) {
 	if (Left(Line, 8) == "/PRESET/") {
 		bTransferDone = false;
@@ -126,6 +152,12 @@ function ParseLine(string Line) {
 		Log(Line, 'VoteSys');
 		Channel.AddPreset(none);
 		Channel.FocusPreset(ParsePresetRef(Line));
+	} else if (Left(Line, 6) == "/LOGO/") {
+		Log(Line, 'VoteSys');
+		ParseLogo(Line);
+	} else if (Left(Line, 12) == "/LOGOBUTTON/") {
+		Log(Line, 'VoteSys');
+		ParseLogoButton(Line);
 	} else if (Line == "/NOTADMIN/") {
 		ServerSettings.SState = S_NOTADMIN;
 		ServerSettings = none;
@@ -166,6 +198,7 @@ state Talking {
 Begin:
 	Log("VS_DataClient Connection Established", 'VoteSys');
 	SendLine("/SENDPRESETS");
+	SendLine("/SENDLOGO/");
 
 	while(Channel.Cookie == 0)
 		Sleep(0);
@@ -236,6 +269,11 @@ function SaveServerSettings(VS_ServerSettings S) {
 	SendServerSetting(S, "GameNameMode");
 	SendServerSetting(S, "bAlwaysUseDefaultPreset");
 	SendServerSetting(S, "bAlwaysUseDefaultMap");
+	SendServerSetting(S, "LogoTexture");
+	SendServerSetting(S, "LogoRegion");
+	SendServerSetting(S, "LogoButton0");
+	SendServerSetting(S, "LogoButton1");
+	SendServerSetting(S, "LogoButton2");
 	SendLine("/SAVESERVERSETTINGSFILE/");
 
 	Log("VS_DataClient SaveServerSettings Done", 'VoteSys');

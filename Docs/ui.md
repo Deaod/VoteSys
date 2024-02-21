@@ -70,6 +70,14 @@ If you hold the "Ctrl" key while sending a message, it will be sent to your own 
 
 You can recall past messages sent by you by pressing the Up arrow key repeatedly.
 
+### Logo Area
+
+![Logo Area](LogoHighlight.png)
+
+If the server admin has configured a logo, that logo will be shown instead of the chat area. The logo can be dismissed by pressing the X button in the top right. Dismissing the logo will restore the chat area.
+
+Additionally, server admins can configure up to 3 buttons that will be shown along the bottom edge of the logo area.
+
 ### Player List
 
 ![Player List](PlayerListHighlight.png)

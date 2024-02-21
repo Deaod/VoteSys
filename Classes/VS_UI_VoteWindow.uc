@@ -61,6 +61,14 @@ function FocusPreset(VS_Preset P) {
 	VS_UI_VoteClientWindow(ClientArea).FocusPreset(P);
 }
 
+function ConfigureLogo(string Tex, int X, int Y, int W, int H) {
+	VS_UI_VoteClientWindow(ClientArea).ConfigureLogo(Tex, X, Y, W, H);
+}
+
+function ConfigureLogoButton(int Index, string Label, string LinkURL) {
+	VS_UI_VoteClientWindow(ClientArea).ConfigureLogoButton(Index, Label, LinkURL);
+}
+
 defaultproperties
 {
 	ClientClass=class'VS_UI_VoteClientWindow'
