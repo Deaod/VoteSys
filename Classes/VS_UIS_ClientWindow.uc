@@ -3,7 +3,7 @@ class VS_UIS_ClientWindow extends UWindowPageControl;
 var VS_PlayerChannel Channel;
 
 var VS_UIS_PageClient ClientSettingsPage;
-var VS_UIS_PageVoting ServerSettingsPage;
+var VS_UIS_PageAdminVoting ServerSettingsPage;
 
 function Created() {
 	super.Created();
@@ -19,7 +19,7 @@ function BeforePaint(Canvas C, float X, float Y) {
 	bIsAdmin = O != none && O.PlayerReplicationInfo != none && O.PlayerReplicationInfo.bAdmin;
 
 	if (bIsAdmin && ServerSettingsPage == none) {
-		ServerSettingsPage = VS_UIS_PageVoting(AddPage("[A] Server", class'VS_UIS_PageVoting').Page);
+		ServerSettingsPage = VS_UIS_PageAdminVoting(AddPage("[A] Server", class'VS_UIS_PageAdminVoting').Page);
 		ServerSettingsPage.LoadSettings(Channel);
 	} else if (bIsAdmin == false && ServerSettingsPage != none) {
 		DeletePage(ServerSettingsPage.OwnerTab);

@@ -25,13 +25,16 @@ function LoadSettings(VS_PlayerChannel C) {
 
 function SaveSettings() {}
 
+function bool CanSaveSettings() { return true; }
+
 function ApplyTheme() {}
 
 function Notify(UWindowDialogControl C, byte E) {
 	super.Notify(C, E);
 	
 	if (C == Btn_Save && E == DE_Click) {
-		SaveSettings();
+		if (CanSaveSettings())
+			SaveSettings();
 	}
 }
 

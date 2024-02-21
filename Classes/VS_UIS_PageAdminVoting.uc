@@ -1,18 +1,4 @@
-class VS_UIS_PageVoting extends VS_UIS_Page;
-
-var VS_ServerSettings Settings;
-var bool bSettingsLoaded;
-
-var UWindowSmallButton Btn_RestartServer;
-var localized string Text_RestartServer;
-
-var UWindowSmallButton Btn_ReloadSettings;
-var localized string Text_ReloadSettings;
-
-var UWindowLabelControl Lbl_SettingsState;
-var localized string Text_SettingsState_New;
-var localized string Text_SettingsState_Complete;
-var localized string Text_SettingsState_NotAdmin;
+class VS_UIS_PageAdminVoting extends VS_UIS_PageAdmin;
 
 var VS_UI_EditControl Edt_MidGameVoteThreshold;
 var localized string Text_MidGameVoteThreshold;
@@ -92,16 +78,6 @@ var localized string Text_DataPort;
 var VS_UI_EditControl Edt_ClientDataPort;
 var localized string Text_ClientDataPort;
 
-function LoadSettings(VS_PlayerChannel C) {
-	super.LoadSettings(C);
-
-	Settings = C.GetServerSettings();
-	LoadServerSettings();
-	Log("ServerSettingsPage LoadSettings", 'VoteSys');
-
-	EnableInteraction(bSettingsLoaded);
-}
-
 function EnableInteraction(bool bEnable) {
 	Edt_MidGameVoteThreshold.EditBox.SetEditable(bEnable);
 	Edt_MidGameVoteTimeLimit.EditBox.SetEditable(bEnable);
@@ -130,11 +106,6 @@ function EnableInteraction(bool bEnable) {
 }
 
 function LoadServerSettings() {
-	bSettingsLoaded = false;
-
-	if (Settings.SState != S_COMPLETE)
-		return;
-
 	Edt_MidGameVoteThreshold.SetValue(string(Settings.MidGameVoteThreshold));
 	Edt_MidGameVoteTimeLimit.SetValue(string(Settings.MidGameVoteTimeLimit));
 	Edt_GameEndedVoteDelay.SetValue(string(Settings.GameEndedVoteDelay));
@@ -159,14 +130,9 @@ function LoadServerSettings() {
 	Edt_ServerAddress.SetValue(Settings.ServerAddress);
 	Edt_DataPort.SetValue(string(Settings.DataPort));
 	Edt_ClientDataPort.SetValue(string(Settings.ClientDataPort));
-
-	bSettingsLoaded = true;
 }
 
 function SaveSettings() {
-	if (bSettingsLoaded == false)
-		return;
-
 	Settings.MidGameVoteThreshold = float(Edt_MidGameVoteThreshold.GetValue());
 	Settings.MidGameVoteTimeLimit = int(Edt_MidGameVoteTimeLimit.GetValue());
 	Settings.GameEndedVoteDelay = int(Edt_GameEndedVoteDelay.GetValue());
@@ -192,20 +158,11 @@ function SaveSettings() {
 	Settings.DataPort = int(Edt_DataPort.GetValue());
 	Settings.ClientDataPort = int(Edt_ClientDataPort.GetValue());
 
-	Channel.SaveServerSettings();
+	super.SaveSettings();
 }
 
 function Created() {
 	super.Created();
-
-	Btn_RestartServer = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 4, 334, 80, 16));
-	Btn_RestartServer.SetText(Text_RestartServer);
-
-	Btn_ReloadSettings = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 88, 334, 80, 16));
-	Btn_ReloadSettings.SetText(Text_ReloadSettings);
-
-	Lbl_SettingsState = UWindowLabelControl(CreateControl(class'UWindowLabelControl', 172, 334, 114, 16));
-	Lbl_SettingsState.Align = TA_Right;
 
 	Edt_MidGameVoteThreshold = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 8, 188, 16));
 	Edt_MidGameVoteThreshold.SetText(Text_MidGameVoteThreshold);
@@ -322,28 +279,6 @@ function Created() {
 	Edt_ClientDataPort.SetNumericOnly(true);
 }
 
-function BeforePaint(Canvas C, float MouseX, float MouseY) {
-	super.BeforePaint(C, MouseX, MouseY);
-
-	switch(Settings.SState) {
-		case S_NEW:
-			Lbl_SettingsState.SetText(Text_SettingsState_New);
-			break;
-		case S_COMPLETE:
-			Lbl_SettingsState.SetText(Text_SettingsState_Complete);
-			break;
-		case S_NOTADMIN:
-			Lbl_SettingsState.SetText(Text_SettingsState_NotAdmin);
-			break;
-	}
-
-	if (bSettingsLoaded == false) {
-		LoadServerSettings();
-		if (bSettingsLoaded)
-			EnableInteraction(bSettingsLoaded);
-	}
-}
-
 function ApplyTheme() {
 	Edt_MidGameVoteThreshold.Theme = Theme;
 	Edt_MidGameVoteTimeLimit.Theme = Theme;
@@ -371,27 +306,7 @@ function ApplyTheme() {
 	Edt_ClientDataPort.Theme = Theme;
 }
 
-function Notify(UWindowDialogControl C, byte E) {
-	super.Notify(C, E);
-
-	if (E == DE_Click) {
-		if (C == Btn_RestartServer) {
-			GetPlayerOwner().ConsoleCommand("admin exit");
-		} else if (C == Btn_ReloadSettings) {
-			bSettingsLoaded = false;
-			Settings = Channel.ReloadServerSettings();
-			EnableInteraction(false);
-		}
-	}
-}
-
 defaultproperties {
-	Text_RestartServer="Restart Server"
-	Text_ReloadSettings="Reload Settings"
-	Text_SettingsState_New="Loading"
-	Text_SettingsState_Complete="Loaded"
-	Text_SettingsState_NotAdmin="Unauthorized"
-
 	Text_MidGameVoteThreshold="Mid-Game Vote Threshold"
 	Text_MidGameVoteTimeLimit="Mid-Game Vote Time Limit"
 	Text_GameEndedVoteDelay="Game Ended Vote Delay"
