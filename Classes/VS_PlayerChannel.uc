@@ -9,7 +9,7 @@ var VS_DataClient DataClient;
 var VS_ServerSettings ServerSettings;
 
 var VS_Preset PresetList;
-var VS_UI_VoteWindow VoteMenuDialog;
+var VS_UIV_Window VoteMenuDialog;
 var VS_UIS_Window SettingsDialog;
 var bool bOpenVoteMenuAfterTyping;
 var bool bOpenSettingsAfterTyping;
@@ -130,8 +130,8 @@ simulated function TryCreateVoteMenuDialog() {
 		if (C.Root == none)
 			return;
 
-		VoteMenuDialog = VS_UI_VoteWindow(C.Root.CreateWindow(
-			class'VS_UI_VoteWindow',
+		VoteMenuDialog = VS_UIV_Window(C.Root.CreateWindow(
+			class'VS_UIV_Window',
 			Settings.MenuX,
 			Settings.MenuY,
 			0,0 // Size set internally
@@ -165,8 +165,8 @@ simulated function CreateVoteMenuDialog() {
 			return;
 		}
 
-		VoteMenuDialog = VS_UI_VoteWindow(C.Root.CreateWindow(
-			class'VS_UI_VoteWindow',
+		VoteMenuDialog = VS_UIV_Window(C.Root.CreateWindow(
+			class'VS_UIV_Window',
 			Settings.MenuX,
 			Settings.MenuY,
 			0,0 // Size set internally
@@ -542,7 +542,7 @@ simulated function ChatMessage(PlayerReplicationInfo PRI, string Msg) {
 	if (VoteMenuDialog == none)
 		return;
 
-	VS_UI_VoteClientWindow(VoteMenuDialog.ClientArea).ChatArea.AddChat(PRI, Msg);
+	VS_UIV_ClientWindow(VoteMenuDialog.ClientArea).ChatArea.AddChat(PRI, Msg);
 }
 
 simulated function DumpPlayerList() {
@@ -555,7 +555,7 @@ simulated function DumpPlayerList() {
 		if (Info.PlayerInfo[i] != none)
 			PlayerOwner.ClientMessage("["$i$"]=("$Info.PlayerInfo[i].Dump()$")");
 
-	for (Item = VS_UI_PlayerListItem(VS_UI_VoteClientWindow(VoteMenuDialog.ClientArea).PlayerListBox.Items.Next); Item != none; Item = VS_UI_PlayerListItem(Item.Next)) {
+	for (Item = VS_UI_PlayerListItem(VS_UIV_ClientWindow(VoteMenuDialog.ClientArea).PlayerListBox.Items.Next); Item != none; Item = VS_UI_PlayerListItem(Item.Next)) {
 		PlayerOwner.ClientMessage(string(Item.PlayerInfo.PRI));
 	}
 }

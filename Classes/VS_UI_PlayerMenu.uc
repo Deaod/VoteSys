@@ -33,7 +33,7 @@ function ShowWindow() {
 	PlayerKick.SetCaption(PlayerKickText@PRI.PlayerName);
 	PlayerBan.SetCaption(PlayerBanText@PRI.PlayerName);
 
-	Ch = VS_UI_VoteClientWindow(OwnerWindow.OwnerWindow).Channel;
+	Ch = VS_UIV_ClientWindow(OwnerWindow.OwnerWindow).Channel;
 	PlayerKick.bChecked = Ch.WantsToKick(PRI);
 
 	if (PlayerBanMB != none)
@@ -44,7 +44,7 @@ function ShowWindow() {
 function ExecuteItem(UWindowPullDownMenuItem Item) {
 	local VS_PlayerChannel Ch;
 
-	Ch = VS_UI_VoteClientWindow(OwnerWindow.OwnerWindow).Channel;
+	Ch = VS_UIV_ClientWindow(OwnerWindow.OwnerWindow).Channel;
 
 	if (Item == PlayerKick) {
 		if (Ch != none)
@@ -68,7 +68,7 @@ function MessageBoxDone(UWindowMessageBox W, MessageBoxResult R) {
 	if (W != PlayerBanMB)
 		return;
 
-	Ch = VS_UI_VoteClientWindow(OwnerWindow.OwnerWindow).Channel;
+	Ch = VS_UIV_ClientWindow(OwnerWindow.OwnerWindow).Channel;
 	if (Ch != none && R == MR_Yes)
 		Ch.BanPlayer(PRI);
 }

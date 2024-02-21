@@ -207,7 +207,7 @@ function RMouseDown(float MouseX, float MouseY) {
 	if (I == none)
 		return;
 
-	LocalPlayerInfo = VS_UI_VoteClientWindow(ParentWindow).Channel.PlayerInfo();
+	LocalPlayerInfo = VS_UIV_ClientWindow(ParentWindow).Channel.PlayerInfo();
 
 	ContextMenu.WinLeft = Root.MouseX;
 	ContextMenu.WinTop = Root.MouseY;

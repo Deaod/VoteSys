@@ -1,4 +1,4 @@
-class VS_UI_VoteClientWindow extends UWindowDialogClientWindow;
+class VS_UIV_ClientWindow extends UWindowDialogClientWindow;
 
 #exec TEXTURE IMPORT Name="Gear" File="Textures/Gear.pcx" MIPS=OFF FLAGS=2
 

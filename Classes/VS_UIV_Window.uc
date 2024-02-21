@@ -1,4 +1,4 @@
-class VS_UI_VoteWindow extends UWindowFramedWindow;
+class VS_UIV_Window extends UWindowFramedWindow;
 
 var bool bPlaced;
 var VS_ClientSettings Settings;
@@ -17,7 +17,7 @@ function Created() {
 
 function LoadSettings(VS_ClientSettings CS) {
 	Settings = CS;
-	VS_UI_VoteClientWindow(ClientArea).LoadSettings(CS);
+	VS_UIV_ClientWindow(ClientArea).LoadSettings(CS);
 }
 
 function BeforePaint(Canvas C, float X, float Y) {
@@ -53,25 +53,25 @@ function Close(optional bool bByParent) {
 }
 
 function AddPreset(VS_Preset P) {
-	VS_UI_VoteClientWindow(ClientArea).Channel = Channel;
-	VS_UI_VoteClientWindow(ClientArea).AddPreset(P);
+	VS_UIV_ClientWindow(ClientArea).Channel = Channel;
+	VS_UIV_ClientWindow(ClientArea).AddPreset(P);
 }
 
 function FocusPreset(VS_Preset P) {
-	VS_UI_VoteClientWindow(ClientArea).FocusPreset(P);
+	VS_UIV_ClientWindow(ClientArea).FocusPreset(P);
 }
 
 function ConfigureLogo(string Tex, int X, int Y, int W, int H) {
-	VS_UI_VoteClientWindow(ClientArea).ConfigureLogo(Tex, X, Y, W, H);
+	VS_UIV_ClientWindow(ClientArea).ConfigureLogo(Tex, X, Y, W, H);
 }
 
 function ConfigureLogoButton(int Index, string Label, string LinkURL) {
-	VS_UI_VoteClientWindow(ClientArea).ConfigureLogoButton(Index, Label, LinkURL);
+	VS_UIV_ClientWindow(ClientArea).ConfigureLogoButton(Index, Label, LinkURL);
 }
 
 defaultproperties
 {
-	ClientClass=class'VS_UI_VoteClientWindow'
+	ClientClass=class'VS_UIV_ClientWindow'
 	WindowTitle="VoteSys Menu"
 	bStatusBar=False
 }
