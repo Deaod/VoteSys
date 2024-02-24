@@ -88,13 +88,13 @@ function Created() {
 	Cmb_VoteEndCondition.EditBoxWidth = 100;
 	Cmb_VoteEndCondition.SetEditable(false);
 
-	Edt_KickVoteThreshold = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 128, 188, 16));
+	Edt_KickVoteThreshold = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 108, 188, 16));
 	Edt_KickVoteThreshold.SetText(Text_KickVoteThreshold);
 	Edt_KickVoteThreshold.EditBoxWidth = 60;
 	Edt_KickVoteThreshold.SetNumericOnly(true);
 	Edt_KickVoteThreshold.SetNumericFloat(true);
 
-	Edt_MinimumMapRepeatDistance = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 268, 188, 16));
+	Edt_MinimumMapRepeatDistance = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 128, 188, 16));
 	Edt_MinimumMapRepeatDistance.SetText(Text_MinimumMapRepeatDistance);
 	Edt_MinimumMapRepeatDistance.EditBoxWidth = 60;
 	Edt_MinimumMapRepeatDistance.SetNumericOnly(true);
