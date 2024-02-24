@@ -60,7 +60,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 
 	if (bSettingsLoaded == false && Settings.SState == S_COMPLETE) {
 		LoadServerSettings();
-		EnableInteraction(bSettingsLoaded);
+		EnableInteraction(true);
 		bSettingsLoaded = true;
 	}
 }
