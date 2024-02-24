@@ -75,6 +75,9 @@ PlayerBanText="&Ban"
 PlayerBanTitle="Ban Player"
 PlayerBanMessage="Do you want to permanently ban {1}?"
 
+[VS_UI_ScreenshotWindow]
+TextPlayerCount="Players:"
+
 [VS_UIS_PageAdminVoting]
 Text_MidGameVoteThreshold="Mid-Game Vote Threshold"
 Text_MidGameVoteTimeLimit="Mid-Game Vote Time Limit"
@@ -87,9 +90,6 @@ Text_VoteEndCondition_TimerOrResultDetermined="Result Certain"
 Text_KickVoteThreshold="Kick Vote Threshold"
 Text_MinimumMapRepeatDistance="Map Repeat Distance"
 
-[VS_UI_ScreenshotWindow]
-TextPlayerCount="Players:"
-
 [VS_UIS_PageClient]
 ThemeText="Theme"
 ThemeBright="Bright"
@@ -100,10 +100,16 @@ MapListSortName="Name"
 MapListSortRecency="Recency"
 MapListSortPlayCount="Play Count"
 
-[VS_UIS_Window]
-WindowTitle="VoteSys Settings"
-
 [VS_UIS_PageAdminUI]
 Text_RetainCandidates="Retain Candidates"
 Text_DefaultTimeMessageClass="Time Msg Class"
+Text_LogoTexture="Logo Texture"
+Text_LogoRegion="Logo Region"
+Text_LogoRegionX="X"
+Text_LogoRegionY="Y"
+Text_LogoRegionW="W"
+Text_LogoRegionH="H"
+
+[VS_UIS_Window]
+WindowTitle="VoteSys Settings"
 
