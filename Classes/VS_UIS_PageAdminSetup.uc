@@ -107,26 +107,26 @@ function SaveSettings() {
 function Created() {
 	super.Created();
 
-	Edt_DefaultPreset = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 148, 188, 16));
+	Edt_DefaultPreset = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 8, 188, 16));
 	Edt_DefaultPreset.SetText(Text_DefaultPreset);
 	Edt_DefaultPreset.EditBoxWidth = 100;
 
-	Chk_AlwaysUseDefaultPreset = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 4, 168, 188, 16));
+	Chk_AlwaysUseDefaultPreset = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 4, 28, 188, 16));
 	Chk_AlwaysUseDefaultPreset.SetText(Text_AlwaysUseDefaultPreset);
 
-	Edt_DefaultMap = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 188, 188, 16));
+	Edt_DefaultMap = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 48, 188, 16));
 	Edt_DefaultMap.SetText(Text_DefaultMap);
 	Edt_DefaultMap.EditBoxWidth = 100;
 
-	Chk_AlwaysUseDefaultMap = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 4, 208, 188, 16));
+	Chk_AlwaysUseDefaultMap = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 4, 68, 188, 16));
 	Chk_AlwaysUseDefaultMap.SetText(Text_AlwaysUseDefaultMap);
 
-	Edt_IdleTimeout = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 248, 188, 16));
+	Edt_IdleTimeout = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 88, 188, 16));
 	Edt_IdleTimeout.SetText(Text_IdleTimeout);
 	Edt_IdleTimeout.EditBoxWidth = 60;
 	Edt_IdleTimeout.SetNumericOnly(true);
 
-	Edt_PresetProbeDepth = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 288, 188, 16));
+	Edt_PresetProbeDepth = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 108, 188, 16));
 	Edt_PresetProbeDepth.SetText(Text_PresetProbeDepth);
 	Edt_PresetProbeDepth.EditBoxWidth = 60;
 	Edt_PresetProbeDepth.SetNumericOnly(true);
