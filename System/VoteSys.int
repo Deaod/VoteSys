@@ -68,6 +68,22 @@ Text_DefaultMap="Default Map"
 Text_AlwaysUseDefaultMap="Always Use Default Map"
 Text_IdleTimeout="Idle Timeout"
 
+[VS_UIS_PageAdminUI]
+Text_RetainCandidates="Retain Candidates"
+Text_DefaultTimeMessageClass="Time Msg Class"
+Text_LogoTexture="Logo Texture"
+Text_LogoRegion="Logo Region"
+Text_LogoRegionX="X"
+Text_LogoRegionY="Y"
+Text_LogoRegionW="W"
+Text_LogoRegionH="H"
+Text_LogoButton0Label="Button 1 Label"
+Text_LogoButton0LinkURL="Button 1 URL"
+Text_LogoButton1Label="Button 2 Label"
+Text_LogoButton1LinkURL="Button 2 URL"
+Text_LogoButton2Label="Button 3 Label"
+Text_LogoButton2LinkURL="Button 3 URL"
+
 [VS_UI_PlayerMenu]
 PlayerIdText="ID:"
 PlayerKickText="&Kick"
@@ -99,16 +115,6 @@ MapListSortText="Sort Map List By"
 MapListSortName="Name"
 MapListSortRecency="Recency"
 MapListSortPlayCount="Play Count"
-
-[VS_UIS_PageAdminUI]
-Text_RetainCandidates="Retain Candidates"
-Text_DefaultTimeMessageClass="Time Msg Class"
-Text_LogoTexture="Logo Texture"
-Text_LogoRegion="Logo Region"
-Text_LogoRegionX="X"
-Text_LogoRegionY="Y"
-Text_LogoRegionW="W"
-Text_LogoRegionH="H"
 
 [VS_UIS_Window]
 WindowTitle="VoteSys Settings"
