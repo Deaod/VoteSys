@@ -116,8 +116,18 @@ Allows changing client-side settings.
 
 The Save button saves the current state of settings. The Close button closes the Settings Menu without saving.
 
-### Server Settings
+### Admin Settings
 
-![Server Settings](ServerSettings.png)
+Admin settings are split into three parts: Voting, UI, and Setup. The tab-cards containing admin settings are prefixed with \[A\] and are only visible when logged in as admin.
 
-Allows changing server-side settings. Only visible when logged in as admin.
+#### Voting
+
+![Admin Voting Settings](AdminVotingSettings.png)
+
+#### UI
+
+![Admin UI Settings](AdminUISettings.png)
+
+#### Setup
+
+![Admin Setup Settings](AdminSetupSettings.png)
