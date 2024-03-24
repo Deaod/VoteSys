@@ -1009,7 +1009,7 @@ function GetDefaultServerPackages() {
 function GetDefaultServerActors() {
 	local string Prop;
 
-	if (Settings.DefaultPackages.Length > 0)
+	if (Settings.DefaultActors.Length > 0)
 		return; // already done
 
 	Prop = ConsoleCommand("get Engine.GameEngine ServerActors");
