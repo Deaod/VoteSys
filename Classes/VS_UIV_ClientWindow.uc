@@ -22,6 +22,8 @@ var VS_UI_MapListBox MapListBox;
 
 var UWindowSmallButton VoteButton;
 var localized string VoteButtonText;
+var UWindowSmallButton SuggestButton;
+var localized string SuggestButtonText;
 var UWindowSmallButton RandomButton;
 var localized string RandomButtonText;
 
@@ -62,9 +64,11 @@ function Created() {
 	MapFilter.SetEmptyText(MapFilterText);
 
 	MapListBox = VS_UI_MapListBox(CreateControl(class'VS_UI_MapListBox', 10, TabsHeight + 50, 180, 284));
-	VoteButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 10, TabsHeight + 338, 88, 12));
+	VoteButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 10, TabsHeight + 338, 57, 12));
 	VoteButton.SetText(VoteButtonText);
-	RandomButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 102, TabsHeight + 338, 88, 12));
+	SuggestButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 71, TabsHeight + 338, 58, 12));
+	SuggestButton.SetText(SuggestButtonText);
+	RandomButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 133, TabsHeight + 338, 57, 12));
 	RandomButton.SetText(RandomButtonText);
 
 	VoteListBox = VS_UI_CandidateListBox(CreateControl(class'VS_UI_CandidateListBox', 200, TabsHeight + 10, 400, 100));
@@ -387,6 +391,8 @@ function Notify(UWindowDialogControl C, byte E) {
 	} else if (C == MapFilter && E == DE_Change) {
 		LastMapFilterEditTime = GetLevel().TimeSeconds;
 		bMapFilterApplied = false;
+	} else if (C == SuggestButton && E == DE_Click) {
+		SuggestMap();
 	} else if (C == RandomButton && E == DE_Click) {
 		if (ActivePreset != none)
 			Channel.VoteRandom(ActivePreset);
@@ -424,6 +430,21 @@ function SendChat() {
 		GetPlayerOwner().Say(Msg);
 
 	ChatEdit.Clear();
+}
+
+function SuggestMap() {
+	local VS_UI_ListItem MapListItems;
+	local int MapCount;
+
+	if (ActivePreset == none)
+		return;
+
+	MapListItems = VS_UI_ListItem(MapListBox.Items);
+	MapCount = MapListItems.CountEnabled();
+	if (MapCount <= 0)
+		return;
+
+	Channel.Vote(ActivePreset, VS_UI_MapListItem(MapListItems.FindEnabledEntry(int(MapCount * BetterFRand()))).MapRef);
 }
 
 function AddPreset(VS_Preset P) {
@@ -497,6 +518,7 @@ defaultproperties {
 	
 	MapFilterText="Filter Maps By Name"
 	VoteButtonText="Vote"
+	SuggestButtonText="Suggest"
 	RandomButtonText="Random"
 	ChatSayText="Say"
 	ChatTeamSayText="TeamSay"

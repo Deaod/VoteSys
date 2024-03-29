@@ -41,6 +41,7 @@ ErrNotAllowed="Sorry, you are not allowed to vote"
 [VS_UIV_ClientWindow]
 MapFilterText="Filter Maps By Name"
 VoteButtonText="Vote"
+SuggestButtonText="Suggest"
 RandomButtonText="Random"
 ChatSayText="Say"
 ChatTeamSayText="TeamSay"

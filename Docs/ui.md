@@ -32,11 +32,14 @@ Allows filtering the map list. Only maps containing the sequence of letters ente
 
 ![Map List](MapListHighlight.png)
 
-Shows the maps available to be used with the currently selected preset.
+Shows the maps available to be used with the currently selected preset.  
+Maps unavailable due to player limits or repetition restrictions are grayed out and cannot be selected.
 
 Selecting a map clears any current selection in the candidate list.  
 Double-clicking votes for the map and preset combination.  
 Alternatively, you can vote for a map/preset combination by selecting a map in the list and pressing the "Vote" button.
+
+The "Suggest" button will select a suitable map from the list and place your vote for it.
 
 The "Random" button will place your vote for a random map of the currently selected preset.
 
