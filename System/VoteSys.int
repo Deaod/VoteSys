@@ -17,6 +17,14 @@ MapColumnHeader="Map"
 VotesColumnHeader="Votes"
 RandomMapDisplayName="<Random>"
 
+[VS_UIV_ClientWindow]
+MapFilterText="Filter Maps By Name"
+VoteButtonText="Vote"
+SuggestButtonText="Suggest"
+RandomButtonText="Random"
+ChatSayText="Say"
+ChatTeamSayText="TeamSay"
+
 [VS_Msg_LocalMessage]
 MsgNobodyVoted="Nobody voted, randomly selecting {1}"
 MsgVotesTied="Tied, randomly selecting {1}"
@@ -37,14 +45,6 @@ ErrWrongConsole="Failed to create {1} window (Console not a WindowConsole)"
 ErrMapLoadFailed="Loading map {1} failed, randomly selecting {2}"
 ErrNoConnection="VoteSys has no connection to server, check server firewall"
 ErrNotAllowed="Sorry, you are not allowed to vote"
-
-[VS_UIV_ClientWindow]
-MapFilterText="Filter Maps By Name"
-VoteButtonText="Vote"
-SuggestButtonText="Suggest"
-RandomButtonText="Random"
-ChatSayText="Say"
-ChatTeamSayText="TeamSay"
 
 [VS_UIV_Window]
 WindowTitle="VoteSys Menu"
@@ -92,9 +92,6 @@ PlayerBanText="&Ban"
 PlayerBanTitle="Ban Player"
 PlayerBanMessage="Do you want to permanently ban {1}?"
 
-[VS_UI_ScreenshotWindow]
-TextPlayerCount="Players:"
-
 [VS_UIS_PageAdminVoting]
 Text_MidGameVoteThreshold="Mid-Game Vote Threshold"
 Text_MidGameVoteTimeLimit="Mid-Game Vote Time Limit"
@@ -106,6 +103,12 @@ Text_VoteEndCondition_TimerOrAllVotesIn="Everyone Voted"
 Text_VoteEndCondition_TimerOrResultDetermined="Result Certain"
 Text_KickVoteThreshold="Kick Vote Threshold"
 Text_MinimumMapRepeatDistance="Map Repeat Distance"
+
+[VS_UI_ScreenshotWindow]
+TextPlayerCount="Players:"
+
+[VS_UI_MapMenu]
+SortByText="Sort By"
 
 [VS_UIS_PageClient]
 ThemeText="Theme"
@@ -119,4 +122,9 @@ MapListSortPlayCount="Play Count"
 
 [VS_UIS_Window]
 WindowTitle="VoteSys Settings"
+
+[VS_UI_MapSortByMenu]
+ItemNameText="Name"
+ItemRecencyText="Recency"
+ItemPlayCountText="Play Count"
 

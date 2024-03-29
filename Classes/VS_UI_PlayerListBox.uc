@@ -193,7 +193,7 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 
 function Close(optional bool bByParent) {
 	if (ContextMenu.bWindowVisible)
-		ContextMenu.CloseUp();
+		ContextMenu.CloseUp(True);
 	super.Close(bByParent);
 }
 

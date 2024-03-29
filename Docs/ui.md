@@ -51,6 +51,12 @@ This window will also show player limits, if specified.
 
 ![Map Screenshot Window](MapPreview.png)
 
+#### Map Context Menu
+
+Right clicking a map will bring up a context menu where you can change how maps are sorted.
+
+![Map Context Menu](MapContextMenu.png)
+
 ### Candidate List
 
 ![Candidate List](CandidateListHighlight.png)
