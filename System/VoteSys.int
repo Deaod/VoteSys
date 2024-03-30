@@ -1,5 +1,5 @@
 [Public]
-Object=(Name=VoteSys.MutVoteSys,Class=Class,MetaClass=Engine.Mutator,Description="VoteSys,Enables voting for next map")
+Object=(Name=VoteSys.MutVoteSys,Class=Class,MetaClass=Engine.Mutator,Description="MutVoteSys,Enables voting for next map")
 
 [VS_UIS_PageAdmin]
 Text_RestartServer="Restart Server"

@@ -1,4 +1,5 @@
 class MutVoteSys extends Mutator;
+// Description="Enables voting for next map"
 
 var VS_ChannelContainer ChannelList;
 var VS_Info Info;
