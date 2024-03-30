@@ -74,7 +74,7 @@ function Created() {
 	VoteListBox = VS_UI_CandidateListBox(CreateControl(class'VS_UI_CandidateListBox', 200, TabsHeight + 10, 400, 100));
 	PlayerListBox = VS_UI_PlayerListBox(CreateControl(class'VS_UI_PlayerListBox', 480, TabsHeight + 120, 120, 214));
 
-	Logo = VS_UI_Logo(CreateControl(class'VS_UI_Logo', 200, TabsHeight + 120, 270, 244));
+	Logo = VS_UI_Logo(CreateControl(class'VS_UI_Logo', 200, TabsHeight + 120, 270, 234));
 	Logo.HideWindow();
 
 	LogoButtons[0] = VS_UI_LinkButton(CreateControl(class'VS_UI_LinkButton', 200, TabsHeight + 338, 86, 16));

@@ -321,7 +321,7 @@ Defaults to false.
 
 If this refers to a valid texture, it is displayed to users as a logo instead of the chat interface until it is dismissed by the user. Users can dismiss the logo by pressing the X button in the top right of the logo.
 
-The space reserved for the logo is 270 pixels wide and 244 pixels high, with the bottom 16 pixels reserved for [logo buttons](#logobuttons). If you want to perfectly fill out the space, use `LogoRegion` to extract an image with that aspect ratio.
+The space reserved for the logo is 270 pixels wide and 234 pixels high, with the bottom 16 pixels reserved for [logo buttons](#logobuttons). If you want to perfectly fill out the space, use `LogoRegion` to extract an image with that aspect ratio.
 
 #### LogoRegion
 
