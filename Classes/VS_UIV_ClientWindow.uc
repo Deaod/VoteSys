@@ -109,6 +109,8 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	local string Filter;
 	local VS_UI_MapListItem M;
 
+	Logo.SendToBack();
+
 	super.BeforePaint(C, MouseX, MouseY);
 
 	if (Settings.Theme != ActiveTheme) {
