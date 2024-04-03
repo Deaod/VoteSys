@@ -140,7 +140,11 @@ Begin:
 		"/"$VoteSys.Settings.LogoRegion.X$
 		"/"$VoteSys.Settings.LogoRegion.Y$
 		"/"$VoteSys.Settings.LogoRegion.W$
-		"/"$VoteSys.Settings.LogoRegion.H
+		"/"$VoteSys.Settings.LogoRegion.H$
+		"/"$VoteSys.Settings.LogoDrawRegion.X$
+		"/"$VoteSys.Settings.LogoDrawRegion.Y$
+		"/"$VoteSys.Settings.LogoDrawRegion.W$
+		"/"$VoteSys.Settings.LogoDrawRegion.H
 	);
 
 	SendLine("/LOGOBUTTON/0/"$

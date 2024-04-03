@@ -475,10 +475,11 @@ function FocusPreset(VS_Preset P) {
 	}
 }
 
-function ConfigureLogo(string Tex, int X, int Y, int W, int H) {
+function ConfigureLogo(string Tex, int TexX, int TexY, int TexW, int TexH, int DrawX, int DrawY, int DrawW, int DrawH) {
 	Logo.SetLogoTexture(Tex);
-	if (X != 0 || Y != 0 || W != 0 || H != 0)
-		Logo.SetLogoRegion(X, Y, W, H);
+	if (TexX != 0 || TexY != 0 || TexW != 0 || TexH != 0)
+		Logo.SetLogoRegion(TexX, TexY, TexW, TexH);
+	Logo.SetDrawRegion(DrawX, DrawY, DrawW, DrawH);
 
 	if (Logo.LogoTexture != none) {
 		Logo.ShowWindow();

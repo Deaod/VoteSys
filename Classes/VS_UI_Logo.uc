@@ -2,6 +2,7 @@ class VS_UI_Logo extends UWindowDialogControl;
 
 var Texture LogoTexture;
 var Region LogoRegion;
+var Region DrawRegionConfig;
 var Region DrawRegion;
 
 var UWindowButton DismissButton;
@@ -9,6 +10,8 @@ var UWindowButton DismissButton;
 const DE_VoteSys_LogoDismiss = 129;
 
 function Created() {
+	super.Created();
+
 	DismissButton = VS_UI_LogoDismissButton(CreateWindow(class'VS_UI_LogoDismissButton', 0, 0, 0, 0));
 }
 
@@ -32,15 +35,29 @@ function SetLogoRegion(int X, int Y, int W, int H) {
 	LogoRegion.H = H;
 }
 
+function SetDrawRegion(int X, int Y, int W, int H) {
+	DrawRegionConfig.X = X;
+	DrawRegionConfig.Y = Y;
+	DrawRegionConfig.W = W;
+	DrawRegionConfig.H = H;
+}
+
 function BeforePaint(Canvas C, float X, float Y) {
 	local float DrawScale;
 	local UWindowButton CloseBox;
-	DrawScale = FMin(WinWidth / LogoRegion.W, WinHeight / LogoRegion.H);
+
+	if (DrawRegionConfig.X == 0 && DrawRegionConfig.Y == 0 && DrawRegionConfig.W == 0 && DrawRegionConfig.H == 0) {
+		DrawRegion = NewRegion(0,0,WinWidth,WinHeight);
+	} else {
+		DrawRegion = DrawRegionConfig;
+	}
+
+	DrawScale = FMin(float(DrawRegion.W) / LogoRegion.W, float(DrawRegion.H) / LogoRegion.H);
 
 	DrawRegion.W = int(LogoRegion.W * DrawScale);
 	DrawRegion.H = int(LogoRegion.H * DrawScale);
-	DrawRegion.X = int(0.5 * (WinWidth - DrawRegion.W));
-	DrawRegion.Y = int(0.5 * (WinHeight - DrawRegion.H));
+	DrawRegion.X = DrawRegionConfig.X + int(0.5 * (WinWidth - DrawRegion.W));
+	DrawRegion.Y = DrawRegionConfig.Y + int(0.5 * (WinHeight - DrawRegion.H));
 
 	CloseBox = UWindowFramedWindow(GetParent(class'UWindowFramedWindow')).CloseBox;
 	DismissButton.SetSize(CloseBox.WinWidth, CloseBox.WinHeight);

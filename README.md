@@ -79,6 +79,7 @@ bAlwaysUseDefaultPreset=True
 bAlwaysUseDefaultMap=False
 LogoTexture=UnrealShare.Epic
 LogoRegion=(X=0,Y=0,W=0,H=0)
+LogoDrawRegion=(X=0,Y=0,W=0,H=0)
 LogoButton0=(Label="GitHub",LinkURL="https://github.com/Deaod/VoteSys")
 LogoButton1=(Label="",LinkURL="")
 LogoButton2=(Label="Discord",LinkURL="https://discord.gg/5wWAGHRvMC")
@@ -123,6 +124,7 @@ DefaultActors=IpServer.UdpServerUplink MasterServerAddress=unreal.epicgames.com 
 1. [GameNameMode](#gamenamemode)
 1. [LogoTexture](#logotexture)
 1. [LogoRegion](#logoregion)
+1. [LogoDrawRegion](#logodrawregion)
 1. [LogoButton0](#logobuttons)
 1. [LogoButton1](#logobuttons)
 1. [LogoButton2](#logobuttons)
@@ -328,6 +330,10 @@ The space reserved for the logo is 270 pixels wide and 234 pixels high, with the
 Can be used to extract a region from a larger image. `X` and `Y` specify the top-left corner of the image, `W` and `H` specify the number of pixels to extract horizontally and vertically, respecitvely.
 
 If `X`, `Y`, `W`, and `H` are all 0, the full texture will be used as logo.
+
+#### LogoDrawRegion
+
+Can be used to resize and move the drawn logo. `X` and `Y` are effectively offsets from the center of the logo display area. `W` and `H` specify the width and height of the logo respectively.
 
 #### LogoButtons
 

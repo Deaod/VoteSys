@@ -24,6 +24,21 @@ var localized string Text_LogoRegionW;
 var VS_UI_EditControl Edt_LogoRegionH;
 var localized string Text_LogoRegionH;
 
+var UWindowLabelControl Lbl_LogoDrawRegion;
+var localized string Text_LogoDrawRegion;
+
+var VS_UI_EditControl Edt_LogoDrawRegionX;
+var localized string Text_LogoDrawRegionX;
+
+var VS_UI_EditControl Edt_LogoDrawRegionY;
+var localized string Text_LogoDrawRegionY;
+
+var VS_UI_EditControl Edt_LogoDrawRegionW;
+var localized string Text_LogoDrawRegionW;
+
+var VS_UI_EditControl Edt_LogoDrawRegionH;
+var localized string Text_LogoDrawRegionH;
+
 var VS_UI_EditControl Edt_LogoButton0Label;
 var localized string Text_LogoButton0Label;
 
@@ -50,6 +65,10 @@ function EnableInteraction(bool bEnable) {
 	Edt_LogoRegionY.EditBox.SetEditable(bEnable);
 	Edt_LogoRegionW.EditBox.SetEditable(bEnable);
 	Edt_LogoRegionH.EditBox.SetEditable(bEnable);
+	Edt_LogoDrawRegionX.EditBox.SetEditable(bEnable);
+	Edt_LogoDrawRegionY.EditBox.SetEditable(bEnable);
+	Edt_LogoDrawRegionW.EditBox.SetEditable(bEnable);
+	Edt_LogoDrawRegionH.EditBox.SetEditable(bEnable);
 	Edt_LogoButton0Label.EditBox.SetEditable(bEnable);
 	Edt_LogoButton0LinkURL.EditBox.SetEditable(bEnable);
 	Edt_LogoButton1Label.EditBox.SetEditable(bEnable);
@@ -66,6 +85,10 @@ function LoadServerSettings() {
 	Edt_LogoRegionY.SetValue(string(Settings.LogoRegion.Y));
 	Edt_LogoRegionW.SetValue(string(Settings.LogoRegion.W));
 	Edt_LogoRegionH.SetValue(string(Settings.LogoRegion.H));
+	Edt_LogoDrawRegionX.SetValue(string(Settings.LogoDrawRegion.X));
+	Edt_LogoDrawRegionY.SetValue(string(Settings.LogoDrawRegion.Y));
+	Edt_LogoDrawRegionW.SetValue(string(Settings.LogoDrawRegion.W));
+	Edt_LogoDrawRegionH.SetValue(string(Settings.LogoDrawRegion.H));
 	Edt_LogoButton0Label.SetValue(Settings.LogoButton0.Label);
 	Edt_LogoButton0LinkURL.SetValue(Settings.LogoButton0.LinkURL);
 	Edt_LogoButton1Label.SetValue(Settings.LogoButton1.Label);
@@ -82,6 +105,10 @@ function SaveSettings() {
 	Settings.LogoRegion.Y = int(Edt_LogoRegionY.GetValue());
 	Settings.LogoRegion.W = int(Edt_LogoRegionW.GetValue());
 	Settings.LogoRegion.H = int(Edt_LogoRegionH.GetValue());
+	Settings.LogoDrawRegion.X = int(Edt_LogoDrawRegionX.GetValue());
+	Settings.LogoDrawRegion.Y = int(Edt_LogoDrawRegionY.GetValue());
+	Settings.LogoDrawRegion.W = int(Edt_LogoDrawRegionW.GetValue());
+	Settings.LogoDrawRegion.H = int(Edt_LogoDrawRegionH.GetValue());
 	Settings.LogoButton0.Label = Edt_LogoButton0Label.GetValue();
 	Settings.LogoButton0.LinkURL = Edt_LogoButton0LinkURL.GetValue();
 	Settings.LogoButton1.Label = Edt_LogoButton1Label.GetValue();
@@ -129,27 +156,50 @@ function Created() {
 	Edt_LogoRegionH.SetNumericOnly(true);
 	Edt_LogoRegionH.EditBoxWidth = 30;
 
-	Edt_LogoButton0Label = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 108, 188, 16));
+	Lbl_LogoDrawRegion = UWindowLabelControl(CreateControl(class'UWindowLabelControl', 4, 120, 84, 16));
+	Lbl_LogoDrawRegion.SetText(Text_LogoDrawRegion);
+
+	Edt_LogoDrawRegionX = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 92, 108, 40, 16));
+	Edt_LogoDrawRegionX.SetText(Text_LogoDrawRegionX);
+	Edt_LogoDrawRegionX.SetNumericOnly(true);
+	Edt_LogoDrawRegionX.EditBoxWidth = 30;
+
+	Edt_LogoDrawRegionY = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 152, 108, 40, 16));
+	Edt_LogoDrawRegionY.SetText(Text_LogoDrawRegionY);
+	Edt_LogoDrawRegionY.SetNumericOnly(true);
+	Edt_LogoDrawRegionY.EditBoxWidth = 30;
+
+	Edt_LogoDrawRegionW = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 92, 128, 40, 16));
+	Edt_LogoDrawRegionW.SetText(Text_LogoDrawRegionW);
+	Edt_LogoDrawRegionW.SetNumericOnly(true);
+	Edt_LogoDrawRegionW.EditBoxWidth = 30;
+
+	Edt_LogoDrawRegionH = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 152, 128, 40, 16));
+	Edt_LogoDrawRegionH.SetText(Text_LogoDrawRegionH);
+	Edt_LogoDrawRegionH.SetNumericOnly(true);
+	Edt_LogoDrawRegionH.EditBoxWidth = 30;
+
+	Edt_LogoButton0Label = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 148, 188, 16));
 	Edt_LogoButton0Label.SetText(Text_LogoButton0Label);
 	Edt_LogoButton0Label.EditBoxWidth = 100;
 
-	Edt_LogoButton0LinkURL = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 128, 188, 16));
+	Edt_LogoButton0LinkURL = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 168, 188, 16));
 	Edt_LogoButton0LinkURL.SetText(Text_LogoButton0LinkURL);
 	Edt_LogoButton0LinkURL.EditBoxWidth = 100;
 
-	Edt_LogoButton1Label = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 148, 188, 16));
+	Edt_LogoButton1Label = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 188, 188, 16));
 	Edt_LogoButton1Label.SetText(Text_LogoButton1Label);
 	Edt_LogoButton1Label.EditBoxWidth = 100;
 
-	Edt_LogoButton1LinkURL = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 168, 188, 16));
+	Edt_LogoButton1LinkURL = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 208, 188, 16));
 	Edt_LogoButton1LinkURL.SetText(Text_LogoButton1LinkURL);
 	Edt_LogoButton1LinkURL.EditBoxWidth = 100;
 
-	Edt_LogoButton2Label = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 188, 188, 16));
+	Edt_LogoButton2Label = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 228, 188, 16));
 	Edt_LogoButton2Label.SetText(Text_LogoButton2Label);
 	Edt_LogoButton2Label.EditBoxWidth = 100;
 
-	Edt_LogoButton2LinkURL = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 208, 188, 16));
+	Edt_LogoButton2LinkURL = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 248, 188, 16));
 	Edt_LogoButton2LinkURL.SetText(Text_LogoButton2LinkURL);
 	Edt_LogoButton2LinkURL.EditBoxWidth = 100;
 }
@@ -162,6 +212,10 @@ function ApplyTheme() {
 	Edt_LogoRegionY.Theme = Theme;
 	Edt_LogoRegionW.Theme = Theme;
 	Edt_LogoRegionH.Theme = Theme;
+	Edt_LogoDrawRegionX.Theme = Theme;
+	Edt_LogoDrawRegionY.Theme = Theme;
+	Edt_LogoDrawRegionW.Theme = Theme;
+	Edt_LogoDrawRegionH.Theme = Theme;
 	Edt_LogoButton0Label.Theme = Theme;
 	Edt_LogoButton0LinkURL.Theme = Theme;
 	Edt_LogoButton1Label.Theme = Theme;
@@ -179,6 +233,11 @@ defaultproperties {
 	Text_LogoRegionY="Y"
 	Text_LogoRegionW="W"
 	Text_LogoRegionH="H"
+	Text_LogoDrawRegion="Logo Draw Region"
+	Text_LogoDrawRegionX="X"
+	Text_LogoDrawRegionY="Y"
+	Text_LogoDrawRegionW="W"
+	Text_LogoDrawRegionH="H"
 	Text_LogoButton0Label="Button 1 Label"
 	Text_LogoButton0LinkURL="Button 1 URL"
 	Text_LogoButton1Label="Button 2 Label"

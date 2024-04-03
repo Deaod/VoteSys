@@ -315,11 +315,11 @@ simulated function FocusPreset(string Ref) {
 		VoteMenuDialog.FocusPreset(P);
 }
 
-simulated function ConfigureLogo(string Tex, int X, int Y, int W, int H) {
+simulated function ConfigureLogo(string Tex, int TexX, int TexY, int TexW, int TexH, int DrawX, int DrawY, int DrawW, int DrawH) {
 	if (VoteMenuDialog == none)
 		CreateVoteMenuDialog();
 
-	VoteMenuDialog.ConfigureLogo(Tex, X, Y, W, H);
+	VoteMenuDialog.ConfigureLogo(Tex, TexX, TexY, TexW, TexH, DrawX, DrawY, DrawW, DrawH);
 }
 
 simulated function ConfigureLogoButton(int Index, string Label, string LinkURL) {

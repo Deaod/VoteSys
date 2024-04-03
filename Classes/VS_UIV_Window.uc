@@ -61,8 +61,8 @@ function FocusPreset(VS_Preset P) {
 	VS_UIV_ClientWindow(ClientArea).FocusPreset(P);
 }
 
-function ConfigureLogo(string Tex, int X, int Y, int W, int H) {
-	VS_UIV_ClientWindow(ClientArea).ConfigureLogo(Tex, X, Y, W, H);
+function ConfigureLogo(string Tex, int TexX, int TexY, int TexW, int TexH, int DrawX, int DrawY, int DrawW, int DrawH) {
+	VS_UIV_ClientWindow(ClientArea).ConfigureLogo(Tex, TexX, TexY, TexW, TexH, DrawX, DrawY, DrawW, DrawH);
 }
 
 function ConfigureLogoButton(int Index, string Label, string LinkURL) {

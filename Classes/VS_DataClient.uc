@@ -116,16 +116,21 @@ function ParseServerSetting(string Line) {
 
 function ParseLogo(string Line) {
 	local string Tex;
-	local int X, Y, W, H;
+	local int TexX, TexY, TexW, TexH;
+	local int DrawX, DrawY, DrawW, DrawH;
 	Line = Mid(Line, 6);
 
-	Tex = S11N.DecodeString(Line); S11N.NextVariable(Line);
-	X   = int(Line);               S11N.NextVariable(Line);
-	Y   = int(Line);               S11N.NextVariable(Line);
-	W   = int(Line);               S11N.NextVariable(Line);
-	H   = int(Line);
+	Tex   = S11N.DecodeString(Line); S11N.NextVariable(Line);
+	TexX  = int(Line);               S11N.NextVariable(Line);
+	TexY  = int(Line);               S11N.NextVariable(Line);
+	TexW  = int(Line);               S11N.NextVariable(Line);
+	TexH  = int(Line);               S11N.NextVariable(Line);
+	DrawX = int(Line);               S11N.NextVariable(Line);
+	DrawY = int(Line);               S11N.NextVariable(Line);
+	DrawW = int(Line);               S11N.NextVariable(Line);
+	DrawH = int(Line);
 
-	Channel.ConfigureLogo(Tex, X, Y, W, H);
+	Channel.ConfigureLogo(Tex, TexX, TexY, TexW, TexH, DrawX, DrawY, DrawW, DrawH);
 }
 
 function ParseLogoButton(string Line) {

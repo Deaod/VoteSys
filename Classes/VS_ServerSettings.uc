@@ -53,6 +53,7 @@ var config bool bAlwaysUseDefaultMap;
 
 var config string LogoTexture;
 var config Region LogoRegion;
+var config Region LogoDrawRegion;
 
 struct LogoButton {
 	var() string Label;
