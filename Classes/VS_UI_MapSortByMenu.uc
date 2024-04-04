@@ -21,6 +21,13 @@ function ShowWindow() {
 	UpdateCheckmark();
 }
 
+function SetSelected(float X, float Y) {
+	if (Y >= VBorder)
+		super.SetSelected(X, Y);
+	else
+		PerformSelect(none);
+}
+
 function ExecuteItem(UWindowPullDownMenuItem I) {
 	switch(I) {
 		case ItemName:

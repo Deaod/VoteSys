@@ -12,6 +12,13 @@ function Created() {
 	SortByMenu = SortBy.CreateSubMenu(class'VS_UI_MapSortByMenu', OwnerWindow);
 }
 
+function SetSelected(float X, float Y) {
+	if (Y >= VBorder)
+		super.SetSelected(X, Y);
+	else
+		PerformSelect(none);
+}
+
 function BeforeExecuteItem(UWindowPulldownMenuItem I) {
 	if (I != SortBy)
 		super.BeforeExecuteItem(I);
