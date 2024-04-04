@@ -34,6 +34,7 @@ function ExecuteItem(UWindowPullDownMenuItem I) {
 			break;
 	}
 
+	VS_UIV_ClientWindow(OwnerWindow.OwnerWindow).Settings.SaveConfig();
 	UpdateCheckmark();
 
 	super.ExecuteItem(I);
