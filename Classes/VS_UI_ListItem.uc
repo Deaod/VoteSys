@@ -8,12 +8,16 @@ function UWindowList FindEnabledEntry(int Index) {
 	local UWindowList L;
 
 	for(L = Next; L != none; L = L.Next) {
-		if (VS_UI_ListItem(L).bEnabled)
+		if (VS_UI_ListItem(L).bEnabled) {
+			if (Index == 0)
+				break;
 			Index -= 1;
-		if (Index == 0)
-			break;
+		}
 	}
-	return L;
+	if (L != none && VS_UI_ListItem(L).bEnabled)
+		return L;
+	else
+		return none;
 }
 
 function int CountEnabled() {
