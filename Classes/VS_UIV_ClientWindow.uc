@@ -75,7 +75,6 @@ function Created() {
 	PlayerListBox = VS_UI_PlayerListBox(CreateControl(class'VS_UI_PlayerListBox', 480, TabsHeight + 120, 120, 214));
 
 	Logo = VS_UI_Logo(CreateControl(class'VS_UI_Logo', 200, TabsHeight + 120, 270, 234));
-	Logo.HideWindow();
 
 	LogoButtons[0] = VS_UI_LinkButton(CreateControl(class'VS_UI_LinkButton', 200, TabsHeight + 338, 86, 16));
 	LogoButtons[0].HideWindow();
@@ -97,6 +96,9 @@ function Created() {
 
 	MapScreenshotWindow = VS_UI_ScreenshotWindow(Root.CreateWindow(class'VS_UI_ScreenshotWindow', 0,0,130,130, self));
 	MapScreenshotWindow.HideWindow();
+
+	Logo.SendToBack();
+	Logo.HideWindow();
 }
 
 function LoadSettings(VS_ClientSettings CS) {
@@ -108,9 +110,6 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	local LevelInfo L;
 	local string Filter;
 	local VS_UI_MapListItem M;
-
-	if (Logo.WindowIsVisible())
-		Logo.SendToBack();
 
 	super.BeforePaint(C, MouseX, MouseY);
 
