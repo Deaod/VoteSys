@@ -351,12 +351,13 @@ function ServerVote(string FullPresetName, string MapName) {
 	local VS_Info I;
 	local int NumPlayers;
 
-	if (PlayerOwner == none || PlayerInfo().bCanVote == false) {
+	I = VoteInfo();
+
+	if (I.VoteSys.CanVote(PlayerOwner) == false) {
 		LocalizeMessage(class'VS_Msg_LocalMessage', -7);
 		return;
 	}
 
-	I = VoteInfo();
 	P = I.ResolvePreset(FullPresetName);
 	M = I.ResolveMapOfPreset(P, MapName);
 
@@ -387,12 +388,12 @@ simulated function VoteExisting(VS_Candidate Candidate) {
 function ServerVoteExisting(VS_Candidate Candidate) {
 	local VS_Info I;
 
-	if (PlayerOwner == none || PlayerInfo().bCanVote == false) {
+	I = VoteInfo();
+
+	if (I.VoteSys.CanVote(PlayerOwner) == false) {
 		LocalizeMessage(class'VS_Msg_LocalMessage', -7);
 		return;
 	}
-
-	I = VoteInfo();
 
 	if (Candidate == none)
 		return;
@@ -413,12 +414,13 @@ function ServerVoteRandom(string FullPresetName) {
 	local VS_Info I;
 	local VS_Preset P;
 
-	if (PlayerOwner == none || PlayerInfo().bCanVote == false) {
+	I = VoteInfo();
+
+	if (PlayerOwner == none || I.VoteSys.CanVote(PlayerOwner) == false) {
 		LocalizeMessage(class'VS_Msg_LocalMessage', -7);
 		return;
 	}
 
-	I = VoteInfo();
 	P = I.ResolvePreset(FullPresetName);
 
 	if (P == none)
