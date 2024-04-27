@@ -221,7 +221,7 @@ function KickBanPlayer(PlayerPawn Admin, PlayerPawn P, string Reason) {
 		if (Level.Game.CheckIPPolicy(IP)) {
 			IP = StripPort(IP);
 			Log(P.PlayerReplicationInfo.PlayerName@"("$IP$") was banned from the server:"@Reason,'AdminAction');
-			Log("Adding IP Ban for: "$IP);
+			Log("Adding IP Ban for: "$IP, 'AdminAction');
 			for (j = 0; j<ArrayCount(Level.Game.IPPolicies); j++)
 				if (Level.Game.IPPolicies[j] == "")
 					break;
@@ -242,6 +242,7 @@ function bool IsPlayerBanned(PlayerPawn P, Actor AceCheck) {
 		return true;
 
 	Address = P.GetPlayerNetworkAddress();
+	Log("Checking if"@Address@"is banned", 'VoteSys');
 	for (i = 0; i < BannedAddresses.Length; i++)
 		if (Address == BannedAddresses[i])
 			return true;
