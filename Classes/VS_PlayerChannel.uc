@@ -490,9 +490,6 @@ simulated function BanPlayer(PlayerReplicationInfo PRI) {
 }
 
 function ServerBanPlayer(PlayerReplicationInfo PRI) {
-	if (PlayerOwner == none)
-		return;
-
 	VoteInfo().BanPlayer(self, PRI);
 }
 
