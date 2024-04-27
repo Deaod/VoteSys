@@ -364,7 +364,7 @@ function ServerVote(string FullPresetName, string MapName) {
 	if (P == none || M == none)
 		return;
 
-	if (PlayerOwner.PlayerReplicationInfo.bAdmin == false) {
+	if (PlayerOwner.bAdmin == false) {
 		NumPlayers = Level.Game.NumPlayers;
 		if (VotedFor.PresetRef == P && VotedFor.MapRef == M)
 			return;
@@ -398,7 +398,7 @@ function ServerVoteExisting(VS_Candidate Candidate) {
 	if (Candidate == none)
 		return;
 
-	if (VotedFor == Candidate && PlayerOwner.PlayerReplicationInfo.bAdmin == false)
+	if (VotedFor == Candidate && PlayerOwner.bAdmin == false)
 		return;
 
 	if (VotedFor != none)

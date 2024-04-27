@@ -171,8 +171,7 @@ state SendServerSettings {
 Begin:
 	if (Channel == none ||
 		Channel.PlayerOwner == none ||
-		Channel.PlayerOwner.PlayerReplicationInfo == none ||
-		Channel.PlayerOwner.PlayerReplicationInfo.bAdmin == false
+		Channel.PlayerOwner.bAdmin == false
 	) {
 		SendLine("/NOTADMIN/");
 		GoToState('Idle');
@@ -221,8 +220,7 @@ function SaveServerSetting(string Line) {
 
 	if (Channel == none ||
 		Channel.PlayerOwner == none ||
-		Channel.PlayerOwner.PlayerReplicationInfo == none ||
-		Channel.PlayerOwner.PlayerReplicationInfo.bAdmin == false
+		Channel.PlayerOwner.bAdmin == false
 	) {
 		return;
 	}

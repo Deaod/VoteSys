@@ -48,7 +48,7 @@ simulated function VS_PlayerInfo GetPlayerInfoForPRI(PlayerReplicationInfo PRI) 
 
 function VS_Candidate AddMapVote(VS_PlayerChannel Origin, VS_Preset P, VS_Map M) {
 	if (VoteSys.CanVote(Origin.PlayerOwner)) {
-		if (Origin.PlayerOwner.PlayerReplicationInfo.bAdmin) {
+		if (Origin.PlayerOwner.bAdmin) {
 			VoteSys.BroadcastLocalizedMessage2(
 				class'VS_Msg_LocalMessage', 7,
 				Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
@@ -94,7 +94,7 @@ function VS_Candidate AddCandidateVote(VS_PlayerChannel Origin, VS_Candidate Can
 	local VS_Preset P;
 	local VS_Map M;
 	if (VoteSys.CanVote(Origin.PlayerOwner)) {
-		if (Origin.PlayerOwner.PlayerReplicationInfo.bAdmin) {
+		if (Origin.PlayerOwner.bAdmin) {
 			P = Candidate.PresetRef;
 			M = Candidate.MapRef;
 			if (M == none)
@@ -133,7 +133,7 @@ function VS_Candidate AddRandomVote(VS_PlayerChannel Origin, VS_Preset P) {
 	local VS_Map M;
 
 	if (VoteSys.CanVote(Origin.PlayerOwner)) {
-		if (Origin.PlayerOwner.PlayerReplicationInfo.bAdmin) {
+		if (Origin.PlayerOwner.bAdmin) {
 			M = P.SelectRandomMapFromList();
 			VoteSys.BroadcastLocalizedMessage2(
 				class'VS_Msg_LocalMessage', 7,
@@ -200,7 +200,7 @@ function KickPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target) {
 	if (VoteSys.CanVote(Origin.PlayerOwner) == false)
 		return;
 
-	if (Origin.PlayerOwner.PlayerReplicationInfo.bAdmin) {
+	if (Origin.PlayerOwner.bAdmin) {
 		P = PlayerPawn(Target.Owner);
 		if (P != none) {
 			VoteSys.BroadcastLocalizedMessage2(
@@ -237,10 +237,7 @@ function BanPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target) {
 	if (Origin == none || Target == none)
 		return;
 
-	if (Origin.PlayerOwner != none &&
-		Origin.PlayerOwner.PlayerReplicationInfo != none &&
-		Origin.PlayerOwner.PlayerReplicationInfo.bAdmin
-	) {
+	if (Origin.PlayerOwner != none && Origin.PlayerOwner.bAdmin) {
 		P = PlayerPawn(Target.Owner);
 		if (P != none) {
 			VoteSys.BroadcastLocalizedMessage2(
