@@ -2,6 +2,7 @@ class VS_Preset extends Object;
 
 var VS_Preset       Next;
 var VS_PresetConfig Storage;
+var int             StorageIndex;
 var string          PresetName;
 var string          Abbreviation;
 var string          Category;
