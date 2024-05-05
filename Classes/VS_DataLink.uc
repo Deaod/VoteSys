@@ -81,6 +81,8 @@ function ParseLine(string Line) {
 		SaveServerSetting(Line);
 	} else if (Line == "/SAVESERVERSETTINGSFILE/") {
 		VoteSys.Settings.SaveConfig();
+	} else if (Line == "/SENDSERVERPRESETCONFIG/") {
+		QueueCommand('SendServerPresets');
 	}
 }
 
@@ -229,6 +231,53 @@ function SaveServerSetting(string Line) {
 
 	if (VoteSys.Settings.SetPropertyText(PropertyName, PropertyValue))
 		Log("Successfully set property"@PropertyName@"to"@PropertyValue, 'VoteSys');
+}
+
+state SendServerPresets {
+	function SendServerPreset(VS_PresetConfig PC, int Index) {
+		local string Prefix;
+		Prefix = "/SERVERPRESETPROPERTY/" $ Index $ "/";
+
+		SendServerPresetProperty(Prefix, PC, "PresetName");
+		SendServerPresetProperty(Prefix, PC, "Abbreviation");
+		SendServerPresetProperty(Prefix, PC, "Category");
+		SendServerPresetProperty(Prefix, PC, "SortPriority");
+		SendServerPresetProperty(Prefix, PC, "InheritFrom");
+		SendServerPresetProperty(Prefix, PC, "Game");
+		SendServerPresetProperty(Prefix, PC, "MapListName");
+		SendServerPresetProperty(Prefix, PC, "Mutators");
+		SendServerPresetProperty(Prefix, PC, "Parameters");
+		SendServerPresetProperty(Prefix, PC, "GameSettings");
+		SendServerPresetProperty(Prefix, PC, "Packages");
+		SendServerPresetProperty(Prefix, PC, "bDisabled");
+		SendServerPresetProperty(Prefix, PC, "MinimumMapRepeatDistance");
+		SendServerPresetProperty(Prefix, PC, "MinPlayers");
+		SendServerPresetProperty(Prefix, PC, "MaxPlayers");
+	}
+
+	function SendServerPresetProperty(string Prefix, VS_PresetConfig PC, string PropName) {
+		SendLine(Prefix $ S11N.SerializeProperty(PropName, PC.GetPropertyText(PropName)));
+	}
+
+Begin:
+	if (Channel == none ||
+		Channel.PlayerOwner == none ||
+		Channel.PlayerOwner.bAdmin == false
+	) {
+		SendLine("/NOTADMIN/");
+		GoToState('Idle');
+	}
+
+	Log("VS_DataLink SendServerPresets"@IpAddrToString(RemoteAddr), 'VoteSys');
+	SendLine("/BEGINSERVERPRESETCONFIG/"$VoteSys.PresetMaxIndex);
+
+	for (TempPreset = VoteSys.PresetList; TempPreset != none; TempPreset = TempPreset.Next) {
+		SendServerPreset(TempPreset.Storage, TempPreset.StorageIndex);
+	}
+
+	SendLine("/ENDSERVERPRESETCONFIG/");
+
+	GoToState('Idle');
 }
 
 function HandleError() {

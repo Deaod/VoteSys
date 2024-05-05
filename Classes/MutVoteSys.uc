@@ -13,6 +13,7 @@ var Object PresetConfigDummy;
 var Object PresetListDummy;
 var VS_Preset PresetList;
 var name PresetNameDummy;
+var int PresetMaxIndex;
 
 var Object MapConfigDummy;
 var Object MapListDummy;
@@ -1154,22 +1155,26 @@ function LoadConfig() {
 		ProbeDepth = 0;
 
 		if (PresetList == none) {
-			P = LoadPresetPassOne(PC);
+			P = LoadPresetPassOne(PC, i);
 			PresetList = P;
 		} else {
-			P.Next = LoadPresetPassOne(PC);
+			P.Next = LoadPresetPassOne(PC, i);
 			if (P.Next != none)
 				P = P.Next;
 		}
 	};
+
+	PresetMaxIndex = i - ProbeDepth;
 
 	for (P = PresetList; P != none; P = P.Next) {
 		LoadPresetPassTwo(P);
 
 		if ((DefaultPresetRef == none && P.bDisabled == false) ||
 			(P != none && Settings.DefaultPreset != "" && P.GetFullName() == Settings.DefaultPreset) ||
-			(P != none && Settings.DefaultPreset == "" && CurrentPreset != "" && P.GetFullName() == CurrentPreset))
+			(P != none && Settings.DefaultPreset == "" && CurrentPreset != "" && P.GetFullName() == CurrentPreset)
+		) {
 			DefaultPresetRef = P;
+		}
 	}
 
 	if (DefaultPresetRef == none) {
@@ -1178,7 +1183,7 @@ function LoadConfig() {
 	}
 }
 
-function VS_Preset LoadPresetPassOne(VS_PresetConfig PC) {
+function VS_Preset LoadPresetPassOne(VS_PresetConfig PC, int Index) {
 	local VS_Preset P;
 
 	Log("Adding Preset '"$PC.Category$"/"$PC.PresetName$"' ("$PC.Abbreviation$")", 'VoteSys');
@@ -1189,6 +1194,7 @@ function VS_Preset LoadPresetPassOne(VS_PresetConfig PC) {
 	P.Category     = PC.Category;
 	P.SortPriority = PC.SortPriority;
 	P.Storage      = PC;
+	P.StorageIndex = Index;
 
 	return P;
 }

@@ -12,6 +12,7 @@ var VS_PlayerChannel Channel;
 var VS_Preset Preset;
 var VS_Map LastMap;
 var VS_ServerSettings ServerSettings;
+var VS_PresetConfigList ServerPresets;
 
 var float ResolveDelay;
 
@@ -282,6 +283,21 @@ function SaveServerSettings(VS_ServerSettings S) {
 	SendLine("/SAVESERVERSETTINGSFILE/");
 
 	Log("VS_DataClient SaveServerSettings Done", 'VoteSys');
+}
+
+function VS_PresetConfigList GetServerPresetConfig() {
+	Log("DataClient GetServerSettings", 'VoteSys');
+	if (int(Level.EngineVersion) < 469)
+		return none; // not supported without 469
+
+	Log("VS_DataClient GetServerPresetConfig Version OK", 'VoteSys');
+
+	if (ServerPresets == none) {
+		ServerPresets = new(none) class'VS_PresetConfigList';
+		SendLine("/SENDSERVERPRESETCONFIG/");
+		Log("VS_DataClient GetServerPresetConfig Presets Requested", 'VoteSys');
+	}
+	return ServerPresets;
 }
 
 defaultproperties {
