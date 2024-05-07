@@ -1,5 +1,8 @@
 class VS_UIS_PageAdminSetup extends VS_UIS_PageAdmin;
 
+var UWindowCheckbox Chk_EnableACEIntegration;
+var localized string Text_EnableACEIntegration;
+
 var VS_UI_EditControl Edt_PresetProbeDepth;
 var localized string Text_PresetProbeDepth;
 
@@ -49,6 +52,7 @@ var VS_UI_EditControl Edt_IdleTimeout;
 var localized string Text_IdleTimeout;
 
 function EnableInteraction(bool bEnable) {
+	Chk_EnableACEIntegration.bDisabled = !bEnable;
 	Edt_DefaultPreset.EditBox.SetEditable(bEnable);
 	Chk_AlwaysUseDefaultPreset.bDisabled = !bEnable;
 	Edt_DefaultMap.EditBox.SetEditable(bEnable);
@@ -67,6 +71,7 @@ function EnableInteraction(bool bEnable) {
 }
 
 function LoadServerSettings() {
+	Chk_EnableACEIntegration.bChecked = Settings.bEnableACEIntegration;
 	Edt_DefaultPreset.SetValue(Settings.DefaultPreset);
 	Chk_AlwaysUseDefaultPreset.bChecked = Settings.bAlwaysUseDefaultPreset;
 	Edt_DefaultMap.SetValue(Settings.DefaultMap);
@@ -85,6 +90,7 @@ function LoadServerSettings() {
 }
 
 function SaveSettings() {
+	Settings.bEnableACEIntegration = Chk_EnableACEIntegration.bChecked;
 	Settings.DefaultPreset = Edt_DefaultPreset.GetValue();
 	Settings.bAlwaysUseDefaultPreset = Chk_AlwaysUseDefaultPreset.bChecked;
 	Settings.DefaultMap = Edt_DefaultMap.GetValue();
@@ -107,26 +113,29 @@ function SaveSettings() {
 function Created() {
 	super.Created();
 
-	Edt_DefaultPreset = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 8, 188, 16));
+	Chk_EnableACEIntegration = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 4, 8, 188, 16));
+	Chk_EnableACEIntegration.SetText(Text_EnableACEIntegration);
+
+	Edt_DefaultPreset = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 28, 188, 16));
 	Edt_DefaultPreset.SetText(Text_DefaultPreset);
 	Edt_DefaultPreset.EditBoxWidth = 100;
 
-	Chk_AlwaysUseDefaultPreset = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 4, 28, 188, 16));
+	Chk_AlwaysUseDefaultPreset = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 4, 48, 188, 16));
 	Chk_AlwaysUseDefaultPreset.SetText(Text_AlwaysUseDefaultPreset);
 
-	Edt_DefaultMap = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 48, 188, 16));
+	Edt_DefaultMap = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 68, 188, 16));
 	Edt_DefaultMap.SetText(Text_DefaultMap);
 	Edt_DefaultMap.EditBoxWidth = 100;
 
-	Chk_AlwaysUseDefaultMap = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 4, 68, 188, 16));
+	Chk_AlwaysUseDefaultMap = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 4, 88, 188, 16));
 	Chk_AlwaysUseDefaultMap.SetText(Text_AlwaysUseDefaultMap);
 
-	Edt_IdleTimeout = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 88, 188, 16));
+	Edt_IdleTimeout = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 108, 188, 16));
 	Edt_IdleTimeout.SetText(Text_IdleTimeout);
 	Edt_IdleTimeout.EditBoxWidth = 60;
 	Edt_IdleTimeout.SetNumericOnly(true);
 
-	Edt_PresetProbeDepth = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 108, 188, 16));
+	Edt_PresetProbeDepth = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 128, 188, 16));
 	Edt_PresetProbeDepth.SetText(Text_PresetProbeDepth);
 	Edt_PresetProbeDepth.EditBoxWidth = 60;
 	Edt_PresetProbeDepth.SetNumericOnly(true);
@@ -176,6 +185,7 @@ function Created() {
 }
 
 function ApplyTheme() {
+	//Chk_EnableACEIntegration // not themed
 	Edt_DefaultPreset.Theme = Theme;
 	//Chk_AlwaysUseDefaultPreset // not themed
 	Edt_DefaultMap.Theme = Theme;
@@ -194,6 +204,7 @@ function ApplyTheme() {
 }
 
 defaultproperties {
+	Text_EnableACEIntegration="Enable ACE Integration"
 	Text_DefaultPreset="Default Preset"
 	Text_AlwaysUseDefaultPreset="Always Use Default Preset"
 	Text_DefaultMap="Default Map"

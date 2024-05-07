@@ -251,6 +251,7 @@ function SaveServerSettings(VS_ServerSettings S) {
 
 	Log("VS_DataClient SaveServerSettings", 'VoteSys');
 
+	SendServerSetting(S, "bEnableACEIntegration");
 	SendServerSetting(S, "MidGameVoteThreshold");
 	SendServerSetting(S, "MidGameVoteTimeLimit");
 	SendServerSetting(S, "GameEndedVoteDelay");

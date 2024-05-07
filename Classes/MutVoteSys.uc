@@ -127,28 +127,9 @@ function VS_ChannelContainer FindChannelForPRI(PlayerReplicationInfo PRI) {
 
 function CreateChannel(PlayerPawn P) {
 	local VS_ChannelContainer C;
-	local Actor Ace;
-	local Actor AceCheck;
-
-	Ace = AceHandler.GetACE();
-	if (Ace != none && P.IsA('Spectator') == false) {
-		foreach AllActors(class'Actor', AceCheck)
-			if (AceCheck.IsA('IACECheck') && AceHandler.GetAceCheckHWHash(AceCheck) != "" && P.PlayerReplicationInfo.PlayerId == AceHandler.GetAceCheckPlayerId(AceCheck))
-				break;
-
-		if (AceCheck == none || AceHandler.GetAceCheckHWHash(AceCheck) == "") {
-			Log("No ACECheck object found for player"@P.PlayerReplicationInfo.PlayerId, 'VoteSys');
-			return; // retry later
-		}
-	}
-
-	if (P != none && IsPlayerBanned(P, AceCheck)) {
-		KickPlayer(P, "Temp Banned (VoteSys)");
-		return;
-	}
 
 	C = Spawn(class'VS_ChannelContainer');
-	C.Initialize(P, AceCheck);
+	C.Initialize(P);
 	C.Channel.Cookie = CreateCookie();
 	C.Next = ChannelList;
 	ChannelList = C;
@@ -206,7 +187,8 @@ function KickBanPlayer(PlayerPawn Admin, PlayerPawn P, string Reason) {
 
 	C = FindChannel(P);
 	if (C != none) {
-		Chk = C.AceCheck;
+		if (Settings.bEnableACEIntegration)
+			Chk = C.AceCheck;
 	} else if (AceHandler.GetACE() != none) {
 		Admin.ClientMessage("Banning"@P.PlayerReplicationInfo.PlayerName@"failed, please try again in a few seconds");
 		return;
@@ -435,6 +417,9 @@ function HandleKickVoting() {
 	local VS_ChannelContainer Other;
 	local int VotingPlayers;
 	local int i;
+	local Actor Ace;
+	local Actor AceCheck;
+	local Actor Chk;
 
 	for (C = ChannelList; C != none; C = C.Next) {
 		if (CanVote(C.PlayerOwner)) {
@@ -449,9 +434,15 @@ function HandleKickVoting() {
 		}
 	}
 
+	if (Settings.bEnableACEIntegration) {
+		Ace = AceHandler.GetACE();
+	}
+
 	for (C = ChannelList; C != none; C = C.Next) {
-		if (C.Channel == none)
+		if (C.Channel == none || C.PlayerOwner == none)
 			continue;
+
+		// Handle new kicks
 		if (C.Channel.KickVotesAgainstMe > Settings.KickVoteThreshold * VotingPlayers) {
 			BroadcastLocalizedMessage2(
 				class'VS_Msg_LocalMessage', 11,
@@ -460,6 +451,33 @@ function HandleKickVoting() {
 
 			TempBanPlayer(C.PlayerOwner);
 			KickPlayer(C.PlayerOwner, "Kick Vote Successful (VoteSys)");
+		}
+
+		if (C.KickCheckDelaySeconds <= 0)
+			continue;
+
+		C.KickCheckDelaySeconds -= 1;
+
+		if (C.KickCheckDelaySeconds > 0)
+			continue;
+
+		if (Ace != none) {
+			AceCheck = none;
+			foreach AllActors(class'Actor', Chk) {
+				if (Chk.IsA('IACECheck') &&
+					AceHandler.GetAceCheckHWHash(Chk) != "" &&
+					C.PlayerOwner.PlayerReplicationInfo.PlayerId == AceHandler.GetAceCheckPlayerId(Chk)
+				) {
+					AceCheck = Chk;
+					break;
+				}
+			}
+			C.AceCheck = AceCheck;
+		}
+
+		// Enforce older kicks
+		if (C.PlayerOwner != none && IsPlayerBanned(C.PlayerOwner, C.AceCheck)) {
+			KickPlayer(C.PlayerOwner, "Temp Banned (VoteSys)");
 		}
 	}
 }

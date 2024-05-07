@@ -55,6 +55,7 @@ its full preset name is `"My Category/Custom Preset Name"`.
 ### VoteSys.ini
 ```ini
 [ServerSettings]
+bEnableACEIntegration=False
 GameEndedVoteDelay=5
 VoteTimeLimit=30
 MidGameVoteThreshold=0.5
@@ -98,6 +99,7 @@ DefaultActors=IpServer.UdpServerUplink MasterServerAddress=unreal.epicgames.com 
 
 ```
 
+1. [bEnableACEIntegration](#benableaceintegration)
 1. [GameEndedVoteDelay](#gameendedvotedelay)
 1. [VoteTimeLimit](#votetimelimit)
 1. [MidGameVoteThreshold](#midgamevotethreshold)
@@ -128,6 +130,12 @@ DefaultActors=IpServer.UdpServerUplink MasterServerAddress=unreal.epicgames.com 
 1. [LogoButton0](#logobuttons)
 1. [LogoButton1](#logobuttons)
 1. [LogoButton2](#logobuttons)
+
+#### bEnableACEIntegration
+
+If enabled, VoteSys will use ACE to enforce kicks and bans. ACE does not grab the necessary information for players that arent using the Windows client, so if enabled these players will not be able to use VoteSys.
+
+Defaults to False.
 
 #### GameEndedVoteDelay
 

@@ -71,6 +71,7 @@ Text_LogoButton2Label="Button 3 Label"
 Text_LogoButton2LinkURL="Button 3 URL"
 
 [VS_UIS_PageAdminSetup]
+Text_EnableACEIntegration="Enable ACE Integration"
 Text_PresetProbeDepth="Preset Probe Depth"
 Text_ManageServerPackages="Manage Server Packages"
 Text_UseServerPackagesCompatibilityMode="Use Server Package Compat. Mode"

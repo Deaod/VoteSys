@@ -181,6 +181,7 @@ Begin:
 
 	Log("VS_DataLink SendServerSettings"@IpAddrToString(RemoteAddr), 'VoteSys');
 
+	SendServerSetting("bEnableACEIntegration");
 	SendServerSetting("MidGameVoteThreshold");
 	SendServerSetting("MidGameVoteTimeLimit");
 	SendServerSetting("GameEndedVoteDelay");

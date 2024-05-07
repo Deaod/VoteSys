@@ -21,6 +21,8 @@ struct Region {
 	var() int H;
 };
 
+var config bool bEnableACEIntegration;
+
 var config float MidGameVoteThreshold;
 var config int MidGameVoteTimeLimit;
 var config int GameEndedVoteDelay;
@@ -93,6 +95,8 @@ function EGameNameMode IntToGameNameMode(int v) {
 }
 
 defaultproperties {
+	bEnableACEIntegration=False
+
 	MidGameVoteThreshold=0.5
 	MidGameVoteTimeLimit=0
 	GameEndedVoteDelay=5
