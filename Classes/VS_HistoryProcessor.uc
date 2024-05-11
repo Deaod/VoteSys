@@ -3,6 +3,8 @@ class VS_HistoryProcessor extends Actor;
 var MutVoteSys VoteSys;
 var VS_HistoryConfig History;
 var VS_Preset PresetList;
+var int ProcessingTicks;
+var float ProcessingTime;
 var int ProcessedEntry;
 const EntriesPerTick = 200;
 
@@ -40,8 +42,12 @@ event Tick(float Delta) {
 		ProcessedEntry++;
 	}
 
+	ProcessingTicks += 1;
+	ProcessingTime += Delta;
+
 	if (ProcessedEntry == History.Entry.Length) {
 		VoteSys.HistoryProcessor = none;
+		Log("Processed history in"@ProcessingTime@"seconds ("$ProcessingTicks$" ticks)", 'VoteSys');
 		Destroy();
 	}
 }
