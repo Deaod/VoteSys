@@ -8,13 +8,13 @@ var config string Abbreviation;
 /** Which Category to add this Preset to */
 var config string Category;
 /** Used to determine the order in which presets of a category are sorted */
-var config int    SortPriority;
+var config int SortPriority;
 /** List of full preset names to inherit data from */
 var config array<string> InheritFrom;
 /** Which game type to use */
 var config string Game;
 /** Which MapList to use for this preset, empty uses all map for specified game type */
-var config name   MapListName;
+var config name MapListName;
 /** Comma-separated list of Mutators */
 var config array<string> Mutators;
 /** Comma-separated list of URL parameters to pass when switching maps */
