@@ -12,6 +12,7 @@ var VS_ServerSettings Settings;
 var Object PresetConfigDummy;
 var Object PresetListDummy;
 var VS_Preset PresetList;
+var array<VS_PresetConfig> PresetArray;
 var name PresetNameDummy;
 var int PresetMaxIndex;
 
@@ -1183,8 +1184,10 @@ function LoadConfig() {
 	};
 
 	PresetMaxIndex = i - ProbeDepth;
+	PresetArray.Insert(0, PresetMaxIndex + 1);
 
 	for (P = PresetList; P != none; P = P.Next) {
+		PresetArray[P.StorageIndex] = P.Storage;
 		LoadPresetPassTwo(P);
 
 		if ((DefaultPresetRef == none && P.bDisabled == false) ||
