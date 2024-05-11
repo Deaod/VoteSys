@@ -12,7 +12,7 @@ var VS_PlayerChannel Channel;
 var VS_Preset Preset;
 var VS_Map LastMap;
 var VS_ServerSettings ServerSettings;
-var VS_PresetConfigList ServerPresets;
+var VS_ClientPresetList ServerPresets;
 
 var float ResolveDelay;
 
@@ -167,6 +167,8 @@ function ParseLine(string Line) {
 	} else if (Line == "/NOTADMIN/") {
 		ServerSettings.SState = S_NOTADMIN;
 		ServerSettings = none;
+		ServerPresets.TransmissionState = TS_NotAdmin;
+		ServerPresets = none;
 	} else if (Left(Line, 15) == "/SERVERSETTING/") {
 		Log(Line, 'VoteSys');
 		if (ServerSettings != none)
@@ -174,6 +176,13 @@ function ParseLine(string Line) {
 	} else if (Line == "/ENDSERVERSETTINGS/") {
 		Log("VS_DataClient GetServerSettings Done", 'VoteSys');
 		ServerSettings.SState = S_COMPLETE;
+	} else if (Left(Line, 25) == "/BEGINSERVERPRESETCONFIG/") {
+		ServerPresets.TransmissionState = TS_New;
+		ServerPresets.AllocatePresets(int(Mid(Line, 25)));
+	} else if (Left(Line, 22) == "/SERVERPRESETPROPERTY/") {
+		ParsePresetProperty(Line);
+	} else if (Line == "/ENDSERVERPRESETCONFIG/") {
+		ServerPresets.TransmissionState = TS_Complete;
 	} else if (Left(Line, 5) == "/PONG") {
 		// nothing to do
 	} else {
@@ -286,7 +295,7 @@ function SaveServerSettings(VS_ServerSettings S) {
 	Log("VS_DataClient SaveServerSettings Done", 'VoteSys');
 }
 
-function VS_PresetConfigList GetServerPresetConfig() {
+function VS_ClientPresetList GetServerPresetConfig() {
 	Log("DataClient GetServerSettings", 'VoteSys');
 	if (int(Level.EngineVersion) < 469)
 		return none; // not supported without 469
@@ -294,11 +303,20 @@ function VS_PresetConfigList GetServerPresetConfig() {
 	Log("VS_DataClient GetServerPresetConfig Version OK", 'VoteSys');
 
 	if (ServerPresets == none) {
-		ServerPresets = new(none) class'VS_PresetConfigList';
+		ServerPresets = new(none) class'VS_ClientPresetList';
 		SendLine("/SENDSERVERPRESETCONFIG/");
 		Log("VS_DataClient GetServerPresetConfig Presets Requested", 'VoteSys');
 	}
 	return ServerPresets;
+}
+
+function ParsePresetProperty(string Line) {
+	local int Index;
+	local string Prop, Value;
+	Line = Mid(Line, 22);
+	Index = int(Line); S11N.NextVariable(Line);
+	S11N.ParseProperty(Line, Prop, Value);
+	ServerPresets.PresetList[Index].SetPropertyText(Prop, Value);
 }
 
 defaultproperties {
