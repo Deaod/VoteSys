@@ -1354,6 +1354,7 @@ function VS_MapList LoadMapListByName(name ListName) {
 
 	ML = new(MapListDummy) class'VS_MapList';
 	ML.ListName = string(ListName);
+	ML.Storage = MC;
 
 	AddAllMapsToMapList(MC.Map, ML);
 	AddMapPrefixesToMapList(MC.IncludeMapsWithPrefix, ML);

@@ -10,9 +10,10 @@ var VS_MapList Next;
 var string Prefix;
 var string ListName;
 var array<MapInfo> Maps;
+var VS_MapListConfig Storage;
 
 // Finds either the exact index of the MapName in the Maps array or the first
-// index that returns true for (Maps[Index] > MapName)
+// index that returns true for (Maps[Index].MapName > MapName)
 function int FindIndexForMap(string MapName) {
 	local int F, C;
 	local int Index;
