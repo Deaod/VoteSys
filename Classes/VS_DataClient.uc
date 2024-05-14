@@ -179,10 +179,12 @@ function ParseLine(string Line) {
 	} else if (Left(Line, 25) == "/BEGINSERVERPRESETCONFIG/") {
 		ServerPresets.TransmissionState = TS_New;
 		ServerPresets.AllocatePresets(int(Mid(Line, 25)));
+		Log("VS_DataClient GetServerPresets Begin", 'VoteSys');
 	} else if (Left(Line, 22) == "/SERVERPRESETPROPERTY/") {
 		ParsePresetProperty(Line);
 	} else if (Line == "/ENDSERVERPRESETCONFIG/") {
 		ServerPresets.TransmissionState = TS_Complete;
+		Log("VS_DataClient GetServerPresets End", 'VoteSys');
 	} else if (Left(Line, 5) == "/PONG") {
 		// nothing to do
 	} else {
@@ -295,17 +297,21 @@ function SaveServerSettings(VS_ServerSettings S) {
 	Log("VS_DataClient SaveServerSettings Done", 'VoteSys');
 }
 
-function VS_ClientPresetList GetServerPresetConfig() {
-	Log("DataClient GetServerSettings", 'VoteSys');
+function DiscardServerPresets() {
+	ServerPresets = none;
+}
+
+function VS_ClientPresetList GetServerPresets() {
+	Log("DataClient GetServerPresets", 'VoteSys');
 	if (int(Level.EngineVersion) < 469)
 		return none; // not supported without 469
 
-	Log("VS_DataClient GetServerPresetConfig Version OK", 'VoteSys');
+	Log("VS_DataClient GetServerPresets Version OK", 'VoteSys');
 
 	if (ServerPresets == none) {
 		ServerPresets = new(none) class'VS_ClientPresetList';
 		SendLine("/SENDSERVERPRESETCONFIG/");
-		Log("VS_DataClient GetServerPresetConfig Presets Requested", 'VoteSys');
+		Log("VS_DataClient GetServerPresets Presets Requested", 'VoteSys');
 	}
 	return ServerPresets;
 }

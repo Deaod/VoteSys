@@ -7,6 +7,7 @@ var int Cookie;
 
 var VS_DataClient DataClient;
 var VS_ServerSettings ServerSettings;
+var VS_ClientPresetList ServerPresets;
 
 var VS_Preset PresetList;
 var VS_UIV_Window VoteMenuDialog;
@@ -513,6 +514,20 @@ simulated function SaveServerSettings() {
 		return;
 
 	DataClient.SaveServerSettings(ServerSettings);
+}
+
+simulated function VS_ClientPresetList ReloadServerPresets() {
+	ServerPresets = none;
+	DataClient.DiscardServerPresets();
+	return GetServerPresets();
+}
+
+simulated function VS_ClientPresetList GetServerPresets() {
+	Log("PlayerChannel GetServerPresets", 'VoteSys');
+	if (ServerPresets == none) {
+		ServerPresets = DataClient.GetServerPresets();
+	}
+	return ServerPresets;
 }
 
 simulated function LocalizeMessage(

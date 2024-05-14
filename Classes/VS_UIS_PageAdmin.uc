@@ -1,6 +1,7 @@
 class VS_UIS_PageAdmin extends VS_UIS_Page;
 
 var VS_ServerSettings Settings;
+var VS_ClientPresetList Presets;
 var bool bSettingsLoaded;
 
 var UWindowSmallButton Btn_RestartServer;
@@ -34,6 +35,7 @@ function LoadSettings(VS_PlayerChannel C) {
 	super.LoadSettings(C);
 
 	Settings = C.GetServerSettings();
+	Presets = C.GetServerPresets();
 	LoadServerSettings();
 
 	EnableInteraction(bSettingsLoaded);
@@ -58,7 +60,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 			break;
 	}
 
-	if (bSettingsLoaded == false && Settings.SState == S_COMPLETE) {
+	if (bSettingsLoaded == false && Settings.SState == S_COMPLETE && Presets.TransmissionState == TS_Complete) {
 		LoadServerSettings();
 		EnableInteraction(true);
 		bSettingsLoaded = true;
@@ -74,6 +76,7 @@ function Notify(UWindowDialogControl C, byte E) {
 		} else if (C == Btn_ReloadSettings) {
 			bSettingsLoaded = false;
 			Settings = Channel.ReloadServerSettings();
+			Presets = Channel.ReloadServerPresets();
 			EnableInteraction(false);
 		}
 	}
