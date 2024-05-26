@@ -19,12 +19,6 @@ RandomButtonText="Random"
 ChatSayText="Say"
 ChatTeamSayText="TeamSay"
 
-[VS_UI_CandidateListBox]
-PresetColumnHeader="Preset"
-MapColumnHeader="Map"
-VotesColumnHeader="Votes"
-RandomMapDisplayName="<Random>"
-
 [VS_UIS_PageAdminPresets]
 Text_PresetName="Preset Name"
 Text_Category="Category"
@@ -34,6 +28,13 @@ Text_InheritFrom="Inherit From"
 Text_Game="Game"
 Text_MapListName="Map List Name"
 Text_Mutators="Mutators"
+Text_Parameters="Parameters"
+
+[VS_UI_CandidateListBox]
+PresetColumnHeader="Preset"
+MapColumnHeader="Map"
+VotesColumnHeader="Votes"
+RandomMapDisplayName="<Random>"
 
 [VS_Msg_LocalMessage]
 MsgNobodyVoted="Nobody voted, randomly selecting {1}"
@@ -126,6 +127,9 @@ Text_MinimumMapRepeatDistance="Map Repeat Distance"
 [VS_UIS_Window]
 WindowTitle="VoteSys Settings"
 
+[VS_UI_MapMenu]
+SortByText="Sort By"
+
 [VS_UIS_PageClient]
 ThemeText="Theme"
 ThemeBright="Bright"
@@ -135,9 +139,6 @@ MapListSortText="Sort Map List By"
 MapListSortName="Name"
 MapListSortRecency="Recency"
 MapListSortPlayCount="Play Count"
-
-[VS_UI_MapMenu]
-SortByText="Sort By"
 
 [VS_UI_MapSortByMenu]
 ItemNameText="Name"
