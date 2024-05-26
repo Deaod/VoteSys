@@ -35,6 +35,9 @@ var localized string Text_Parameters;
 var VS_UI_ArrayEditControl Adt_GameSettings;
 var localized string Text_GameSettings;
 
+var VS_UI_ArrayEditControl Adt_Packages;
+var localized string Text_Packages;
+
 function Created() {
 	super.Created();
 
@@ -90,6 +93,10 @@ function Created() {
 	Adt_GameSettings = VS_UI_ArrayEditControl(CreateControl(class'VS_UI_ArrayEditControl', 200, 188, 188, 16));
 	Adt_GameSettings.SetText(Text_GameSettings);
 	Adt_GameSettings.EditBoxWidth = 100;
+
+	Adt_Packages = VS_UI_ArrayEditControl(CreateControl(class'VS_UI_ArrayEditControl', 200, 208, 188, 16));
+	Adt_Packages.SetText(Text_Packages);
+	Adt_Packages.EditBoxWidth = 100;
 }
 
 function ApplyTheme() {
@@ -106,6 +113,7 @@ function ApplyTheme() {
 	Adt_Mutators.Theme = Theme;
 	Adt_Parameters.Theme = Theme;
 	Adt_GameSettings.Theme = Theme;
+	Adt_Packages.Theme = Theme;
 }
 
 function EnableInteraction(bool bEnable) {
@@ -121,6 +129,7 @@ function EnableInteraction(bool bEnable) {
 	Adt_Mutators.EditBox.SetEditable(false);
 	Adt_Parameters.EditBox.SetEditable(false);
 	Adt_GameSettings.EditBox.SetEditable(false);
+	Adt_Packages.EditBox.SetEditable(false);
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
@@ -138,6 +147,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 			SelectedPreset.Preset.SetPropertyText("Mutators", Adt_Mutators.GetValue());
 			SelectedPreset.Preset.SetPropertyText("Parameters", Adt_Parameters.GetValue());
 			SelectedPreset.Preset.SetPropertyText("GameSettings", Adt_GameSettings.GetValue());
+			SelectedPreset.Preset.SetPropertyText("Packages", Adt_Packages.GetValue());
 		}
 
 		SelectedPreset = VS_UI_PresetListItem(PresetList.SelectedItem);
@@ -153,6 +163,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 			Adt_Mutators.SetValue(SelectedPreset.Preset.GetPropertyText("Mutators"));
 			Adt_Parameters.SetValue(SelectedPreset.Preset.GetPropertyText("Parameters"));
 			Adt_GameSettings.SetValue(SelectedPreset.Preset.GetPropertyText("GameSettings"));
+			Adt_Packages.SetValue(SelectedPreset.Preset.GetPropertyText("Packages"));
 		} else {
 			Edt_PresetName.SetValue(class'VS_PresetConfig'.default.PresetName);
 			Edt_Category.SetValue(class'VS_PresetConfig'.default.Category);
@@ -164,6 +175,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 			Adt_Mutators.SetValue("()");
 			Adt_Parameters.SetValue("()");
 			Adt_GameSettings.SetValue("()");
+			Adt_Packages.SetValue("()");
 		}
 
 		Edt_PresetName.EditBox.SetEditable(SelectedPreset != none);
@@ -176,6 +188,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 		Adt_Mutators.EditBox.SetEditable(SelectedPreset != none);
 		Adt_Parameters.EditBox.SetEditable(SelectedPreset != none);
 		Adt_GameSettings.EditBox.SetEditable(SelectedPreset != none);
+		Adt_Packages.EditBox.SetEditable(SelectedPreset != none);
 	}
 }
 
@@ -232,4 +245,5 @@ defaultproperties {
 	Text_Mutators="Mutators"
 	Text_Parameters="Parameters"
 	Text_GameSettings="Game Settings"
+	Text_Packages="Packages"
 }
