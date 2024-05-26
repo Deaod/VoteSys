@@ -22,6 +22,10 @@ function SetEmptyText(string NewText) {
 	VS_UI_EditBox(EditBox).EmptyText = NewText;
 }
 
+function SetNumericNegative(bool bEnable) {
+	VS_UI_EditBox(EditBox).bNumericNegative = bEnable;
+}
+
 function Paint(Canvas C, float MouseX, float MouseY) {
 	Theme.DrawBox(C, self, EditAreaDrawX, 0, EditBoxWidth, WinHeight);
 

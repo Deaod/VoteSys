@@ -43,15 +43,11 @@ function Notify(UWindowDialogControl C, byte E) {
 		} else if (C == Btn_RemElement) {
 			RemoveCurrentElement();
 		}
-	}
-
-	if (E == DE_Change) {
-		if (C == Edt_Element) {
+	} else if (E == DE_Change) {
+		if (C == Edt_Element && CurrentElement != none) {
 			CurrentElement.Text = Edt_Element.GetValue();
 		}
-	}
-
-	if (E == Lst_Elements.DE_VoteSys_ClickDone && C == Lst_Elements) {
+	} else if (C == Lst_Elements && E == Lst_Elements.DE_VoteSys_ClickDone) {
 		Edt_Element.ActivateWindow(0, false);
 	}
 }
