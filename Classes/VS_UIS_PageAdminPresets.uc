@@ -26,6 +26,9 @@ var localized string Text_Game;
 var VS_UI_EditControl Edt_MapListName;
 var localized string Text_MapListName;
 
+var VS_UI_ArrayEditControl Adt_Mutators;
+var localized string Text_Mutators;
+
 function Created() {
 	super.Created();
 
@@ -69,6 +72,10 @@ function Created() {
 	Edt_MapListName = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 128, 188, 16));
 	Edt_MapListName.SetText(Text_MapListName);
 	Edt_MapListName.EditBoxWidth = 100;
+
+	Adt_Mutators = VS_UI_ArrayEditControl(CreateControl(class'VS_UI_ArrayEditControl', 200, 148, 188, 16));
+	Adt_Mutators.SetText(Text_Mutators);
+	Adt_Mutators.EditBoxWidth = 100;
 }
 
 function ApplyTheme() {
@@ -82,6 +89,7 @@ function ApplyTheme() {
 	Adt_InheritFrom.Theme = Theme;
 	Edt_Game.Theme = Theme;
 	Edt_MapListName.Theme = Theme;
+	Adt_Mutators.Theme = Theme;
 }
 
 function EnableInteraction(bool bEnable) {
@@ -94,6 +102,7 @@ function EnableInteraction(bool bEnable) {
 	Adt_InheritFrom.EditBox.SetEditable(false);
 	Edt_Game.EditBox.SetEditable(false);
 	Edt_MapListName.EditBox.SetEditable(false);
+	Adt_Mutators.EditBox.SetEditable(false);
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
@@ -108,6 +117,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 			SelectedPreset.Preset.SetPropertyText("InheritFrom", Adt_InheritFrom.GetValue());
 			SelectedPreset.Preset.Game = Edt_Game.GetValue();
 			SelectedPreset.Preset.SetPropertyText("MapListName", Edt_MapListName.GetValue());
+			SelectedPreset.Preset.SetPropertyText("Mutators", Adt_Mutators.GetValue());
 		}
 
 		SelectedPreset = VS_UI_PresetListItem(PresetList.SelectedItem);
@@ -120,6 +130,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 			Adt_InheritFrom.SetValue(SelectedPreset.Preset.GetPropertyText("InheritFrom"));
 			Edt_Game.SetValue(SelectedPreset.Preset.Game);
 			Edt_MapListName.SetValue(string(SelectedPreset.Preset.MapListName));
+			Adt_Mutators.SetValue(SelectedPreset.Preset.GetPropertyText("Mutators"));
 		} else {
 			Edt_PresetName.SetValue(class'VS_PresetConfig'.default.PresetName);
 			Edt_Category.SetValue(class'VS_PresetConfig'.default.Category);
@@ -128,6 +139,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 			Adt_InheritFrom.SetValue("()");
 			Edt_Game.SetValue(class'VS_PresetConfig'.default.Game);
 			Edt_MapListName.SetValue(string(class'VS_PresetConfig'.default.MapListName));
+			Adt_Mutators.SetValue("()");
 		}
 
 		Edt_PresetName.EditBox.SetEditable(SelectedPreset != none);
@@ -137,6 +149,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 		Adt_InheritFrom.EditBox.SetEditable(SelectedPreset != none);
 		Edt_Game.EditBox.SetEditable(SelectedPreset != none);
 		Edt_MapListName.EditBox.SetEditable(SelectedPreset != none);
+		Adt_Mutators.EditBox.SetEditable(SelectedPreset != none);
 	}
 }
 
@@ -190,4 +203,5 @@ defaultproperties {
 	Text_InheritFrom="Inherit From"
 	Text_Game="Game"
 	Text_MapListName="Map List Name"
+	Text_Mutators="Mutators"
 }

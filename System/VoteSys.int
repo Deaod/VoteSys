@@ -33,6 +33,7 @@ Text_SortPriority="Sort Priority"
 Text_InheritFrom="Inherit From"
 Text_Game="Game"
 Text_MapListName="Map List Name"
+Text_Mutators="Mutators"
 
 [VS_Msg_LocalMessage]
 MsgNobodyVoted="Nobody voted, randomly selecting {1}"
@@ -122,6 +123,9 @@ Text_VoteEndCondition_TimerOrResultDetermined="Result Certain"
 Text_KickVoteThreshold="Kick Vote Threshold"
 Text_MinimumMapRepeatDistance="Map Repeat Distance"
 
+[VS_UIS_Window]
+WindowTitle="VoteSys Settings"
+
 [VS_UIS_PageClient]
 ThemeText="Theme"
 ThemeBright="Bright"
@@ -134,9 +138,6 @@ MapListSortPlayCount="Play Count"
 
 [VS_UI_MapMenu]
 SortByText="Sort By"
-
-[VS_UIS_Window]
-WindowTitle="VoteSys Settings"
 
 [VS_UI_MapSortByMenu]
 ItemNameText="Name"
