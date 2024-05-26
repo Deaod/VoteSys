@@ -23,6 +23,9 @@ var localized string Text_InheritFrom;
 var VS_UI_EditControl Edt_Game;
 var localized string Text_Game;
 
+var VS_UI_EditControl Edt_MapListName;
+var localized string Text_MapListName;
+
 function Created() {
 	super.Created();
 
@@ -62,6 +65,10 @@ function Created() {
 	Edt_Game = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 108, 188, 16));
 	Edt_Game.SetText(Text_Game);
 	Edt_Game.EditBoxWidth = 100;
+
+	Edt_MapListName = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 128, 188, 16));
+	Edt_MapListName.SetText(Text_MapListName);
+	Edt_MapListName.EditBoxWidth = 100;
 }
 
 function ApplyTheme() {
@@ -74,6 +81,7 @@ function ApplyTheme() {
 	Edt_SortPriority.Theme = Theme;
 	Adt_InheritFrom.Theme = Theme;
 	Edt_Game.Theme = Theme;
+	Edt_MapListName.Theme = Theme;
 }
 
 function EnableInteraction(bool bEnable) {
@@ -85,6 +93,7 @@ function EnableInteraction(bool bEnable) {
 	Edt_SortPriority.EditBox.SetEditable(false);
 	Adt_InheritFrom.EditBox.SetEditable(false);
 	Edt_Game.EditBox.SetEditable(false);
+	Edt_MapListName.EditBox.SetEditable(false);
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
@@ -98,6 +107,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 			SelectedPreset.Preset.SortPriority = int(Edt_SortPriority.GetValue());
 			SelectedPreset.Preset.SetPropertyText("InheritFrom", Adt_InheritFrom.GetValue());
 			SelectedPreset.Preset.Game = Edt_Game.GetValue();
+			SelectedPreset.Preset.SetPropertyText("MapListName", Edt_MapListName.GetValue());
 		}
 
 		SelectedPreset = VS_UI_PresetListItem(PresetList.SelectedItem);
@@ -109,6 +119,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 			Edt_SortPriority.SetValue(string(SelectedPreset.Preset.SortPriority));
 			Adt_InheritFrom.SetValue(SelectedPreset.Preset.GetPropertyText("InheritFrom"));
 			Edt_Game.SetValue(SelectedPreset.Preset.Game);
+			Edt_MapListName.SetValue(string(SelectedPreset.Preset.MapListName));
 		} else {
 			Edt_PresetName.SetValue(class'VS_PresetConfig'.default.PresetName);
 			Edt_Category.SetValue(class'VS_PresetConfig'.default.Category);
@@ -116,6 +127,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 			Edt_SortPriority.SetValue(string(class'VS_PresetConfig'.default.SortPriority));
 			Adt_InheritFrom.SetValue("()");
 			Edt_Game.SetValue(class'VS_PresetConfig'.default.Game);
+			Edt_MapListName.SetValue(string(class'VS_PresetConfig'.default.MapListName));
 		}
 
 		Edt_PresetName.EditBox.SetEditable(SelectedPreset != none);
@@ -124,6 +136,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 		Edt_SortPriority.EditBox.SetEditable(SelectedPreset != none);
 		Adt_InheritFrom.EditBox.SetEditable(SelectedPreset != none);
 		Edt_Game.EditBox.SetEditable(SelectedPreset != none);
+		Edt_MapListName.EditBox.SetEditable(SelectedPreset != none);
 	}
 }
 
@@ -176,4 +189,5 @@ defaultproperties {
 	Text_SortPriority="Sort Priority"
 	Text_InheritFrom="Inherit From"
 	Text_Game="Game"
+	Text_MapListName="Map List Name"
 }

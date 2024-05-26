@@ -32,6 +32,7 @@ Text_Abbreviation="Abbreviation"
 Text_SortPriority="Sort Priority"
 Text_InheritFrom="Inherit From"
 Text_Game="Game"
+Text_MapListName="Map List Name"
 
 [VS_Msg_LocalMessage]
 MsgNobodyVoted="Nobody voted, randomly selecting {1}"
