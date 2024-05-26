@@ -4,6 +4,7 @@ var VS_UI_PresetListBox PresetList;
 var UWindowSmallButton AddPreset;
 var UWindowSmallButton RemPreset;
 var VS_UI_PresetListItem SelectedPreset;
+var VS_ClientPreset DefaultPreset;
 
 var VS_UI_EditControl Edt_PresetName;
 var localized string Text_PresetName;
@@ -52,6 +53,8 @@ var localized string Text_MaxPlayers;
 
 function Created() {
 	super.Created();
+
+	DefaultPreset = new class'VS_ClientPreset';
 
 	PresetList = VS_UI_PresetListBox(CreateControl(class'VS_UI_PresetListBox', 4, 28, 188, 302));
 
@@ -125,7 +128,7 @@ function Created() {
 	Edt_MinPlayers.SetNumericOnly(true);
 	Edt_MinPlayers.SetNumericNegative(true);
 
-	Edt_MaxPlayers = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 268, 188, 16));
+	Edt_MaxPlayers = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 288, 188, 16));
 	Edt_MaxPlayers.SetText(Text_MaxPlayers);
 	Edt_MaxPlayers.EditBoxWidth = 60;
 	Edt_MaxPlayers.SetNumericOnly(true);
@@ -173,63 +176,55 @@ function EnableInteraction(bool bEnable) {
 	Edt_MaxPlayers.EditBox.SetEditable(false);
 }
 
+function SavePresetSettings() {
+	if (SelectedPreset == none)
+		return;
+
+	SelectedPreset.Preset.PresetName = Edt_PresetName.GetValue();
+	SelectedPreset.Preset.Category = Edt_Category.GetValue();
+	SelectedPreset.Preset.Abbreviation = Edt_Abbreviation.GetValue();
+	SelectedPreset.Preset.SortPriority = int(Edt_SortPriority.GetValue());
+	SelectedPreset.Preset.SetPropertyText("InheritFrom", Adt_InheritFrom.GetValue());
+	SelectedPreset.Preset.Game = Edt_Game.GetValue();
+	SelectedPreset.Preset.SetPropertyText("MapListName", Edt_MapListName.GetValue());
+	SelectedPreset.Preset.SetPropertyText("Mutators", Adt_Mutators.GetValue());
+	SelectedPreset.Preset.SetPropertyText("Parameters", Adt_Parameters.GetValue());
+	SelectedPreset.Preset.SetPropertyText("GameSettings", Adt_GameSettings.GetValue());
+	SelectedPreset.Preset.SetPropertyText("Packages", Adt_Packages.GetValue());
+	SelectedPreset.Preset.bDisabled = Chk_Disabled.bChecked;
+	SelectedPreset.Preset.MinimumMapRepeatDistance = int(Edt_MinimumMapRepeatDistance.GetValue());
+	SelectedPreset.Preset.MinPlayers = int(Edt_MinPlayers.GetValue());
+	SelectedPreset.Preset.MaxPlayers = int(Edt_MaxPlayers.GetValue());
+}
+
+function LoadPresetSettings(VS_ClientPreset P) {
+	if (P == none)
+		P = DefaultPreset;
+
+	Edt_PresetName.SetValue(P.PresetName);
+	Edt_Category.SetValue(P.Category);
+	Edt_Abbreviation.SetValue(P.Abbreviation);
+	Edt_SortPriority.SetValue(string(P.SortPriority));
+	Adt_InheritFrom.SetValue(P.GetPropertyText("InheritFrom"));
+	Edt_Game.SetValue(P.Game);
+	Edt_MapListName.SetValue(string(P.MapListName));
+	Adt_Mutators.SetValue(P.GetPropertyText("Mutators"));
+	Adt_Parameters.SetValue(P.GetPropertyText("Parameters"));
+	Adt_GameSettings.SetValue(P.GetPropertyText("GameSettings"));
+	Adt_Packages.SetValue(P.GetPropertyText("Packages"));
+	Chk_Disabled.bChecked = P.bDisabled;
+	Edt_MinimumMapRepeatDistance.SetValue(string(P.MinimumMapRepeatDistance));
+	Edt_MinPlayers.SetValue(string(P.MinPlayers));
+	Edt_MaxPlayers.SetValue(string(P.MaxPlayers));
+}
+
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	super.BeforePaint(C, MouseX, MouseY);
 
 	if (SelectedPreset != PresetList.SelectedItem) {
-		if (SelectedPreset != none) {
-			SelectedPreset.Preset.PresetName = Edt_PresetName.GetValue();
-			SelectedPreset.Preset.Category = Edt_Category.GetValue();
-			SelectedPreset.Preset.Abbreviation = Edt_Abbreviation.GetValue();
-			SelectedPreset.Preset.SortPriority = int(Edt_SortPriority.GetValue());
-			SelectedPreset.Preset.SetPropertyText("InheritFrom", Adt_InheritFrom.GetValue());
-			SelectedPreset.Preset.Game = Edt_Game.GetValue();
-			SelectedPreset.Preset.SetPropertyText("MapListName", Edt_MapListName.GetValue());
-			SelectedPreset.Preset.SetPropertyText("Mutators", Adt_Mutators.GetValue());
-			SelectedPreset.Preset.SetPropertyText("Parameters", Adt_Parameters.GetValue());
-			SelectedPreset.Preset.SetPropertyText("GameSettings", Adt_GameSettings.GetValue());
-			SelectedPreset.Preset.SetPropertyText("Packages", Adt_Packages.GetValue());
-			SelectedPreset.Preset.bDisabled = Chk_Disabled.bChecked;
-			SelectedPreset.Preset.MinimumMapRepeatDistance = int(Edt_MinimumMapRepeatDistance.GetValue());
-			SelectedPreset.Preset.MinPlayers = int(Edt_MinPlayers.GetValue());
-			SelectedPreset.Preset.MaxPlayers = int(Edt_MaxPlayers.GetValue());
-		}
-
+		SavePresetSettings();
 		SelectedPreset = VS_UI_PresetListItem(PresetList.SelectedItem);
-
-		if (SelectedPreset != none) {
-			Edt_PresetName.SetValue(SelectedPreset.Preset.PresetName);
-			Edt_Category.SetValue(SelectedPreset.Preset.Category);
-			Edt_Abbreviation.SetValue(SelectedPreset.Preset.Abbreviation);
-			Edt_SortPriority.SetValue(string(SelectedPreset.Preset.SortPriority));
-			Adt_InheritFrom.SetValue(SelectedPreset.Preset.GetPropertyText("InheritFrom"));
-			Edt_Game.SetValue(SelectedPreset.Preset.Game);
-			Edt_MapListName.SetValue(string(SelectedPreset.Preset.MapListName));
-			Adt_Mutators.SetValue(SelectedPreset.Preset.GetPropertyText("Mutators"));
-			Adt_Parameters.SetValue(SelectedPreset.Preset.GetPropertyText("Parameters"));
-			Adt_GameSettings.SetValue(SelectedPreset.Preset.GetPropertyText("GameSettings"));
-			Adt_Packages.SetValue(SelectedPreset.Preset.GetPropertyText("Packages"));
-			Chk_Disabled.bChecked = SelectedPreset.Preset.bDisabled;
-			Edt_MinimumMapRepeatDistance.SetValue(string(SelectedPreset.Preset.MinimumMapRepeatDistance));
-			Edt_MinPlayers.SetValue(string(SelectedPreset.Preset.MinPlayers));
-			Edt_MaxPlayers.SetValue(string(SelectedPreset.Preset.MaxPlayers));
-		} else {
-			Edt_PresetName.SetValue(class'VS_PresetConfig'.default.PresetName);
-			Edt_Category.SetValue(class'VS_PresetConfig'.default.Category);
-			Edt_Abbreviation.SetValue(class'VS_PresetConfig'.default.Abbreviation);
-			Edt_SortPriority.SetValue(string(class'VS_PresetConfig'.default.SortPriority));
-			Adt_InheritFrom.SetValue("()");
-			Edt_Game.SetValue(class'VS_PresetConfig'.default.Game);
-			Edt_MapListName.SetValue(string(class'VS_PresetConfig'.default.MapListName));
-			Adt_Mutators.SetValue("()");
-			Adt_Parameters.SetValue("()");
-			Adt_GameSettings.SetValue("()");
-			Adt_Packages.SetValue("()");
-			Chk_Disabled.bChecked = class'VS_PresetConfig'.default.bDisabled;
-			Edt_MinimumMapRepeatDistance.SetValue(string(class'VS_PresetConfig'.default.MinimumMapRepeatDistance));
-			Edt_MinPlayers.SetValue(string(class'VS_PresetConfig'.default.MinPlayers));
-			Edt_MaxPlayers.SetValue(string(class'VS_PresetConfig'.default.MaxPlayers));
-		}
+		LoadPresetSettings(SelectedPreset.Preset);
 
 		Edt_PresetName.EditBox.SetEditable(SelectedPreset != none);
 		Edt_Category.EditBox.SetEditable(SelectedPreset != none);
@@ -277,6 +272,8 @@ function LoadServerSettings() {
 	local VS_UI_PresetListItem P;
 
 	PresetList.Items.DestroyList();
+	PresetList.SelectedItem = none;
+
 	for (i = 0; i < Presets.PresetList.Length; ++i) {
 		if (Presets.PresetList[i].PresetName == "")
 			continue;
@@ -284,9 +281,25 @@ function LoadServerSettings() {
 		P = VS_UI_PresetListItem(PresetList.Items.Append(class'VS_UI_PresetListItem'));
 		P.Preset = Presets.PresetList[i];
 	}
+
+	LoadPresetSettings(none);
 }
 
 function SaveSettings() {
+	local int i;
+	local VS_UI_PresetListItem P;
+
+	SavePresetSettings();
+
+	for (P = VS_UI_PresetListItem(PresetList.Items.Next); P != none; P = VS_UI_PresetListItem(P.Next)) {
+		if (i >= Presets.PresetList.Length)
+			Presets.PresetList.Insert(i, 1);
+		Presets.PresetList[i++] = P.Preset;
+	}
+
+	while(i < Presets.PresetList.Length) {
+		Presets.PresetList[i++] = none;
+	}
 
 	super.SaveSettings();
 }
