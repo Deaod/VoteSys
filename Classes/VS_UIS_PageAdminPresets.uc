@@ -41,6 +41,15 @@ var localized string Text_Packages;
 var UWindowCheckbox Chk_Disabled;
 var localized string Text_Disabled;
 
+var VS_UI_EditControl Edt_MinimumMapRepeatDistance;
+var localized string Text_MinimumMapRepeatDistance;
+
+var VS_UI_EditControl Edt_MinPlayers;
+var localized string Text_MinPlayers;
+
+var VS_UI_EditControl Edt_MaxPlayers;
+var localized string Text_MaxPlayers;
+
 function Created() {
 	super.Created();
 
@@ -103,6 +112,24 @@ function Created() {
 
 	Chk_Disabled = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 200, 228, 188, 16));
 	Chk_Disabled.SetText(Text_Disabled);
+
+	Edt_MinimumMapRepeatDistance = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 248, 188, 16));
+	Edt_MinimumMapRepeatDistance.SetText(Text_MinimumMapRepeatDistance);
+	Edt_MinimumMapRepeatDistance.EditBoxWidth = 60;
+	Edt_MinimumMapRepeatDistance.SetNumericOnly(true);
+	Edt_MinimumMapRepeatDistance.SetNumericNegative(true);
+
+	Edt_MinPlayers = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 268, 188, 16));
+	Edt_MinPlayers.SetText(Text_MinPlayers);
+	Edt_MinPlayers.EditBoxWidth = 60;
+	Edt_MinPlayers.SetNumericOnly(true);
+	Edt_MinPlayers.SetNumericNegative(true);
+
+	Edt_MaxPlayers = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 268, 188, 16));
+	Edt_MaxPlayers.SetText(Text_MaxPlayers);
+	Edt_MaxPlayers.EditBoxWidth = 60;
+	Edt_MaxPlayers.SetNumericOnly(true);
+	Edt_MaxPlayers.SetNumericNegative(true);
 }
 
 function ApplyTheme() {
@@ -121,6 +148,9 @@ function ApplyTheme() {
 	Adt_GameSettings.Theme = Theme;
 	Adt_Packages.Theme = Theme;
 	//Chk_Disabled // not themed
+	Edt_MinimumMapRepeatDistance.Theme = Theme;
+	Edt_MinPlayers.Theme = Theme;
+	Edt_MaxPlayers.Theme = Theme;
 }
 
 function EnableInteraction(bool bEnable) {
@@ -138,6 +168,9 @@ function EnableInteraction(bool bEnable) {
 	Adt_GameSettings.EditBox.SetEditable(false);
 	Adt_Packages.EditBox.SetEditable(false);
 	Chk_Disabled.bDisabled = true;
+	Edt_MinimumMapRepeatDistance.EditBox.SetEditable(false);
+	Edt_MinPlayers.EditBox.SetEditable(false);
+	Edt_MaxPlayers.EditBox.SetEditable(false);
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
@@ -157,6 +190,9 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 			SelectedPreset.Preset.SetPropertyText("GameSettings", Adt_GameSettings.GetValue());
 			SelectedPreset.Preset.SetPropertyText("Packages", Adt_Packages.GetValue());
 			SelectedPreset.Preset.bDisabled = Chk_Disabled.bChecked;
+			SelectedPreset.Preset.MinimumMapRepeatDistance = int(Edt_MinimumMapRepeatDistance.GetValue());
+			SelectedPreset.Preset.MinPlayers = int(Edt_MinPlayers.GetValue());
+			SelectedPreset.Preset.MaxPlayers = int(Edt_MaxPlayers.GetValue());
 		}
 
 		SelectedPreset = VS_UI_PresetListItem(PresetList.SelectedItem);
@@ -174,6 +210,9 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 			Adt_GameSettings.SetValue(SelectedPreset.Preset.GetPropertyText("GameSettings"));
 			Adt_Packages.SetValue(SelectedPreset.Preset.GetPropertyText("Packages"));
 			Chk_Disabled.bChecked = SelectedPreset.Preset.bDisabled;
+			Edt_MinimumMapRepeatDistance.SetValue(string(SelectedPreset.Preset.MinimumMapRepeatDistance));
+			Edt_MinPlayers.SetValue(string(SelectedPreset.Preset.MinPlayers));
+			Edt_MaxPlayers.SetValue(string(SelectedPreset.Preset.MaxPlayers));
 		} else {
 			Edt_PresetName.SetValue(class'VS_PresetConfig'.default.PresetName);
 			Edt_Category.SetValue(class'VS_PresetConfig'.default.Category);
@@ -187,6 +226,9 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 			Adt_GameSettings.SetValue("()");
 			Adt_Packages.SetValue("()");
 			Chk_Disabled.bChecked = class'VS_PresetConfig'.default.bDisabled;
+			Edt_MinimumMapRepeatDistance.SetValue(string(class'VS_PresetConfig'.default.MinimumMapRepeatDistance));
+			Edt_MinPlayers.SetValue(string(class'VS_PresetConfig'.default.MinPlayers));
+			Edt_MaxPlayers.SetValue(string(class'VS_PresetConfig'.default.MaxPlayers));
 		}
 
 		Edt_PresetName.EditBox.SetEditable(SelectedPreset != none);
@@ -201,6 +243,9 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 		Adt_GameSettings.EditBox.SetEditable(SelectedPreset != none);
 		Adt_Packages.EditBox.SetEditable(SelectedPreset != none);
 		Chk_Disabled.bDisabled = SelectedPreset == none;
+		Edt_MinimumMapRepeatDistance.EditBox.SetEditable(SelectedPreset != none);
+		Edt_MinPlayers.EditBox.SetEditable(SelectedPreset != none);
+		Edt_MaxPlayers.EditBox.SetEditable(SelectedPreset != none);
 	}
 }
 
@@ -259,4 +304,7 @@ defaultproperties {
 	Text_GameSettings="Game Settings"
 	Text_Packages="Packages"
 	Text_Disabled="Disabled"
+	Text_MinimumMapRepeatDistance="Min. Map Repeat Distance"
+	Text_MinPlayers="Min. Players"
+	Text_MaxPlayers="Max. Players"
 }

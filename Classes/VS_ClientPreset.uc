@@ -15,3 +15,9 @@ var bool          bDisabled;
 var int           MinimumMapRepeatDistance;
 var int           MinPlayers;
 var int           MaxPlayers;
+
+defaultproperties {
+	MinimumMapRepeatDistance=-1
+	MinPlayers=-1
+	MaxPlayers=-1
+}
