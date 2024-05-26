@@ -38,6 +38,9 @@ var localized string Text_GameSettings;
 var VS_UI_ArrayEditControl Adt_Packages;
 var localized string Text_Packages;
 
+var UWindowCheckbox Chk_Disabled;
+var localized string Text_Disabled;
+
 function Created() {
 	super.Created();
 
@@ -97,6 +100,9 @@ function Created() {
 	Adt_Packages = VS_UI_ArrayEditControl(CreateControl(class'VS_UI_ArrayEditControl', 200, 208, 188, 16));
 	Adt_Packages.SetText(Text_Packages);
 	Adt_Packages.EditBoxWidth = 100;
+
+	Chk_Disabled = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 200, 228, 188, 16));
+	Chk_Disabled.SetText(Text_Disabled);
 }
 
 function ApplyTheme() {
@@ -114,6 +120,7 @@ function ApplyTheme() {
 	Adt_Parameters.Theme = Theme;
 	Adt_GameSettings.Theme = Theme;
 	Adt_Packages.Theme = Theme;
+	//Chk_Disabled // not themed
 }
 
 function EnableInteraction(bool bEnable) {
@@ -130,6 +137,7 @@ function EnableInteraction(bool bEnable) {
 	Adt_Parameters.EditBox.SetEditable(false);
 	Adt_GameSettings.EditBox.SetEditable(false);
 	Adt_Packages.EditBox.SetEditable(false);
+	Chk_Disabled.bDisabled = true;
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
@@ -148,6 +156,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 			SelectedPreset.Preset.SetPropertyText("Parameters", Adt_Parameters.GetValue());
 			SelectedPreset.Preset.SetPropertyText("GameSettings", Adt_GameSettings.GetValue());
 			SelectedPreset.Preset.SetPropertyText("Packages", Adt_Packages.GetValue());
+			SelectedPreset.Preset.bDisabled = Chk_Disabled.bChecked;
 		}
 
 		SelectedPreset = VS_UI_PresetListItem(PresetList.SelectedItem);
@@ -164,6 +173,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 			Adt_Parameters.SetValue(SelectedPreset.Preset.GetPropertyText("Parameters"));
 			Adt_GameSettings.SetValue(SelectedPreset.Preset.GetPropertyText("GameSettings"));
 			Adt_Packages.SetValue(SelectedPreset.Preset.GetPropertyText("Packages"));
+			Chk_Disabled.bChecked = SelectedPreset.Preset.bDisabled;
 		} else {
 			Edt_PresetName.SetValue(class'VS_PresetConfig'.default.PresetName);
 			Edt_Category.SetValue(class'VS_PresetConfig'.default.Category);
@@ -176,6 +186,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 			Adt_Parameters.SetValue("()");
 			Adt_GameSettings.SetValue("()");
 			Adt_Packages.SetValue("()");
+			Chk_Disabled.bChecked = class'VS_PresetConfig'.default.bDisabled;
 		}
 
 		Edt_PresetName.EditBox.SetEditable(SelectedPreset != none);
@@ -189,6 +200,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 		Adt_Parameters.EditBox.SetEditable(SelectedPreset != none);
 		Adt_GameSettings.EditBox.SetEditable(SelectedPreset != none);
 		Adt_Packages.EditBox.SetEditable(SelectedPreset != none);
+		Chk_Disabled.bDisabled = SelectedPreset == none;
 	}
 }
 
@@ -246,4 +258,5 @@ defaultproperties {
 	Text_Parameters="Parameters"
 	Text_GameSettings="Game Settings"
 	Text_Packages="Packages"
+	Text_Disabled="Disabled"
 }
