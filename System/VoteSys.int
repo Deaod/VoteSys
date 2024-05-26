@@ -46,6 +46,13 @@ ErrMapLoadFailed="Loading map {1} failed, randomly selecting {2}"
 ErrNoConnection="VoteSys has no connection to server, check server firewall"
 ErrNotAllowed="Sorry, you are not allowed to vote"
 
+[VS_UIS_PageAdminPresets]
+Text_PresetName="Preset Name"
+Text_Category="Category"
+Text_Abbreviation="Abbreviation"
+Text_SortPriority="Sort Priority"
+Text_InheritFrom="Inherit From"
+
 [VS_UIV_Window]
 WindowTitle="VoteSys Menu"
 

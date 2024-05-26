@@ -6,6 +6,7 @@ var VS_UIS_PageClient ClientSettingsPage;
 var VS_UIS_PageAdminVoting PageAdminVoting;
 var VS_UIS_PageAdminUI PageAdminUI;
 var VS_UIS_PageAdminSetup PageAdminSetup;
+var VS_UIS_PageAdminPresets PageAdminPresets;
 
 function Created() {
 	super.Created();
@@ -33,6 +34,10 @@ function BeforePaint(Canvas C, float X, float Y) {
 			PageAdminSetup = VS_UIS_PageAdminSetup(AddPage("[A] Setup", class'VS_UIS_PageAdminSetup').Page);
 			PageAdminSetup.LoadSettings(Channel);
 		}
+		if (PageAdminPresets == none) {
+			PageAdminPresets = VS_UIS_PageAdminPresets(AddPage("[A] Presets", class'VS_UIS_PageAdminPresets').Page);
+			PageAdminPresets.LoadSettings(Channel);
+		}
 	} else {
 		if (PageAdminVoting != none) {
 			DeletePage(PageAdminVoting.OwnerTab);
@@ -45,6 +50,10 @@ function BeforePaint(Canvas C, float X, float Y) {
 		if (PageAdminSetup != none) {
 			DeletePage(PageAdminSetup.OwnerTab);
 			PageAdminSetup = none;
+		}
+		if (PageAdminPresets != none) {
+			DeletePage(PageAdminPresets.OwnerTab);
+			PageAdminPresets = none;
 		}
 	}
 
@@ -62,4 +71,6 @@ function LoadSettings(VS_PlayerChannel C) {
 		PageAdminUI.LoadSettings(Channel);
 	if (PageAdminSetup != none)
 		PageAdminSetup.LoadSettings(Channel);
+	if (PageAdminPresets != none)
+		PageAdminPresets.LoadSettings(Channel);
 }
