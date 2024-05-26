@@ -530,6 +530,14 @@ simulated function VS_ClientPresetList GetServerPresets() {
 	return ServerPresets;
 }
 
+simulated function SaveServerPresets() {
+	Log("PlayerChannel SavePresetSettings", 'VoteSys');
+	if (ServerPresets == none)
+		return;
+
+	DataClient.SaveServerPresets(ServerPresets);
+}
+
 simulated function LocalizeMessage(
 	class<LocalMessage> MessageClass,
 	optional int Switch,

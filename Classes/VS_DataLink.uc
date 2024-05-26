@@ -83,6 +83,12 @@ function ParseLine(string Line) {
 		VoteSys.Settings.SaveConfig();
 	} else if (Line == "/SENDSERVERPRESETCONFIG/") {
 		QueueCommand('SendServerPresets');
+	} else if (Left(Line, 18) == "/SAVESERVERPRESET/") {
+		SaveServerPreset(Line);
+	} else if (Left(Line, 19) == "/CLEARSERVERPRESET/") {
+		ClearServerPreset(Line);
+	} else if (Line == "/SAVESERVERPRESETSFILE/") {
+		SaveServerPresetsFile();
 	}
 }
 
@@ -237,6 +243,10 @@ function SaveServerSetting(string Line) {
 state SendServerPresets {
 	function SendServerPreset(VS_PresetConfig PC, int Index) {
 		local string Prefix;
+
+		if (PC == none)
+			return;
+
 		Prefix = "/SERVERPRESETPROPERTY/" $ Index $ "/";
 
 		SendServerPresetProperty(Prefix, PC, "PresetName");
@@ -260,6 +270,17 @@ state SendServerPresets {
 		SendLine(Prefix $ S11N.SerializeProperty(PropName, PC.GetPropertyText(PropName)));
 	}
 
+	function SendServerPresetsF() {
+		local int i;
+		SendLine("/BEGINSERVERPRESETCONFIG/"$VoteSys.PresetMaxIndex);
+
+		for (i = 0; i < VoteSys.PresetArray.Length; i++) {
+			SendServerPreset(VoteSys.PresetArray[i], i);
+		}
+
+		SendLine("/ENDSERVERPRESETCONFIG/");
+	}
+
 Begin:
 	if (Channel == none ||
 		Channel.PlayerOwner == none ||
@@ -270,15 +291,59 @@ Begin:
 	}
 
 	Log("VS_DataLink SendServerPresets"@IpAddrToString(RemoteAddr), 'VoteSys');
-	SendLine("/BEGINSERVERPRESETCONFIG/"$VoteSys.PresetMaxIndex);
-
-	for (TempPreset = VoteSys.PresetList; TempPreset != none; TempPreset = TempPreset.Next) {
-		SendServerPreset(TempPreset.Storage, TempPreset.StorageIndex);
-	}
-
-	SendLine("/ENDSERVERPRESETCONFIG/");
+	SendServerPresetsF();
 
 	GoToState('Idle');
+}
+
+function SaveServerPreset(string Line) {
+	local int Index;
+	local string PropertyName;
+	local string PropertyValue;
+
+	if (Channel == none ||
+		Channel.PlayerOwner == none ||
+		Channel.PlayerOwner.bAdmin == false
+	) {
+		return;
+	}
+
+	Line = Mid(Line, 18);
+	Index = int(Line); S11N.NextVariable(Line);
+	S11N.ParseProperty(Line, PropertyName, PropertyValue);
+
+	if (Index >= VoteSys.PresetArray.Length)
+		VoteSys.PresetArray.Insert(VoteSys.PresetArray.Length, Index - VoteSys.PresetArray.Length + 1);
+	if (VoteSys.PresetArray[Index] == none) {
+		VoteSys.SetPropertyText("PresetNameDummy", "VS_PresetConfig"$Index);
+		VoteSys.PresetArray[Index] = new(VoteSys.PresetConfigDummy, VoteSys.PresetNameDummy) class'VS_PresetConfig';
+	}
+
+	VoteSys.PresetArray[Index].SetPropertyText(PropertyName, PropertyValue);
+}
+
+function ClearServerPreset(string Line) {
+	local int i;
+
+	Line = Mid(Line, 19);
+	i = int(Line);
+
+	if (i >= VoteSys.PresetArray.Length)
+		return;
+
+	if (VoteSys.PresetArray[i] == none)
+		return;
+
+	VoteSys.PresetArray[i].ClearConfig();
+	VoteSys.PresetArray[i] = none;
+}
+
+function SaveServerPresetsFile() {
+	local int i;
+
+	for (i = 0; i < VoteSys.PresetArray.Length; i++)
+		if (VoteSys.PresetArray[i] != none)
+			VoteSys.PresetArray[i].SaveConfig();
 }
 
 function HandleError() {

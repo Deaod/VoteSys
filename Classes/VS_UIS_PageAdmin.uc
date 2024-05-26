@@ -43,6 +43,7 @@ function LoadSettings(VS_PlayerChannel C) {
 
 function SaveSettings() {
 	Channel.SaveServerSettings();
+	Channel.SaveServerPresets();
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {

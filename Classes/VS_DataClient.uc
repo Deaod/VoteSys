@@ -255,8 +255,6 @@ function SendServerSetting(VS_ServerSettings S, string SettingName) {
 }
 
 function SaveServerSettings(VS_ServerSettings S) {
-	Log("DataClient SaveServerSettings", 'VoteSys');
-
 	if (S == none)
 		return;
 
@@ -323,6 +321,55 @@ function ParsePresetProperty(string Line) {
 	Index = int(Line); S11N.NextVariable(Line);
 	S11N.ParseProperty(Line, Prop, Value);
 	ServerPresets.PresetList[Index].SetPropertyText(Prop, Value);
+}
+
+function SaveServerPresetProperty(VS_ClientPreset P, string Prefix, string Prop) {
+	SendLine(Prefix$S11N.SerializeProperty(Prop, P.GetPropertyText(Prop)));
+}
+
+function SaveServerPreset(VS_ClientPreset P, int i) {
+	local string Prefix;
+	Prefix = "/SAVESERVERPRESET/"$i$"/";
+
+	SaveServerPresetProperty(P, Prefix, "PresetName");
+	SaveServerPresetProperty(P, Prefix, "Abbreviation");
+	SaveServerPresetProperty(P, Prefix, "Category");
+	SaveServerPresetProperty(P, Prefix, "SortPriority");
+	SaveServerPresetProperty(P, Prefix, "InheritFrom");
+	SaveServerPresetProperty(P, Prefix, "Game");
+	SaveServerPresetProperty(P, Prefix, "MapListName");
+	SaveServerPresetProperty(P, Prefix, "Mutators");
+	SaveServerPresetProperty(P, Prefix, "Parameters");
+	SaveServerPresetProperty(P, Prefix, "GameSettings");
+	SaveServerPresetProperty(P, Prefix, "Packages");
+	SaveServerPresetProperty(P, Prefix, "bDisabled");
+	SaveServerPresetProperty(P, Prefix, "MinimumMapRepeatDistance");
+	SaveServerPresetProperty(P, Prefix, "MinPlayers");
+	SaveServerPresetProperty(P, Prefix, "MaxPlayers");
+}
+
+function ClearServerPreset(int i) {
+	SendLine("/CLEARSERVERPRESET/"$i);
+}
+
+function SaveServerPresets(VS_ClientPresetList S) {
+	local int i;
+	if (S == none)
+		return;
+
+	Log("VS_DataClient SaveServerPresets", 'VoteSys');
+
+	for (i = 0; i < S.PresetList.Length; i++) {
+		if (S.PresetList[i] != none && S.PresetList[i].PresetName != "") {
+			SaveServerPreset(S.PresetList[i], i);
+		} else {
+			ClearServerPreset(i);
+		}
+	}
+
+	SendLine("/SAVESERVERPRESETSFILE/");
+
+	Log("VS_DataClient SaveServerPresets Done", 'VoteSys');
 }
 
 defaultproperties {
