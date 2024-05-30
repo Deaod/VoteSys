@@ -5,6 +5,7 @@ var color Foreground;
 var color Background;
 var color Separator;
 var color InactiveFG;
+var color ErrorFG;
 var color ForegroundAlt;
 var color BackgroundAlt;
 var color SeparatorAlt;
@@ -62,6 +63,7 @@ defaultproperties {
 	Background=(R=0,G=0,B=0,A=0)
 	Separator=(R=0,G=0,B=0,A=0)
 	InactiveFG=(R=0,G=0,B=0,A=0)
+	ErrorFG=(R=0,G=0,B=0,A=0)
 	ForegroundAlt=(R=0,G=0,B=0,A=0)
 	BackgroundAlt=(R=0,G=0,B=0,A=0)
 	SeparatorAlt=(R=0,G=0,B=0,A=0)

@@ -5,6 +5,7 @@ defaultproperties {
 	Background=(R=0,G=0,B=0,A=255)
 	Separator=(R=128,G=128,B=128,A=255)
 	InactiveFG=(R=96,G=96,B=96,A=255)
+	ErrorFG=(R=255,G=102,B=102,A=255)
 	ForegroundAlt=(R=225,G=225,B=225,A=255)
 	BackgroundAlt=(R=24,G=24,B=24,A=255)
 	SeparatorAlt=(R=160,G=160,B=160,A=255)

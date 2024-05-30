@@ -8,6 +8,7 @@ var VS_ClientPreset DefaultPreset;
 
 var VS_UI_EditControl Edt_PresetName;
 var localized string Text_PresetName;
+var localized string Text_PresetNameEmpty;
 
 var VS_UI_EditControl Edt_Category;
 var localized string Text_Category;
@@ -68,6 +69,8 @@ function Created() {
 	Edt_PresetName.SetText(Text_PresetName);
 	Edt_PresetName.EditBoxWidth = 100;
 	Edt_PresetName.SetDelayedNotify(true);
+	Edt_PresetName.SetEmptyText(Text_PresetNameEmpty);
+	Edt_PresetName.bEmptyIsError = true;
 
 	Edt_Category = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 28, 188, 16));
 	Edt_Category.SetText(Text_Category);
@@ -306,6 +309,7 @@ function SaveSettings() {
 
 defaultproperties {
 	Text_PresetName="Preset Name"
+	Text_PresetNameEmpty="Preset will be deleted"
 	Text_Category="Category"
 	Text_Abbreviation="Abbreviation"
 	Text_SortPriority="Sort Priority"

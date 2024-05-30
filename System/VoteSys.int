@@ -13,6 +13,7 @@ SaveText="Save"
 
 [VS_UIS_PageAdminPresets]
 Text_PresetName="Preset Name"
+Text_PresetNameEmpty="Preset will be deleted"
 Text_Category="Category"
 Text_Abbreviation="Abbreviation"
 Text_SortPriority="Sort Priority"
