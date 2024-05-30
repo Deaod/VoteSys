@@ -271,7 +271,7 @@ function LoadServerSettings() {
 	local int i;
 	local VS_UI_PresetListItem P;
 
-	PresetList.Items.DestroyList();
+	PresetList.Items.Clear();
 	PresetList.SelectedItem = none;
 
 	for (i = 0; i < Presets.PresetList.Length; ++i) {
