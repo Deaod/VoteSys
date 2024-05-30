@@ -10,7 +10,7 @@ function Paint(Canvas C, float X, float Y) {
 
 	super.Paint(C, X, Y);
 
-	if (GetValue() == "") {
+	if (bCanEdit && GetValue() == "") {
 		C.Font = Root.Fonts[Font];
 		TextSize(C, "A", W, H);
 		TextY = (WinHeight - H) / 2;
