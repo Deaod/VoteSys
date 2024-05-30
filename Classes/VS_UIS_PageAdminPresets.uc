@@ -254,7 +254,7 @@ function Notify(UWindowDialogControl C, byte E) {
 	} else if (E == DE_Click && C == RemPreset) {
 		if (SelectedPreset != none) {
 			SelectedPreset.Remove();
-			PresetList.SelectedItem = none;
+			PresetList.ClearSelection();
 		}
 	} else if (E == DE_Change && C == Edt_PresetName) {
 		if (SelectedPreset != none)
@@ -275,7 +275,7 @@ function LoadServerSettings() {
 	local VS_UI_PresetListItem P;
 
 	PresetList.Items.Clear();
-	PresetList.SelectedItem = none;
+	PresetList.ClearSelection();
 
 	for (i = 0; i < Presets.PresetList.Length; ++i) {
 		if (Presets.PresetList[i].PresetName == "")
