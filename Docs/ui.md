@@ -140,3 +140,9 @@ Admin settings are split into three parts: Voting, UI, and Setup. The tab-cards 
 #### Setup
 
 ![Admin Setup Settings](AdminSetupSettings.png)
+
+### Presets Settings
+
+This tab-card is only visible when logged in as admin. It allows changing preset settings.
+
+![Admin Presets Settings](AdminPresetsSettings.png)
