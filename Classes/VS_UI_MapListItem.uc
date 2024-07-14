@@ -5,12 +5,20 @@ var bool bFilteredOut;
 
 // Sentinel Only
 var byte SortMode;
+var bool bFavoritesFirst;
 
 function int Compare(UWindowList T, UWindowList B) {
 	local VS_Map M1, M2;
 
 	M1 = VS_UI_MapListItem(T).MapRef;
 	M2 = VS_UI_MapListItem(B).MapRef;
+
+	if (VS_UI_MapListItem(Sentinel).bFavoritesFirst && M1.bClientFavorite != M2.bClientFavorite) {
+		if (M1.bClientFavorite)
+			return -1;
+		
+		return 1;
+	}
 
 	switch(VS_UI_MapListItem(Sentinel).SortMode) {
 		case 1:

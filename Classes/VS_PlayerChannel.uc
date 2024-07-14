@@ -1,4 +1,5 @@
-class VS_PlayerChannel extends Info;
+class VS_PlayerChannel extends Info
+	imports(VS_Util_String);
 
 var PlayerPawn PlayerOwner;
 var VS_PlayerInfo PInfo;
@@ -6,6 +7,7 @@ var VS_Info Info; // Info Info
 var int Cookie;
 
 var VS_DataClient DataClient;
+var VS_FavoritesProcessor FavoritesProcessor;
 var VS_ServerSettings ServerSettings;
 var VS_ClientPresetList ServerPresets;
 
@@ -28,6 +30,11 @@ var int KickVotesAgainstMe;
 var array<PlayerReplicationInfo> IWantToKick;
 
 var int MaxMapSequenceNumber;
+
+struct Range {
+	var int Beg;
+	var int End;
+};
 
 replication {
 	reliable if (Role < ROLE_Authority)
@@ -55,6 +62,7 @@ replication {
 simulated event PostBeginPlay() {
 	SettingsDummy = new(none, 'VoteSys') class 'Object';
 	Settings = new (SettingsDummy, 'ClientSettings') class'VS_ClientSettings';
+	FavoritesProcessor = Spawn(class'VS_FavoritesProcessor', self);
 }
 
 simulated event Tick(float Delta) {
@@ -337,6 +345,61 @@ simulated function AddMap(VS_Map M) {
 		LatestMap.Next = M;
 	}
 	LatestMap = M;
+}
+
+simulated function ToggleFavorite(VS_Map M) {
+	local Range R;
+
+	R = FindFavoriteRule(Settings.FavoritesList, M.MapName);
+	if (R.Beg >= 0) {
+		Settings.FavoritesList = Left(Settings.FavoritesList, R.Beg) $ Mid(Settings.FavoritesList, R.End+1);
+	} else {
+		Settings.FavoritesList = Settings.FavoritesList $ M.MapName $ ",";
+	}
+	Settings.SaveConfig();
+	UpdateFavorites();
+}
+
+simulated function UpdateFavorites() {
+	FavoritesProcessor.UpdateFavorites(PresetList, Settings.FavoritesList);
+}
+
+simulated function UpdateFavoritesEnd() {
+	VoteMenuDialog.UpdateFavoritesEnd();
+}
+
+simulated function Range FindFavoriteRule(string Rules, string M) {
+	local string List;
+	local string Part;
+	local int Pos, Old;
+	local Range Result;
+
+	List = Rules;
+	Old = 0;
+	Pos = InStr(List, ",");
+	while (Pos >= 0) {
+		Part = Trim(Left(List, Pos));
+
+		if (M ~= Part) {
+			Result.Beg = Old;
+			Result.End = Old+Pos;
+			return Result;
+		}
+
+		List = Mid(List, Pos + 1);
+		Old += Pos + 1;
+		Pos = InStr(List, ",");
+	}
+
+	if (M ~= List) {
+		Result.Beg = Old;
+		Result.End = Len(List);
+		return Result;
+	}
+
+	Result.Beg = -1;
+	Result.End = -1;
+	return Result;
 }
 
 simulated function Vote(VS_Preset P, VS_Map M) {

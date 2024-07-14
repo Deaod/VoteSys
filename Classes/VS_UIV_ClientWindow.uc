@@ -1,11 +1,14 @@
 class VS_UIV_ClientWindow extends UWindowDialogClientWindow;
 
 #exec TEXTURE IMPORT Name="Gear" File="Textures/Gear.pcx" MIPS=OFF FLAGS=2
+#exec TEXTURE IMPORT Name="StarEmpty" File="Textures/Star-Empty.pcx" MIPS=OFF FLAGS=2
+#exec TEXTURE IMPORT Name="StarFilled" File="Textures/Star-Filled.pcx" MIPS=OFF FLAGS=2
 
 var VS_PlayerChannel Channel;
 var VS_ClientSettings Settings;
 var int ActiveTheme;
 var byte PreviousMapListSort;
+var bool bPreviousFavoritesFirst;
 
 var VS_UI_CategoryTabItem ActiveCategory;
 var VS_Preset ActivePreset;
@@ -133,6 +136,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	UpdatePlayerList(Info);
 
 	PreviousMapListSort = Settings.MapListSort;
+	bPreviousFavoritesFirst = Settings.bFavoritesFirst;
 
 	CategoryTabs.WinWidth = WinWidth;
 
@@ -264,31 +268,38 @@ function UpdateActiveCategory() {
 }
 
 function UpdateActivePreset(VS_Info Info) {
-	local VS_Map M;
-	local bool bEnable;
-	
 	if (Presets.SelectedPreset != ActivePreset ||
 		bWasAdmin != bAdmin ||
 		PreviousNumPlayers != NumPlayers ||
-		PreviousMapListSort != Settings.MapListSort
+		PreviousMapListSort != Settings.MapListSort ||
+		bPreviousFavoritesFirst != Settings.bFavoritesFirst
 	) {
 		ActivePreset = Presets.SelectedPreset;
-		MapListBox.Items.Clear();
 
-		if (ActivePreset == none)
-			return;
-
-		for (M = ActivePreset.MapList; M != none; M = M.Next) {
-			bEnable = 
-				(M.Sequence == 0 || ActivePreset.MaxSequenceNumber - M.Sequence >= ActivePreset.MinimumMapRepeatDistance) &&
-				(NumPlayers >= M.MinPlayers && (NumPlayers <= M.MaxPlayers || M.MaxPlayers <= 0));
-			if (bAdmin)
-				bEnable = true;
-			MapListBox.AppendMap(M, bEnable);
-		}
+		FillMapListWithPreset(ActivePreset);
 
 		VS_UI_MapListItem(MapListBox.Items).SortMode = Settings.MapListSort;
+		VS_UI_MapListItem(MapListBox.Items).bFavoritesFirst = Settings.bFavoritesFirst;
 		MapListBox.Items.Sort();
+	}
+}
+
+function FillMapListWithPreset(VS_Preset P) {
+	local VS_Map M;
+	local bool bEnable;
+
+	MapListBox.Items.Clear();
+
+	if (P == none)
+		return;
+
+	for (M = P.MapList; M != none; M = M.Next) {
+		bEnable = 
+			(M.Sequence == 0 || P.MaxSequenceNumber - M.Sequence >= P.MinimumMapRepeatDistance) &&
+			(NumPlayers >= M.MinPlayers && (NumPlayers <= M.MaxPlayers || M.MaxPlayers <= 0));
+		if (bAdmin)
+			bEnable = true;
+		MapListBox.AppendMap(M, bEnable);
 	}
 }
 
@@ -449,6 +460,10 @@ function SuggestMap() {
 	Channel.Vote(ActivePreset, VS_UI_MapListItem(MapListItems.FindEnabledEntry(int(MapCount * BetterFRand()))).MapRef);
 }
 
+function ToggleFavorite(VS_Map M) {
+	Channel.ToggleFavorite(M);
+}
+
 function AddPreset(VS_Preset P) {
 	local string Cat;
 	local VS_UI_CategoryTabItem CTI;
@@ -507,6 +522,10 @@ function ConfigureLogoButton(int Index, string Label, string LinkURL) {
 
 	if (Logo.bWindowVisible && LinkURL != "")
 		LogoButtons[Index].ShowWindow();
+}
+
+function UpdateFavoritesEnd() {
+	MapListBox.Items.Sort();
 }
 
 function Close(optional bool bByParent) {

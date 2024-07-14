@@ -14,6 +14,9 @@ var localized string MapListSortName;
 var localized string MapListSortRecency;
 var localized string MapListSortPlayCount;
 
+var UWindowCheckbox Chk_FavoritesFirst;
+var localized string FavoritesFirstText;
+
 function Created() {
 	super.Created();
 
@@ -30,6 +33,9 @@ function Created() {
 	Cmb_MapListSort.AddItem(MapListSortRecency);
 	Cmb_MapListSort.AddItem(MapListSortPlayCount);
 	Cmb_MapListSort.SetEditable(false);
+
+	Chk_FavoritesFirst = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 8, 48, 188, 16));
+	Chk_FavoritesFirst.SetText(FavoritesFirstText);
 }
 
 function LoadSettings(VS_PlayerChannel C) {
@@ -39,11 +45,13 @@ function LoadSettings(VS_PlayerChannel C) {
 
 	Cmb_Theme.SetSelectedIndex(Settings.Theme);
 	Cmb_MapListSort.SetSelectedIndex(Settings.MapListSort);
+	Chk_FavoritesFirst.bChecked = Settings.bFavoritesFirst;
 }
 
 function SaveSettings() {
 	Settings.Theme = Settings.IntToTheme(Cmb_Theme.GetSelectedIndex());
 	Settings.MapListSort = Settings.IntToMapListSort(Cmb_MapListSort.GetSelectedIndex());
+	Settings.bFavoritesFirst = Chk_FavoritesFirst.bChecked;
 
 	Settings.SaveConfig();
 }
@@ -63,4 +71,6 @@ defaultproperties {
 	MapListSortName="Name"
 	MapListSortRecency="Recency"
 	MapListSortPlayCount="Play Count"
+
+	FavoritesFirstText="Sort Favorites First"
 }

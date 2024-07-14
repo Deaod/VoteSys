@@ -1,11 +1,14 @@
 class VS_UI_MapSortByMenu extends UWindowPulldownMenu;
 
-var UWindowPullDownMenuItem ItemName;
+var UWindowPulldownMenuItem ItemName;
 var localized string ItemNameText;
-var UWindowPullDownMenuItem ItemRecency;
+var UWindowPulldownMenuItem ItemRecency;
 var localized string ItemRecencyText;
-var UWindowPullDownMenuItem ItemPlayCount;
+var UWindowPulldownMenuItem ItemPlayCount;
 var localized string ItemPlayCountText;
+
+var UWindowPulldownMenuItem FavoritesFirst;
+var localized string FavoritesFirstText;
 
 function Created() {
 	super.Created();
@@ -13,6 +16,8 @@ function Created() {
 	ItemName = AddMenuItem(ItemNameText, none);
 	ItemRecency = AddMenuItem(ItemRecencyText, none);
 	ItemPlayCount = AddMenuItem(ItemPlayCountText, none);
+	AddMenuItem("-", none);
+	FavoritesFirst = AddMenuItem(FavoritesFirstText, none);
 }
 
 function ShowWindow() {
@@ -29,19 +34,26 @@ function SetSelected(float X, float Y) {
 }
 
 function ExecuteItem(UWindowPullDownMenuItem I) {
+	local VS_ClientSettings Settings;
+
+	Settings = VS_UIV_ClientWindow(OwnerWindow.OwnerWindow).Settings;
+
 	switch(I) {
 		case ItemName:
-			VS_UIV_ClientWindow(OwnerWindow.OwnerWindow).Settings.MapListSort = MLS_Name;
+			Settings.MapListSort = MLS_Name;
 			break;
 		case ItemRecency:
-			VS_UIV_ClientWindow(OwnerWindow.OwnerWindow).Settings.MapListSort = MLS_Recency;
+			Settings.MapListSort = MLS_Recency;
 			break;
 		case ItemPlayCount:
-			VS_UIV_ClientWindow(OwnerWindow.OwnerWindow).Settings.MapListSort = MLS_PlayCount;
+			Settings.MapListSort = MLS_PlayCount;
+			break;
+		case FavoritesFirst:
+			Settings.bFavoritesFirst = !Settings.bFavoritesFirst;
 			break;
 	}
 
-	VS_UIV_ClientWindow(OwnerWindow.OwnerWindow).Settings.SaveConfig();
+	Settings.SaveConfig();
 	UpdateCheckmark();
 
 	super.ExecuteItem(I);
@@ -54,12 +66,16 @@ function CloseUp(optional bool bByOwner) {
 
 function UpdateCheckmark() {
 	local UWindowPullDownMenuItem I;
+	local VS_ClientSettings Settings;
+
+	Settings = VS_UIV_ClientWindow(OwnerWindow.OwnerWindow).Settings;
 
 	ItemName.bChecked = false;
 	ItemRecency.bChecked = false;
 	ItemPlayCount.bChecked = false;
+	FavoritesFirst.bChecked = Settings.bFavoritesFirst;
 
-	switch(VS_UIV_ClientWindow(OwnerWindow.OwnerWindow).Settings.MapListSort) {
+	switch(Settings.MapListSort) {
 		case MLS_Name:
 			I = ItemName;
 			break;
@@ -81,4 +97,5 @@ defaultproperties {
 	ItemNameText="Name"
 	ItemRecencyText="Recency"
 	ItemPlayCountText="Play Count"
+	FavoritesFirstText="Favorites First"
 }

@@ -17,6 +17,9 @@ enum EMapListSort {
 var config ETheme Theme;
 var config EMapListSort MapListSort;
 
+var config string FavoritesList;
+var config bool bFavoritesFirst;
+
 var config float MenuX;
 var config float MenuY;
 
@@ -43,7 +46,9 @@ static final function EMapListSort IntToMapListSort(int A) {
 
 defaultproperties {
 	Theme=TH_Bright
-	MapListSort=MLS_Name;
+	MapListSort=MLS_Name
+	FavoritesList=
+	bFavoritesFirst=True
 	
 	MenuX=-1.0
 	MenuY=-1.0

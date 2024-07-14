@@ -144,7 +144,7 @@ function SetSelected(float X, float Y) {
 	local VS_UI_ListItem NewSelected;
 
 	NewSelected = VS_UI_ListItem(GetItemAt(X, Y));
-	if (NewSelected.bEnabled)
+	if (NewSelected != none && NewSelected.bEnabled)
 		SetSelectedItem(NewSelected);
 }
 

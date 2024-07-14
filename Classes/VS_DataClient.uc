@@ -158,6 +158,7 @@ function ParseLine(string Line) {
 		Log(Line, 'VoteSys');
 		Channel.AddPreset(none);
 		Channel.FocusPreset(ParsePresetRef(Line));
+		Channel.UpdateFavorites();
 	} else if (Left(Line, 6) == "/LOGO/") {
 		Log(Line, 'VoteSys');
 		ParseLogo(Line);

@@ -132,6 +132,7 @@ Text_KickVoteThreshold="Kick Vote Threshold"
 Text_MinimumMapRepeatDistance="Map Repeat Distance"
 
 [VS_UI_MapMenu]
+FavoriteText="Favorite"
 SortByText="Sort By"
 
 [VS_UIS_PageClient]
@@ -143,6 +144,7 @@ MapListSortText="Sort Map List By"
 MapListSortName="Name"
 MapListSortRecency="Recency"
 MapListSortPlayCount="Play Count"
+FavoritesFirstText="Sort Favorites First"
 
 [VS_UIS_Window]
 WindowTitle="VoteSys Settings"
@@ -151,4 +153,5 @@ WindowTitle="VoteSys Settings"
 ItemNameText="Name"
 ItemRecencyText="Recency"
 ItemPlayCountText="Play Count"
+FavoritesFirstText="Favorites First"
 

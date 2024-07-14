@@ -69,6 +69,10 @@ function ConfigureLogoButton(int Index, string Label, string LinkURL) {
 	VS_UIV_ClientWindow(ClientArea).ConfigureLogoButton(Index, Label, LinkURL);
 }
 
+function UpdateFavoritesEnd() {
+	VS_UIV_ClientWindow(ClientArea).UpdateFavoritesEnd();
+}
+
 defaultproperties
 {
 	ClientClass=class'VS_UIV_ClientWindow'

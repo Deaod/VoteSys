@@ -43,6 +43,16 @@ The "Suggest" button will select a suitable map from the list and place your vot
 
 The "Random" button will place your vote for a random map of the currently selected preset.
 
+#### Map Favorites
+
+Maps with a filled in star next to their name have been marked as a favorite.
+
+The outline of a star is shown when hovering over maps in the list.
+
+Maps can also be marked as favorites through the [context menu](#map-context-menu).
+
+By default, your favorite maps are show at the top of the list.
+
 #### Map Screenshot Preview
 
 After hovering over a map in the map list for half a second, a window showing the screenshot of the map will appear.
