@@ -41,7 +41,7 @@ event Tick(float Delta) {
 			if (CurM == none)
 				CurM = CurP.MapList;
 			while(CurM != none) {
-				CurM.bClientFavorite = CurM.bClientFavorite || InStr(CurM.MapName, CurR) >= 0;
+				CurM.bClientFavorite = CurM.bClientFavorite || (CurM.MapName ~= CurR);
 
 				if (--OpsRemaining == 0)
 					return;
