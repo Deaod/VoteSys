@@ -57,11 +57,11 @@ var VS_Package TempPkg;
 event PostBeginPlay() {
 	super.PostBeginPlay();
 
-	SettingsDummy = new(none, 'VoteSys') class 'Object';
-	Settings = new (SettingsDummy, 'ServerSettings') class'VS_ServerSettings';
+	SettingsDummy = new(XLevel, 'VoteSys') class 'Object';
+	Settings = new(SettingsDummy, 'ServerSettings') class'VS_ServerSettings';
 	Settings.SaveConfig();
 
-	BannedPlayersDummy = new(none, 'VoteSysBans') class'Object';
+	BannedPlayersDummy = new(XLevel, 'VoteSysBans') class'Object';
 	BannedPlayers = new(BannedPlayersDummy, 'BannedPlayers') class'VS_BannedPlayers';
 
 	AceHandler = Spawn(class'VS_AceHandler');
@@ -562,7 +562,7 @@ function CheckGameEnded() {
 	// Or extend this condition with another gamemode, whatever ...
 	if ((Level.Game.IsA('Assault') && Level.Game.GetPropertyText("bDefenseSet") ~= "False")) {
 		if (bConfiguredTempData == false) {
-			TempDataDummy = new(none, 'VoteSysTemp') class'Object';
+			TempDataDummy = new(XLevel, 'VoteSysTemp') class'Object';
 			TD = new(TempDataDummy, 'Data') class'VS_TempData';
 
 			TD.bNoColdStart = true;
@@ -643,7 +643,7 @@ function TravelTo(VS_Preset P, VS_Map M) {
 	if (InStr(Mutators, "MutVoteSys") == -1)
 		Mutators = string(self.Class)$","$Mutators;
 
-	TempDataDummy = new(none, 'VoteSysTemp') class'Object';
+	TempDataDummy = new(XLevel, 'VoteSysTemp') class'Object';
 	TD = new(TempDataDummy, 'Data') class'VS_TempData';
 
 	TD.bNoColdStart = true;
@@ -1449,7 +1449,7 @@ function AddMapListsToMapList(array<name> MapListArray, VS_MapList MapList) {
 }
 
 function LoadHistory() {
-	HistoryDummy = new(none, 'VoteSysHistory') class'Object';
+	HistoryDummy = new(XLevel, 'VoteSysHistory') class'Object';
 	History = new(HistoryDummy, 'History') class'VS_HistoryConfig';
 
 	HistoryProcessor = Spawn(class'VS_HistoryProcessor');
