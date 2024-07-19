@@ -268,6 +268,7 @@ function SaveServerSettings(VS_ServerSettings S) {
 	SendServerSetting(S, "VoteTimeLimit");
 	SendServerSetting(S, "VoteEndCondition");
 	SendServerSetting(S, "bRetainCandidates");
+	SendServerSetting(S, "bOpenVoteMenuAutomatically");
 	SendServerSetting(S, "KickVoteThreshold");
 	SendServerSetting(S, "DefaultPreset");
 	SendServerSetting(S, "DefaultMap");
@@ -344,6 +345,7 @@ function SaveServerPreset(VS_ClientPreset P, int i) {
 	SaveServerPresetProperty(P, Prefix, "GameSettings");
 	SaveServerPresetProperty(P, Prefix, "Packages");
 	SaveServerPresetProperty(P, Prefix, "bDisabled");
+	SaveServerPresetProperty(P, Prefix, "bOpenVoteMenuAutomatically");
 	SaveServerPresetProperty(P, Prefix, "MinimumMapRepeatDistance");
 	SaveServerPresetProperty(P, Prefix, "MinPlayers");
 	SaveServerPresetProperty(P, Prefix, "MaxPlayers");

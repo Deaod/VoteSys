@@ -28,6 +28,7 @@ Text_Disabled="Disabled"
 Text_MinimumMapRepeatDistance="Min. Map Repeat Distance"
 Text_MinPlayers="Min. Players"
 Text_MaxPlayers="Max. Players"
+Text_OpenVoteMenuAutomatically="Open Vote Menu Automatically"
 
 [VS_UIV_ClientWindow]
 MapFilterText="Filter Maps By Name"
@@ -69,6 +70,7 @@ WindowTitle="VoteSys Menu"
 
 [VS_UIS_PageAdminUI]
 Text_RetainCandidates="Retain Candidates"
+Text_OpenVoteMenuAutomatically="Open Vote Menu Automatically"
 Text_DefaultTimeMessageClass="Time Msg Class"
 Text_LogoTexture="Logo Texture"
 Text_LogoRegion="Logo Region"
@@ -131,10 +133,6 @@ Text_VoteEndCondition_TimerOrResultDetermined="Result Certain"
 Text_KickVoteThreshold="Kick Vote Threshold"
 Text_MinimumMapRepeatDistance="Map Repeat Distance"
 
-[VS_UI_MapMenu]
-FavoriteText="Favorite"
-SortByText="Sort By"
-
 [VS_UIS_PageClient]
 ThemeText="Theme"
 ThemeBright="Bright"
@@ -145,6 +143,10 @@ MapListSortName="Name"
 MapListSortRecency="Recency"
 MapListSortPlayCount="Play Count"
 FavoritesFirstText="Sort Favorites First"
+
+[VS_UI_MapMenu]
+FavoriteText="Favorite"
+SortByText="Sort By"
 
 [VS_UIS_Window]
 WindowTitle="VoteSys Settings"

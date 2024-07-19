@@ -25,6 +25,8 @@ var config array<string> GameSettings;
 var config array<string> Packages;
 /** Disabled presets are not shown to users and cannot be voted for */
 var config bool bDisabled;
+/** When running this preset, dont open the menu automatically. */
+var config bool bOpenVoteMenuAutomatically;
 /** Overrides the server setting of the same name, if the value is 0 or greater */
 var config int MinimumMapRepeatDistance;
 /** At least this many players have to be on the server to allow voting for this preset */
@@ -33,6 +35,7 @@ var config int MinPlayers;
 var config int MaxPlayers;
 
 defaultproperties {
+	bOpenVoteMenuAutomatically=True
 	MinimumMapRepeatDistance=-1
 	MinPlayers=-1
 	MaxPlayers=-1

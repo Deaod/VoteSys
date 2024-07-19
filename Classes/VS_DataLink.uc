@@ -194,6 +194,7 @@ Begin:
 	SendServerSetting("VoteTimeLimit");
 	SendServerSetting("VoteEndCondition");
 	SendServerSetting("bRetainCandidates");
+	SendServerSetting("bOpenVoteMenuAutomatically");
 	SendServerSetting("KickVoteThreshold");
 	SendServerSetting("DefaultPreset");
 	SendServerSetting("DefaultMap");
@@ -261,6 +262,7 @@ state SendServerPresets {
 		SendServerPresetProperty(Prefix, PC, "GameSettings");
 		SendServerPresetProperty(Prefix, PC, "Packages");
 		SendServerPresetProperty(Prefix, PC, "bDisabled");
+		SendServerPresetProperty(Prefix, PC, "bOpenVoteMenuAutomatically");
 		SendServerPresetProperty(Prefix, PC, "MinimumMapRepeatDistance");
 		SendServerPresetProperty(Prefix, PC, "MinPlayers");
 		SendServerPresetProperty(Prefix, PC, "MaxPlayers");

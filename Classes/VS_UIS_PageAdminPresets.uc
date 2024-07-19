@@ -52,6 +52,9 @@ var localized string Text_MinPlayers;
 var VS_UI_EditControl Edt_MaxPlayers;
 var localized string Text_MaxPlayers;
 
+var UWindowCheckbox Chk_OpenVoteMenuAutomatically;
+var localized string Text_OpenVoteMenuAutomatically;
+
 function Created() {
 	super.Created();
 
@@ -136,6 +139,9 @@ function Created() {
 	Edt_MaxPlayers.EditBoxWidth = 60;
 	Edt_MaxPlayers.SetNumericOnly(true);
 	Edt_MaxPlayers.SetNumericNegative(true);
+
+	Chk_OpenVoteMenuAutomatically = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 200, 308, 188, 16));
+	Chk_OpenVoteMenuAutomatically.SetText(Text_OpenVoteMenuAutomatically);
 }
 
 function ApplyTheme() {
@@ -157,6 +163,7 @@ function ApplyTheme() {
 	Edt_MinimumMapRepeatDistance.Theme = Theme;
 	Edt_MinPlayers.Theme = Theme;
 	Edt_MaxPlayers.Theme = Theme;
+	//Chk_OpenVoteMenuAutomatically // not themed
 }
 
 function EnableInteraction(bool bEnable) {
@@ -177,6 +184,7 @@ function EnableInteraction(bool bEnable) {
 	Edt_MinimumMapRepeatDistance.EditBox.SetEditable(false);
 	Edt_MinPlayers.EditBox.SetEditable(false);
 	Edt_MaxPlayers.EditBox.SetEditable(false);
+	Chk_OpenVoteMenuAutomatically.bDisabled = true;
 }
 
 function SavePresetSettings() {
@@ -198,6 +206,7 @@ function SavePresetSettings() {
 	SelectedPreset.Preset.MinimumMapRepeatDistance = int(Edt_MinimumMapRepeatDistance.GetValue());
 	SelectedPreset.Preset.MinPlayers = int(Edt_MinPlayers.GetValue());
 	SelectedPreset.Preset.MaxPlayers = int(Edt_MaxPlayers.GetValue());
+	SelectedPreset.Preset.bOpenVoteMenuAutomatically = Chk_OpenVoteMenuAutomatically.bChecked;
 }
 
 function LoadPresetSettings(VS_ClientPreset P) {
@@ -219,6 +228,7 @@ function LoadPresetSettings(VS_ClientPreset P) {
 	Edt_MinimumMapRepeatDistance.SetValue(string(P.MinimumMapRepeatDistance));
 	Edt_MinPlayers.SetValue(string(P.MinPlayers));
 	Edt_MaxPlayers.SetValue(string(P.MaxPlayers));
+	Chk_OpenVoteMenuAutomatically.bChecked = P.bOpenVoteMenuAutomatically;
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
@@ -244,6 +254,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 		Edt_MinimumMapRepeatDistance.EditBox.SetEditable(SelectedPreset != none);
 		Edt_MinPlayers.EditBox.SetEditable(SelectedPreset != none);
 		Edt_MaxPlayers.EditBox.SetEditable(SelectedPreset != none);
+		Chk_OpenVoteMenuAutomatically.bDisabled = SelectedPreset == none;
 	}
 }
 
@@ -324,4 +335,5 @@ defaultproperties {
 	Text_MinimumMapRepeatDistance="Min. Map Repeat Distance"
 	Text_MinPlayers="Min. Players"
 	Text_MaxPlayers="Max. Players"
+	Text_OpenVoteMenuAutomatically="Open Vote Menu Automatically"
 }

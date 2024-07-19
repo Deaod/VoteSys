@@ -300,8 +300,22 @@ function Mutate(string Command, PlayerPawn Sender) {
 	super.Mutate(Command, Sender);
 }
 
+function bool WantAutomaticallyOpenVoteMenu() {
+	local VS_Preset P;
+
+	if (Settings.bOpenVoteMenuAutomatically == false)
+		return false;
+
+	P = FindPreset(CurrentPreset);
+	return P == none || P.bOpenVoteMenuAutomatically;
+}
+
 function OpenVoteMenuForAll() {
 	local VS_ChannelContainer C;
+
+	if (WantAutomaticallyOpenVoteMenu() == false)
+		return;
+
 	for (C = ChannelList; C != none; C = C.Next)
 		if (C.Channel != none && CanVote(C.PlayerOwner))
 			C.Channel.ShowVoteMenu();
@@ -1274,6 +1288,7 @@ function LoadPresetPassTwo(VS_Preset P) {
 		P.Game = Game;
 
 	P.bDisabled = PC.bDisabled;
+	P.bOpenVoteMenuAutomatically = PC.bOpenVoteMenuAutomatically;
 	if (P.MinimumMapRepeatDistance < 0)
 		P.MinimumMapRepeatDistance = Settings.MinimumMapRepeatDistance;
 

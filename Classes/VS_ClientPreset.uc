@@ -12,11 +12,13 @@ var array<string> Parameters;
 var array<string> GameSettings;
 var array<string> Packages;
 var bool          bDisabled;
+var bool          bOpenVoteMenuAutomatically;
 var int           MinimumMapRepeatDistance;
 var int           MinPlayers;
 var int           MaxPlayers;
 
 defaultproperties {
+	bOpenVoteMenuAutomatically=True
 	MinimumMapRepeatDistance=-1
 	MinPlayers=-1
 	MaxPlayers=-1

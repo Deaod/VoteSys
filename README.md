@@ -62,6 +62,7 @@ MidGameVoteThreshold=0.5
 MidGameVoteTimeLimit=30
 VoteEndCondition=VEC_TimerOnly
 bRetainCandidates=False
+bOpenVoteMenuAutomatically=True
 MinimumMapRepeatDistance=0
 KickVoteThreshold=0.6
 DefaultTimeMessageClass=Botpack.TimeMessage
@@ -106,6 +107,7 @@ DefaultActors=IpServer.UdpServerUplink MasterServerAddress=unreal.epicgames.com 
 1. [MidGameVoteTimeLimit](#midgamevotetimelimit)
 1. [VoteEndCondition](#voteendcondition)
 1. [bRetainCandidates](#bretaincandidates)
+1. [bOpenVoteMenuAutomatically](#bopenvotemenuautomatically)
 1. [MinimumRepeatDistance](#minimumrepeatdistance)
 1. [KickVoteThreshold](#kickvotethreshold)
 1. [DefaultTimeMessageClass](#defaulttimemessageclass)
@@ -179,6 +181,13 @@ Defaults to `VEC_TimerOnly`.
 If true, candidates that no longer have any votes for them get retained. If false, candidates with no votes disappear from the list.
 
 Defaults to false.
+
+#### bOpenVoteMenuAutomatically
+
+If true, the vote menu gets opened automatically when the vote timer starts.  
+If false, the menu does not get opened automatically. Setting this to false is equivalent to setting [`bOpenVoteMenuAutomatically`](bopenvotemenuautomatically-1) to false for all presets.
+
+Defaults to true.
 
 #### MinimumRepeatDistance
 
@@ -385,6 +394,7 @@ Category=DM
 InheritFrom=DM/Team DeathMatch
 GameSettings=MaxTeams=4
 Mutators=Botpack.InstaGibDM
+bOpenVoteMenuAutomatically=False
 MinimumMapRepeatDistance=4
 MinPlayers=4
 MaxPlayers=8
@@ -475,6 +485,13 @@ If `True` the preset will not be shown to users and will not be eligible to beco
 This setting does not need to be mentioned explicitly. Its default value will be used if it is not mentioned.
 
 Default is `False`.
+
+#### bOpenVoteMenuAutomatically
+
+If `True`, the vote menu gets opened automatically when the vote timer starts while this preset is active on the server.  
+If `False`, the menu does not get opened automatically.
+
+Default is `True`.
 
 #### MinimumMapRepeatDistance
 

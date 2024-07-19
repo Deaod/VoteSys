@@ -29,6 +29,7 @@ var config int GameEndedVoteDelay;
 var config int VoteTimeLimit;
 var config EVoteEndCond VoteEndCondition;
 var config bool bRetainCandidates;
+var config bool bOpenVoteMenuAutomatically;
 
 var config float KickVoteThreshold;
 
@@ -103,6 +104,7 @@ defaultproperties {
 	VoteTimeLimit=30
 	VoteEndCondition=VEC_TimerOnly
 	bRetainCandidates=False
+	bOpenVoteMenuAutomatically=True
 
 	KickVoteThreshold=0.6
 

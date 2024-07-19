@@ -14,6 +14,7 @@ var string          Parameters;
 var string          GameSettings;
 var string          Packages;
 var bool            bDisabled;
+var bool            bOpenVoteMenuAutomatically;
 var bool            bLoading;
 var bool            bLoaded;
 var int             MaxSequenceNumber;
@@ -92,4 +93,11 @@ function VS_Map SelectRandomMapFromList() {
 	}
 
 	return Result;
+}
+
+defaultproperties {
+	bOpenVoteMenuAutomatically=True
+	MinimumMapRepeatDistance=-1
+	MinPlayers=-1
+	MaxPlayers=-1
 }
