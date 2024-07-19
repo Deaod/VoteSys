@@ -5,13 +5,14 @@ A new, independent implementation of map vote.
 * Unlimited number of maps
 * Quicker transfer of data to clients
 * Automatic management of ServerPackages
-  * Opt-in (`bManageServerPackages`)
-  * Before server version 469c `DefaultPackages` have to be configured correctly
+  * Opt-in ([`bManageServerPackages`](#bmanageserverpackages))
+  * Before server version 469c [`DefaultPackages`](#defaultpackages) have to be configured correctly
   * With 469c no further configuration is necessary
-* Map repeat limits (`MinimumMapRepeatDistance`)
+* Map repeat limits ([`MinimumMapRepeatDistance`](#minimummaprepeatdistance))
 
 Servers must run at least UT v469.  
-Clients must run at least UT v436.
+Clients must run at least UT v436.  
+Admin UI functionality also requires at least UT v469.
 
 ## [UI Documentation](Docs/ui.md)
 
@@ -547,7 +548,7 @@ Adds or removes all maps that match a specified prefix from the map list.
 Adds or removes all maps in another map list from the map list.
 
 ## Build
-In order to build this mutator, you need to be using UT99 v469c or later.
+In order to build this mutator, you need to be using UT99 v469d or later.
 
 1. Go to the installation directory of UT99 in a command shell
 2. Use `git clone https://github.com/Deaod/VoteSys` to clone the repo
