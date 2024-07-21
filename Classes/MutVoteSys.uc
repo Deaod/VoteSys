@@ -313,9 +313,6 @@ function bool WantAutomaticallyOpenVoteMenu() {
 function OpenVoteMenuForAll() {
 	local VS_ChannelContainer C;
 
-	if (WantAutomaticallyOpenVoteMenu() == false)
-		return;
-
 	for (C = ChannelList; C != none; C = C.Next)
 		if (C.Channel != none && CanVote(C.PlayerOwner))
 			C.Channel.ShowVoteMenu();
@@ -524,8 +521,10 @@ function CheckMidGameVoting() {
 	TimeCounter = Settings.MidGameVoteTimeLimit;
 	if (TimeCounter <= 0)
 		TimeCounter = Settings.VoteTimeLimit;
-	BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 4);
-	OpenVoteMenuForAll();
+	if (WantAutomaticallyOpenVoteMenu()) {
+		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 4);
+		OpenVoteMenuForAll();
+	}
 	AnnounceCountdown(TimeCounter);
 }
 
@@ -598,8 +597,10 @@ function TickVoteMenuDelay() {
 
 	GameState = GS_Voting;
 	TimeCounter = Settings.VoteTimeLimit;
-	BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 5);
-	OpenVoteMenuForAll();
+	if (WantAutomaticallyOpenVoteMenu()) {
+		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 5);
+		OpenVoteMenuForAll();
+	}
 	AnnounceCountdown(TimeCounter);
 }
 
@@ -794,7 +795,8 @@ function TallyVotes() {
 	}
 
 	if (CountTiedCandidates == 0) {
-		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 1, VotedMap.MapName@"("$VotedPreset.Abbreviation$")");
+		if (WantAutomaticallyOpenVoteMenu())
+			BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 1, VotedMap.MapName@"("$VotedPreset.Abbreviation$")");
 	} else if (CountTiedCandidates > 1) {
 		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 2, VotedMap.MapName@"("$VotedPreset.Abbreviation$")");
 	} else {
