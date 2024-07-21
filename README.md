@@ -186,7 +186,7 @@ Defaults to false.
 #### bOpenVoteMenuAutomatically
 
 If true, the vote menu gets opened automatically when the vote timer starts.  
-If false, the menu does not get opened automatically. Setting this to false is equivalent to setting [`bOpenVoteMenuAutomatically`](bopenvotemenuautomatically-1) to false for all presets.
+If false, the menu does not get opened automatically. Setting this to false is equivalent to setting [`bOpenVoteMenuAutomatically`](#bopenvotemenuautomatically-1) to false for all presets.
 
 Defaults to true.
 
