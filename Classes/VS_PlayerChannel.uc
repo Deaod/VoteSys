@@ -365,7 +365,8 @@ simulated function UpdateFavorites() {
 }
 
 simulated function UpdateFavoritesEnd() {
-	VoteMenuDialog.UpdateFavoritesEnd();
+	if (VoteMenuDialog != none)
+		VoteMenuDialog.UpdateFavoritesEnd();
 }
 
 simulated function Range FindFavoriteRule(string Rules, string M) {
