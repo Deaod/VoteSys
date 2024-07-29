@@ -16,6 +16,9 @@ function Created() {
 }
 
 function SetLogoTexture(string TextureRef) {
+	if (TextureRef == "")
+		return;
+		
 	LogoTexture = Texture(DynamicLoadObject(TextureRef, class'Texture', true));
 	if (LogoTexture == none) {
 		Log("Logo texture \""$TextureRef$"\" failed to load!", 'VoteSys');
