@@ -461,7 +461,7 @@ function SuggestMap() {
 }
 
 function ToggleFavorite(VS_Map M) {
-	Channel.ToggleFavorite(M);
+	Channel.ToggleFavorite(M, ActivePreset);
 }
 
 function AddPreset(VS_Preset P) {

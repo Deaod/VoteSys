@@ -2,9 +2,9 @@ class VS_FavoritesProcessor extends Actor
 	imports(VS_Util_String);
 
 var VS_Preset PresetList;
-var string RemainingRules;
+var VS_Preset FirstPreset;
+var string FavoritesRules;
 
-var string CurR;
 var VS_Preset CurP;
 var VS_Map CurM;
 
@@ -14,14 +14,16 @@ event PostBeginPlay() {
 	Disable('Tick');
 }
 
-function UpdateFavorites(VS_Preset Presets, string FavoritesRules) {
-	RemainingRules = FavoritesRules;
-	if (PeekRule() == "")
-		PopRule();
-
+// PrioPreset indicates that out of the list of Presets, this specific preset
+// should be updated first.
+function UpdateFavorites(VS_Preset Presets, string Rules, optional VS_Preset PrioPreset) {
+	FavoritesRules = Rules;
 	PresetList = Presets;
+	FirstPreset = PrioPreset;
+	if (FirstPreset == none)
+		FirstPreset = PresetList;
+	CurP = FirstPreset;
 
-	ClearFavorites();
 	Enable('Tick');
 }
 
@@ -30,31 +32,28 @@ event Tick(float Delta) {
 
 	OpsRemaining = MaxOpsPerTick;
 
-	if (CurR == "")
-		CurR = PeekRule();
-	while (CurR != "") {
+	do {
+		if (CurM == none)
+			CurM = CurP.MapList;
+		while(CurM != none) {
+			CurM.bClientFavorite = (InStr(FavoritesRules, CurM.MapName$",") >= 0);
 
-		if (CurP == none)
-			CurP = PresetList;
-		while (CurP != none) {
+			if (--OpsRemaining == 0)
+				return;
 
-			if (CurM == none)
-				CurM = CurP.MapList;
-			while(CurM != none) {
-				CurM.bClientFavorite = CurM.bClientFavorite || (CurM.MapName ~= CurR);
-
-				if (--OpsRemaining == 0)
-					return;
-
-				CurM = CurM.Next;
-			}
-
-			CurP = CurP.Next;
+			CurM = CurM.Next;
 		}
 
-		PopRule();
-		CurR = PeekRule();
-	}
+		// Eagerly notify when the first preset has been processed, FirstPreset
+		// could be the PrioPreset passed to UpdateFavorites, so we want to
+		// update the UI ASAP after updating favorites for it.
+		if (CurP == FirstPreset)
+			VS_PlayerChannel(Owner).UpdateFavoritesEnd();
+
+		CurP = CurP.Next;
+		if (CurP == none)
+			CurP = PresetList;
+	} until(CurP == FirstPreset);
 
 	Disable('Tick');
 	VS_PlayerChannel(Owner).UpdateFavoritesEnd();
@@ -73,26 +72,6 @@ function ClearFavorites() {
 		}
 		P = P.Next;
 	}
-}
-
-function string PeekRule() {
-	local int Pos;
-
-	Pos = InStr(RemainingRules, ",");
-	if (Pos >= 0)
-		return Trim(Left(RemainingRules, Pos));
-
-	return Trim(RemainingRules);
-}
-
-function PopRule() {
-	local int Pos;
-
-	do {
-		Pos = InStr(RemainingRules, ",");
-		if (Pos >= 0)
-			RemainingRules = Mid(RemainingRules, Pos+1);
-	} until(Len(RemainingRules) == 0 || PeekRule() != "");
 }
 
 defaultproperties {

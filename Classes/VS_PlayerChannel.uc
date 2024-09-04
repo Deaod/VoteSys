@@ -347,7 +347,7 @@ simulated function AddMap(VS_Map M) {
 	LatestMap = M;
 }
 
-simulated function ToggleFavorite(VS_Map M) {
+simulated function ToggleFavorite(VS_Map M, VS_Preset PrioPreset) {
 	local Range R;
 
 	R = FindFavoriteRule(Settings.FavoritesList, M.MapName);
@@ -357,11 +357,11 @@ simulated function ToggleFavorite(VS_Map M) {
 		Settings.FavoritesList = Settings.FavoritesList $ M.MapName $ ",";
 	}
 	Settings.SaveConfig();
-	UpdateFavorites();
+	UpdateFavorites(PrioPreset);
 }
 
-simulated function UpdateFavorites() {
-	FavoritesProcessor.UpdateFavorites(PresetList, Settings.FavoritesList);
+simulated function UpdateFavorites(optional VS_Preset PrioPreset) {
+	FavoritesProcessor.UpdateFavorites(PresetList, Settings.FavoritesList, PrioPreset);
 }
 
 simulated function UpdateFavoritesEnd() {
