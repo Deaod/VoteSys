@@ -4,7 +4,17 @@ var VS_UI_ThemeBase Theme;
 
 var VS_UI_ListItem HoverItem;
 
+var float MaxItemWidth;
+var UWindowHScrollbar HorSB;
+var bool bUseHorizontalScrollbar;
+
 const DE_VoteSys_ClickDone = 128;
+
+function Created() {
+	super.Created();
+
+	HorSB = UWindowHScrollbar(CreateWindow(class'UWindowHScrollbar', 0, WinHeight-12, WinWidth-VertSB.WinWidth, 12));
+}
 
 function UWindowListBoxItem GetItemAt(float MouseX, float MouseY) {
 	local float y;
@@ -21,6 +31,8 @@ function UWindowListBoxItem GetItemAt(float MouseX, float MouseY) {
 	CurItem = Items.Next;
 	i = 0;
 	YLimit = WinHeight - LookAndFeel.MiscBevelB[LookAndFeel.EditBoxBevel].H;
+	if (bUseHorizontalScrollbar)
+		YLimit -= HorSB.WinHeight;
 
 	while((CurItem != none) && (i < VertSB.Pos)) {
 		if(CurItem.ShowThisItem())
@@ -59,17 +71,53 @@ function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H
 	C.Font = Root.Fonts[F_Normal];
 }
 
+function float ItemWidth(Canvas C, UWindowList Item, float VisibleWidth) {
+	return VisibleWidth;
+}
+
+function float CalcMaxItemWidth(Canvas C, float VisibleWidth) {
+	local UWindowList I;
+	local float MaxWidth;
+
+	for (I = Items.Next; I != none; I = I.Next) {
+		MaxWidth = FMax(MaxWidth, ItemWidth(C, I, VisibleWidth));
+	}
+
+	return MaxWidth;
+}
+
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	local string NewHelpText;
 	local int BevelType;
+	local float VisibleHeight;
+	local float VisibleWidth;
 
 	BevelType = LookAndFeel.EditBoxBevel;
 
-	VertSB.SetRange(
-		0,
-		Items.CountShown(),
-		int((WinHeight - (LookAndFeel.MiscBevelT[BevelType].H + LookAndFeel.MiscBevelB[BevelType].H)) / ItemHeight)
-	);
+	if (bUseHorizontalScrollbar) {
+		HorSB.ShowWindow();
+		HorSB.WinLeft = 0;
+		HorSB.WinTop = WinHeight - LookAndFeel.Size_ScrollbarWidth;
+		HorSB.WinHeight = LookAndFeel.Size_ScrollbarWidth;
+		HorSB.WinWidth = WinWidth - LookAndFeel.Size_ScrollbarWidth;
+	} else {
+		HorSB.HideWindow();
+	}
+
+	VisibleHeight = WinHeight - (LookAndFeel.MiscBevelT[BevelType].H + LookAndFeel.MiscBevelB[BevelType].H);
+	if (bUseHorizontalScrollbar) {
+		VisibleHeight -= HorSB.WinHeight;
+		VertSB.WinHeight = WinHeight - HorSB.WinHeight;
+	}
+	VertSB.SetRange(0, Items.CountShown(), int(VisibleHeight / ItemHeight));
+
+	if (bUseHorizontalScrollbar) {
+		VisibleWidth = WinWidth - VertSB.WinWidth - LookAndFeel.MiscBevelL[BevelType].W - LookAndFeel.MiscBevelR[BevelType].W;
+		MaxItemWidth = CalcMaxItemWidth(C, VisibleWidth);
+		HorSB.SetRange(0, MaxItemWidth, VisibleWidth);
+	} else {
+		MaxItemWidth = WinWidth - VertSB.WinWidth - LookAndFeel.MiscBevelL[BevelType].W - LookAndFeel.MiscBevelR[BevelType].W;
+	}
 
 	if (HoverItem != none)
 		HoverItem.bHover = false;
@@ -87,13 +135,12 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	}
 }
 
-
 function Paint(Canvas C, float MouseX, float MouseY) {
 	local int BevelType;
 	local float Y;
 	local UWindowList CurItem;
 	local int i;
-	local float ItemWidth;
+	local float VisibleWidth;
 	local float YLimit;
 
 	local Region OldClipRegion;
@@ -102,12 +149,27 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 
 	BevelType = LookAndFeel.EditBoxBevel;
 
-	Theme.DrawBox(C, self, 0, 0, WinWidth - VertSB.WinWidth, WinHeight);
+	if (bUseHorizontalScrollbar)
+		Theme.DrawBox(C, self,
+			0,
+			0,
+			WinWidth - LookAndFeel.Size_ScrollbarWidth,
+			WinHeight - LookAndFeel.Size_ScrollbarWidth
+		);
+	else
+		Theme.DrawBox(C, self,
+			0,
+			0,
+			WinWidth - LookAndFeel.Size_ScrollbarWidth,
+			WinHeight
+		);
 
 	CurItem = Items.Next;
 	i = 0;
-	ItemWidth = WinWidth - VertSB.WinWidth - LookAndFeel.MiscBevelL[BevelType].W - LookAndFeel.MiscBevelR[BevelType].W;
+	VisibleWidth = WinWidth - VertSB.WinWidth - LookAndFeel.MiscBevelL[BevelType].W - LookAndFeel.MiscBevelR[BevelType].W;
 	YLimit = WinHeight - LookAndFeel.MiscBevelT[BevelType].H - LookAndFeel.MiscBevelB[BevelType].H;
+	if (bUseHorizontalScrollbar)
+		YLimit -= HorSB.WinHeight;
 
 	OrgX = C.OrgX; OrgY = C.OrgY;
 	ClipX = C.ClipX; ClipY = C.ClipY;
@@ -115,11 +177,11 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 
 	C.OrgX = int(C.OrgX + LookAndFeel.MiscBevelL[BevelType].W * Root.GUIScale);
 	C.OrgY = int(C.OrgY + LookAndFeel.MiscBevelT[BevelType].H * Root.GUIScale);
-	C.ClipX = ItemWidth * Root.GUIScale;
+	C.ClipX = VisibleWidth * Root.GUIScale;
 	C.ClipY = YLimit * Root.GUIScale;
 	ClippingRegion.X = 0.0;
 	ClippingRegion.Y = 0.0;
-	ClippingRegion.W = ItemWidth;
+	ClippingRegion.W = VisibleWidth;
 	ClippingRegion.H = YLimit;
 
 	while ((CurItem != None) && (i < VertSB.Pos)) {
@@ -130,7 +192,7 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 
 	for(Y = 0; (Y < YLimit) && (CurItem != None); CurItem = CurItem.Next) {
 		if(CurItem.ShowThisItem()) {
-			DrawItem(C, CurItem, 0, Y, ItemWidth, ItemHeight);
+			DrawItem(C, CurItem, -HorSB.Pos, Y, MaxItemWidth, ItemHeight);
 			Y += ItemHeight;
 		}
 	}
@@ -166,6 +228,7 @@ function ClearSelection() {
 }
 
 defaultproperties {
+	bUseHorizontalScrollbar=False
 	ListClass=class'VS_UI_ListItem'
 	ItemHeight=13
 }
