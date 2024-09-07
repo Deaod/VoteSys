@@ -4,6 +4,7 @@ var VS_UI_ThemeBase Theme;
 
 var VS_UI_ListItem HoverItem;
 
+var float TotalBevelWidth, TotalBevelHeight;
 var float MaxItemWidth;
 var UWindowHScrollbar HorSB;
 var bool bUseHorizontalScrollbar;
@@ -89,10 +90,13 @@ function float CalcMaxItemWidth(Canvas C, float VisibleWidth) {
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	local string NewHelpText;
 	local int BevelType;
+	local float TotalBevelWidth, TotalBevelHeight;
 	local float VisibleHeight;
 	local float VisibleWidth;
 
 	BevelType = LookAndFeel.EditBoxBevel;
+	TotalBevelWidth = LookAndFeel.MiscBevelL[BevelType].W + LookAndFeel.MiscBevelR[BevelType].W;
+	TotalBevelHeight = LookAndFeel.MiscBevelT[BevelType].H + LookAndFeel.MiscBevelB[BevelType].H;
 
 	if (bUseHorizontalScrollbar) {
 		HorSB.ShowWindow();
@@ -104,7 +108,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 		HorSB.HideWindow();
 	}
 
-	VisibleHeight = WinHeight - (LookAndFeel.MiscBevelT[BevelType].H + LookAndFeel.MiscBevelB[BevelType].H);
+	VisibleHeight = WinHeight - TotalBevelHeight;
 	if (bUseHorizontalScrollbar) {
 		VisibleHeight -= HorSB.WinHeight;
 		VertSB.WinHeight = WinHeight - HorSB.WinHeight;
@@ -112,11 +116,11 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	VertSB.SetRange(0, Items.CountShown(), int(VisibleHeight / ItemHeight));
 
 	if (bUseHorizontalScrollbar) {
-		VisibleWidth = WinWidth - VertSB.WinWidth - LookAndFeel.MiscBevelL[BevelType].W - LookAndFeel.MiscBevelR[BevelType].W;
+		VisibleWidth = WinWidth - VertSB.WinWidth - TotalBevelWidth;
 		MaxItemWidth = CalcMaxItemWidth(C, VisibleWidth);
 		HorSB.SetRange(0, MaxItemWidth, VisibleWidth);
 	} else {
-		MaxItemWidth = WinWidth - VertSB.WinWidth - LookAndFeel.MiscBevelL[BevelType].W - LookAndFeel.MiscBevelR[BevelType].W;
+		MaxItemWidth = WinWidth - VertSB.WinWidth - TotalBevelWidth;
 	}
 
 	if (HoverItem != none)
@@ -166,8 +170,8 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 
 	CurItem = Items.Next;
 	i = 0;
-	VisibleWidth = WinWidth - VertSB.WinWidth - LookAndFeel.MiscBevelL[BevelType].W - LookAndFeel.MiscBevelR[BevelType].W;
-	YLimit = WinHeight - LookAndFeel.MiscBevelT[BevelType].H - LookAndFeel.MiscBevelB[BevelType].H;
+	VisibleWidth = WinWidth - VertSB.WinWidth - TotalBevelWidth;
+	YLimit = WinHeight - TotalBevelHeight;
 	if (bUseHorizontalScrollbar)
 		YLimit -= HorSB.WinHeight;
 
@@ -190,8 +194,8 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 		CurItem = CurItem.Next;
 	}
 
-	for(Y = 0; (Y < YLimit) && (CurItem != None); CurItem = CurItem.Next) {
-		if(CurItem.ShowThisItem()) {
+	for (Y = 0; (Y < YLimit) && (CurItem != None); CurItem = CurItem.Next) {
+		if (CurItem.ShowThisItem()) {
 			DrawItem(C, CurItem, -HorSB.Pos, Y, MaxItemWidth, ItemHeight);
 			Y += ItemHeight;
 		}
