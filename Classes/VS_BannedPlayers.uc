@@ -58,6 +58,7 @@ final function BannedPlayer FillBannedPlayerStruct(string HWHash, string PlayerN
 
 final function BanPlayer(string HWHash, string PlayerName, string BannedBy) {
 	AddPlayerToBanList(BannedPlayers, FillBannedPlayerStruct(HWHash, PlayerName, BannedBy));
+	SaveConfig();
 }
 
 final function TempBanPlayer(string HWHash, string PlayerName, string BannedBy) {
