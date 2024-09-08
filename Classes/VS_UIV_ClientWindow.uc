@@ -141,6 +141,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	CategoryTabs.WinWidth = WinWidth;
 
 	VoteButton.bDisabled = (ActivePreset == none);
+	SuggestButton.bDisabled = (ActivePreset == none);
 	RandomButton.bDisabled = (ActivePreset == none);
 
 	if (ChatEdit.EditBox.bControlDown)
