@@ -148,6 +148,8 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	else
 		ChatSay.SetText(ChatSayText);
 
+	if (Logo.bWindowVisible)
+		Logo.SendToBack();
 
 	L = GetLevel();
 	if (MouseX != PrevMouseX || MouseY != PrevMouseY || MapListBox.HoverItem == none || IsActive() == false) {
