@@ -24,7 +24,7 @@ function Created() {
 	Btn_ReloadSettings = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 88, 334, 80, 16));
 	Btn_ReloadSettings.SetText(Text_ReloadSettings);
 
-	Lbl_SettingsState = UWindowLabelControl(CreateControl(class'UWindowLabelControl', 172, 334, 114, 16));
+	Lbl_SettingsState = UWindowLabelControl(CreateControl(class'UWindowLabelControl', 172, 336, 114, 16));
 	Lbl_SettingsState.Align = TA_Right;
 }
 
