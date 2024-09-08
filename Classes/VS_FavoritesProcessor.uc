@@ -24,11 +24,17 @@ function UpdateFavorites(VS_Preset Presets, string Rules, optional VS_Preset Pri
 		FirstPreset = PresetList;
 	CurP = FirstPreset;
 
-	Enable('Tick');
+	if (CurP != none)
+		Enable('Tick');
 }
 
 event Tick(float Delta) {
 	local int OpsRemaining;
+
+	if (CurP == none) {
+		Disable('Tick');
+		return;
+	}
 
 	OpsRemaining = MaxOpsPerTick;
 
