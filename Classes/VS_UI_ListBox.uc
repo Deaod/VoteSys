@@ -14,7 +14,12 @@ const DE_VoteSys_ClickDone = 128;
 function Created() {
 	super.Created();
 
-	HorSB = UWindowHScrollbar(CreateWindow(class'UWindowHScrollbar', 0, WinHeight-12, WinWidth-VertSB.WinWidth, 12));
+	HorSB = UWindowHScrollbar(CreateWindow(class'UWindowHScrollbar',
+		0,
+		WinHeight - LookAndFeel.Size_ScrollbarWidth,
+		WinWidth - LookAndFeel.Size_ScrollbarWidth,
+		LookAndFeel.Size_ScrollbarWidth
+	));
 }
 
 function UWindowListBoxItem GetItemAt(float MouseX, float MouseY) {
@@ -111,7 +116,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	VisibleHeight = WinHeight - TotalBevelHeight;
 	if (bUseHorizontalScrollbar) {
 		VisibleHeight -= HorSB.WinHeight;
-		VertSB.WinHeight = WinHeight - HorSB.WinHeight;
+		VertSB.WinHeight = WinHeight - LookAndFeel.Size_ScrollbarWidth;
 	}
 	VertSB.SetRange(0, Items.CountShown(), int(VisibleHeight / ItemHeight));
 
