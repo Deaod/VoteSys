@@ -274,8 +274,8 @@ simulated function ShowSettings() {
 
 		SettingsDialog = VS_UIS_Window(C.Root.CreateWindow(
 			class'VS_UIS_Window',
-			Settings.MenuX,
-			Settings.MenuY,
+			Settings.SettingsX,
+			Settings.SettingsY,
 			0,0 // Size set internally
 		));
 		SettingsDialog.HideWindow();
