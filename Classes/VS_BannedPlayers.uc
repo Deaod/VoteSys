@@ -38,6 +38,9 @@ final function bool FindPlayer(array<BannedPlayer> BanList, string HWHash, out i
 final function AddPlayerToBanList(out array<BannedPlayer> BanList, BannedPlayer P) {
 	local int Index;
 
+	if (P.HWHash == "")
+		return;
+
 	if (FindPlayer(BanList, P.HWHash, Index) == false) {
 		BanList.Insert(Index, 1);
 		BanList[Index] = P;
