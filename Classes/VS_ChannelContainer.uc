@@ -1,11 +1,12 @@
-class VS_ChannelContainer extends Info;
+class VS_ChannelContainer extends Info
+	imports(VS_BannedPlayers);
 
 var VS_ChannelContainer Next;
 var VS_PlayerChannel Channel;
 var VS_PlayerInfo PlayerInfo;
 var PlayerPawn PlayerOwner;
 var Actor AceCheck;
-var int KickCheckDelaySeconds;
+var EBanState BanState;
 
 function Initialize(PlayerPawn P) {
 	PlayerOwner = P;
@@ -16,6 +17,6 @@ function Initialize(PlayerPawn P) {
 }
 
 defaultproperties {
-	KickCheckDelaySeconds=30
+	BanState=BS_Unknown
 	RemoteRole=ROLE_None
 }

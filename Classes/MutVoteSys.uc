@@ -1,4 +1,5 @@
-class MutVoteSys extends Mutator;
+class MutVoteSys extends Mutator
+	imports(VS_BannedPlayers);
 // Description="Enables voting for next map"
 
 var VS_ChannelContainer ChannelList;
@@ -218,20 +219,26 @@ function KickBanPlayer(PlayerPawn Admin, PlayerPawn P, string Reason) {
 	P.Destroy();
 }
 
-function bool IsPlayerBanned(PlayerPawn P, Actor AceCheck) {
+function EBanState IsPlayerBanned(PlayerPawn P, Actor AceCheck) {
 	local int i;
 	local string Address;
 
 	if (AceCheck != none && BannedPlayers.IsPlayerBanned(AceHandler.GetAceCheckHWHash(AceCheck)))
-		return true;
+		return BS_Banned;
+
+	if (P.Player == none || P.Player.IsA('NetConnection') == false)
+		return BS_NotBanned;
 
 	Address = P.GetPlayerNetworkAddress();
+	if (Address == "")
+		return BS_Unknown;
+
 	Log("Checking if"@Address@"is banned", 'VoteSys');
 	for (i = 0; i < BannedAddresses.Length; i++)
 		if (Address == BannedAddresses[i])
-			return true;
+			return BS_Banned;
 
-	return false;
+	return BS_NotBanned;
 }
 
 function TempBanPlayer(PlayerPawn P) {
@@ -243,7 +250,7 @@ function TempBanPlayer(PlayerPawn P) {
 	if (C != none)
 		Chk = C.AceCheck;
 
-	if (IsPlayerBanned(P, Chk))
+	if (IsPlayerBanned(P, Chk) == BS_Banned)
 		return;
 
 	if (Chk != none) {
@@ -430,7 +437,6 @@ function HandleKickVoting() {
 	local int VotingPlayers;
 	local int i;
 	local Actor Ace;
-	local Actor AceCheck;
 	local Actor Chk;
 
 	for (C = ChannelList; C != none; C = C.Next) {
@@ -465,31 +471,28 @@ function HandleKickVoting() {
 			KickPlayer(C.PlayerOwner, "Kick Vote Successful (VoteSys)");
 		}
 
-		if (C.KickCheckDelaySeconds <= 0)
+		if (C.BanState != BS_Unknown)
 			continue;
 
-		C.KickCheckDelaySeconds -= 1;
-
-		if (C.KickCheckDelaySeconds > 0)
-			continue;
-
-		if (Ace != none) {
-			AceCheck = none;
+		if (Ace != none && C.AceCheck == none) {
 			foreach AllActors(class'Actor', Chk) {
 				if (Chk.IsA('IACECheck') &&
 					AceHandler.GetAceCheckHWHash(Chk) != "" &&
 					C.PlayerOwner.PlayerReplicationInfo.PlayerId == AceHandler.GetAceCheckPlayerId(Chk)
 				) {
-					AceCheck = Chk;
+					C.AceCheck = Chk;
 					break;
 				}
 			}
-			C.AceCheck = AceCheck;
+			if (C.AceCheck == none)
+				continue;
 		}
 
+		C.BanState = IsPlayerBanned(C.PlayerOwner, C.AceCheck);
+
 		// Enforce older kicks
-		if (C.PlayerOwner != none && IsPlayerBanned(C.PlayerOwner, C.AceCheck)) {
-			KickPlayer(C.PlayerOwner, "Temp Banned (VoteSys)");
+		if (C.PlayerOwner != none && C.BanState == BS_Banned) {
+			KickPlayer(C.PlayerOwner, "Banned (VoteSys)");
 		}
 	}
 }

@@ -9,6 +9,12 @@ struct BannedPlayer {
 var config array<BannedPlayer> BannedPlayers;
 var array<BannedPlayer> TempBannedPlayers;
 
+enum EBanState {
+	BS_Unknown,
+	BS_NotBanned,
+	BS_Banned
+};
+
 final function bool FindPlayer(array<BannedPlayer> BanList, string HWHash, out int Index) {
 	local int F, C;
 
