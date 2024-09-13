@@ -269,6 +269,7 @@ function SaveServerSettings(VS_ServerSettings S) {
 	SendServerSetting(S, "VoteEndCondition");
 	SendServerSetting(S, "bRetainCandidates");
 	SendServerSetting(S, "bOpenVoteMenuAutomatically");
+	SendServerSetting(S, "bEnableKickVoting");
 	SendServerSetting(S, "KickVoteThreshold");
 	SendServerSetting(S, "DefaultPreset");
 	SendServerSetting(S, "DefaultMap");

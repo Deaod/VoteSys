@@ -31,6 +31,7 @@ var config EVoteEndCond VoteEndCondition;
 var config bool bRetainCandidates;
 var config bool bOpenVoteMenuAutomatically;
 
+var config bool bEnableKickVoting;
 var config float KickVoteThreshold;
 
 var config string DefaultPreset;
@@ -106,6 +107,7 @@ defaultproperties {
 	bRetainCandidates=False
 	bOpenVoteMenuAutomatically=True
 
+	bEnableKickVoting=True
 	KickVoteThreshold=0.6
 
 	DefaultPreset=

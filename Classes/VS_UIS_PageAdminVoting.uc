@@ -18,6 +18,9 @@ var localized string Text_VoteEndCondition_TimerOnly;
 var localized string Text_VoteEndCondition_TimerOrAllVotesIn;
 var localized string Text_VoteEndCondition_TimerOrResultDetermined;
 
+var UWindowCheckbox Chk_EnableKickVoting;
+var localized string Text_EnableKickVoting;
+
 var VS_UI_EditControl Edt_KickVoteThreshold;
 var localized string Text_KickVoteThreshold;
 
@@ -30,6 +33,7 @@ function EnableInteraction(bool bEnable) {
 	Edt_GameEndedVoteDelay.EditBox.SetEditable(bEnable);
 	Edt_VoteTimeLimit.EditBox.SetEditable(bEnable);
 	Cmb_VoteEndCondition.SetEnabled(bEnable);
+	Chk_EnableKickVoting.bDisabled = !bEnable;
 	Edt_KickVoteThreshold.EditBox.SetEditable(bEnable);
 	Edt_MinimumMapRepeatDistance.EditBox.SetEditable(bEnable);
 }
@@ -40,6 +44,7 @@ function LoadServerSettings() {
 	Edt_GameEndedVoteDelay.SetValue(string(Settings.GameEndedVoteDelay));
 	Edt_VoteTimeLimit.SetValue(string(Settings.VoteTimeLimit));
 	Cmb_VoteEndCondition.SetSelectedIndex(int(Settings.VoteEndCondition));
+	Chk_EnableKickVoting.bChecked = Settings.bEnableKickVoting;
 	Edt_KickVoteThreshold.SetValue(string(Settings.KickVoteThreshold));
 	Edt_MinimumMapRepeatDistance.SetValue(string(Settings.MinimumMapRepeatDistance));
 }
@@ -50,6 +55,7 @@ function SaveSettings() {
 	Settings.GameEndedVoteDelay = int(Edt_GameEndedVoteDelay.GetValue());
 	Settings.VoteTimeLimit = int(Edt_VoteTimeLimit.GetValue());
 	Settings.VoteEndCondition = Settings.IntToVoteEndCond(Cmb_VoteEndCondition.GetSelectedIndex());
+	Settings.bEnableKickVoting = Chk_EnableKickVoting.bChecked;
 	Settings.KickVoteThreshold = float(Edt_KickVoteThreshold.GetValue());
 	Settings.MinimumMapRepeatDistance = int(Edt_MinimumMapRepeatDistance.GetValue());
 
@@ -88,13 +94,16 @@ function Created() {
 	Cmb_VoteEndCondition.EditBoxWidth = 100;
 	Cmb_VoteEndCondition.SetEditable(false);
 
-	Edt_KickVoteThreshold = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 108, 188, 16));
+	Chk_EnableKickVoting = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 4, 108, 188, 16));
+	Chk_EnableKickVoting.SetText(Text_EnableKickVoting);
+
+	Edt_KickVoteThreshold = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 128, 188, 16));
 	Edt_KickVoteThreshold.SetText(Text_KickVoteThreshold);
 	Edt_KickVoteThreshold.EditBoxWidth = 60;
 	Edt_KickVoteThreshold.SetNumericOnly(true);
 	Edt_KickVoteThreshold.SetNumericFloat(true);
 
-	Edt_MinimumMapRepeatDistance = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 128, 188, 16));
+	Edt_MinimumMapRepeatDistance = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 148, 188, 16));
 	Edt_MinimumMapRepeatDistance.SetText(Text_MinimumMapRepeatDistance);
 	Edt_MinimumMapRepeatDistance.EditBoxWidth = 60;
 	Edt_MinimumMapRepeatDistance.SetNumericOnly(true);
@@ -106,6 +115,7 @@ function ApplyTheme() {
 	Edt_GameEndedVoteDelay.Theme = Theme;
 	Edt_VoteTimeLimit.Theme = Theme;
 	Cmb_VoteEndCondition.Theme = Theme;
+	//Chk_EnableKickVoting.Theme = Theme; // not themed
 	Edt_KickVoteThreshold.Theme = Theme;
 	Edt_MinimumMapRepeatDistance.Theme = Theme;
 }
@@ -119,6 +129,7 @@ defaultproperties {
 	Text_VoteEndCondition_TimerOnly="Timer Only"
 	Text_VoteEndCondition_TimerOrAllVotesIn="Everyone Voted"
 	Text_VoteEndCondition_TimerOrResultDetermined="Result Certain"
+	Text_EnableKickVoting="Enable Kick Voting"
 	Text_KickVoteThreshold="Kick Vote Threshold"
 	Text_MinimumMapRepeatDistance="Map Repeat Distance"
 }

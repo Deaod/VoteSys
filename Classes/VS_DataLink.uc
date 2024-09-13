@@ -80,7 +80,7 @@ function ParseLine(string Line) {
 	} else if (Left(Line, 19) == "/SAVESERVERSETTING/") {
 		SaveServerSetting(Line);
 	} else if (Line == "/SAVESERVERSETTINGSFILE/") {
-		VoteSys.Settings.SaveConfig();
+		VoteSys.SaveSettings();
 	} else if (Line == "/SENDSERVERPRESETCONFIG/") {
 		QueueCommand('SendServerPresets');
 	} else if (Left(Line, 18) == "/SAVESERVERPRESET/") {
@@ -195,6 +195,7 @@ Begin:
 	SendServerSetting("VoteEndCondition");
 	SendServerSetting("bRetainCandidates");
 	SendServerSetting("bOpenVoteMenuAutomatically");
+	SendServerSetting("bEnableKickVoting");
 	SendServerSetting("KickVoteThreshold");
 	SendServerSetting("DefaultPreset");
 	SendServerSetting("DefaultMap");

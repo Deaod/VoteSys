@@ -199,7 +199,9 @@ function Close(optional bool bByParent) {
 
 function RMouseDown(float MouseX, float MouseY) {
 	local VS_UI_PlayerListItem I;
-	local VS_PlayerInfo LocalPlayerInfo;
+	local VS_PlayerChannel PlayerChannel;
+	local VS_PlayerInfo PlayerInfo;
+	local VS_Info VoteInfo;
 
 	super.RMouseDown(MouseX, MouseY);
 
@@ -207,11 +209,16 @@ function RMouseDown(float MouseX, float MouseY) {
 	if (I == none)
 		return;
 
-	LocalPlayerInfo = VS_UIV_ClientWindow(ParentWindow).Channel.PlayerInfo();
+	PlayerChannel = VS_UIV_ClientWindow(ParentWindow).Channel;
+	PlayerInfo = PlayerChannel.PlayerInfo();
+	VoteInfo = PlayerChannel.VoteInfo();
 
 	ContextMenu.WinLeft = Root.MouseX;
 	ContextMenu.WinTop = Root.MouseY;
-	ContextMenu.PlayerKick.bDisabled = (LocalPlayerInfo == none || LocalPlayerInfo.bCanVote == false);
+	ContextMenu.PlayerKick.bDisabled = ! (
+		(PlayerInfo != none && PlayerInfo.bCanVote) &&
+		(VoteInfo.bEnableKickVoting || GetPlayerOwner().PlayerReplicationInfo.bAdmin)
+	);
 	ContextMenu.PlayerBan.bDisabled = (GetPlayerOwner().PlayerReplicationInfo.bAdmin == false);
 
 	// ContextMenu.PRI MUST be set before ShowWindow is invoked,

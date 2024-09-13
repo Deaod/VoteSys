@@ -60,7 +60,6 @@ event PostBeginPlay() {
 
 	SettingsDummy = new(XLevel, 'VoteSys') class 'Object';
 	Settings = new(SettingsDummy, 'ServerSettings') class'VS_ServerSettings';
-	Settings.SaveConfig();
 
 	BannedPlayersDummy = new(XLevel, 'VoteSysBans') class'Object';
 	BannedPlayers = new(BannedPlayersDummy, 'BannedPlayers') class'VS_BannedPlayers';
@@ -91,6 +90,7 @@ event PostBeginPlay() {
 	ChatObserver.VoteSys = self;
 
 	ConfigureGameMode();
+	SaveSettings();
 }
 
 function ConfigureGameMode() {
@@ -1476,6 +1476,12 @@ function LoadHistory() {
 	HistoryProcessor.VoteSys = self;
 	HistoryProcessor.History = History;
 	HistoryProcessor.PresetList = PresetList;
+}
+
+function SaveSettings() {
+	Settings.SaveConfig();
+
+	Info.bEnableKickVoting = Settings.bEnableKickVoting;
 }
 
 function bool CanVote(PlayerPawn P) {

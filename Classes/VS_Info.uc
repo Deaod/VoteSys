@@ -6,6 +6,7 @@ struct ConnectionData {
 	var int    Port;
 };
 var ConnectionData Data;
+var bool bEnableKickVoting;
 
 var VS_Candidate FirstCandidate;
 var VS_Candidate LastCandidate;
@@ -16,6 +17,7 @@ var string RandomMapNameIdentifier;
 replication {
 	unreliable if (Role == ROLE_Authority)
 		Data,
+		bEnableKickVoting,
 		FirstCandidate,
 		LastCandidate;
 }
@@ -190,6 +192,9 @@ function KickPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target) {
 	local PlayerPawn P;
 	local VS_ChannelContainer ChCont;
 	local VS_PlayerChannel TCh;
+
+	if (bEnableKickVoting == false)
+		return;
 
 	if (Origin == none || Target == none)
 		return;

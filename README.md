@@ -65,6 +65,7 @@ VoteEndCondition=VEC_TimerOnly
 bRetainCandidates=False
 bOpenVoteMenuAutomatically=True
 MinimumMapRepeatDistance=0
+bEnableKickVoting=True
 KickVoteThreshold=0.6
 DefaultTimeMessageClass=Botpack.TimeMessage
 DefaultPreset=DM/Team DeathMatch
@@ -110,6 +111,7 @@ DefaultActors=IpServer.UdpServerUplink MasterServerAddress=unreal.epicgames.com 
 1. [bRetainCandidates](#bretaincandidates)
 1. [bOpenVoteMenuAutomatically](#bopenvotemenuautomatically)
 1. [MinimumRepeatDistance](#minimumrepeatdistance)
+1. [bEnableKickVoting](#benablekickvoting)
 1. [KickVoteThreshold](#kickvotethreshold)
 1. [DefaultTimeMessageClass](#defaulttimemessageclass)
 1. [DefaultPreset](#defaultpreset)
@@ -197,6 +199,12 @@ Number of different maps that must be played before being able to play the curre
 Same map, but a different preset does not count as the same map for the purposes of this check.
 
 Defaults to 0.
+
+#### bEnableKickVoting
+
+If True, players can vote to kick other players. If False, players cant vote to kick others.
+
+Default is True.
 
 #### KickVoteThreshold
 
