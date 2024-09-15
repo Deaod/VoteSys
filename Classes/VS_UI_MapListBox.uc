@@ -34,6 +34,14 @@ function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H
 		ClippingRegion.W += (H+2);
 }
 
+function float ItemWidth(Canvas C, UWindowList Item, float VisibleWidth) {
+	local float W, H;
+
+	TextSize(C, VS_UI_MapListItem(Item).MapRef.MapName, W, H);
+
+	return FMax(W + 4.0, VisibleWidth);
+}
+
 function AppendMap(VS_Map M, bool bEnabled) {
 	local VS_UI_MapListItem I;
 	I = VS_UI_MapListItem(Items.Append(ListClass));
@@ -75,6 +83,7 @@ function RMouseDown(float MouseX, float MouseY) {
 }
 
 defaultproperties {
+	HorizontalScrollbarMode=HSM_Auto
 	ListClass=class'VS_UI_MapListItem'
 	ItemHeight=13
 }
