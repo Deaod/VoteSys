@@ -2,6 +2,8 @@
 
 set INFO_FILE="%BUILD_DIR%Classes/VersionInfo.uc"
 
+if not exist "%BUILD_DIR%Classes" mkdir "%BUILD_DIR%Classes"
+
 @if NOT EXIST %INFO_FILE% (
 	@echo PackageBaseName=%1
 	@echo PackageVersion=%2
