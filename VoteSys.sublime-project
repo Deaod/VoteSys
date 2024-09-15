@@ -3,8 +3,11 @@
 	[
 		{
 			"path": ".",
-			"folder_exclude_patterns": ["Build/Temp"],
-		}
+			"folder_exclude_patterns": [
+				"//Build/Temp",
+				"//Classes"
+			]
+		},
 	],
 	"settings":
 	{
