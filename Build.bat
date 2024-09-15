@@ -304,6 +304,8 @@ exit /B %ERRORLEVEL%
 exit /B %ERRORLEVEL%
 
 :PrepareUnrealscriptSource
+if not exist "%BUILD_DIR%Classes" mkdir "%BUILD_DIR%Classes"
+
 for /f "delims=" %%f in ('dir "%BUILD_DIR%Classes\*" /b') do (
     if [%%f] NEQ [VersionInfo.uc] (
         del "%BUILD_DIR%Classes\%%f" >NUL
