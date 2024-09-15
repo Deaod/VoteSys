@@ -91,7 +91,7 @@ jobs:
           Replace-PackageName "/System/"  "${{ github.event.repository.name }}.*"
           Replace-PackageName "/System/"  "ACEFileList-${{ github.event.repository.name }}.*"
           Replace-PackageName "/System/"  "ACETweakList-${{ github.event.repository.name }}.*"
-          Replace-PackageName "/Classes/" "${{ github.event.repository.name }}.upkg"
+          Replace-PackageName "/USrc/"    "${{ github.event.repository.name }}.upkg"
 
       - name: Extract Necessary Resources
         run: 7z x "${{ env.PKG_NAME }}/Build/BuildEnv.zip"
