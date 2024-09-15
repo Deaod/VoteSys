@@ -20,7 +20,7 @@ function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H
 }
 
 defaultproperties {
-	bUseHorizontalScrollbar=True
+	HorizontalScrollbarMode=HSM_Show
 	ListClass=class'VS_UI_PresetListItem'
 	bCanDrag=True
 }

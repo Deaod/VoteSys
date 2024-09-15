@@ -5,9 +5,15 @@ var VS_UI_ThemeBase Theme;
 var VS_UI_ListItem HoverItem;
 
 var float TotalBevelWidth, TotalBevelHeight;
+
+enum EHorizontalScrollbarMode {
+	HSM_Hide,
+	HSM_Show,
+	HSM_Auto
+};
+var EHorizontalScrollbarMode HorizontalScrollbarMode;
 var float MaxItemWidth;
 var UWindowHScrollbar HorSB;
-var bool bUseHorizontalScrollbar;
 
 const DE_VoteSys_ClickDone = 128;
 
@@ -37,8 +43,8 @@ function UWindowListBoxItem GetItemAt(float MouseX, float MouseY) {
 	CurItem = Items.Next;
 	i = 0;
 	YLimit = WinHeight - LookAndFeel.MiscBevelB[LookAndFeel.EditBoxBevel].H;
-	if (bUseHorizontalScrollbar)
-		YLimit -= HorSB.WinHeight;
+	if (HorSB.bWindowVisible)
+		YLimit -= LookAndFeel.Size_ScrollbarWidth;
 
 	while((CurItem != none) && (i < VertSB.Pos)) {
 		if(CurItem.ShowThisItem())
@@ -85,6 +91,9 @@ function float CalcMaxItemWidth(Canvas C, float VisibleWidth) {
 	local UWindowList I;
 	local float MaxWidth;
 
+	if (HorizontalScrollbarMode == HSM_Hide)
+		return VisibleWidth;
+
 	for (I = Items.Next; I != none; I = I.Next) {
 		MaxWidth = FMax(MaxWidth, ItemWidth(C, I, VisibleWidth));
 	}
@@ -103,30 +112,26 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	TotalBevelWidth = LookAndFeel.MiscBevelL[BevelType].W + LookAndFeel.MiscBevelR[BevelType].W;
 	TotalBevelHeight = LookAndFeel.MiscBevelT[BevelType].H + LookAndFeel.MiscBevelB[BevelType].H;
 
-	if (bUseHorizontalScrollbar) {
+	VisibleWidth = WinWidth - VertSB.WinWidth - TotalBevelWidth;
+	MaxItemWidth = CalcMaxItemWidth(C, VisibleWidth);
+
+	if (HorizontalScrollbarMode == HSM_Show || MaxItemWidth > VisibleWidth) {
 		HorSB.ShowWindow();
 		HorSB.WinLeft = 0;
 		HorSB.WinTop = WinHeight - LookAndFeel.Size_ScrollbarWidth;
 		HorSB.WinHeight = LookAndFeel.Size_ScrollbarWidth;
 		HorSB.WinWidth = WinWidth - LookAndFeel.Size_ScrollbarWidth;
+		HorSB.SetRange(0, MaxItemWidth, VisibleWidth);
 	} else {
 		HorSB.HideWindow();
 	}
 
 	VisibleHeight = WinHeight - TotalBevelHeight;
-	if (bUseHorizontalScrollbar) {
+	if (HorSB.bWindowVisible) {
 		VisibleHeight -= HorSB.WinHeight;
 		VertSB.WinHeight = WinHeight - LookAndFeel.Size_ScrollbarWidth;
 	}
 	VertSB.SetRange(0, Items.CountShown(), int(VisibleHeight / ItemHeight));
-
-	if (bUseHorizontalScrollbar) {
-		VisibleWidth = WinWidth - VertSB.WinWidth - TotalBevelWidth;
-		MaxItemWidth = CalcMaxItemWidth(C, VisibleWidth);
-		HorSB.SetRange(0, MaxItemWidth, VisibleWidth);
-	} else {
-		MaxItemWidth = WinWidth - VertSB.WinWidth - TotalBevelWidth;
-	}
 
 	if (HoverItem != none)
 		HoverItem.bHover = false;
@@ -158,7 +163,7 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 
 	BevelType = LookAndFeel.EditBoxBevel;
 
-	if (bUseHorizontalScrollbar)
+	if (HorSB.bWindowVisible)
 		Theme.DrawBox(C, self,
 			0,
 			0,
@@ -177,8 +182,8 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 	i = 0;
 	VisibleWidth = WinWidth - VertSB.WinWidth - TotalBevelWidth;
 	YLimit = WinHeight - TotalBevelHeight;
-	if (bUseHorizontalScrollbar)
-		YLimit -= HorSB.WinHeight;
+	if (HorSB.bWindowVisible)
+		YLimit -= LookAndFeel.Size_ScrollbarWidth;
 
 	OrgX = C.OrgX; OrgY = C.OrgY;
 	ClipX = C.ClipX; ClipY = C.ClipY;
@@ -237,7 +242,7 @@ function ClearSelection() {
 }
 
 defaultproperties {
-	bUseHorizontalScrollbar=False
+	HorizontalScrollbarMode=HSM_Hide
 	ListClass=class'VS_UI_ListItem'
 	ItemHeight=13
 }
