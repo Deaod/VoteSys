@@ -1,6 +1,4 @@
-class VS_UI_PlayerListItem extends UWindowListBoxItem;
-
-var bool bHover;
+class VS_UI_PlayerListItem extends VS_UI_ListItem;
 
 var VS_PlayerInfo PlayerInfo;
 
