@@ -111,12 +111,27 @@ Text_DefaultMap="Default Map"
 Text_AlwaysUseDefaultMap="Always Use Default Map"
 Text_IdleTimeout="Idle Timeout"
 
+[VS_UIS_PageClient]
+ThemeText="Theme"
+ThemeBright="Bright"
+ThemeDark="Dark"
+ThemeBlack="Black"
+MapListSortText="Sort Map List By"
+MapListSortName="Name"
+MapListSortRecency="Recency"
+MapListSortPlayCount="Play Count"
+FavoritesFirstText="Sort Favorites First"
+ShowPlayerListText="Show Player List"
+
 [VS_UI_PlayerMenu]
 PlayerIdText="ID:"
 PlayerKickText="&Kick"
 PlayerBanText="&Ban"
 PlayerBanTitle="Ban Player"
 PlayerBanMessage="Do you want to permanently ban {1}?"
+
+[VS_UI_ScreenshotWindow]
+TextPlayerCount="Players:"
 
 [VS_UIS_PageAdminVoting]
 Text_MidGameVoteThreshold="Mid-Game Vote Threshold"
@@ -131,23 +146,9 @@ Text_EnableKickVoting="Enable Kick Voting"
 Text_KickVoteThreshold="Kick Vote Threshold"
 Text_MinimumMapRepeatDistance="Map Repeat Distance"
 
-[VS_UI_ScreenshotWindow]
-TextPlayerCount="Players:"
-
 [VS_UI_MapMenu]
 FavoriteText="Favorite"
 SortByText="Sort By"
-
-[VS_UIS_PageClient]
-ThemeText="Theme"
-ThemeBright="Bright"
-ThemeDark="Dark"
-ThemeBlack="Black"
-MapListSortText="Sort Map List By"
-MapListSortName="Name"
-MapListSortRecency="Recency"
-MapListSortPlayCount="Play Count"
-FavoritesFirstText="Sort Favorites First"
 
 [VS_UIS_Window]
 WindowTitle="VoteSys Settings"

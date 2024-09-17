@@ -17,6 +17,9 @@ var localized string MapListSortPlayCount;
 var UWindowCheckbox Chk_FavoritesFirst;
 var localized string FavoritesFirstText;
 
+var UWindowCheckbox Chk_ShowPlayerList;
+var localized string ShowPlayerListText;
+
 function Created() {
 	super.Created();
 
@@ -36,6 +39,9 @@ function Created() {
 
 	Chk_FavoritesFirst = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 8, 48, 188, 16));
 	Chk_FavoritesFirst.SetText(FavoritesFirstText);
+
+	Chk_ShowPlayerList = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 8, 68, 188, 16));
+	Chk_ShowPlayerList.SetText(ShowPlayerListText);
 }
 
 function LoadSettings(VS_PlayerChannel C) {
@@ -46,12 +52,14 @@ function LoadSettings(VS_PlayerChannel C) {
 	Cmb_Theme.SetSelectedIndex(Settings.Theme);
 	Cmb_MapListSort.SetSelectedIndex(Settings.MapListSort);
 	Chk_FavoritesFirst.bChecked = Settings.bFavoritesFirst;
+	Chk_ShowPlayerList.bChecked = Settings.bShowPlayerList;
 }
 
 function SaveSettings() {
 	Settings.Theme = Settings.IntToTheme(Cmb_Theme.GetSelectedIndex());
 	Settings.MapListSort = Settings.IntToMapListSort(Cmb_MapListSort.GetSelectedIndex());
 	Settings.bFavoritesFirst = Chk_FavoritesFirst.bChecked;
+	Settings.bShowPlayerList = Chk_ShowPlayerList.bChecked;
 
 	Settings.SaveConfig();
 }
@@ -73,4 +81,5 @@ defaultproperties {
 	MapListSortPlayCount="Play Count"
 
 	FavoritesFirstText="Sort Favorites First"
+	ShowPlayerListText="Show Player List"
 }

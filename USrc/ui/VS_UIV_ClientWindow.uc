@@ -152,6 +152,16 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	if (Logo.bWindowVisible)
 		Logo.SendToBack();
 
+	if (PlayerListBox.bWindowVisible == false && Settings.bShowPlayerList) {
+		PlayerListBox.ShowWindow();
+		ChatArea.WinWidth = 270;
+		Logo.WinWidth = 270;
+	} else if (PlayerListBox.bWindowVisible && Settings.bShowPlayerList == false) {
+		PlayerListBox.HideWindow();
+		ChatArea.WinWidth = 400;
+		Logo.WinWidth = 400;
+	}
+
 	L = GetLevel();
 	if (MouseX != PrevMouseX || MouseY != PrevMouseY || MapListBox.HoverItem == none || IsActive() == false) {
 		PrevMouseX = MouseX;

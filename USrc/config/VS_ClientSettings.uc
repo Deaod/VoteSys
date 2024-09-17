@@ -20,6 +20,8 @@ var config EMapListSort MapListSort;
 var config string FavoritesList;
 var config bool bFavoritesFirst;
 
+var config bool bShowPlayerList;
+
 var config float MenuX;
 var config float MenuY;
 
@@ -49,6 +51,7 @@ defaultproperties {
 	MapListSort=MLS_Name
 	FavoritesList=
 	bFavoritesFirst=True
+	bShowPlayerList=True
 	
 	MenuX=-1.0
 	MenuY=-1.0
