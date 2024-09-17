@@ -199,7 +199,7 @@ function KickPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target) {
 	if (Origin == none || Target == none)
 		return;
 
-	if (Origin.PlayerOwner == none || Origin.PlayerOwner.PlayerReplicationInfo == none)
+	if (Origin.PlayerOwner == none)
 		return;
 
 	if (VoteSys.CanVote(Origin.PlayerOwner) == false)
