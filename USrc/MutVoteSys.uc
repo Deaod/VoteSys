@@ -80,7 +80,7 @@ event PostBeginPlay() {
 
 	ApplyVotedPreset();
 
-	SetTimer(Level.TimeDilation, true);
+	SetTimer(0.5, true);
 	LoadConfig();
 	LoadHistory();
 	Info = Spawn(class'VS_Info', self);
@@ -385,6 +385,11 @@ event Timer() {
 			break;
 		case GS_Travelling:
 			break;
+	}
+
+	if (TimerRate != Level.TimeDilation) {
+		Log("TimeDilation has changed to"@Level.TimeDilation, 'VoteSys');
+		SetTimer(Level.TimeDilation, true);
 	}
 }
 
