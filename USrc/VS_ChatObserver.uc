@@ -3,7 +3,7 @@ class VS_ChatObserver extends MessagingSpectator;
 var MutVoteSys VoteSys;
 
 event TeamMessage(PlayerReplicationInfo PRI, coerce string S, name Type, optional bool bBeep) {
-	if (Type == 'Say' || Type == 'TeamSay') {
+	if (Type == 'Say') {
 		VoteSys.ChatMessage(PRI, S);
 	}
 }

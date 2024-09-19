@@ -164,6 +164,14 @@ function float DrawTextLine2(Canvas C, UWindowDynamicTextRow L, float Y, float W
 	} else {
 		X = 2;
 	}
+
+	if (M.bTeamMsg) {
+		if(M.ColorRef == 0) {
+			C.DrawColor = M.PlayerColor;
+		} else if (M.ColorRef == 1) {
+			C.DrawColor = Theme.Foreground;
+		}
+	}
 	TextAreaClipText(C, X, Y, M.LineText());
 
 	if (M.PlayerName != "") {
@@ -179,9 +187,10 @@ function float DrawTextLine2(Canvas C, UWindowDynamicTextRow L, float Y, float W
 	return DefaultTextHeight;
 }
 
-function AddChat(PlayerReplicationInfo PRI, string Message) {
+function AddChat(PlayerReplicationInfo PRI, string Message, bool bTeamMsg) {
 	local VS_UI_ChatMessage M;
 	M = VS_UI_ChatMessage(AddText(Message));
+	M.bTeamMsg = bTeamMsg;
 	if (PRI != none)
 		M.PlayerName = PRI.PlayerName;
 	else

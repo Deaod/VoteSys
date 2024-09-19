@@ -624,11 +624,11 @@ simulated function LocalizeMessage(
 	PlayerOwner.ReceiveLocalizedMessage(MessageClass, Switch, /*PRI1*/, /*PRI2*/, Params);
 }
 
-simulated function ChatMessage(PlayerReplicationInfo PRI, string Msg) {
+simulated function ChatMessage(PlayerReplicationInfo PRI, string Msg, bool bTeamMsg) {
 	if (VoteMenuDialog == none)
 		return;
 
-	VS_UIV_ClientWindow(VoteMenuDialog.ClientArea).ChatArea.AddChat(PRI, Msg);
+	VS_UIV_ClientWindow(VoteMenuDialog.ClientArea).ChatArea.AddChat(PRI, Msg, bTeamMsg);
 }
 
 simulated function DumpPlayerList() {

@@ -86,6 +86,7 @@ event PostBeginPlay() {
 	Info = Spawn(class'VS_Info', self);
 	Info.VoteSys = self;
 	DataServer = Spawn(class'VS_DataServer', self);
+	Level.Game.RegisterMessageMutator(self);
 	ChatObserver = Level.Spawn(class'VS_ChatObserver');
 	ChatObserver.VoteSys = self;
 
@@ -280,7 +281,26 @@ function ChatMessage(PlayerReplicationInfo PRI, string Msg) {
 	local VS_ChannelContainer C;
 	for (C = ChannelList; C != none; C = C.Next)
 		if (C.Channel != none && C.PlayerOwner != none)
-			C.Channel.ChatMessage(PRI, Msg);
+			C.Channel.ChatMessage(PRI, Msg, false);
+}
+
+function bool MutatorTeamMessage(
+	Actor Sender,
+	Pawn Receiver,
+	PlayerReplicationInfo PRI,
+	coerce string S,
+	name Type,
+	optional bool bBeep
+) {
+	local VS_ChannelContainer C;
+
+	if (Type == 'TeamSay') {
+		C = FindChannel(Receiver);
+		if (C != none && C.Channel != none)
+			C.Channel.ChatMessage(PRI, S, true);
+	}
+
+	return super.MutatorTeamMessage(Sender, Receiver, PRI, S, Type, bBeep);
 }
 
 function Mutate(string Command, PlayerPawn Sender) {
