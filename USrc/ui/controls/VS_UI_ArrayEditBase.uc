@@ -1,4 +1,4 @@
-class VS_UI_ArrayEditControl extends UWindowDialogControl;
+class VS_UI_ArrayEditBase extends UWindowDialogControl;
 
 var	float               EditBoxWidth;
 var float               EditAreaDrawX, EditAreaDrawY;
@@ -7,8 +7,6 @@ var VS_UI_ThemeBase     Theme;
 var UWindowEditBox      EditBox;
 var VS_UI_ArrayEditButton Button;
 var VS_UI_ArrayEditW    EditWindow;
-
-var array<string>       Entries;
 
 var bool                bCanEdit;
 var bool                bEnabled;
@@ -34,34 +32,16 @@ function Created() {
 }
 
 function LaunchEditWindow() {
-	local int i;
 	EditWindow.WindowTitle = Text;
 	EditWindow.SetTheme(Theme);
 
 	VS_UI_ArrayEditCW(EditWindow.ClientArea).Lst_Elements.Items.Clear();
 	VS_UI_ArrayEditCW(EditWindow.ClientArea).Lst_Elements.ClearSelection();
 
-	SetPropertyText("Entries", EditBox.GetValue());
-	for (i = 0; i < Entries.Length; i++)
-		EditWindow.AddElement(Entries[i]);
-
 	GetParent(class'UWindowFramedWindow').ShowModal(EditWindow);
 }
 
-function EditWindowClosed(VS_UI_ArrayEditW Wnd) {
-	local int i, Count;
-	local VS_UI_ArrayEditLI It;
-
-	Count = VS_UI_ArrayEditCW(EditWindow.ClientArea).Lst_Elements.Items.Count();
-	Entries.Remove(0, Entries.Length);
-	Entries.Insert(0, Count);
-
-	It = VS_UI_ArrayEditLI(VS_UI_ArrayEditCW(EditWindow.ClientArea).Lst_Elements.Items.Next);
-	for (i = 0; It != none; It = VS_UI_ArrayEditLI(It.Next))
-		Entries[i++] = It.Text;
-
-	EditBox.SetValue(GetPropertyText("Entries"));
-}
+function EditWindowClosed(VS_UI_ArrayEditW Wnd);
 
 function Notify(byte E) {
 	Super.Notify(E);
@@ -190,7 +170,6 @@ function ClearValue() {
 }
 
 function Clear() {
-	Entries.Remove(0, Entries.Length);
 	EditBox.Clear();
 }
 

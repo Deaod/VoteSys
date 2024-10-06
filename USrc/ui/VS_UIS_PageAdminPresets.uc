@@ -19,7 +19,7 @@ var localized string Text_Abbreviation;
 var VS_UI_EditControl Edt_SortPriority;
 var localized string Text_SortPriority;
 
-var VS_UI_ArrayEditControl Adt_InheritFrom;
+var VS_UI_ArrayEditString Adt_InheritFrom;
 var localized string Text_InheritFrom;
 
 var VS_UI_EditControl Edt_Game;
@@ -28,16 +28,16 @@ var localized string Text_Game;
 var VS_UI_EditControl Edt_MapListName;
 var localized string Text_MapListName;
 
-var VS_UI_ArrayEditControl Adt_Mutators;
+var VS_UI_ArrayEditString Adt_Mutators;
 var localized string Text_Mutators;
 
-var VS_UI_ArrayEditControl Adt_Parameters;
+var VS_UI_ArrayEditString Adt_Parameters;
 var localized string Text_Parameters;
 
-var VS_UI_ArrayEditControl Adt_GameSettings;
+var VS_UI_ArrayEditString Adt_GameSettings;
 var localized string Text_GameSettings;
 
-var VS_UI_ArrayEditControl Adt_Packages;
+var VS_UI_ArrayEditString Adt_Packages;
 var localized string Text_Packages;
 
 var UWindowCheckbox Chk_Disabled;
@@ -91,7 +91,7 @@ function Created() {
 	Edt_SortPriority.SetNumericOnly(true);
 	Edt_SortPriority.SetNumericNegative(true);
 
-	Adt_InheritFrom = VS_UI_ArrayEditControl(CreateControl(class'VS_UI_ArrayEditControl', 200, 88, 188, 16));
+	Adt_InheritFrom = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 200, 88, 188, 16));
 	Adt_InheritFrom.SetText(Text_InheritFrom);
 	Adt_InheritFrom.EditBoxWidth = 100;
 
@@ -103,19 +103,19 @@ function Created() {
 	Edt_MapListName.SetText(Text_MapListName);
 	Edt_MapListName.EditBoxWidth = 100;
 
-	Adt_Mutators = VS_UI_ArrayEditControl(CreateControl(class'VS_UI_ArrayEditControl', 200, 148, 188, 16));
+	Adt_Mutators = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 200, 148, 188, 16));
 	Adt_Mutators.SetText(Text_Mutators);
 	Adt_Mutators.EditBoxWidth = 100;
 
-	Adt_Parameters = VS_UI_ArrayEditControl(CreateControl(class'VS_UI_ArrayEditControl', 200, 168, 188, 16));
+	Adt_Parameters = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 200, 168, 188, 16));
 	Adt_Parameters.SetText(Text_Parameters);
 	Adt_Parameters.EditBoxWidth = 100;
 
-	Adt_GameSettings = VS_UI_ArrayEditControl(CreateControl(class'VS_UI_ArrayEditControl', 200, 188, 188, 16));
+	Adt_GameSettings = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 200, 188, 188, 16));
 	Adt_GameSettings.SetText(Text_GameSettings);
 	Adt_GameSettings.EditBoxWidth = 100;
 
-	Adt_Packages = VS_UI_ArrayEditControl(CreateControl(class'VS_UI_ArrayEditControl', 200, 208, 188, 16));
+	Adt_Packages = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 200, 208, 188, 16));
 	Adt_Packages.SetText(Text_Packages);
 	Adt_Packages.EditBoxWidth = 100;
 

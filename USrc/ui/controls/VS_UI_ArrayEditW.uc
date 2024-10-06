@@ -1,8 +1,8 @@
 class VS_UI_ArrayEditW extends UWindowFramedWindow;
 
-var VS_UI_ArrayEditControl Owner;
+var VS_UI_ArrayEditBase Owner;
 
-function SetOwner(VS_UI_ArrayEditControl O) {
+function SetOwner(VS_UI_ArrayEditBase O) {
 	local UWindowWindow P;
 
 	Owner = O;

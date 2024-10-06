@@ -1,7 +1,7 @@
 class VS_UI_ArrayEditButton extends UWindowSmallButton;
 
 var float TextW;
-var VS_UI_ArrayEditControl Owner;
+var VS_UI_ArrayEditBase Owner;
 
 function Created() {
 	Super.Created();

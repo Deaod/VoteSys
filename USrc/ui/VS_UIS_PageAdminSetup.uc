@@ -12,13 +12,13 @@ var localized string Text_ManageServerPackages;
 var UWindowCheckbox Chk_UseServerPackagesCompatibilityMode;
 var localized string Text_UseServerPackagesCompatibilityMode;
 
-var VS_UI_ArrayEditControl Adt_DefaultPackages;
+var VS_UI_ArrayEditString Adt_DefaultPackages;
 var localized string Text_DefaultPackages;
 
 var UWindowCheckbox Chk_UseServerActorsCompatibilityMode;
 var localized string Text_UseServerActorsCompatibilityMode;
 
-var VS_UI_ArrayEditControl Adt_DefaultActors;
+var VS_UI_ArrayEditString Adt_DefaultActors;
 var localized string Text_DefaultActors;
 
 var VS_UI_ComboControl Cmb_GameNameMode;
@@ -150,14 +150,14 @@ function Created() {
 	Chk_UseServerPackagesCompatibilityMode = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 200, 28, 188, 16));
 	Chk_UseServerPackagesCompatibilityMode.SetText(Text_UseServerPackagesCompatibilityMode);
 
-	Adt_DefaultPackages = VS_UI_ArrayEditControl(CreateControl(class'VS_UI_ArrayEditControl', 200, 48, 188, 16));
+	Adt_DefaultPackages = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 200, 48, 188, 16));
 	Adt_DefaultPackages.SetText(Text_DefaultPackages);
 	Adt_DefaultPackages.EditBoxWidth = 100;
 
 	Chk_UseServerActorsCompatibilityMode = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 200, 68, 188, 16));
 	Chk_UseServerActorsCompatibilityMode.SetText(Text_UseServerActorsCompatibilityMode);
 
-	Adt_DefaultActors = VS_UI_ArrayEditControl(CreateControl(class'VS_UI_ArrayEditControl', 200, 88, 188, 16));
+	Adt_DefaultActors = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 200, 88, 188, 16));
 	Adt_DefaultActors.SetText(Text_DefaultActors);
 	Adt_DefaultActors.EditBoxWidth = 100;
 

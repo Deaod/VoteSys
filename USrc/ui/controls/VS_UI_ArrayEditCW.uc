@@ -1,6 +1,6 @@
 class VS_UI_ArrayEditCW extends UWindowDialogClientWindow;
 
-var VS_UI_ArrayEditControl Owner;
+var VS_UI_ArrayEditBase Owner;
 
 var VS_UI_EditControl Edt_Element;
 var VS_UI_ArrayEditLB Lst_Elements;
@@ -113,6 +113,6 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	}
 }
 
-function SetOwner(VS_UI_ArrayEditControl O) {
+function SetOwner(VS_UI_ArrayEditBase O) {
 	Owner = O;
 }
