@@ -98,11 +98,6 @@ set BUILD_BYTEHAX=0
 set VERBOSE=0
 
 :ParseArgs
-    if /I "%1" EQU "BuildDir" (
-        set BUILD_DIR=%~f2
-        shift /1
-    )
-
     if /I "%1" EQU "NoInt"    ( set BUILD_NOINT=1 )
     if /I "%1" EQU "NoUz"     ( set BUILD_NOUZ=1 )
 
@@ -111,6 +106,11 @@ set VERBOSE=0
     if /I "%1" EQU "ByteHax"  ( set BUILD_BYTEHAX=1 )
 
     if /I "%1" EQU "Verbose"  ( set /A VERBOSE+=1 )
+
+    if /I "%1" EQU "BuildDir" (
+        set BUILD_DIR=%~f2
+        shift /1
+    )
     
     shift /1
     if [%1] NEQ [] goto ParseArgs
