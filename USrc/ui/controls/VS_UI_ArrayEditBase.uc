@@ -39,7 +39,11 @@ function LaunchEditWindow() {
 	VS_UI_ArrayEditCW(EditWindow.ClientArea).Lst_Elements.ClearSelection();
 
 	GetParent(class'UWindowFramedWindow').ShowModal(EditWindow);
+
+	FillEditWindow(EditWindow);
 }
+
+function FillEditWindow(VS_UI_ArrayEditW Wnd);
 
 function EditWindowClosed(VS_UI_ArrayEditW Wnd);
 
@@ -48,7 +52,8 @@ function Notify(byte E) {
 }
 
 function Close(optional bool bByParent) {
-	// close EditWindow
+	if (EditWindow.bWindowVisible)
+		EditWindow.Close(bByParent);
 
 	Super.Close(bByParent);
 }
