@@ -20,6 +20,7 @@ var int PresetMaxIndex;
 var Object MapConfigDummy;
 var Object MapListDummy;
 var VS_MapList MapLists;
+var array<VS_MapListConfig> MapListArray;
 
 var Object HistoryDummy;
 var VS_HistoryConfig History;
@@ -1390,6 +1391,8 @@ function VS_MapList LoadMapListByName(name ListName) {
 		return ML;
 
 	MC = new(MapConfigDummy, ListName) class'VS_MapListConfig';
+	MapListArray.Insert(MapListArray.Length, 1);
+	MapListArray[MapListArray.Length - 1] = MC;
 
 	MLIgnore = new(MapListDummy) class'VS_MapList';
 
@@ -1400,6 +1403,8 @@ function VS_MapList LoadMapListByName(name ListName) {
 	ML = new(MapListDummy) class'VS_MapList';
 	ML.ListName = string(ListName);
 	ML.Storage = MC;
+	ML.Next = MapLists;
+	MapLists = ML;
 
 	AddAllMapsToMapList(MC.Map, ML);
 	AddMapPrefixesToMapList(MC.IncludeMapsWithPrefix, ML);
@@ -1423,9 +1428,9 @@ function VS_MapList LoadMapListByPrefix(string Prefix) {
 		return ML;
 
 	ML = new(MapListDummy) class'VS_MapList';
+	ML.Prefix = Prefix;
 	ML.Next = MapLists;
 	MapLists = ML;
-	ML.Prefix = Prefix;
 
 	FirstMap = GetMapName(Prefix, "", 0);
 	if (FirstMap == "")
@@ -1479,15 +1484,15 @@ function AddMapPrefixesToMapList(array<string> MapPrefixArray, VS_MapList MapLis
 	}
 }
 
-function AddMapListsToMapList(array<name> MapListArray, VS_MapList MapList) {
+function AddMapListsToMapList(array<name> MLArr, VS_MapList MapList) {
 	local VS_MapList IncludeList;
 	local int i;
 
-	for (i = 0; i < MapListArray.Length; i++) {
-		if (MapListArray[i] == '')
+	for (i = 0; i < MLArr.Length; i++) {
+		if (MLArr[i] == '')
 			continue;
 
-		IncludeList = LoadMapListByName(MapListArray[i]);
+		IncludeList = LoadMapListByName(MLArr[i]);
 		if (IncludeList != none)
 			MapList.AddMapList(IncludeList);
 	}

@@ -10,6 +10,7 @@ var VS_DataClient DataClient;
 var VS_FavoritesProcessor FavoritesProcessor;
 var VS_ServerSettings ServerSettings;
 var VS_ClientPresetList ServerPresets;
+var VS_ClientMapListsContainer ServerMapLists;
 
 var VS_Preset PresetList;
 var VS_UIV_Window VoteMenuDialog;
@@ -600,6 +601,28 @@ simulated function SaveServerPresets() {
 		return;
 
 	DataClient.SaveServerPresets(ServerPresets);
+}
+
+simulated function VS_ClientMapListsContainer ReloadServerMapLists() {
+	ServerMapLists = none;
+	DataClient.DiscardServerMapLists();
+	return GetServerMapLists();
+}
+
+simulated function VS_ClientMapListsContainer GetServerMapLists() {
+	Log("PlayerChannel GetServerMapLists", 'VoteSys');
+	if (ServerMapLists == none) {
+		ServerMapLists = DataClient.GetServerMapLists();
+	}
+	return ServerMapLists;
+}
+
+simulated function SaveServerMapLists() {
+	Log("PlayerChannel SaveServerMapLists", 'VoteSys');
+	if (ServerMapLists == none)
+		return;
+
+	DataClient.SaveServerMapLists(ServerMapLists);
 }
 
 simulated function LocalizeMessage(

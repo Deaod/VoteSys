@@ -156,3 +156,9 @@ Admin settings are split into three parts: Voting, UI, and Setup. The tab-cards 
 This tab-card is only visible when logged in as admin. It allows changing preset settings.
 
 ![Admin Presets Settings](AdminPresetsSettings.png)
+
+### Map Lists Settings
+
+This tab-card is only visible when logged in as admin. It allows editing map lists, including adding and removing them.
+
+![Admin Map Lists Settings](AdminMapListsSettings.png)

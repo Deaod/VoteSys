@@ -13,6 +13,7 @@ var VS_Preset Preset;
 var VS_Map LastMap;
 var VS_ServerSettings ServerSettings;
 var VS_ClientPresetList ServerPresets;
+var VS_ClientMapListsContainer ServerMapLists;
 
 var float ResolveDelay;
 
@@ -186,6 +187,19 @@ function ParseLine(string Line) {
 	} else if (Line == "/ENDSERVERPRESETCONFIG/") {
 		ServerPresets.TransmissionState = TS_Complete;
 		Log("VS_DataClient GetServerPresets End", 'VoteSys');
+	} else if (Left(Line, 21) == "/BEGINSERVERMAPLISTS/") {
+		ServerMapLists.TransmissionState = TS_New;
+		ServerMapLists.AllocateMapLists(int(Mid(Line, 21)));
+		Log("VS_DataClient GetServerMapLists Begin", 'VoteSys');
+	} else if (Left(Line, 20) == "/BEGINSERVERMAPLIST/") {
+		ParseMapListName(Line);
+	} else if (Left(Line, 23) == "/SERVERMAPLISTPROPERTY/") {
+		ParseMapListProperty(Line);
+	} else if (Left(Line, 18) == "/ENDSERVERMAPLIST/") {
+		//
+	} else if (Line == "/ENDSERVERMAPLISTS/") {
+		ServerMapLists.TransmissionState = TS_Complete;
+		Log("VS_DataClient GetServerMapLists End", 'VoteSys');
 	} else if (Left(Line, 5) == "/PONG") {
 		// nothing to do
 	} else {
@@ -310,7 +324,7 @@ function VS_ClientPresetList GetServerPresets() {
 	Log("VS_DataClient GetServerPresets Version OK", 'VoteSys');
 
 	if (ServerPresets == none) {
-		ServerPresets = new(none) class'VS_ClientPresetList';
+		ServerPresets = new(XLevel) class'VS_ClientPresetList';
 		SendLine("/SENDSERVERPRESETCONFIG/");
 		Log("VS_DataClient GetServerPresets Presets Requested", 'VoteSys');
 	}
@@ -374,6 +388,80 @@ function SaveServerPresets(VS_ClientPresetList S) {
 	SendLine("/SAVESERVERPRESETSFILE/");
 
 	Log("VS_DataClient SaveServerPresets Done", 'VoteSys');
+}
+
+function DiscardServerMapLists() {
+	ServerMapLists = none;
+}
+
+function VS_ClientMapListsContainer GetServerMapLists() {
+	Log("DataClient GetServerMapLists", 'VoteSys');
+	if (int(Level.EngineVersion) < 469)
+		return none; // not supported without 469
+
+	if (ServerMapLists == none) {
+		ServerMapLists = new(XLevel) class'VS_ClientMapListsContainer';
+		SendLine("/SENDSERVERMAPLISTS/");
+		Log("VS_DataClient GetServerMapLists Map Lists Requested", 'VoteSys');
+	}
+
+	return ServerMapLists;
+}
+
+function ParseMapListName(string Line) {
+	local int Index;
+
+	Line = Mid(Line, 20);
+	Index = int(Line); S11N.NextVariable(Line);
+	ServerMapLists.MapLists[Index].MapListName = S11N.DecodeString(Line);
+
+	Log("VS_DataClient GetServerMapList"@ServerMapLists.MapLists[Index].MapListName, 'VoteSys');
+}
+
+function ParseMapListProperty(string Line) {
+	local int Index;
+	local string PropName, PropValue;
+
+	Line = Mid(Line, 23);
+
+	Index = int(Line); S11N.NextVariable(Line);
+	S11N.ParseProperty(Line, PropName, PropValue);
+
+	ServerMapLists.MapLists[Index].SetPropertyText(PropName, PropValue);
+}
+
+function SaveServerMapListProperty(VS_ClientMapList M, string Prefix, string Prop) {
+	SendLine(Prefix$S11N.SerializeProperty(Prop, M.GetPropertyText(Prop)));
+}
+
+function SaveServerMapList(VS_ClientMapList M, int i) {
+	local string Prefix;
+	Prefix = "/SAVESERVERMAPLISTPROPERTY/"$i$"/";
+
+	SendLine("/SAVESERVERMAPLISTBEGIN/"$i$"/"$S11N.EncodeString(M.MapListName));
+
+	SaveServerMapListProperty(M, Prefix, "Map");
+	SaveServerMapListProperty(M, Prefix, "IgnoreMap");
+	SaveServerMapListProperty(M, Prefix, "IncludeMapsWithPrefix");
+	SaveServerMapListProperty(M, Prefix, "IgnoreMapsWithPrefix");
+	SaveServerMapListProperty(M, Prefix, "IncludeList");
+	SaveServerMapListProperty(M, Prefix, "IgnoreList");
+}
+
+function SaveServerMapLists(VS_ClientMapListsContainer S) {
+	local int i;
+	if (S == none)
+		return;
+
+	Log("VS_DataClient SaveServerMapLists", 'VoteSys');
+
+	for (i = 0; i < S.MapLists.Length; i++)
+		if (S.MapLists[i] != none && S.MapLists[i].MapListName != "")
+			SaveServerMapList(S.MapLists[i], i);
+
+	SendLine("/SAVESERVERMAPLISTSFILE/");
+
+	Log("VS_DataClient SaveServerMapLists Done", 'VoteSys');
 }
 
 defaultproperties {

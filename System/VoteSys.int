@@ -65,6 +65,15 @@ ErrMapLoadFailed="Loading map {1} failed, randomly selecting {2}"
 ErrNoConnection="VoteSys has no connection to server, check server firewall"
 ErrNotAllowed="Sorry, you are not allowed to vote"
 
+[VS_UIS_PageAdminMapLists]
+Text_MapListName="Map List Name"
+Text_Map="Include Maps"
+Text_IgnoreMap="Exclude Maps"
+Text_IncludeMapsWithPrefix="Include Prefixes"
+Text_IgnoreMapsWithPrefix="Exclude Prefixes"
+Text_IncludeList="Include Lists"
+Text_IgnoreList="Exclude Lists"
+
 [VS_UIV_Window]
 WindowTitle="VoteSys Menu"
 
@@ -111,6 +120,21 @@ Text_DefaultMap="Default Map"
 Text_AlwaysUseDefaultMap="Always Use Default Map"
 Text_IdleTimeout="Idle Timeout"
 
+[VS_UI_PlayerMenu]
+PlayerIdText="ID:"
+PlayerKickText="&Kick"
+PlayerBanText="&Ban"
+PlayerBanTitle="Ban Player"
+PlayerBanMessage="Do you want to permanently ban {1}?"
+
+[VS_UIS_ClientWindow]
+PageClientSettingsName="Client"
+PageAdminVotingName="[A] Voting"
+PageAdminUIName="[A] UI"
+PageAdminSetupName="[A] Setup"
+PageAdminPresetsName="[A] Presets"
+PageAdminMapListsName="[A] Map Lists"
+
 [VS_UIS_PageClient]
 ThemeText="Theme"
 ThemeBright="Bright"
@@ -122,13 +146,6 @@ MapListSortRecency="Recency"
 MapListSortPlayCount="Play Count"
 FavoritesFirstText="Sort Favorites First"
 ShowPlayerListText="Show Player List"
-
-[VS_UI_PlayerMenu]
-PlayerIdText="ID:"
-PlayerKickText="&Kick"
-PlayerBanText="&Ban"
-PlayerBanTitle="Ban Player"
-PlayerBanMessage="Do you want to permanently ban {1}?"
 
 [VS_UI_ScreenshotWindow]
 TextPlayerCount="Players:"

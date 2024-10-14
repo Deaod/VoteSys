@@ -2,6 +2,7 @@ class VS_UIS_PageAdmin extends VS_UIS_Page;
 
 var VS_ServerSettings Settings;
 var VS_ClientPresetList Presets;
+var VS_ClientMapListsContainer MapLists;
 var bool bSettingsLoaded;
 
 var UWindowSmallButton Btn_RestartServer;
@@ -36,6 +37,7 @@ function LoadSettings(VS_PlayerChannel C) {
 
 	Settings = C.GetServerSettings();
 	Presets = C.GetServerPresets();
+	MapLists = C.GetServerMapLists();
 	LoadServerSettings();
 
 	EnableInteraction(bSettingsLoaded);
@@ -44,27 +46,30 @@ function LoadSettings(VS_PlayerChannel C) {
 function SaveSettings() {
 	Channel.SaveServerSettings();
 	Channel.SaveServerPresets();
+	Channel.SaveServerMapLists();
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	super.BeforePaint(C, MouseX, MouseY);
 
-	switch(Settings.SState) {
-		case S_NEW:
-			Lbl_SettingsState.SetText(Text_SettingsState_New);
-			break;
-		case S_COMPLETE:
-			Lbl_SettingsState.SetText(Text_SettingsState_Complete);
-			break;
-		case S_NOTADMIN:
-			Lbl_SettingsState.SetText(Text_SettingsState_NotAdmin);
-			break;
-	}
-
-	if (bSettingsLoaded == false && Settings.SState == S_COMPLETE && Presets.TransmissionState == TS_Complete) {
-		LoadServerSettings();
-		EnableInteraction(true);
-		bSettingsLoaded = true;
+	if (Settings.SState == S_COMPLETE &&
+		Presets.TransmissionState == TS_Complete &&
+		MapLists.TransmissionState == TS_Complete
+	) {
+		Lbl_SettingsState.SetText(Text_SettingsState_Complete);
+		if (bSettingsLoaded == false) {
+			LoadServerSettings();
+			EnableInteraction(true);
+			bSettingsLoaded = true;
+		}
+	} else if (
+		Settings.SState == S_NOTADMIN ||
+		Presets.TransmissionState == TS_NotAdmin ||
+		MapLists.TransmissionState == TS_NotAdmin
+	) {
+		Lbl_SettingsState.SetText(Text_SettingsState_NotAdmin);
+	} else {
+		Lbl_SettingsState.SetText(Text_SettingsState_New);
 	}
 }
 
@@ -78,6 +83,7 @@ function Notify(UWindowDialogControl C, byte E) {
 			bSettingsLoaded = false;
 			Settings = Channel.ReloadServerSettings();
 			Presets = Channel.ReloadServerPresets();
+			MapLists = Channel.ReloadServerMapLists();
 			EnableInteraction(false);
 		}
 	}

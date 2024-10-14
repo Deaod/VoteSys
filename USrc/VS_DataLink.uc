@@ -8,6 +8,7 @@ var VS_ChannelContainer Channel;
 var string SendBuffer;
 var VS_Preset TempPreset;
 var VS_Map TempMap;
+var array<VS_MapListConfig> TempMapLists;
 var VS_Serialization S11N;
 
 var string CRLF;
@@ -20,6 +21,8 @@ struct Command {
 var array<Command> QueuedCommands;
 var name CurrentCommand;
 var string CommandParams;
+
+var name TempName;
 
 event PostBeginPlay() {
 	LinkMode = MODE_Text;
@@ -36,6 +39,9 @@ event Closed() {
 }
 
 final function bool SendLine(string Line) {
+	if (Len(Line) > 0xFFFE)
+		Channel.PlayerOwner.ClientMessage(
+			"Max line length exceeded in VoteSys. Please report this and include the following: "$Left(Line, 25));
 	// Len+2 to account for cr-lf at the end
 	return SendText(Line$CRLF) == Len(Line) + 2;
 }
@@ -89,6 +95,14 @@ function ParseLine(string Line) {
 		ClearServerPreset(Line);
 	} else if (Line == "/SAVESERVERPRESETSFILE/") {
 		SaveServerPresetsFile();
+	} else if (Line == "/SENDSERVERMAPLISTS/") {
+		QueueCommand('SendServerMapLists');
+	} else if (Left(Line, 24) == "/SAVESERVERMAPLISTBEGIN/") {
+		SaveServerMapListBegin(Line);
+	} else if (Left(Line, 27) == "/SAVESERVERMAPLISTPROPERTY/") {
+		SaveServerMapListProperty(Line);
+	} else if (Line == "/SAVESERVERMAPLISTSFILE/") {
+		SaveServerMapListsFile();
 	}
 }
 
@@ -347,6 +361,125 @@ function SaveServerPresetsFile() {
 	for (i = 0; i < VoteSys.PresetArray.Length; i++)
 		if (VoteSys.PresetArray[i] != none)
 			VoteSys.PresetArray[i].SaveConfig();
+}
+
+state SendServerMapLists {
+	function SendServerMapList(VS_MapListConfig MC, int Index) {
+		local string Prefix;
+		if (MC == none)
+			return;
+
+		SendLine("/BEGINSERVERMAPLIST/"$Index$"/"$S11N.EncodeString(string(MC.Name)));
+
+		Prefix = "/SERVERMAPLISTPROPERTY/" $ Index $ "/";
+		SendServerMapListProperty(Prefix, MC, "Map");
+		SendServerMapListProperty(Prefix, MC, "IgnoreMap");
+		SendServerMapListProperty(Prefix, MC, "IncludeMapsWithPrefix");
+		SendServerMapListProperty(Prefix, MC, "IgnoreMapsWithPrefix");
+		SendServerMapListProperty(Prefix, MC, "IncludeList");
+		SendServerMapListProperty(Prefix, MC, "IgnoreList");
+
+		SendLine("/ENDSERVERMAPLIST/"$Index);
+	}
+
+	function SendServerMapListProperty(string Prefix, VS_MapListConfig MC, string PropName) {
+		SendLine(Prefix $ S11N.SerializeProperty(PropName, MC.GetPropertyText(PropName)));
+	}
+
+	function SendServerMapLists() {
+		local int i;
+
+		SendLine("/BEGINSERVERMAPLISTS/"$VoteSys.MapListArray.Length);
+
+		for (i = 0; i < VoteSys.MapListArray.Length; ++i)
+			SendServerMapList(VoteSys.MapListArray[i], i);
+
+		SendLine("/ENDSERVERMAPLISTS/");
+	}
+
+Begin:
+	if (Channel == none ||
+		Channel.PlayerOwner == none ||
+		Channel.PlayerOwner.bAdmin == false
+	) {
+		SendLine("/NOTADMIN/");
+		GoToState('Idle');
+	}
+
+	Log("VS_DataLink SendServerMapLists"@IpAddrToString(RemoteAddr), 'VoteSys');
+	SendServerMapLists();
+
+	GoToState('Idle');
+}
+
+function SaveServerMapListBegin(string Line) {
+	local int Index;
+	local string MapListName;
+
+	if (Channel == none ||
+		Channel.PlayerOwner == none ||
+		Channel.PlayerOwner.bAdmin == false
+	) {
+		return;
+	}
+
+	Line = Mid(Line, 24);
+	Index = int(Line); S11N.NextVariable(Line);
+	MapListName = S11N.DecodeString(Line);
+
+	if (Index < 0)
+		return;
+
+	if (Index >= TempMapLists.Length)
+		TempMapLists.Insert(TempMapLists.Length, Index - TempMapLists.Length + 1);
+
+	if (TempMapLists[Index] != none)
+		return;
+
+	SetPropertyText("TempName", MapListName);
+	TempMapLists[Index] = new(VoteSys.MapConfigDummy, TempName) class'VS_MapListConfig';
+}
+
+function SaveServerMapListProperty(string Line) {
+	local int Index;
+	local string PropName, PropValue;
+
+	if (Channel == none ||
+		Channel.PlayerOwner == none ||
+		Channel.PlayerOwner.bAdmin == false
+	) {
+		return;
+	}
+
+	Line = Mid(Line, 27);
+	Index = int(Line); S11N.NextVariable(Line);
+	S11N.ParseProperty(Line, PropName, PropValue);
+
+	if (Index < 0 || Index >= TempMapLists.Length || TempMapLists[Index] == none)
+		return;
+
+	TempMapLists[Index].SetPropertyText(PropName, PropValue);
+}
+
+function SaveServerMapListsFile() {
+	local int i;
+
+	if (Channel == none ||
+		Channel.PlayerOwner == none ||
+		Channel.PlayerOwner.bAdmin == false
+	) {
+		return;
+	}
+
+	for (i = 0; i < VoteSys.MapListArray.Length; ++i)
+		VoteSys.MapListArray[i].ClearConfig();
+
+	VoteSys.MapListArray = TempMapLists;
+	TempMapLists.Remove(0, TempMapLists.Length);
+
+	for (i = 0; i < VoteSys.MapListArray.Length; ++i)
+		if (VoteSys.MapListArray[i] != none)
+			VoteSys.MapListArray[i].SaveConfig();
 }
 
 function HandleError() {

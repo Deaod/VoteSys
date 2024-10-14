@@ -7,12 +7,12 @@ A new, independent implementation of map vote.
 * Automatic management of ServerPackages
   * Opt-in ([`bManageServerPackages`](#bmanageserverpackages))
   * Before server version 469c [`DefaultPackages`](#defaultpackages) have to be configured correctly
-  * With 469c no further configuration is necessary
+  * With 469c or later no further configuration is necessary
 * Map repeat limits ([`MinimumMapRepeatDistance`](#minimummaprepeatdistance))
 
 Servers must run at least UT v469.  
 Clients must run at least UT v436.  
-Admin UI functionality also requires at least UT v469.
+Admin UI functionality also requires at least UT v469 clients.
 
 ## [UI Documentation](Docs/ui.md)
 
