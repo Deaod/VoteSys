@@ -74,21 +74,27 @@ function VS_Map SelectRandomMapFromList() {
 	local float TargetCount;
 	local VS_Map M;
 	local VS_Map Result;
+	local int SequenceCutoff;
+	local bool Skip;
 
 	if (MapList == none)
 		return none;
 
+	SequenceCutoff = MaxSequenceNumber - MinimumMapRepeatDistance;
 	Target = FRand();
 	M = MapList;
 	Result = MapList;
 	while (M.Next != none) {
+		Skip = (M.Sequence > 0 && M.Sequence > SequenceCutoff);
 		M = M.Next;
-		if (M.Sequence > 0 && M.Sequence > MaxSequenceNumber - MinimumMapRepeatDistance)
+		if (Skip)
 			continue;
 		TargetCount += Target;
 		if (TargetCount >= 1.0) {
 			TargetCount -= 1.0;
-			Result = Result.Next;
+			do {
+				Result = Result.Next;
+			} until(Result.Sequence == 0 || Result.Sequence <= SequenceCutoff);
 		}
 	}
 
