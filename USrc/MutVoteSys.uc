@@ -561,6 +561,9 @@ function AnnounceCountdown(int SecondsLeft) {
 	local int Num;
 	local Pawn P;
 
+	if (WantAutomaticallyOpenVoteMenu() == false && (Info.FirstCandidate == none || Info.FirstCandidate.Votes == 0))
+		return;
+
 	if (TimeMessageClass == none)
 		TimeMessageClass = class<CriticalEventPlus>(DynamicLoadObject(Settings.DefaultTimeMessageClass, class'Class'));
 	if (SecondsLeft <= 10 && SecondsLeft > 0) {
