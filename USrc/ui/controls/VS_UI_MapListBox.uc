@@ -12,32 +12,39 @@ function Created() {
 function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H) {
 	local VS_UI_MapListItem I;
 	local bool bDrawStar;
+	local float Offset;
 
 	super.DrawItem(C, Item, X, Y, W, H);
 
 	I = VS_UI_MapListItem(Item);
+	Offset = (H+3);
 
 	if (I.MapRef.bClientFavorite) {
-		DrawStretchedTexture(C, X + W - H, Y, H, H, Texture'StarFilled');
+		DrawStretchedTexture(C, ClippingRegion.W - Offset, Y, H, H, Texture'StarFilled');
 		bDrawStar = true;
 	} else if (I.bHover) {
-		DrawStretchedTexture(C, X + W - H, Y, H, H, Texture'StarEmpty');
+		DrawStretchedTexture(C, ClippingRegion.W - Offset, Y, H, H, Texture'StarEmpty');
 		bDrawStar = true;
 	}
 
 	if (bDrawStar)
-		ClippingRegion.W -= (H+2);
+		ClippingRegion.W -= Offset;
 
 	ClipText(C, X+2, Y, I.MapRef.MapName);
 
 	if (bDrawStar)
-		ClippingRegion.W += (H+2);
+		ClippingRegion.W += Offset;
 }
 
 function float ItemWidth(Canvas C, UWindowList Item, float VisibleWidth) {
 	local float W, H;
+	local VS_UI_MapListItem I;
 
-	TextSize(C, VS_UI_MapListItem(Item).MapRef.MapName, W, H);
+	I = VS_UI_MapListItem(Item);
+
+	TextSize(C, I.MapRef.MapName, W, H);
+	if (I.MapRef.bClientFavorite)
+		W += ItemHeight;
 
 	return FMax(W + 4.0, VisibleWidth);
 }

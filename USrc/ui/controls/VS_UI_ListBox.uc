@@ -107,10 +107,12 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	local float TotalBevelWidth, TotalBevelHeight;
 	local float VisibleHeight;
 	local float VisibleWidth;
+	local float BevelScale;
 
 	BevelType = LookAndFeel.EditBoxBevel;
-	TotalBevelWidth = LookAndFeel.MiscBevelL[BevelType].W + LookAndFeel.MiscBevelR[BevelType].W;
-	TotalBevelHeight = LookAndFeel.MiscBevelT[BevelType].H + LookAndFeel.MiscBevelB[BevelType].H;
+	BevelScale = FMin(Max(1, int(Root.GUIScale)), Root.GUIScale) / Root.GUIScale;
+	TotalBevelWidth  = (LookAndFeel.MiscBevelL[BevelType].W + LookAndFeel.MiscBevelR[BevelType].W) * BevelScale;
+	TotalBevelHeight = (LookAndFeel.MiscBevelT[BevelType].H + LookAndFeel.MiscBevelB[BevelType].H) * BevelScale;
 
 	VisibleWidth = WinWidth - VertSB.WinWidth - TotalBevelWidth;
 	MaxItemWidth = CalcMaxItemWidth(C, VisibleWidth);
@@ -156,6 +158,7 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 	local int i;
 	local float VisibleWidth;
 	local float YLimit;
+	local float BevelScale;
 
 	local Region OldClipRegion;
 	local float OrgX,OrgY;
@@ -189,8 +192,9 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 	ClipX = C.ClipX; ClipY = C.ClipY;
 	OldClipRegion = ClippingRegion;
 
-	C.OrgX = int(C.OrgX + LookAndFeel.MiscBevelL[BevelType].W * Root.GUIScale);
-	C.OrgY = int(C.OrgY + LookAndFeel.MiscBevelT[BevelType].H * Root.GUIScale);
+	BevelScale = FMin(Max(1, int(Root.GUIScale)), Root.GUIScale);
+	C.OrgX = int(C.OrgX + LookAndFeel.MiscBevelL[BevelType].W * BevelScale);
+	C.OrgY = int(C.OrgY + LookAndFeel.MiscBevelT[BevelType].H * BevelScale);
 	C.ClipX = VisibleWidth * Root.GUIScale;
 	C.ClipY = YLimit * Root.GUIScale;
 	ClippingRegion.X = 0.0;
