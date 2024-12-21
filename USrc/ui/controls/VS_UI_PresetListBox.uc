@@ -16,7 +16,7 @@ function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H
 	super.DrawItem(C, Item, X, Y, W, H);
 
 	I = VS_UI_PresetListItem(Item);
-	ClipText(C, X, Y, I.Preset.Category$"/"$I.Preset.PresetName);
+	ClipText(C, X + 2.0, Y, I.Preset.Category$"/"$I.Preset.PresetName);
 }
 
 defaultproperties {
