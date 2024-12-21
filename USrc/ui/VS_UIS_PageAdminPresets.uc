@@ -6,6 +6,8 @@ var UWindowSmallButton RemPreset;
 var VS_UI_PresetListItem SelectedPreset;
 var VS_ClientPreset DefaultPreset;
 
+var VS_UI_ScrollingWindow Scr_Properties;
+
 var VS_UI_EditControl Edt_PresetName;
 var localized string Text_PresetName;
 var localized string Text_PresetNameEmpty;
@@ -21,6 +23,9 @@ var localized string Text_SortPriority;
 
 var VS_UI_ArrayEditString Adt_InheritFrom;
 var localized string Text_InheritFrom;
+
+var VS_UI_EditControl Edt_ServerName;
+var localized string Text_ServerName;
 
 var VS_UI_EditControl Edt_Game;
 var localized string Text_Game;
@@ -60,7 +65,7 @@ function Created() {
 
 	DefaultPreset = new class'VS_ClientPreset';
 
-	PresetList = VS_UI_PresetListBox(CreateControl(class'VS_UI_PresetListBox', 4, 28, 188, 302));
+	PresetList = VS_UI_PresetListBox(CreateControl(class'VS_UI_PresetListBox', 4, 28, 176, 302));
 
 	AddPreset = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 4, 8, 16, 16));
 	AddPreset.SetText("+");
@@ -68,79 +73,102 @@ function Created() {
 	RemPreset = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 24, 8, 16, 16));
 	RemPreset.SetText("-");
 
-	Edt_PresetName = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 8, 188, 16));
+	Scr_Properties = VS_UI_ScrollingWindow(CreateWindow(class'VS_UI_ScrollingWindow', 188, 28, 200, 300));
+
+	Edt_PresetName = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 0, 0, 188, 16));
+	Edt_PresetName.SetParent(Scr_Properties);
 	Edt_PresetName.SetText(Text_PresetName);
 	Edt_PresetName.EditBoxWidth = 100;
 	Edt_PresetName.SetDelayedNotify(true);
 	Edt_PresetName.SetEmptyText(Text_PresetNameEmpty);
 	Edt_PresetName.bEmptyIsError = true;
 
-	Edt_Category = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 28, 188, 16));
+	Edt_Category = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 0, 20, 188, 16));
+	Edt_Category.SetParent(Scr_Properties);
 	Edt_Category.SetText(Text_Category);
 	Edt_Category.EditBoxWidth = 100;
 	Edt_Category.SetDelayedNotify(true);
 
-	Edt_Abbreviation = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 48, 188, 16));
+	Edt_Abbreviation = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 0, 40, 188, 16));
+	Edt_Abbreviation.SetParent(Scr_Properties);
 	Edt_Abbreviation.SetText(Text_Abbreviation);
 	Edt_Abbreviation.EditBoxWidth = 100;
 	Edt_Abbreviation.SetDelayedNotify(true);
 
-	Edt_SortPriority = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 68, 188, 16));
+	Edt_SortPriority = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 0, 60, 188, 16));
+	Edt_SortPriority.SetParent(Scr_Properties);
 	Edt_SortPriority.SetText(Text_SortPriority);
 	Edt_SortPriority.EditBoxWidth = 60;
 	Edt_SortPriority.SetNumericOnly(true);
 	Edt_SortPriority.SetNumericNegative(true);
 
-	Adt_InheritFrom = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 200, 88, 188, 16));
+	Adt_InheritFrom = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 0, 80, 188, 16));
+	Adt_InheritFrom.SetParent(Scr_Properties);
 	Adt_InheritFrom.SetText(Text_InheritFrom);
 	Adt_InheritFrom.EditBoxWidth = 100;
 
-	Edt_Game = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 108, 188, 16));
+	Edt_ServerName = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 0, 100, 188, 16));
+	Edt_ServerName.SetParent(Scr_Properties);
+	Edt_ServerName.SetText(Text_ServerName);
+	Edt_ServerName.EditBoxWidth = 100;
+
+	Edt_Game = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 0, 120, 188, 16));
+	Edt_Game.SetParent(Scr_Properties);
 	Edt_Game.SetText(Text_Game);
 	Edt_Game.EditBoxWidth = 100;
 
-	Edt_MapListName = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 128, 188, 16));
+	Edt_MapListName = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 0, 140, 188, 16));
+	Edt_MapListName.SetParent(Scr_Properties);
 	Edt_MapListName.SetText(Text_MapListName);
 	Edt_MapListName.EditBoxWidth = 100;
 
-	Adt_Mutators = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 200, 148, 188, 16));
+	Adt_Mutators = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 0, 160, 188, 16));
+	Adt_Mutators.SetParent(Scr_Properties);
 	Adt_Mutators.SetText(Text_Mutators);
 	Adt_Mutators.EditBoxWidth = 100;
 
-	Adt_Parameters = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 200, 168, 188, 16));
+	Adt_Parameters = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 0, 180, 188, 16));
+	Adt_Parameters.SetParent(Scr_Properties);
 	Adt_Parameters.SetText(Text_Parameters);
 	Adt_Parameters.EditBoxWidth = 100;
 
-	Adt_GameSettings = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 200, 188, 188, 16));
+	Adt_GameSettings = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 0, 200, 188, 16));
+	Adt_GameSettings.SetParent(Scr_Properties);
 	Adt_GameSettings.SetText(Text_GameSettings);
 	Adt_GameSettings.EditBoxWidth = 100;
 
-	Adt_Packages = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 200, 208, 188, 16));
+	Adt_Packages = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 0, 220, 188, 16));
+	Adt_Packages.SetParent(Scr_Properties);
 	Adt_Packages.SetText(Text_Packages);
 	Adt_Packages.EditBoxWidth = 100;
 
-	Chk_Disabled = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 200, 228, 188, 16));
+	Chk_Disabled = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 0, 240, 188, 16));
+	Chk_Disabled.SetParent(Scr_Properties);
 	Chk_Disabled.SetText(Text_Disabled);
 
-	Edt_MinimumMapRepeatDistance = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 248, 188, 16));
+	Edt_MinimumMapRepeatDistance = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 0, 260, 188, 16));
+	Edt_MinimumMapRepeatDistance.SetParent(Scr_Properties);
 	Edt_MinimumMapRepeatDistance.SetText(Text_MinimumMapRepeatDistance);
 	Edt_MinimumMapRepeatDistance.EditBoxWidth = 60;
 	Edt_MinimumMapRepeatDistance.SetNumericOnly(true);
 	Edt_MinimumMapRepeatDistance.SetNumericNegative(true);
 
-	Edt_MinPlayers = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 268, 188, 16));
+	Edt_MinPlayers = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 0, 280, 188, 16));
+	Edt_MinPlayers.SetParent(Scr_Properties);
 	Edt_MinPlayers.SetText(Text_MinPlayers);
 	Edt_MinPlayers.EditBoxWidth = 60;
 	Edt_MinPlayers.SetNumericOnly(true);
 	Edt_MinPlayers.SetNumericNegative(true);
 
-	Edt_MaxPlayers = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 288, 188, 16));
+	Edt_MaxPlayers = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 0, 300, 188, 16));
+	Edt_MaxPlayers.SetParent(Scr_Properties);
 	Edt_MaxPlayers.SetText(Text_MaxPlayers);
 	Edt_MaxPlayers.EditBoxWidth = 60;
 	Edt_MaxPlayers.SetNumericOnly(true);
 	Edt_MaxPlayers.SetNumericNegative(true);
 
-	Chk_OpenVoteMenuAutomatically = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 200, 308, 188, 16));
+	Chk_OpenVoteMenuAutomatically = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 0, 320, 188, 16));
+	Chk_OpenVoteMenuAutomatically.SetParent(Scr_Properties);
 	Chk_OpenVoteMenuAutomatically.SetText(Text_OpenVoteMenuAutomatically);
 }
 
@@ -153,6 +181,7 @@ function ApplyTheme() {
 	Edt_Abbreviation.Theme = Theme;
 	Edt_SortPriority.Theme = Theme;
 	Adt_InheritFrom.Theme = Theme;
+	Edt_ServerName.Theme = Theme;
 	Edt_Game.Theme = Theme;
 	Edt_MapListName.Theme = Theme;
 	Adt_Mutators.Theme = Theme;
@@ -174,6 +203,7 @@ function EnableInteraction(bool bEnable) {
 	Edt_Abbreviation.EditBox.SetEditable(false);
 	Edt_SortPriority.EditBox.SetEditable(false);
 	Adt_InheritFrom.EditBox.SetEditable(false);
+	Edt_ServerName.EditBox.SetEditable(false);
 	Edt_Game.EditBox.SetEditable(false);
 	Edt_MapListName.EditBox.SetEditable(false);
 	Adt_Mutators.EditBox.SetEditable(false);
@@ -196,6 +226,7 @@ function SavePresetSettings() {
 	SelectedPreset.Preset.Abbreviation = Edt_Abbreviation.GetValue();
 	SelectedPreset.Preset.SortPriority = int(Edt_SortPriority.GetValue());
 	SelectedPreset.Preset.SetPropertyText("InheritFrom", Adt_InheritFrom.GetValue());
+	SelectedPreset.Preset.ServerName = Edt_ServerName.GetValue();
 	SelectedPreset.Preset.Game = Edt_Game.GetValue();
 	SelectedPreset.Preset.SetPropertyText("MapListName", Edt_MapListName.GetValue());
 	SelectedPreset.Preset.SetPropertyText("Mutators", Adt_Mutators.GetValue());
@@ -218,6 +249,7 @@ function LoadPresetSettings(VS_ClientPreset P) {
 	Edt_Abbreviation.SetValue(P.Abbreviation);
 	Edt_SortPriority.SetValue(string(P.SortPriority));
 	Adt_InheritFrom.SetValue(P.GetPropertyText("InheritFrom"));
+	Edt_ServerName.SetValue(P.ServerName);
 	Edt_Game.SetValue(P.Game);
 	Edt_MapListName.SetValue(string(P.MapListName));
 	Adt_Mutators.SetValue(P.GetPropertyText("Mutators"));
@@ -244,6 +276,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 		Edt_Abbreviation.EditBox.SetEditable(SelectedPreset != none);
 		Edt_SortPriority.EditBox.SetEditable(SelectedPreset != none);
 		Adt_InheritFrom.EditBox.SetEditable(SelectedPreset != none);
+		Edt_ServerName.EditBox.SetEditable(SelectedPreset != none);
 		Edt_Game.EditBox.SetEditable(SelectedPreset != none);
 		Edt_MapListName.EditBox.SetEditable(SelectedPreset != none);
 		Adt_Mutators.EditBox.SetEditable(SelectedPreset != none);
@@ -325,6 +358,7 @@ defaultproperties {
 	Text_Abbreviation="Abbreviation"
 	Text_SortPriority="Sort Priority"
 	Text_InheritFrom="Inherit From"
+	Text_ServerName="Server Name"
 	Text_Game="Game"
 	Text_MapListName="Map List Name"
 	Text_Mutators="Mutators"

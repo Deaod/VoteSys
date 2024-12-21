@@ -697,6 +697,7 @@ function TravelTo(VS_Preset P, VS_Map M) {
 	TD.bDefaultMap = bChangeMapImmediately;
 	TD.PresetName = P.PresetName;
 	TD.Category = P.Category;
+	TD.ServerName = P.ServerName;
 	TD.Mutators = Mutators;
 	TD.Actors = ActorsList;
 	TD.GameSettings = P.GameSettings;
@@ -949,6 +950,10 @@ function ApplyVotedPreset() {
 				break;
 		}
 	}
+
+	if (TD.ServerName != "")
+		Level.Game.GameReplicationInfo.ServerName = TD.ServerName;
+
 	if (Settings.bUseServerActorsCompatibilityMode == false)
 		CreateServerActors(TD.Actors);
 	ApplyGameSettings(TD.GameSettings);
@@ -1302,6 +1307,8 @@ function LoadPresetPassTwo(VS_Preset P) {
 		
 		LoadPresetPassTwo(Base);
 
+		if (P.ServerName == "")
+			P.ServerName = Base.ServerName;
 		if (P.Game == none)
 			P.Game = Base.Game;
 		if (P.MinimumMapRepeatDistance < 0)
@@ -1317,6 +1324,8 @@ function LoadPresetPassTwo(VS_Preset P) {
 		P.AppendPackage(Base.Packages);
 	}
 
+	if (PC.ServerName != "")
+		P.ServerName = PC.ServerName;
 	Game = class<GameInfo>(DynamicLoadObject(PC.Game, class'Class', true));
 	if (Game != none)
 		P.Game = Game;

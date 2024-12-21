@@ -11,6 +11,8 @@ var config string Category;
 var config int SortPriority;
 /** List of full preset names to inherit data from */
 var config array<string> InheritFrom;
+/** ServerName to use while this preset is active. If empty, the default ServerName is used. */
+var config string ServerName;
 /** Which game type to use */
 var config string Game;
 /** Which MapList to use for this preset, empty uses all map for specified game type */

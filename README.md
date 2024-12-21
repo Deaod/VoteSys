@@ -401,6 +401,7 @@ PresetName=2v2v2v2 TDM
 Abbreviation=xTDM
 Category=DM
 InheritFrom=DM/Team DeathMatch
+ServerName=My xTDM Server
 GameSettings=MaxTeams=4
 Mutators=Botpack.InstaGibDM
 bOpenVoteMenuAutomatically=False
@@ -423,9 +424,9 @@ Each preset has a `Name`, a `Category` and an `Abbreviation`.
 You can inherit from an arbitrary number of other presets.  
 Refer to other preset using their [full preset names](#full-preset-names).
 
-You can inherit `Game`, `Mutators`, `Parameters`, `GameSettings`, `MinimumMapRepeatDistance`, `MinPlayers`, and `MaxPlayers`. Other elements cannot be inherited.
+You can inherit `ServerName`, `Game`, `Mutators`, `Parameters`, `GameSettings`, `MinimumMapRepeatDistance`, `MinPlayers`, and `MaxPlayers`. Other elements cannot be inherited.
 
-If you dont specify a value for `Game` in the current preset, the first non-empty value in the list of presets you inherit from will be used.
+If you dont specify a value for `ServerName` or `Game` in the current preset, the first non-empty value in the list of presets you inherit from will be used.
 
 If you dont specify a value, or if you specify a negative value for `MinimumMapRepeatDistance`, `MinPlayers`, or `MaxPlayers` in the current preset, the first non-empty and non-negative value in the list of presets you inherit from will be used.
 
@@ -435,6 +436,9 @@ For `Mutators`, `Parameters`, and `GameSettings` the values will be combined in 
 `SortPriority` can be used to make presets appear above others within a category. Higher values mean the preset will appear higher in the list.
 
 Default is 0.
+
+#### Server Name
+`ServerName` is used to change the name of the server for this preset. If this property is empty, the server's default `ServerName` will be used.
 
 #### Game Type
 `Game` is used to identify the gametype for the preset. It must not be blank for enabled presets.

@@ -270,6 +270,7 @@ state SendServerPresets {
 		SendServerPresetProperty(Prefix, PC, "Category");
 		SendServerPresetProperty(Prefix, PC, "SortPriority");
 		SendServerPresetProperty(Prefix, PC, "InheritFrom");
+		SendServerPresetProperty(Prefix, PC, "ServerName");
 		SendServerPresetProperty(Prefix, PC, "Game");
 		SendServerPresetProperty(Prefix, PC, "MapListName");
 		SendServerPresetProperty(Prefix, PC, "Mutators");

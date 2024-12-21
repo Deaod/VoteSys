@@ -5,6 +5,7 @@ var string        Abbreviation;
 var string        Category;
 var int           SortPriority;
 var array<string> InheritFrom;
+var string        ServerName;
 var string        Game;
 var name          MapListName;
 var array<string> Mutators;

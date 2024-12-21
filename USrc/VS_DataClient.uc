@@ -353,6 +353,7 @@ function SaveServerPreset(VS_ClientPreset P, int i) {
 	SaveServerPresetProperty(P, Prefix, "Category");
 	SaveServerPresetProperty(P, Prefix, "SortPriority");
 	SaveServerPresetProperty(P, Prefix, "InheritFrom");
+	SaveServerPresetProperty(P, Prefix, "ServerName");
 	SaveServerPresetProperty(P, Prefix, "Game");
 	SaveServerPresetProperty(P, Prefix, "MapListName");
 	SaveServerPresetProperty(P, Prefix, "Mutators");
