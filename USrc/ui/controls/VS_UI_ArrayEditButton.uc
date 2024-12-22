@@ -11,6 +11,9 @@ function Created() {
 }
 
 function Click(float X, float Y) {
+	if (bDisabled)
+		return;
+
 	Owner.LaunchEditWindow();
 }
 
@@ -24,7 +27,7 @@ function BeforePaint(Canvas C, float X, float Y) {
 	TextX = (WinWidth-TextW)/2;
 	TextY = (WinHeight-H)/2;
 
-	if (bMouseDown) {
+	if (bDisabled == false && bMouseDown) {
 		TextX += 1;
 		TextY += 1;
 	}

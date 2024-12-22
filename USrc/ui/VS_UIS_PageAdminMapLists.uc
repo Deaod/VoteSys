@@ -79,24 +79,24 @@ function Created() {
 function ApplyTheme() {
 	MapListLB.Theme = Theme;
 	Edt_MapListName.Theme = Theme;
-	Adt_Map.Theme = Theme;
-	Adt_IgnoreMap.Theme = Theme;
-	Adt_IncludeMapsWithPrefix.Theme = Theme;
-	Adt_IgnoreMapsWithPrefix.Theme = Theme;
-	Adt_IncludeList.Theme = Theme;
-	Adt_IgnoreList.Theme = Theme;
+	Adt_Map.SetTheme(Theme);
+	Adt_IgnoreMap.SetTheme(Theme);
+	Adt_IncludeMapsWithPrefix.SetTheme(Theme);
+	Adt_IgnoreMapsWithPrefix.SetTheme(Theme);
+	Adt_IncludeList.SetTheme(Theme);
+	Adt_IgnoreList.SetTheme(Theme);
 }
 
 function EnableInteraction(bool bEnable) {
 	AddMapList.bDisabled = !bEnable;
 	RemMapList.bDisabled = !bEnable;
 	Edt_MapListName.EditBox.SetEditable(false);
-	Adt_Map.EditBox.SetEditable(false);
-	Adt_IgnoreMap.EditBox.SetEditable(false);
-	Adt_IncludeMapsWithPrefix.EditBox.SetEditable(false);
-	Adt_IgnoreMapsWithPrefix.EditBox.SetEditable(false);
-	Adt_IncludeList.EditBox.SetEditable(false);
-	Adt_IgnoreList.EditBox.SetEditable(false);
+	Adt_Map.SetEnabled(false);
+	Adt_IgnoreMap.SetEnabled(false);
+	Adt_IncludeMapsWithPrefix.SetEnabled(false);
+	Adt_IgnoreMapsWithPrefix.SetEnabled(false);
+	Adt_IncludeList.SetEnabled(false);
+	Adt_IgnoreList.SetEnabled(false);
 }
 
 function SaveMapListSettings() {
@@ -134,12 +134,12 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 		LoadMapListSettings(SelectedMapList.MapList);
 
 		Edt_MapListName.EditBox.SetEditable(SelectedMapList != none);
-		Adt_Map.EditBox.SetEditable(SelectedMapList != none);
-		Adt_IgnoreMap.EditBox.SetEditable(SelectedMapList != none);
-		Adt_IncludeMapsWithPrefix.EditBox.SetEditable(SelectedMapList != none);
-		Adt_IgnoreMapsWithPrefix.EditBox.SetEditable(SelectedMapList != none);
-		Adt_IncludeList.EditBox.SetEditable(SelectedMapList != none);
-		Adt_IgnoreList.EditBox.SetEditable(SelectedMapList != none);
+		Adt_Map.SetEnabled(SelectedMapList != none);
+		Adt_IgnoreMap.SetEnabled(SelectedMapList != none);
+		Adt_IncludeMapsWithPrefix.SetEnabled(SelectedMapList != none);
+		Adt_IgnoreMapsWithPrefix.SetEnabled(SelectedMapList != none);
+		Adt_IncludeList.SetEnabled(SelectedMapList != none);
+		Adt_IgnoreList.SetEnabled(SelectedMapList != none);
 	}
 }
 

@@ -11,7 +11,6 @@ var VS_UI_ArrayEditW    EditWindow;
 var bool                bCanEdit;
 var bool                bEnabled;
 var bool                bSavedCanEdit;
-var bool                bSavedEditBoxCanEdit;
 
 function Created() {
 	Super.Created();
@@ -72,8 +71,12 @@ function SetEditTextColor(Color NewColor) {
 }
 
 function SetEditable(bool bNewCanEdit) {
-	bCanEdit = bNewCanEdit;
-	EditBox.SetEditable(bCanEdit);
+	if (bEnabled) {
+		bCanEdit = bNewCanEdit;
+		EditBox.SetEditable(bCanEdit);
+	} else {
+		bSavedCanEdit = bNewCanEdit;
+	}
 }
 
 function string GetValue() {
@@ -158,13 +161,12 @@ function SetEnabled(bool bEnable) {
 	if (bEnable) {
 		Button.bDisabled = false;
 		bCanEdit = bSavedCanEdit;
-		EditBox.SetEditable(bSavedEditBoxCanEdit);
+		EditBox.SetEditable(bCanEdit);
 	} else {
 		bSavedCanEdit = bCanEdit;
-		bSavedEditBoxCanEdit = EditBox.bCanEdit;
 
 		Button.bDisabled = true;
-		bCanEdit = true;
+		bCanEdit = false;
 		EditBox.SetEditable(false);
 	}
 	bEnabled = bEnable;
@@ -183,5 +185,7 @@ function FocusOtherWindow(UWindowWindow W) {
 }
 
 defaultproperties {
+	bCanEdit=True
+	bEnabled=True
 	bNoKeyboard=True
 }
