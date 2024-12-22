@@ -43,6 +43,32 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 	ClippingRegion.W = ContentWidth;
 	ClippingRegion.H = COntentHeight;
 
+	SelectedText = "";
+	bSelect = bMouseDown;
+	if (bSelect)
+	{
+		if (ClickX <= MouseX)
+		{
+			StartX = ClickX;
+			EndX = MouseX;
+		}
+		else
+		{
+			StartX = MouseX;
+			EndX = ClickX;
+		}
+		if (ClickY <= MouseY)
+		{
+			StartY = ClickY;
+			EndY = MouseY;
+		}
+		else
+		{
+			StartY = MouseY;
+			EndY = ClickY;
+		}
+	}
+
 	C.DrawColor = Theme.Foreground;
 
 	if(AbsoluteFont != None)
@@ -180,7 +206,7 @@ function float DrawTextLine2(Canvas C, UWindowDynamicTextRow L, float Y, float W
 		} else if (M.ColorRef == 1) {
 			C.DrawColor = Theme.Foreground;
 		}
-		TextAreaClipText(C, X, Y, M.PlayerName);
+		TextAreaClipText2(C, X, Y, M.PlayerName);
 		C.DrawColor = Theme.Foreground;
 	}
 
