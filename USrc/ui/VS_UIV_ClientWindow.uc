@@ -36,6 +36,7 @@ var VS_UI_PlayerListBox PlayerListBox;
 
 var VS_UI_Logo Logo;
 var VS_UI_LinkButton LogoButtons[3];
+var VS_UI_LogoRestoreButton LogoRestore;
 
 var VS_UI_ChatArea ChatArea;
 var VS_UI_EditControl ChatEdit;
@@ -78,6 +79,7 @@ function Created() {
 	PlayerListBox = VS_UI_PlayerListBox(CreateControl(class'VS_UI_PlayerListBox', 480, TabsHeight + 120, 120, 214));
 
 	Logo = VS_UI_Logo(CreateControl(class'VS_UI_Logo', 200, TabsHeight + 120, 270, 234));
+	Logo.bAlwaysBehind = true;
 
 	LogoButtons[0] = VS_UI_LinkButton(CreateControl(class'VS_UI_LinkButton', 200, TabsHeight + 338, 86, 16));
 	LogoButtons[0].HideWindow();
@@ -86,7 +88,11 @@ function Created() {
 	LogoButtons[2] = VS_UI_LinkButton(CreateControl(class'VS_UI_LinkButton', 384, TabsHeight + 338, 86, 16));
 	LogoButtons[2].HideWindow();
 
+	LogoRestore = VS_UI_LogoRestoreButton(CreateControl(class'VS_UI_LogoRestoreButton', 200, TabsHeight + 120, 11, 11));
+	LogoRestore.HideWindow();
+
 	ChatArea = VS_UI_ChatArea(CreateControl(class'VS_UI_ChatArea', 200, TabsHeight + 120, 270, 214));
+	ChatArea.bAlwaysBehind = true;
 	ChatEdit = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, TabsHeight + 338, 220, 12));
 	ChatEdit.EditBoxWidth = ChatEdit.WinWidth;
 	ChatEdit.SetHistory(true);
@@ -148,9 +154,6 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 		ChatSay.SetText(ChatTeamSayText);
 	else
 		ChatSay.SetText(ChatSayText);
-
-	if (Logo.bWindowVisible)
-		Logo.SendToBack();
 
 	if (PlayerListBox.bWindowVisible == false && Settings.bShowPlayerList) {
 		PlayerListBox.ShowWindow();
@@ -425,14 +428,9 @@ function Notify(UWindowDialogControl C, byte E) {
 	} else if (C == SettingsButton && E == DE_Click) {
 		Channel.ShowSettings();
 	} else if (C == Logo && E == Logo.DE_VoteSys_LogoDismiss) {
-		Logo.HideWindow();
-		LogoButtons[0].HideWindow();
-		LogoButtons[1].HideWindow();
-		LogoButtons[2].HideWindow();
-
-		ChatArea.ShowWindow();
-		ChatEdit.ShowWindow();
-		ChatSay.ShowWindow();
+		HideLogo();
+	} else if (C == LogoRestore && E == DE_Click) {
+		ShowLogo();
 	}
 }
 
@@ -505,12 +503,7 @@ function FocusPreset(VS_Preset P) {
 	}
 }
 
-function ConfigureLogo(string Tex, int TexX, int TexY, int TexW, int TexH, int DrawX, int DrawY, int DrawW, int DrawH) {
-	Logo.SetLogoTexture(Tex);
-	if (TexX != 0 || TexY != 0 || TexW != 0 || TexH != 0)
-		Logo.SetLogoRegion(TexX, TexY, TexW, TexH);
-	Logo.SetDrawRegion(DrawX, DrawY, DrawW, DrawH);
-
+function ShowLogo() {
 	if (Logo.LogoTexture != none) {
 		Logo.ShowWindow();
 		if (LogoButtons[0].LinkURL != "")
@@ -520,10 +513,34 @@ function ConfigureLogo(string Tex, int TexX, int TexY, int TexW, int TexH, int D
 		if (LogoButtons[2].LinkURL != "")
 			LogoButtons[2].ShowWindow();
 
+		LogoRestore.HideWindow();
 		ChatArea.HideWindow();
 		ChatEdit.HideWindow();
 		ChatSay.HideWindow();
 	}
+}
+
+function HideLogo() {
+	if (Logo.LogoTexture != none) {
+		Logo.HideWindow();
+		LogoButtons[0].HideWindow();
+		LogoButtons[1].HideWindow();
+		LogoButtons[2].HideWindow();
+
+		ChatArea.ShowWindow();
+		ChatEdit.ShowWindow();
+		ChatSay.ShowWindow();
+		LogoRestore.ShowWindow();
+	}
+}
+
+function ConfigureLogo(string Tex, int TexX, int TexY, int TexW, int TexH, int DrawX, int DrawY, int DrawW, int DrawH) {
+	Logo.SetLogoTexture(Tex);
+	if (TexX != 0 || TexY != 0 || TexW != 0 || TexH != 0)
+		Logo.SetLogoRegion(TexX, TexY, TexW, TexH);
+	Logo.SetDrawRegion(DrawX, DrawY, DrawW, DrawH);
+
+	ShowLogo();
 }
 
 function ConfigureLogoButton(int Index, string Label, string LinkURL) {
