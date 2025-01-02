@@ -1,4 +1,5 @@
 class VS_MapListConfig extends Object
+	config(VoteSysMapLists)
 	perobjectconfig;
 
 var config array<string> Map;

@@ -1,4 +1,5 @@
 class VS_BannedPlayers extends Object
+	config(VoteSysBans)
 	perobjectconfig;
 
 struct BannedPlayer {

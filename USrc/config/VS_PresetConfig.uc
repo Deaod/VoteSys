@@ -1,4 +1,5 @@
 class VS_PresetConfig extends Object
+	config(VoteSysPresets)
 	perobjectconfig;
 
 /** Name of the preset */

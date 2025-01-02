@@ -1,4 +1,5 @@
 class VS_TempData extends Object
+	config(VoteSysTemp)
 	perobjectconfig;
 
 var config bool bNoColdStart;

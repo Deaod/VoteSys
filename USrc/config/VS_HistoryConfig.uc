@@ -1,4 +1,5 @@
 class VS_HistoryConfig extends Object
+	config(VoteSysHistory)
 	perobjectconfig;
 
 struct HistoryEntry {

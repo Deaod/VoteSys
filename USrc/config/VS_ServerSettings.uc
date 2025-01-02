@@ -1,4 +1,5 @@
 class VS_ServerSettings extends Object
+	config(VoteSys)
 	perobjectconfig;
 
 enum EVoteEndCond {
