@@ -61,9 +61,24 @@ replication {
 }
 
 simulated event PostBeginPlay() {
+	ReloadConfigFiles();
+
 	SettingsDummy = new(none, 'VoteSys') class 'Object';
 	Settings = new (SettingsDummy, 'ClientSettings') class'VS_ClientSettings';
 	FavoritesProcessor = Spawn(class'VS_FavoritesProcessor', self);
+}
+
+simulated function ReloadConfigFiles() {
+	local PlayerPawn PlayerOwner;
+
+	PlayerOwner = PlayerPawn(Owner);
+	if (PlayerOwner == none || Viewport(PlayerOwner.Player) == none)
+		return;
+
+	if ((Level.EngineVersion$Level.GetPropertyText("EngineRevision")) < "469d")
+		return;
+
+	ConsoleCommand("RELOADCONFIG"@string(class'VS_ClientSettings'));
 }
 
 simulated event Tick(float Delta) {

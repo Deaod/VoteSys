@@ -59,6 +59,8 @@ var VS_Package TempPkg;
 event PostBeginPlay() {
 	super.PostBeginPlay();
 
+	ReloadConfigFiles();
+
 	SettingsDummy = new(XLevel, 'VoteSys') class 'Object';
 	Settings = new(SettingsDummy, 'ServerSettings') class'VS_ServerSettings';
 
@@ -1197,6 +1199,18 @@ function ApplyGameSetting(string Setting) {
 
 	if (Key != "")
 		Level.Game.SetPropertyText(Key, Value);
+}
+
+function ReloadConfigFiles() {
+	if ((Level.EngineVersion$Level.GetPropertyText("EngineRevision")) < "469d")
+		return;
+
+	ConsoleCommand("RELOADCONFIG"@string(class'VS_BannedPlayers'));
+	ConsoleCommand("RELOADCONFIG"@string(class'VS_HistoryConfig'));
+	ConsoleCommand("RELOADCONFIG"@string(class'VS_MapListConfig'));
+	ConsoleCommand("RELOADCONFIG"@string(class'VS_PresetConfig'));
+	ConsoleCommand("RELOADCONFIG"@string(class'VS_ServerSettings'));
+	ConsoleCommand("RELOADCONFIG"@string(class'VS_TempData'));
 }
 
 function LoadConfig() {
