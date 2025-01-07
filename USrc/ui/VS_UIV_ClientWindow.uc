@@ -271,7 +271,9 @@ function UpdateActiveCategory() {
 			return;
 			
 		for (P = ActiveCategory.PresetList; P != none; P = P.Next) {
-			bEnable = (NumPlayers >= P.Preset.MinPlayers) && (NumPlayers <= P.Preset.MaxPlayers || P.Preset.MaxPlayers <= 0);
+			bEnable =
+				(NumPlayers >= P.Preset.MinPlayers) &&
+				(NumPlayers <= P.Preset.MaxPlayers || P.Preset.MaxPlayers <= 0);
 			if (bAdmin)
 				bEnable = true;
 			Presets.AddPreset(P.Preset, bEnable);
