@@ -227,6 +227,7 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 	local float S;
 	local Region TL, T, TR;
 	local float X,Y,W;
+	local Texture Tex;
 
 	super.Paint(C, MouseX, MouseY);
 
@@ -245,9 +246,10 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 	TL = LookAndFeel.BevelUpTL;
 	T = LookAndFeel.BevelUpT;
 	TR = LookAndFeel.BevelUpTR;
-	DrawStretchedTextureSegment(C, X             , Y,     (TL.W)*S     , (TL.H)*S, TL.X, TL.Y, TL.W, TL.H, GetLookAndFeelTexture());
-	DrawStretchedTextureSegment(C, X   + (TL.W)*S, Y, W - (TL.W+TR.W)*S, (T.H)*S ,  T.X,  T.Y,  T.W,  T.H, GetLookAndFeelTexture());
-	DrawStretchedTextureSegment(C, X+W - (TR.W)*S, Y,     (TR.W)*S     , (TR.H)*S, TR.X, TR.Y, TR.W, TR.H, GetLookAndFeelTexture());
+	Tex = GetLookAndFeelTexture();
+	DrawStretchedTextureSegment(C, X             , Y,     (TL.W)*S     , (TL.H)*S, TL.X, TL.Y, TL.W, TL.H, Tex);
+	DrawStretchedTextureSegment(C, X   + (TL.W)*S, Y, W - (TL.W+TR.W)*S, (T.H)*S ,  T.X,  T.Y,  T.W,  T.H, Tex);
+	DrawStretchedTextureSegment(C, X+W - (TR.W)*S, Y,     (TR.W)*S     , (TR.H)*S, TR.X, TR.Y, TR.W, TR.H, Tex);
 }
 
 function UpdateActiveCategory() {
