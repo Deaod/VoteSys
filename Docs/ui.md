@@ -89,6 +89,8 @@ If you hold the "Ctrl" key while sending a message, it will be sent to your own 
 
 You can recall past messages sent by you by pressing the Up arrow key repeatedly.
 
+Clicking and dragging the mouse while over the text area will select text inside the area. After releasing the mouse button the selected text will be copied to the clipboard.
+
 ### Logo Area
 
 ![Logo Area](LogoHighlight.png)
