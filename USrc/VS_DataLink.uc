@@ -265,26 +265,26 @@ state SendServerPresets {
 
 		Prefix = "/SERVERPRESETPROPERTY/" $ Index $ "/";
 
-		SendServerPresetProperty(Prefix, PC, "PresetName");
-		SendServerPresetProperty(Prefix, PC, "Abbreviation");
-		SendServerPresetProperty(Prefix, PC, "Category");
-		SendServerPresetProperty(Prefix, PC, "SortPriority");
-		SendServerPresetProperty(Prefix, PC, "InheritFrom");
-		SendServerPresetProperty(Prefix, PC, "ServerName");
-		SendServerPresetProperty(Prefix, PC, "Game");
-		SendServerPresetProperty(Prefix, PC, "MapListName");
-		SendServerPresetProperty(Prefix, PC, "Mutators");
-		SendServerPresetProperty(Prefix, PC, "Parameters");
-		SendServerPresetProperty(Prefix, PC, "GameSettings");
-		SendServerPresetProperty(Prefix, PC, "Packages");
-		SendServerPresetProperty(Prefix, PC, "bDisabled");
-		SendServerPresetProperty(Prefix, PC, "bOpenVoteMenuAutomatically");
-		SendServerPresetProperty(Prefix, PC, "MinimumMapRepeatDistance");
-		SendServerPresetProperty(Prefix, PC, "MinPlayers");
-		SendServerPresetProperty(Prefix, PC, "MaxPlayers");
+		SendServerPresetProperty(PC, Prefix, "PresetName");
+		SendServerPresetProperty(PC, Prefix, "Abbreviation");
+		SendServerPresetProperty(PC, Prefix, "Category");
+		SendServerPresetProperty(PC, Prefix, "SortPriority");
+		SendServerPresetProperty(PC, Prefix, "InheritFrom");
+		SendServerPresetProperty(PC, Prefix, "ServerName");
+		SendServerPresetProperty(PC, Prefix, "Game");
+		SendServerPresetProperty(PC, Prefix, "MapListName");
+		SendServerPresetProperty(PC, Prefix, "Mutators");
+		SendServerPresetProperty(PC, Prefix, "Parameters");
+		SendServerPresetProperty(PC, Prefix, "GameSettings");
+		SendServerPresetProperty(PC, Prefix, "Packages");
+		SendServerPresetProperty(PC, Prefix, "bDisabled");
+		SendServerPresetProperty(PC, Prefix, "bOpenVoteMenuAutomatically");
+		SendServerPresetProperty(PC, Prefix, "MinimumMapRepeatDistance");
+		SendServerPresetProperty(PC, Prefix, "MinPlayers");
+		SendServerPresetProperty(PC, Prefix, "MaxPlayers");
 	}
 
-	function SendServerPresetProperty(string Prefix, VS_PresetConfig PC, string PropName) {
+	function SendServerPresetProperty(VS_PresetConfig PC, string Prefix, string PropName) {
 		SendLine(Prefix $ S11N.SerializeProperty(PropName, PC.GetPropertyText(PropName)));
 	}
 
@@ -373,17 +373,17 @@ state SendServerMapLists {
 		SendLine("/BEGINSERVERMAPLIST/"$Index$"/"$S11N.EncodeString(string(MC.Name)));
 
 		Prefix = "/SERVERMAPLISTPROPERTY/" $ Index $ "/";
-		SendServerMapListProperty(Prefix, MC, "Map");
-		SendServerMapListProperty(Prefix, MC, "IgnoreMap");
-		SendServerMapListProperty(Prefix, MC, "IncludeMapsWithPrefix");
-		SendServerMapListProperty(Prefix, MC, "IgnoreMapsWithPrefix");
-		SendServerMapListProperty(Prefix, MC, "IncludeList");
-		SendServerMapListProperty(Prefix, MC, "IgnoreList");
+		SendServerMapListProperty(MC, Prefix, "Map");
+		SendServerMapListProperty(MC, Prefix, "IgnoreMap");
+		SendServerMapListProperty(MC, Prefix, "IncludeMapsWithPrefix");
+		SendServerMapListProperty(MC, Prefix, "IgnoreMapsWithPrefix");
+		SendServerMapListProperty(MC, Prefix, "IncludeList");
+		SendServerMapListProperty(MC, Prefix, "IgnoreList");
 
 		SendLine("/ENDSERVERMAPLIST/"$Index);
 	}
 
-	function SendServerMapListProperty(string Prefix, VS_MapListConfig MC, string PropName) {
+	function SendServerMapListProperty(VS_MapListConfig MC, string Prefix, string PropName) {
 		SendLine(Prefix $ S11N.SerializeProperty(PropName, MC.GetPropertyText(PropName)));
 	}
 
