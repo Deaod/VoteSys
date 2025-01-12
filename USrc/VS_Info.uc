@@ -193,8 +193,6 @@ function KickPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target, bool 
 	local VS_ChannelContainer ChCont;
 	local VS_PlayerChannel TCh;
 	local int KickIndex;
-	if (bEnableKickVoting == false)
-		return;
 
 	if (Origin == none || Target == none)
 		return;
@@ -218,7 +216,7 @@ function KickPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target, bool 
 			VoteSys.TempBanPlayer(P);
 			VoteSys.KickPlayer(P, "Admin Kick (VoteSys)");
 		}
-	} else {
+	} else if (bEnableKickVoting) {
 		ChCont = VoteSys.FindChannelForPRI(Target);
 		if (ChCont != none)
 			TCh = ChCont.Channel;
