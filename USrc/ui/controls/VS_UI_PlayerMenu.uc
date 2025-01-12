@@ -48,7 +48,7 @@ function ExecuteItem(UWindowPullDownMenuItem Item) {
 
 	if (Item == PlayerKick) {
 		if (Ch != none)
-			Ch.KickPlayer(PRI);
+			Ch.KickPlayer(PRI, !PlayerKick.bChecked);
 	} else if (Item == PlayerBan) {
 		PlayerBanMB = MessageBox(
 			PlayerBanTitle,

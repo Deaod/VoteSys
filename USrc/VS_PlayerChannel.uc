@@ -529,22 +529,26 @@ simulated function bool WantsToKick(PlayerReplicationInfo PRI) {
 	return false;
 }
 
-simulated function ClientToggleKick(PlayerReplicationInfo PRI) {
+simulated function ClientSetKick(PlayerReplicationInfo PRI, bool bWantKick) {
 	local VS_PlayerInfo P;
 
 	P = VoteInfo().GetPlayerInfoForPRI(PRI);
 	if (P != none)
-		P.bLocalPlayerWantsToKick = !P.bLocalPlayerWantsToKick;
+		P.bLocalPlayerWantsToKick = bWantKick;
 }
 
-function bool ServerToggleKick(PlayerReplicationInfo PRI) {
+function int ServerKickIndex(PlayerReplicationInfo PRI) {
 	local int Index;
 
-	for (Index = 0; Index < IWantToKick.Length; Index++) 
+	for (Index = 0; Index < IWantToKick.Length; Index++)
 		if (IWantToKick[Index] == PRI)
-			break;
+			return Index;
 
-	if (Index >= IWantToKick.Length) {
+	return -1;
+}
+
+function bool ServerToggleKick(PlayerReplicationInfo PRI, int Index) {
+	if (Index < 0) {
 		IWantToKick.Insert(0, 1);
 		IWantToKick[0] = PRI;
 		return true;
@@ -554,16 +558,16 @@ function bool ServerToggleKick(PlayerReplicationInfo PRI) {
 	}
 }
 
-simulated function KickPlayer(PlayerReplicationInfo PRI) {
-	ServerKickPlayer(PRI);
+simulated function KickPlayer(PlayerReplicationInfo PRI, bool bWantKick) {
+	ServerKickPlayer(PRI, bWantKick);
 }
 
-function ServerKickPlayer(PlayerReplicationInfo PRI) {
-	VoteInfo().KickPlayer(self, PRI);
+function ServerKickPlayer(PlayerReplicationInfo PRI, bool bWantKick) {
+	VoteInfo().KickPlayer(self, PRI, bWantKick);
 }
 
-simulated function ClientApplyKickVote(PlayerReplicationInfo PRI) {
-	ClientToggleKick(PRI);
+simulated function ClientApplyKickVote(PlayerReplicationInfo PRI, bool bWantKick) {
+	ClientSetKick(PRI, bWantKick);
 }
 
 simulated function BanPlayer(PlayerReplicationInfo PRI) {

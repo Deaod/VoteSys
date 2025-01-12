@@ -188,11 +188,11 @@ function RemCandidateVote(VS_PlayerChannel Origin, VS_Candidate Candidate) {
 	}
 }
 
-function KickPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target) {
+function KickPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target, bool bWantKick) {
 	local PlayerPawn P;
 	local VS_ChannelContainer ChCont;
 	local VS_PlayerChannel TCh;
-
+	local int KickIndex;
 	if (bEnableKickVoting == false)
 		return;
 
@@ -223,7 +223,10 @@ function KickPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target) {
 		if (ChCont != none)
 			TCh = ChCont.Channel;
 		if (TCh != none) {
-			if (Origin.ServerToggleKick(Target)) {
+			KickIndex = Origin.ServerKickIndex(Target);
+			if (bWantKick == (KickIndex < 0))
+				return;
+			if (Origin.ServerToggleKick(Target, KickIndex)) {
 				TCh.KickVotesAgainstMe++;
 				VoteSys.BroadcastLocalizedMessage2(
 					class'VS_Msg_LocalMessage', 10,
@@ -232,7 +235,7 @@ function KickPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target) {
 			} else {
 				TCh.KickVotesAgainstMe--;
 			}
-			Origin.ClientApplyKickVote(Target);
+			Origin.ClientApplyKickVote(Target, bWantKick);
 		}
 	}
 }
