@@ -3,6 +3,28 @@ class VS_UI_ChatArea extends UWindowDynamicTextArea;
 var VS_UI_ThemeBase Theme;
 var GameReplicationInfo GRI;
 
+// Selection
+var bool bVS_Select;
+var string VS_SelectedText;
+
+var float VS_ClickX, VS_ClickY;
+var float VS_StartX, VS_StartY;
+var float VS_EndX, VS_EndY;
+
+// selection
+function LMouseDown(float X, float Y) {
+	super.LMouseDown(X, Y);
+	VS_ClickX = X;
+	VS_ClickY = Y;
+}
+
+function LMouseUp(float X, float Y) {
+	if (bMouseDown && VS_SelectedText != "")
+		GetPlayerOwner().CopyToClipboard(VS_SelectedText);
+	super.LMouseUp(X, Y);
+}
+
+
 function Paint(Canvas C, float MouseX, float MouseY) {
 	local UWindowDynamicTextRow L;
 	local int SkipCount, DrawCount;
@@ -43,29 +65,29 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 	ClippingRegion.W = ContentWidth;
 	ClippingRegion.H = COntentHeight;
 
-	SelectedText = "";
-	bSelect = bMouseDown;
-	if (bSelect)
+	VS_SelectedText = "";
+	bVS_Select = bMouseDown;
+	if (bVS_Select)
 	{
-		if (ClickX <= MouseX)
+		if (VS_ClickX <= MouseX)
 		{
-			StartX = ClickX;
-			EndX = MouseX;
+			VS_StartX = VS_ClickX;
+			VS_EndX = MouseX;
 		}
 		else
 		{
-			StartX = MouseX;
-			EndX = ClickX;
+			VS_StartX = MouseX;
+			VS_EndX = VS_ClickX;
 		}
-		if (ClickY <= MouseY)
+		if (VS_ClickY <= MouseY)
 		{
-			StartY = ClickY;
-			EndY = MouseY;
+			VS_StartY = VS_ClickY;
+			VS_EndY = MouseY;
 		}
 		else
 		{
-			StartY = MouseY;
-			EndY = ClickY;
+			VS_StartY = MouseY;
+			VS_EndY = VS_ClickY;
 		}
 	}
 
@@ -178,6 +200,75 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 	ClippingRegion = OldClipRegion;
 }
 
+function VS_TextAreaClipText2(Canvas C, float DrawX, float DrawY, coerce string S, optional bool bCheckHotkey) {
+	ClipText(C, DrawX, DrawY, S, bCheckHotkey);	
+}
+
+function TextAreaClipText(Canvas C, float DrawX, float DrawY, coerce string S, optional bool bCheckHotkey) {
+	local int X1, X2, XS;
+	local color Prev;
+	local string Selected;
+	local float DrawSelX;
+	local float W, H;
+	local int i;
+	local float DrawBottomY;
+
+	VS_TextAreaClipText2(C, DrawX, DrawY, S, bCheckHotkey);
+	
+	if (!bVS_Select)
+		return;
+	
+	DrawBottomY = DrawY + DefaultTextHeight;
+	
+	if (DrawY > VS_EndY || DrawBottomY < VS_StartY)
+		return;
+	
+	XS = Len(S);
+	X1 = 0;
+	X2 = XS;
+	if (DrawY <= VS_StartY && VS_StartY <= DrawBottomY && VS_StartX > 0)
+	{
+		X1 = XS;
+		for (i = 0; i < XS; i++)
+		{
+			TextAreaTextSize(C, Left(S, i + 1), W, H);
+			if (W > VS_StartX)
+			{
+				X1 = i;
+				break;
+			}
+		}
+	}
+	
+	if (DrawY <= VS_EndY && VS_EndY <= DrawBottomY)
+	{
+		for (i = X1 + 1; i < XS; i++)
+		{
+			TextAreaTextSize(C, Left(S, i), W, H);
+			if (W > VS_EndX)
+			{
+				X2 = i;
+				break;
+			}
+		}
+	}
+	
+	TextAreaTextSize(C, Left(S, X1), DrawSelX, H);
+	DrawSelX += DrawX;
+	
+	Selected = Mid(S, X1, X2 - X1);
+	
+	if (DrawBottomY < VS_EndY)
+		VS_SelectedText = Chr(13) $ Chr(10) $ VS_SelectedText;
+	VS_SelectedText = Selected $ VS_SelectedText;
+	
+	Prev = C.DrawColor;
+	C.DrawColor = Theme.SelectBG;
+	VS_TextAreaClipText2(C, DrawSelX, DrawY, Selected, bCheckHotkey);
+	C.DrawColor = Prev;
+
+}
+
 function float DrawTextLine2(Canvas C, UWindowDynamicTextRow L, float Y, float Width) {
 	local float X, W, H;
 	local VS_UI_ChatMessage M;
@@ -206,7 +297,7 @@ function float DrawTextLine2(Canvas C, UWindowDynamicTextRow L, float Y, float W
 		} else if (M.ColorRef == 1) {
 			C.DrawColor = Theme.Foreground;
 		}
-		TextAreaClipText2(C, X, Y, M.PlayerName);
+		VS_TextAreaClipText2(C, X, Y, M.PlayerName);
 		C.DrawColor = Theme.Foreground;
 	}
 
