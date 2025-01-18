@@ -14,8 +14,8 @@ var float VS_EndX, VS_EndY;
 // selection
 function LMouseDown(float X, float Y) {
 	super.LMouseDown(X, Y);
-	VS_ClickX = X;
-	VS_ClickY = Y;
+	VS_ClickX = X - LookAndFeel.MiscBevelL[LookAndFeel.EditBoxBevel].W;
+	VS_ClickY = Y - LookAndFeel.MiscBevelT[LookAndFeel.EditBoxBevel].H;
 }
 
 function LMouseUp(float X, float Y) {
@@ -65,30 +65,23 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 	ClippingRegion.W = ContentWidth;
 	ClippingRegion.H = COntentHeight;
 
+	MouseX -= ContentLeft;
+	MouseY -= ContentTop;
+
 	VS_SelectedText = "";
 	bVS_Select = bMouseDown;
 	if (bVS_Select)
 	{
-		if (VS_ClickX <= MouseX)
-		{
+		if (MouseY < VS_ClickY) {
+			VS_StartX = MouseX;
+			VS_EndX = VS_ClickX;
+		} else {
 			VS_StartX = VS_ClickX;
 			VS_EndX = MouseX;
 		}
-		else
-		{
-			VS_StartX = MouseX;
-			VS_EndX = VS_ClickX;
-		}
-		if (VS_ClickY <= MouseY)
-		{
-			VS_StartY = VS_ClickY;
-			VS_EndY = MouseY;
-		}
-		else
-		{
-			VS_StartY = MouseY;
-			VS_EndY = VS_ClickY;
-		}
+
+		VS_StartY = FMin(MouseY, VS_ClickY);
+		VS_EndY = FMax(MouseY, VS_ClickY);
 	}
 
 	C.DrawColor = Theme.Foreground;
@@ -226,8 +219,13 @@ function TextAreaClipText(Canvas C, float DrawX, float DrawY, coerce string S, o
 	XS = Len(S);
 	X1 = 0;
 	X2 = XS;
-	if (DrawY <= VS_StartY && VS_StartY <= DrawBottomY && VS_StartX > 0)
+	if (DrawY <= VS_StartY && VS_StartY < DrawBottomY && VS_StartX > 0)
 	{
+		if (VS_EndY < DrawBottomY && VS_EndX < VS_StartX) {
+			H = VS_EndX;
+			VS_EndX = VS_StartX;
+			VS_StartX = H;
+		}
 		X1 = XS;
 		for (i = 0; i < XS; i++)
 		{
@@ -255,7 +253,7 @@ function TextAreaClipText(Canvas C, float DrawX, float DrawY, coerce string S, o
 	
 	TextAreaTextSize(C, Left(S, X1), DrawSelX, H);
 	DrawSelX += DrawX;
-	
+
 	Selected = Mid(S, X1, X2 - X1);
 	
 	if (DrawBottomY < VS_EndY)
@@ -264,9 +262,19 @@ function TextAreaClipText(Canvas C, float DrawX, float DrawY, coerce string S, o
 	
 	Prev = C.DrawColor;
 	C.DrawColor = Theme.SelectBG;
+	if (DrawBottomY < VS_EndY) {
+		if (VertSB.bWindowVisible || bAutoScrollbar)
+			W = WinWidth - VertSB.WinWidth - DrawSelX;
+		else
+			W = WinWidth - DrawSelX;
+	} else {
+		TextAreaTextSize(C, Selected, W, H);
+	}
+	DrawStretchedTexture(C, DrawSelX, DrawY, W, DefaultTextHeight, Texture'WhiteTexture');
+
+	C.DrawColor = Theme.SelectFG;
 	VS_TextAreaClipText2(C, DrawSelX, DrawY, Selected, bCheckHotkey);
 	C.DrawColor = Prev;
-
 }
 
 function float DrawTextLine2(Canvas C, UWindowDynamicTextRow L, float Y, float Width) {
@@ -276,11 +284,13 @@ function float DrawTextLine2(Canvas C, UWindowDynamicTextRow L, float Y, float W
 	M = VS_UI_ChatMessage(L);
 
 	if(bHCenter) {
-		TextAreaTextSize(C, M.LineText(), W, H);
+		TextAreaTextSize(C, M.Text, W, H);
 		X = int((Width - W) / 2);
 	} else {
 		X = 2;
 	}
+
+	X = int(X * Root.GUIScale) / Root.GUIScale;
 
 	if (M.bTeamMsg) {
 		if(M.ColorRef == 0) {
@@ -289,7 +299,7 @@ function float DrawTextLine2(Canvas C, UWindowDynamicTextRow L, float Y, float W
 			C.DrawColor = Theme.Foreground;
 		}
 	}
-	TextAreaClipText(C, X, Y, M.LineText());
+	TextAreaClipText(C, X, Y, M.Text);
 
 	if (M.PlayerName != "") {
 		if(M.ColorRef == 0) {
@@ -306,7 +316,14 @@ function float DrawTextLine2(Canvas C, UWindowDynamicTextRow L, float Y, float W
 
 function AddChat(PlayerReplicationInfo PRI, string Message, bool bTeamMsg) {
 	local VS_UI_ChatMessage M;
-	M = VS_UI_ChatMessage(AddText(Message));
+	local string Text;
+
+	if (PRI != none && PRI.PlayerName != "")
+		Text = PRI.PlayerName$": "$Message;
+	else
+		Text = Message;
+	M = VS_UI_ChatMessage(AddText(Text));
+	M.Message = Message;
 	M.bTeamMsg = bTeamMsg;
 	if (PRI != none)
 		M.PlayerName = PRI.PlayerName;
