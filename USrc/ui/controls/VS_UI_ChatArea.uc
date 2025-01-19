@@ -213,7 +213,7 @@ function TextAreaClipText(Canvas C, float DrawX, float DrawY, coerce string S, o
 	
 	DrawBottomY = DrawY + DefaultTextHeight;
 	
-	if (DrawY > VS_EndY || DrawBottomY < VS_StartY)
+	if (DrawY > VS_EndY || DrawBottomY <= VS_StartY)
 		return;
 	
 	XS = Len(S);
@@ -238,7 +238,7 @@ function TextAreaClipText(Canvas C, float DrawX, float DrawY, coerce string S, o
 		}
 	}
 	
-	if (DrawY <= VS_EndY && VS_EndY <= DrawBottomY)
+	if (DrawY <= VS_EndY && VS_EndY < DrawBottomY)
 	{
 		for (i = X1 + 1; i < XS; i++)
 		{
@@ -290,7 +290,7 @@ function float DrawTextLine2(Canvas C, UWindowDynamicTextRow L, float Y, float W
 		X = 2;
 	}
 
-	X = int(X * Root.GUIScale) / Root.GUIScale;
+	X = int(X * Root.GUIScale + 0.5) / Root.GUIScale;
 
 	if (M.bTeamMsg) {
 		if(M.ColorRef == 0) {
