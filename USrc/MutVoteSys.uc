@@ -489,7 +489,9 @@ function HandleKickVoting() {
 			continue;
 
 		// Handle new kicks
-		if (C.Channel.KickVotesAgainstMe > Settings.KickVoteThreshold * VotingPlayers) {
+		if (C.PlayerOwner != none &&
+			C.Channel.KickVotesAgainstMe > Settings.KickVoteThreshold * VotingPlayers
+		) {
 			BroadcastLocalizedMessage2(
 				class'VS_Msg_LocalMessage', 11,
 				C.PlayerOwner.PlayerReplicationInfo.PlayerName
@@ -497,6 +499,8 @@ function HandleKickVoting() {
 
 			TempBanPlayer(C.PlayerOwner);
 			KickPlayer(C.PlayerOwner, "Kick Vote Successful (VoteSys)");
+			C.PlayerOwner = none;
+			continue;
 		}
 
 		if (C.BanState != BS_Unknown)
