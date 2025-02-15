@@ -6,7 +6,7 @@ on:
   pull_request:
 
   release:
-    types: [published]
+    types: [released]
 
   workflow_dispatch:
 
@@ -30,6 +30,7 @@ jobs:
           $ref = "${{ github.ref }}"
           $repoName = "${{ github.event.repository.name }}"
           $sha = "${{ github.sha }}"
+          $prever = (Get-Date -UFormat "%Y%m%d%H%M%S")
           if ("${{ github.ref_type }}" -eq "tag") {
             echo ("PKG_NAME="+$repoName+"_"+$ref.SubString(10)) >> $env:GITHUB_ENV
             echo ("PKG_VER="+$ref.SubString(10)) >> $env:GITHUB_ENV
@@ -39,6 +40,7 @@ jobs:
           } else {
             echo ("PKG_NAME="+$repoName+"_"+$ref.SubString(11)+"-"+$sha.SubString(0,8)) >> $env:GITHUB_ENV
             echo ("PKG_VER="+$ref.SubString(11)+"-"+$sha.SubString(0,8)) >> $env:GITHUB_ENV
+            echo ("PREVIEW_VER="+$ref.SubString(11)+"-"+$prever) >> $env:GITHUB_ENV
           }
 
       - name: Save Package Name In File
@@ -138,35 +140,24 @@ jobs:
             Release/*
             !Release/**/*.uz
 
-  release:
-    runs-on: windows-latest
-    needs: build
-    if: ${{ github.event_name == 'release' }}
-
-    steps:
-      - name: Download Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: PackageName
-
-      - name: Restore Package Name
-        run: |
-          echo ("PKG_NAME=" + (Get-Content -Path "PackageName")) >> $env:GITHUB_ENV
-          Remove-Item -Path "PackageName"
-
-      - name: Download Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.PKG_NAME }}
-
       - name: Create Release Asset
-        run: >
+        run: |
+          cd Release
           7z a -tzip -- "${{ env.PKG_NAME }}.zip" *
 
       - name: Attach Asset To Release
+        if: success() && github.event_name == 'release'
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ${{ env.PKG_NAME }}.zip
+          asset_path: Release/${{ env.PKG_NAME }}.zip
           overwrite: true
 
+      - name: Create Pre-Release
+        if: success() && github.event_name == 'push'
+        uses: softprops/action-gh-release@v2
+        with:
+          name: IG+ Preview ${{ env.PREVIEW_VER }}
+          prerelease: true
+          files: Release/${{ env.PKG_NAME }}.zip
+          tag_name: ${{ env.PREVIEW_VER }}
