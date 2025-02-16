@@ -438,7 +438,9 @@ For `Mutators`, `Parameters`, and `GameSettings` the values will be combined in 
 Default is 0.
 
 #### Server Name
-`ServerName` is used to change the name of the server for this preset. If this property is empty, the server's default `ServerName` will be used.
+`ServerName` is used to change the name of the server for this preset. Changes to `ServerName` persist across map changes.
+
+It is recommended to define a `ServerName` either for all presets or for none of them. Remember that `ServerName` can be inherited from other presets.
 
 #### Game Type
 `Game` is used to identify the gametype for the preset. It must not be blank for enabled presets.

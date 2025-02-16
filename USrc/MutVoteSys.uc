@@ -958,7 +958,10 @@ function ApplyVotedPreset() {
 	}
 
 	if (TD.ServerName != "")
-		Level.Game.GameReplicationInfo.ServerName = TD.ServerName;
+		if (Level.Game.GameReplicationInfoClass != none)
+			Level.Game.GameReplicationInfoClass.default.ServerName = TD.ServerName;
+		else
+			class'GameReplicationInfo'.default.ServerName = TD.ServerName;
 
 	if (Settings.bUseServerActorsCompatibilityMode == false)
 		CreateServerActors(TD.Actors);
