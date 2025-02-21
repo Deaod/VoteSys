@@ -4,6 +4,8 @@ var VS_UI_ScrollbarV VerSB;
 var float OldVerSBPos;
 
 function Created() {
+	SetAcceptsFocus();
+	
 	VerSB = VS_UI_ScrollbarV(CreateWindow(class'VS_UI_ScrollbarV', WinWidth-12, 0, 12, WinHeight));
 	VerSB.bAlwaysOnTop = True;
 }
