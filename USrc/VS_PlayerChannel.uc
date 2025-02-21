@@ -447,7 +447,7 @@ function ServerVote(string FullPresetName, string MapName) {
 
 	if (PlayerOwner.bAdmin == false) {
 		NumPlayers = Level.Game.NumPlayers;
-		if (VotedFor.PresetRef == P && VotedFor.MapRef == M)
+		if (VotedFor != none && VotedFor.PresetRef == P && VotedFor.MapRef == M)
 			return;
 		if (M.Sequence > 0 && P.MaxSequenceNumber - M.Sequence < P.MinimumMapRepeatDistance)
 			return;
