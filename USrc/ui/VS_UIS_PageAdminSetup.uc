@@ -1,21 +1,21 @@
 class VS_UIS_PageAdminSetup extends VS_UIS_PageAdmin;
 
-var UWindowCheckbox Chk_EnableACEIntegration;
+var VS_UI_Checkbox Chk_EnableACEIntegration;
 var localized string Text_EnableACEIntegration;
 
 var VS_UI_EditControl Edt_PresetProbeDepth;
 var localized string Text_PresetProbeDepth;
 
-var UWindowCheckbox Chk_ManageServerPackages;
+var VS_UI_Checkbox Chk_ManageServerPackages;
 var localized string Text_ManageServerPackages;
 
-var UWindowCheckbox Chk_UseServerPackagesCompatibilityMode;
+var VS_UI_Checkbox Chk_UseServerPackagesCompatibilityMode;
 var localized string Text_UseServerPackagesCompatibilityMode;
 
 var VS_UI_ArrayEditString Adt_DefaultPackages;
 var localized string Text_DefaultPackages;
 
-var UWindowCheckbox Chk_UseServerActorsCompatibilityMode;
+var VS_UI_Checkbox Chk_UseServerActorsCompatibilityMode;
 var localized string Text_UseServerActorsCompatibilityMode;
 
 var VS_UI_ArrayEditString Adt_DefaultActors;
@@ -39,13 +39,13 @@ var localized string Text_ClientDataPort;
 var VS_UI_EditControl Edt_DefaultPreset;
 var localized string Text_DefaultPreset;
 
-var UWindowCheckbox Chk_AlwaysUseDefaultPreset;
+var VS_UI_Checkbox Chk_AlwaysUseDefaultPreset;
 var localized string Text_AlwaysUseDefaultPreset;
 
 var VS_UI_EditControl Edt_DefaultMap;
 var localized string Text_DefaultMap;
 
-var UWindowCheckbox Chk_AlwaysUseDefaultMap;
+var VS_UI_Checkbox Chk_AlwaysUseDefaultMap;
 var localized string Text_AlwaysUseDefaultMap;
 
 var VS_UI_EditControl Edt_IdleTimeout;
@@ -113,21 +113,21 @@ function SaveSettings() {
 function Created() {
 	super.Created();
 
-	Chk_EnableACEIntegration = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 4, 8, 188, 16));
+	Chk_EnableACEIntegration = VS_UI_Checkbox(CreateControl(class'VS_UI_Checkbox', 4, 8, 188, 16));
 	Chk_EnableACEIntegration.SetText(Text_EnableACEIntegration);
 
 	Edt_DefaultPreset = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 28, 188, 16));
 	Edt_DefaultPreset.SetText(Text_DefaultPreset);
 	Edt_DefaultPreset.EditBoxWidth = 100;
 
-	Chk_AlwaysUseDefaultPreset = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 4, 48, 188, 16));
+	Chk_AlwaysUseDefaultPreset = VS_UI_Checkbox(CreateControl(class'VS_UI_Checkbox', 4, 48, 188, 16));
 	Chk_AlwaysUseDefaultPreset.SetText(Text_AlwaysUseDefaultPreset);
 
 	Edt_DefaultMap = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 68, 188, 16));
 	Edt_DefaultMap.SetText(Text_DefaultMap);
 	Edt_DefaultMap.EditBoxWidth = 100;
 
-	Chk_AlwaysUseDefaultMap = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 4, 88, 188, 16));
+	Chk_AlwaysUseDefaultMap = VS_UI_Checkbox(CreateControl(class'VS_UI_Checkbox', 4, 88, 188, 16));
 	Chk_AlwaysUseDefaultMap.SetText(Text_AlwaysUseDefaultMap);
 
 	Edt_IdleTimeout = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 108, 188, 16));
@@ -144,17 +144,17 @@ function Created() {
 	// Right Side
 	//
 
-	Chk_ManageServerPackages = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 200, 8, 188, 16));
+	Chk_ManageServerPackages = VS_UI_Checkbox(CreateControl(class'VS_UI_Checkbox', 200, 8, 188, 16));
 	Chk_ManageServerPackages.SetText(Text_ManageServerPackages);
 
-	Chk_UseServerPackagesCompatibilityMode = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 200, 28, 188, 16));
+	Chk_UseServerPackagesCompatibilityMode = VS_UI_Checkbox(CreateControl(class'VS_UI_Checkbox', 200, 28, 188, 16));
 	Chk_UseServerPackagesCompatibilityMode.SetText(Text_UseServerPackagesCompatibilityMode);
 
 	Adt_DefaultPackages = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 200, 48, 188, 16));
 	Adt_DefaultPackages.SetText(Text_DefaultPackages);
 	Adt_DefaultPackages.EditBoxWidth = 100;
 
-	Chk_UseServerActorsCompatibilityMode = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 200, 68, 188, 16));
+	Chk_UseServerActorsCompatibilityMode = VS_UI_Checkbox(CreateControl(class'VS_UI_Checkbox', 200, 68, 188, 16));
 	Chk_UseServerActorsCompatibilityMode.SetText(Text_UseServerActorsCompatibilityMode);
 
 	Adt_DefaultActors = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 200, 88, 188, 16));

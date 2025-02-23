@@ -14,10 +14,10 @@ var localized string MapListSortName;
 var localized string MapListSortRecency;
 var localized string MapListSortPlayCount;
 
-var UWindowCheckbox Chk_FavoritesFirst;
+var VS_UI_Checkbox Chk_FavoritesFirst;
 var localized string FavoritesFirstText;
 
-var UWindowCheckbox Chk_ShowPlayerList;
+var VS_UI_Checkbox Chk_ShowPlayerList;
 var localized string ShowPlayerListText;
 
 function Created() {
@@ -37,10 +37,10 @@ function Created() {
 	Cmb_MapListSort.AddItem(MapListSortPlayCount);
 	Cmb_MapListSort.SetEditable(false);
 
-	Chk_FavoritesFirst = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 8, 48, 188, 16));
+	Chk_FavoritesFirst = VS_UI_Checkbox(CreateControl(class'VS_UI_Checkbox', 8, 48, 188, 16));
 	Chk_FavoritesFirst.SetText(FavoritesFirstText);
 
-	Chk_ShowPlayerList = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 8, 68, 188, 16));
+	Chk_ShowPlayerList = VS_UI_Checkbox(CreateControl(class'VS_UI_Checkbox', 8, 68, 188, 16));
 	Chk_ShowPlayerList.SetText(ShowPlayerListText);
 }
 

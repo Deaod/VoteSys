@@ -1,9 +1,9 @@
 class VS_UIS_PageAdminUI extends VS_UIS_PageAdmin;
 
-var UWindowCheckbox Chk_RetainCandidates;
+var VS_UI_Checkbox Chk_RetainCandidates;
 var localized string Text_RetainCandidates;
 
-var UWindowCheckbox Chk_OpenVoteMenuAutomatically;
+var VS_UI_Checkbox Chk_OpenVoteMenuAutomatically;
 var localized string Text_OpenVoteMenuAutomatically;
 
 var VS_UI_EditControl Edt_DefaultTimeMessageClass;
@@ -128,10 +128,10 @@ function SaveSettings() {
 function Created() {
 	super.Created();
 
-	Chk_RetainCandidates = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 4, 8, 188, 16));
+	Chk_RetainCandidates = VS_UI_Checkbox(CreateControl(class'VS_UI_Checkbox', 4, 8, 188, 16));
 	Chk_RetainCandidates.SetText(Text_RetainCandidates);
 
-	Chk_OpenVoteMenuAutomatically = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 4, 28, 188, 16));
+	Chk_OpenVoteMenuAutomatically = VS_UI_Checkbox(CreateControl(class'VS_UI_Checkbox', 4, 28, 188, 16));
 	Chk_OpenVoteMenuAutomatically.SetText(Text_OpenVoteMenuAutomatically);
 
 	Edt_DefaultTimeMessageClass = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 48, 188, 16));

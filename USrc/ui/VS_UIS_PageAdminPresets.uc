@@ -45,7 +45,7 @@ var localized string Text_GameSettings;
 var VS_UI_ArrayEditString Adt_Packages;
 var localized string Text_Packages;
 
-var UWindowCheckbox Chk_Disabled;
+var VS_UI_Checkbox Chk_Disabled;
 var localized string Text_Disabled;
 
 var VS_UI_EditControl Edt_MinimumMapRepeatDistance;
@@ -57,7 +57,7 @@ var localized string Text_MinPlayers;
 var VS_UI_EditControl Edt_MaxPlayers;
 var localized string Text_MaxPlayers;
 
-var UWindowCheckbox Chk_OpenVoteMenuAutomatically;
+var VS_UI_Checkbox Chk_OpenVoteMenuAutomatically;
 var localized string Text_OpenVoteMenuAutomatically;
 
 function Created() {
@@ -142,7 +142,7 @@ function Created() {
 	Adt_Packages.SetText(Text_Packages);
 	Adt_Packages.EditBoxWidth = 100;
 
-	Chk_Disabled = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 0, 240, 188, 16));
+	Chk_Disabled = VS_UI_Checkbox(CreateControl(class'VS_UI_Checkbox', 0, 240, 188, 16));
 	Chk_Disabled.SetParent(Scr_Properties);
 	Chk_Disabled.SetText(Text_Disabled);
 
@@ -167,7 +167,7 @@ function Created() {
 	Edt_MaxPlayers.SetNumericOnly(true);
 	Edt_MaxPlayers.SetNumericNegative(true);
 
-	Chk_OpenVoteMenuAutomatically = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 0, 320, 188, 16));
+	Chk_OpenVoteMenuAutomatically = VS_UI_Checkbox(CreateControl(class'VS_UI_Checkbox', 0, 320, 188, 16));
 	Chk_OpenVoteMenuAutomatically.SetParent(Scr_Properties);
 	Chk_OpenVoteMenuAutomatically.SetText(Text_OpenVoteMenuAutomatically);
 }

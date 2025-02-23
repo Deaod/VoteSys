@@ -18,7 +18,7 @@ var localized string Text_VoteEndCondition_TimerOnly;
 var localized string Text_VoteEndCondition_TimerOrAllVotesIn;
 var localized string Text_VoteEndCondition_TimerOrResultDetermined;
 
-var UWindowCheckbox Chk_EnableKickVoting;
+var VS_UI_Checkbox Chk_EnableKickVoting;
 var localized string Text_EnableKickVoting;
 
 var VS_UI_EditControl Edt_KickVoteThreshold;
@@ -94,7 +94,7 @@ function Created() {
 	Cmb_VoteEndCondition.EditBoxWidth = 100;
 	Cmb_VoteEndCondition.SetEditable(false);
 
-	Chk_EnableKickVoting = UWindowCheckbox(CreateControl(class'UWindowCheckbox', 4, 108, 188, 16));
+	Chk_EnableKickVoting = VS_UI_Checkbox(CreateControl(class'VS_UI_Checkbox', 4, 108, 188, 16));
 	Chk_EnableKickVoting.SetText(Text_EnableKickVoting);
 
 	Edt_KickVoteThreshold = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 128, 188, 16));
