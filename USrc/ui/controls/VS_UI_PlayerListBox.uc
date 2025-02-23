@@ -128,5 +128,5 @@ function RMouseDown(float MouseX, float MouseY) {
 defaultproperties {
 	HorizontalScrollbarMode=HSM_Auto
 	ListClass=class'VS_UI_PlayerListItem'
-	ItemHeight=17
+	ItemHeight=15
 }
