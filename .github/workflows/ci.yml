@@ -40,7 +40,7 @@ jobs:
           } else {
             echo ("PKG_NAME="+$repoName+"_"+$ref.SubString(11)+"-"+$sha.SubString(0,8)) >> $env:GITHUB_ENV
             echo ("PKG_VER="+$ref.SubString(11)+"-"+$sha.SubString(0,8)) >> $env:GITHUB_ENV
-            echo ("PREVIEW_VER="+$ref.SubString(11)+"-"+$prever) >> $env:GITHUB_ENV
+            echo ("PREVIEW_VER=v"+$prever+"-"+$ref.SubString(11)) >> $env:GITHUB_ENV
           }
 
       - name: Save Package Name In File
@@ -157,7 +157,7 @@ jobs:
         if: success() && github.event_name == 'push'
         uses: softprops/action-gh-release@v2
         with:
-          name: VoteSys Preview ${{ env.PREVIEW_VER }}
+          name: VoteSys ${{ env.PREVIEW_VER }}
           prerelease: true
           files: Release/${{ env.PKG_NAME }}.zip
           tag_name: ${{ env.PREVIEW_VER }}
