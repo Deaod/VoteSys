@@ -13,7 +13,7 @@ var float VS_EndX, VS_EndY;
 
 // selection
 function LMouseDown(float X, float Y) {
-	super.LMouseDown(X, Y);
+	super(UWindowWindow).LMouseDown(X, Y);
 	VS_ClickX = X - LookAndFeel.MiscBevelL[LookAndFeel.EditBoxBevel].W;
 	VS_ClickY = Y - LookAndFeel.MiscBevelT[LookAndFeel.EditBoxBevel].H;
 }
@@ -21,7 +21,7 @@ function LMouseDown(float X, float Y) {
 function LMouseUp(float X, float Y) {
 	if (bMouseDown && VS_SelectedText != "")
 		GetPlayerOwner().CopyToClipboard(VS_SelectedText);
-	super.LMouseUp(X, Y);
+	super(UWindowWindow).LMouseUp(X, Y);
 }
 
 
