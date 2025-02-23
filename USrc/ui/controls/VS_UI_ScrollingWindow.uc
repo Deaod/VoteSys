@@ -53,6 +53,7 @@ function KeyUp(int Key, float X, float Y) {
 
 function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key) {
 	// 469+ mouse scrolling
+	SetPropertyText("bHandledEvent", "True");
 	switch(Msg) {
 		case WM_MouseWheelDown:
 			MessageClients(Msg, C, X, Y, Key);

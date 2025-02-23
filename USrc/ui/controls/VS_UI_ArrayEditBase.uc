@@ -187,6 +187,7 @@ function FocusOtherWindow(UWindowWindow W) {
 function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key) {
 	// 469+ mouse scrolling
 	// scrolling should not activate this control
+	SetPropertyText("bHandledEvent", "True");
 	switch(Msg) {
 		case WM_MouseWheelDown:
 		case WM_MouseWheelUp:
