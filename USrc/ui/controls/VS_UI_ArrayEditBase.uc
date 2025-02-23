@@ -4,7 +4,7 @@ var	float               EditBoxWidth;
 var float               EditAreaDrawX, EditAreaDrawY;
 
 var VS_UI_ThemeBase     Theme;
-var UWindowEditBox      EditBox;
+var VS_UI_ArrayEditBox  EditBox;
 var VS_UI_ArrayEditButton Button;
 var VS_UI_ArrayEditW    EditWindow;
 
@@ -15,7 +15,7 @@ var bool                bSavedCanEdit;
 function Created() {
 	Super.Created();
 	
-	EditBox = UWindowEditBox(CreateWindow(class'UWindowEditBox', 0, 0, WinWidth-12, WinHeight)); 
+	EditBox = VS_UI_ArrayEditBox(CreateWindow(class'VS_UI_ArrayEditBox', 0, 0, WinWidth-12, WinHeight)); 
 	EditBox.NotifyOwner = Self;
 	EditBoxWidth = WinWidth / 2;
 	EditBox.bTransient = True;
