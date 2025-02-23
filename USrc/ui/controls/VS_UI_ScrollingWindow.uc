@@ -1,4 +1,5 @@
-class VS_UI_ScrollingWindow extends UWindowWindow;
+class VS_UI_ScrollingWindow extends UWindowWindow
+	imports(Console);
 
 var VS_UI_ScrollbarV VerSB;
 var float OldVerSBPos;
@@ -41,13 +42,27 @@ function Paint(Canvas C, float X, float Y) {
 	MoveChildren(-OldVerSBPos);
 }
 
-function bool MouseWheelDown(float ScrollDelta) {
-	Super.MouseWheelDown(ScrollDelta);
-	return true;
+function KeyUp(int Key, float X, float Y) {
+	// pre-469 mouse scrolling
+	if (Key == EInputKey.IK_MouseWheelUp) {
+		VerSB.Scroll(-VerSB.ScrollAmount);
+	} else if (Key == EInputKey.IK_MouseWheelDown) {
+		VerSB.Scroll(VerSB.ScrollAmount);
+	}
 }
 
-function bool MouseWheelUp(float ScrollDelta) {
-	Super.MouseWheelUp(ScrollDelta);
-	VerSB.Scroll(ScrollDelta*VerSB.ScrollAmount);
-	return true;
+function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key) {
+	// 469+ mouse scrolling
+	switch(Msg) {
+		case WM_MouseWheelDown:
+			MessageClients(Msg, C, X, Y, Key);
+			break;
+		case WM_MouseWheelUp:
+			if (!MessageClients(Msg, C, X, Y, Key))
+				VerSB.Scroll(float(Key) * VerSB.ScrollAmount);
+			break;
+		default:
+			super.WindowEvent(Msg, C, X, Y, Key);
+			break;
+	}
 }
