@@ -39,13 +39,16 @@ function BeforePaint(Canvas C, float X, float Y) {
 function Close(optional bool bByParent) {
 	super.Close(bByParent);
 
-	if (Root.Console.IsInState('UWindow') && Root.Console.bShowConsole == false)
+	if ((Root.Console.IsInState('UWindow') || int(Root.Console.GetPropertyText("zzMyState")) == 1) &&
+		(Root.Console.bShowConsole == false)
+	) {
 		if (Root.ActiveWindow == none ||
 			Root.ActiveWindow == UMenuRootWindow(Root).StatusBar ||
 			Root.ActiveWindow == UMenuRootWindow(Root).MenuBar
 		) {
 			Root.Console.CloseUWindow();
 		}
+	}
 
 	Settings.MenuX = WinLeft;
 	Settings.MenuY = WinTop;
