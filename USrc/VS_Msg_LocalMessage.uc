@@ -21,6 +21,7 @@ enum EVS_MsgId {
 	ErrMapLoadFailed,
 	ErrNoConnection,
 	ErrNotAllowed,
+	ErrUrlTooLong
 };
 
 var localized string MsgNobodyVotedText;
@@ -43,6 +44,7 @@ var localized string ErrWrongConsoleText;
 var localized string ErrMapLoadFailedText;
 var localized string ErrNoConnectionText;
 var localized string ErrNotAllowedText;
+var localized string ErrUrlTooLongText;
 
 static function string GetString(
 	optional int Switch,
@@ -76,6 +78,7 @@ static function string GetString(
 		case EVS_MsgId.ErrMapLoadFailed:      Result = default.ErrMapLoadFailedText; break;
 		case EVS_MsgId.ErrNoConnection:       Result = default.ErrNoConnectionText; break;
 		case EVS_MsgId.ErrNotAllowed:         Result = default.ErrNotAllowedText; break;
+		case EVS_MsgId.ErrUrlTooLong:         Result = default.ErrUrlTooLongText; break;
 
 		default:
 			return "";
@@ -135,4 +138,5 @@ defaultproperties {
 	ErrMapLoadFailedText="Loading map {1} failed, randomly selecting {2}"
 	ErrNoConnectionText="VoteSys has no connection to server, check server firewall"
 	ErrNotAllowedText="Sorry, you are not allowed to vote"
+	ErrUrlTooLongText="URL to switch to '{1}' with preset '{2}' is too long (>1023 characters)"
 }

@@ -736,6 +736,12 @@ function TravelTo(VS_Preset P, VS_Map M) {
 
 	Url = M.MapName$"?Game="$P.Game$"?Mutator="$Mutators$P.Parameters;
 
+	if (Len(Url) > 1023) {
+		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', EVS_MsgId.ErrUrlTooLong, M.MapName, P.GetFullName());
+		Log("URL too long: "$Url, 'VoteSys');
+		Log("URL used instead: "$Left(Url, 1023), 'VoteSys');
+	}
+
 	ServerTravel(Url, M.MapName);
 }
 

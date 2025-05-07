@@ -65,6 +65,7 @@ ErrWrongConsoleText="Failed to create {1} window (Console not a WindowConsole)"
 ErrMapLoadFailedText="Loading map {1} failed, randomly selecting {2}"
 ErrNoConnectionText="VoteSys has no connection to server, check server firewall"
 ErrNotAllowedText="Sorry, you are not allowed to vote"
+ErrUrlTooLongText="URL to switch to '{1}' with preset '{2}' is too long (>1023 characters)"
 
 [VS_UIS_PageAdminMapLists]
 Text_MapListName="Map List Name"
