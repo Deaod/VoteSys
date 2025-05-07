@@ -1,5 +1,6 @@
 class MutVoteSys extends Mutator
-	imports(VS_BannedPlayers);
+	imports(VS_BannedPlayers)
+	imports(VS_Msg_LocalMessage);
 // Description="Enables voting for next map"
 
 var VS_ChannelContainer ChannelList;
@@ -493,7 +494,7 @@ function HandleKickVoting() {
 			C.Channel.KickVotesAgainstMe > Settings.KickVoteThreshold * VotingPlayers
 		) {
 			BroadcastLocalizedMessage2(
-				class'VS_Msg_LocalMessage', 11,
+				class'VS_Msg_LocalMessage', EVS_MsgId.MsgKickVoteSuccessful,
 				C.PlayerOwner.PlayerReplicationInfo.PlayerName
 			);
 
@@ -557,7 +558,7 @@ function CheckMidGameVoting() {
 	if (TimeCounter <= 0)
 		TimeCounter = Settings.VoteTimeLimit;
 	if (WantAutomaticallyOpenVoteMenu()) {
-		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 4);
+		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', EVS_MsgId.MsgMidGame);
 		OpenVoteMenuForAll();
 	}
 	AnnounceCountdown(TimeCounter);
@@ -636,7 +637,7 @@ function TickVoteMenuDelay() {
 	GameState = GS_Voting;
 	TimeCounter = Settings.VoteTimeLimit;
 	if (WantAutomaticallyOpenVoteMenu()) {
-		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 5);
+		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', EVS_MsgId.MsgGameEnded);
 		OpenVoteMenuForAll();
 	}
 	AnnounceCountdown(TimeCounter);
@@ -835,11 +836,11 @@ function TallyVotes() {
 
 	if (CountTiedCandidates == 0) {
 		if (WantAutomaticallyOpenVoteMenu())
-			BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 1, VotedMap.MapName@"("$VotedPreset.Abbreviation$")");
+			BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', EVS_MsgId.MsgNobodyVoted, VotedMap.MapName@"("$VotedPreset.Abbreviation$")");
 	} else if (CountTiedCandidates > 1) {
-		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 2, VotedMap.MapName@"("$VotedPreset.Abbreviation$")");
+		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', EVS_MsgId.MsgVotesTied, VotedMap.MapName@"("$VotedPreset.Abbreviation$")");
 	} else {
-		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', 3, VotedMap.MapName@"("$VotedPreset.Abbreviation$")");
+		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', EVS_MsgId.MsgHaveWinner, VotedMap.MapName@"("$VotedPreset.Abbreviation$")");
 	}
 
 	CheckVotedMap();
@@ -856,7 +857,7 @@ function CheckVotedMap() {
 		Log(VotedMap.MapName@"failed to load", 'VoteSys');
 		OldMapName = VotedMap.MapName;
 		VotedMap = VotedPreset.SelectRandomMapFromList();
-		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', -5, OldMapName, VotedMap.MapName);
+		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', EVS_MsgId.ErrMapLoadFailed, OldMapName, VotedMap.MapName);
 	}
 }
 

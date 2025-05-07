@@ -1,4 +1,5 @@
 class VS_PlayerChannel extends Info
+	imports(VS_Msg_LocalMessage)
 	imports(VS_Util_String);
 
 var PlayerPawn PlayerOwner;
@@ -180,13 +181,13 @@ simulated function CreateVoteMenuDialog() {
 		C = WindowConsole(PlayerOwner.Player.Console);
 
 	if (C == none) {
-		LocalizeMessage(class'VS_Msg_LocalMessage', -4, "VoteMenu");
+		LocalizeMessage(class'VS_Msg_LocalMessage', EVS_MsgId.ErrWrongConsole, "VoteMenu");
 		return;
 	}
 
 	if (VoteMenuDialog == none) {
 		if (C.Root == none) {
-			LocalizeMessage(class'VS_Msg_LocalMessage', -2, "VoteMenu");
+			LocalizeMessage(class'VS_Msg_LocalMessage', EVS_MsgId.ErrNoRootWindow, "VoteMenu");
 			return;
 		}
 
@@ -201,7 +202,7 @@ simulated function CreateVoteMenuDialog() {
 		VoteMenuDialog.HideWindow();
 
 		if (VoteMenuDialog == none) {
-			LocalizeMessage(class'VS_Msg_LocalMessage', -3, "VoteMenu");
+			LocalizeMessage(class'VS_Msg_LocalMessage', EVS_MsgId.ErrCreateDialog, "VoteMenu");
 			return;
 		}
 	}
@@ -214,12 +215,12 @@ simulated function ShowVoteMenu() {
 		PlayerOwner = PlayerPawn(Owner);
 
 	if (DataClient != none && DataClient.IsConnected() == false) {
-		LocalizeMessage(class'VS_Msg_LocalMessage', -6);
+		LocalizeMessage(class'VS_Msg_LocalMessage', EVS_MsgId.ErrNoConnection);
 		return;
 	}
 
 	if (DataClient == none || DataClient.bTransferDone == false) {
-		LocalizeMessage(class'VS_Msg_LocalMessage', -1);
+		LocalizeMessage(class'VS_Msg_LocalMessage', EVS_MsgId.ErrStillLoading);
 		return;
 	}
 
@@ -227,7 +228,7 @@ simulated function ShowVoteMenu() {
 		C = WindowConsole(PlayerOwner.Player.Console);
 
 	if (C == none) {
-		LocalizeMessage(class'VS_Msg_LocalMessage', -4, "VoteMenu");
+		LocalizeMessage(class'VS_Msg_LocalMessage', EVS_MsgId.ErrWrongConsole, "VoteMenu");
 		return;
 	}
 
@@ -246,7 +247,7 @@ simulated function ShowVoteMenu() {
 	}
 
 	if (VoteMenuDialog == none) {
-		LocalizeMessage(class'VS_Msg_LocalMessage', -3, "VoteMenu");
+		LocalizeMessage(class'VS_Msg_LocalMessage', EVS_MsgId.ErrCreateDialog, "VoteMenu");
 		return;
 	}
 
@@ -264,7 +265,7 @@ simulated function ShowSettings() {
 		C = WindowConsole(PlayerOwner.Player.Console);
 
 	if (C == none) {
-		LocalizeMessage(class'VS_Msg_LocalMessage', -4, "Settings");
+		LocalizeMessage(class'VS_Msg_LocalMessage', EVS_MsgId.ErrWrongConsole, "Settings");
 		return;
 	}
 
@@ -284,7 +285,7 @@ simulated function ShowSettings() {
 
 	if (SettingsDialog == none) {
 		if (C.Root == none) {
-			LocalizeMessage(class'VS_Msg_LocalMessage', -2, "Settings");
+			LocalizeMessage(class'VS_Msg_LocalMessage', EVS_MsgId.ErrNoRootWindow, "Settings");
 			return;
 		}
 
@@ -297,7 +298,7 @@ simulated function ShowSettings() {
 		SettingsDialog.HideWindow();
 
 		if (SettingsDialog == none) {
-			LocalizeMessage(class'VS_Msg_LocalMessage', -3, "Settings");
+			LocalizeMessage(class'VS_Msg_LocalMessage', EVS_MsgId.ErrCreateDialog, "Settings");
 			return;
 		}
 	}
@@ -435,7 +436,7 @@ function ServerVote(string FullPresetName, string MapName) {
 	I = VoteInfo();
 
 	if (I.VoteSys.CanVote(PlayerOwner) == false) {
-		LocalizeMessage(class'VS_Msg_LocalMessage', -7);
+		LocalizeMessage(class'VS_Msg_LocalMessage', EVS_MsgId.ErrNotAllowed);
 		return;
 	}
 
@@ -472,7 +473,7 @@ function ServerVoteExisting(VS_Candidate Candidate) {
 	I = VoteInfo();
 
 	if (I.VoteSys.CanVote(PlayerOwner) == false) {
-		LocalizeMessage(class'VS_Msg_LocalMessage', -7);
+		LocalizeMessage(class'VS_Msg_LocalMessage', EVS_MsgId.ErrNotAllowed);
 		return;
 	}
 
@@ -498,7 +499,7 @@ function ServerVoteRandom(string FullPresetName) {
 	I = VoteInfo();
 
 	if (PlayerOwner == none || I.VoteSys.CanVote(PlayerOwner) == false) {
-		LocalizeMessage(class'VS_Msg_LocalMessage', -7);
+		LocalizeMessage(class'VS_Msg_LocalMessage', EVS_MsgId.ErrNotAllowed);
 		return;
 	}
 

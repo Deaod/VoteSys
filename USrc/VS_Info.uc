@@ -1,4 +1,5 @@
-class VS_Info extends ReplicationInfo;
+class VS_Info extends ReplicationInfo
+	imports(VS_Msg_LocalMessage);
 
 var MutVoteSys VoteSys;
 struct ConnectionData {
@@ -52,7 +53,7 @@ function VS_Candidate AddMapVote(VS_PlayerChannel Origin, VS_Preset P, VS_Map M)
 	if (VoteSys.CanVote(Origin.PlayerOwner)) {
 		if (Origin.PlayerOwner.bAdmin) {
 			VoteSys.BroadcastLocalizedMessage2(
-				class'VS_Msg_LocalMessage', 7,
+				class'VS_Msg_LocalMessage', EVS_MsgId.MsgAdminForceTravel,
 				Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
 				M.MapName@"("$P.Abbreviation$")"
 			);
@@ -60,7 +61,7 @@ function VS_Candidate AddMapVote(VS_PlayerChannel Origin, VS_Preset P, VS_Map M)
 			return none;
 		} else {
 			VoteSys.BroadcastLocalizedMessage2(
-				class'VS_Msg_LocalMessage', 6,
+				class'VS_Msg_LocalMessage', EVS_MsgId.MsgPlayerVoted,
 				Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
 				M.MapName@"("$P.Abbreviation$")"
 			);
@@ -103,7 +104,7 @@ function VS_Candidate AddCandidateVote(VS_PlayerChannel Origin, VS_Candidate Can
 				M = P.SelectRandomMapFromList();
 				
 			VoteSys.BroadcastLocalizedMessage2(
-				class'VS_Msg_LocalMessage', 7,
+				class'VS_Msg_LocalMessage', EVS_MsgId.MsgAdminForceTravel,
 				Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
 				M.MapName@"("$P.Abbreviation$")"
 			);
@@ -112,13 +113,13 @@ function VS_Candidate AddCandidateVote(VS_PlayerChannel Origin, VS_Candidate Can
 		} else {
 			if (Candidate.MapRef != none) {
 				VoteSys.BroadcastLocalizedMessage2(
-					class'VS_Msg_LocalMessage', 6,
+					class'VS_Msg_LocalMessage', EVS_MsgId.MsgPlayerVoted,
 					Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
 					Candidate.MapRef.MapName@"("$Candidate.PresetRef.Abbreviation$")"
 				);
 			} else {
 				VoteSys.BroadcastLocalizedMessage2(
-					class'VS_Msg_LocalMessage', 12,
+					class'VS_Msg_LocalMessage', EVS_MsgId.MsgPlayerVotedRandom,
 					Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
 					Candidate.PresetRef.Abbreviation
 				);
@@ -138,7 +139,7 @@ function VS_Candidate AddRandomVote(VS_PlayerChannel Origin, VS_Preset P) {
 		if (Origin.PlayerOwner.bAdmin) {
 			M = P.SelectRandomMapFromList();
 			VoteSys.BroadcastLocalizedMessage2(
-				class'VS_Msg_LocalMessage', 7,
+				class'VS_Msg_LocalMessage', EVS_MsgId.MsgAdminForceTravel,
 				Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
 				M.MapName@"("$P.Abbreviation$")"
 			);
@@ -146,7 +147,7 @@ function VS_Candidate AddRandomVote(VS_PlayerChannel Origin, VS_Preset P) {
 			return none;
 		} else {
 			VoteSys.BroadcastLocalizedMessage2(
-				class'VS_Msg_LocalMessage', 12,
+				class'VS_Msg_LocalMessage', EVS_MsgId.MsgPlayerVotedRandom,
 				Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
 				P.Abbreviation
 			);
@@ -207,7 +208,7 @@ function KickPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target, bool 
 		P = PlayerPawn(Target.Owner);
 		if (P != none) {
 			VoteSys.BroadcastLocalizedMessage2(
-				class'VS_Msg_LocalMessage', 8,
+				class'VS_Msg_LocalMessage', EVS_MsgId.MsgAdminKickPlayer,
 				Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
 				Target.PlayerName,
 				string(Target.PlayerId)
@@ -227,7 +228,7 @@ function KickPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target, bool 
 			if (Origin.ServerToggleKick(Target, KickIndex)) {
 				TCh.KickVotesAgainstMe++;
 				VoteSys.BroadcastLocalizedMessage2(
-					class'VS_Msg_LocalMessage', 10,
+					class'VS_Msg_LocalMessage', EVS_MsgId.MsgKickVotePlaced,
 					Target.PlayerName
 				);
 			} else {
@@ -247,7 +248,7 @@ function BanPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target) {
 		P = PlayerPawn(Target.Owner);
 		if (P != none) {
 			VoteSys.BroadcastLocalizedMessage2(
-				class'VS_Msg_LocalMessage', 9,
+				class'VS_Msg_LocalMessage', EVS_MsgId.MsgAdminBanPlayer,
 				Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
 				Target.PlayerName,
 				string(Target.PlayerId)

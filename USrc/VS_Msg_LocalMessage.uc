@@ -1,25 +1,48 @@
 class VS_Msg_LocalMessage extends LocalMessagePlus;
 
-var localized string MsgNobodyVoted;
-var localized string MsgVotesTied;
-var localized string MsgHaveWinner;
-var localized string MsgMidGame;
-var localized string MsgGameEnded;
-var localized string MsgPlayerVoted;
-var localized string MsgAdminForceTravel;
-var localized string MsgAdminKickPlayer;
-var localized string MsgAdminBanPlayer;
-var localized string MsgKickVotePlaced;
-var localized string MsgKickVoteSuccessful;
-var localized string MsgPlayerVotedRandom;
+enum EVS_MsgId {
+	MsgNobodyVoted,
+	MsgVotesTied,
+	MsgHaveWinner,
+	MsgMidGame,
+	MsgGameEnded,
+	MsgPlayerVoted,
+	MsgAdminForceTravel,
+	MsgAdminKickPlayer,
+	MsgAdminBanPlayer,
+	MsgKickVotePlaced,
+	MsgKickVoteSuccessful,
+	MsgPlayerVotedRandom,
 
-var localized string ErrStillLoading;
-var localized string ErrNoRootWindow;
-var localized string ErrCreateDialog;
-var localized string ErrWrongConsole;
-var localized string ErrMapLoadFailed;
-var localized string ErrNoConnection;
-var localized string ErrNotAllowed;
+	ErrStillLoading,
+	ErrNoRootWindow,
+	ErrCreateDialog,
+	ErrWrongConsole,
+	ErrMapLoadFailed,
+	ErrNoConnection,
+	ErrNotAllowed,
+};
+
+var localized string MsgNobodyVotedText;
+var localized string MsgVotesTiedText;
+var localized string MsgHaveWinnerText;
+var localized string MsgMidGameText;
+var localized string MsgGameEndedText;
+var localized string MsgPlayerVotedText;
+var localized string MsgAdminForceTravelText;
+var localized string MsgAdminKickPlayerText;
+var localized string MsgAdminBanPlayerText;
+var localized string MsgKickVotePlacedText;
+var localized string MsgKickVoteSuccessfulText;
+var localized string MsgPlayerVotedRandomText;
+
+var localized string ErrStillLoadingText;
+var localized string ErrNoRootWindowText;
+var localized string ErrCreateDialogText;
+var localized string ErrWrongConsoleText;
+var localized string ErrMapLoadFailedText;
+var localized string ErrNoConnectionText;
+var localized string ErrNotAllowedText;
 
 static function string GetString(
 	optional int Switch,
@@ -33,26 +56,26 @@ static function string GetString(
 	Params = VS_Msg_ParameterContainer(OptionalObject);
 
 	switch(Switch) {
-		case 1:  Result = default.MsgNobodyVoted; break;
-		case 2:  Result = default.MsgVotesTied; break;
-		case 3:  Result = default.MsgHaveWinner; break;
-		case 4:  Result = default.MsgMidGame; break;
-		case 5:  Result = default.MsgGameEnded; break;
-		case 6:  Result = default.MsgPlayerVoted; break;
-		case 7:  Result = default.MsgAdminForceTravel; break;
-		case 8:  Result = default.MsgAdminKickPlayer; break;
-		case 9:  Result = default.MsgAdminBanPlayer; break;
-		case 10: Result = default.MsgKickVotePlaced; break;
-		case 11: Result = default.MsgKickVoteSuccessful; break;
-		case 12: Result = default.MsgPlayerVotedRandom; break;
+		case EVS_MsgId.MsgNobodyVoted:        Result = default.MsgNobodyVotedText; break;
+		case EVS_MsgId.MsgVotesTied:          Result = default.MsgVotesTiedText; break;
+		case EVS_MsgId.MsgHaveWinner:         Result = default.MsgHaveWinnerText; break;
+		case EVS_MsgId.MsgMidGame:            Result = default.MsgMidGameText; break;
+		case EVS_MsgId.MsgGameEnded:          Result = default.MsgGameEndedText; break;
+		case EVS_MsgId.MsgPlayerVoted:        Result = default.MsgPlayerVotedText; break;
+		case EVS_MsgId.MsgAdminForceTravel:   Result = default.MsgAdminForceTravelText; break;
+		case EVS_MsgId.MsgAdminKickPlayer:    Result = default.MsgAdminKickPlayerText; break;
+		case EVS_MsgId.MsgAdminBanPlayer:     Result = default.MsgAdminBanPlayerText; break;
+		case EVS_MsgId.MsgKickVotePlaced:     Result = default.MsgKickVotePlacedText; break;
+		case EVS_MsgId.MsgKickVoteSuccessful: Result = default.MsgKickVoteSuccessfulText; break;
+		case EVS_MsgId.MsgPlayerVotedRandom : Result = default.MsgPlayerVotedRandomText; break;
 
-		case -1: Result = default.ErrStillLoading; break;
-		case -2: Result = default.ErrNoRootWindow; break;
-		case -3: Result = default.ErrCreateDialog; break;
-		case -4: Result = default.ErrWrongConsole; break;
-		case -5: Result = default.ErrMapLoadFailed; break;
-		case -6: Result = default.ErrNoConnection; break;
-		case -7: Result = default.ErrNotAllowed; break;
+		case EVS_MsgId.ErrStillLoading:       Result = default.ErrStillLoadingText; break;
+		case EVS_MsgId.ErrNoRootWindow:       Result = default.ErrNoRootWindowText; break;
+		case EVS_MsgId.ErrCreateDialog:       Result = default.ErrCreateDialogText; break;
+		case EVS_MsgId.ErrWrongConsole:       Result = default.ErrWrongConsoleText; break;
+		case EVS_MsgId.ErrMapLoadFailed:      Result = default.ErrMapLoadFailedText; break;
+		case EVS_MsgId.ErrNoConnection:       Result = default.ErrNoConnectionText; break;
+		case EVS_MsgId.ErrNotAllowed:         Result = default.ErrNotAllowedText; break;
 
 		default:
 			return "";
@@ -92,24 +115,24 @@ defaultproperties {
 	bComplexString=True
 	Lifetime=5
 
-	MsgNobodyVoted="Nobody voted, randomly selecting {1}"
-	MsgVotesTied="Tied, randomly selecting {1}"
-	MsgHaveWinner="{1} won"
-	MsgMidGame="Initiating mid-game voting, opening Vote Menu"
-	MsgGameEnded="Game ended, opening Vote Menu"
-	MsgPlayerVoted="{1} voted for {2}"
-	MsgAdminForceTravel="Admin {1} forced switching to {2}"
-	MsgAdminKickPlayer="Admin {1} kicked player {2} ({3})"
-	MsgAdminBanPlayer="Admin {1} banned player {2} ({3})"
-	MsgKickVotePlaced="A player voted to kick {1}"
-	MsgKickVoteSuccessful="{1} was kicked"
-	MsgPlayerVotedRandom="{1} voted for random map ({2})"
+	MsgNobodyVotedText="Nobody voted, randomly selecting {1}"
+	MsgVotesTiedText="Tied, randomly selecting {1}"
+	MsgHaveWinnerText="{1} won"
+	MsgMidGameText="Initiating mid-game voting, opening Vote Menu"
+	MsgGameEndedText="Game ended, opening Vote Menu"
+	MsgPlayerVotedText="{1} voted for {2}"
+	MsgAdminForceTravelText="Admin {1} forced switching to {2}"
+	MsgAdminKickPlayerText="Admin {1} kicked player {2} ({3})"
+	MsgAdminBanPlayerText="Admin {1} banned player {2} ({3})"
+	MsgKickVotePlacedText="A player voted to kick {1}"
+	MsgKickVoteSuccessfulText="{1} was kicked"
+	MsgPlayerVotedRandomText="{1} voted for random map ({2})"
 
-	ErrStillLoading="Vote Menu data is still being transferred, please try again"
-	ErrNoRootWindow="Failed to create {1} window (Root does not exist)"
-	ErrCreateDialog="Failed to create {1} window (Could not create Dialog)"
-	ErrWrongConsole="Failed to create {1} window (Console not a WindowConsole)"
-	ErrMapLoadFailed="Loading map {1} failed, randomly selecting {2}"
-	ErrNoConnection="VoteSys has no connection to server, check server firewall"
-	ErrNotAllowed="Sorry, you are not allowed to vote"
+	ErrStillLoadingText="Vote Menu data is still being transferred, please try again"
+	ErrNoRootWindowText="Failed to create {1} window (Root does not exist)"
+	ErrCreateDialogText="Failed to create {1} window (Could not create Dialog)"
+	ErrWrongConsoleText="Failed to create {1} window (Console not a WindowConsole)"
+	ErrMapLoadFailedText="Loading map {1} failed, randomly selecting {2}"
+	ErrNoConnectionText="VoteSys has no connection to server, check server firewall"
+	ErrNotAllowedText="Sorry, you are not allowed to vote"
 }
