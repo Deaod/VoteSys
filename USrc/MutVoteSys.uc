@@ -746,10 +746,10 @@ function TravelTo(VS_Preset P, VS_Map M) {
 }
 
 // See Engine.LevelInfo.ServerTravel
-// Clients dont need to know about the URL, since were not making them switch
-// servers. So instead of handing the full URL to GameInfo.ProcessServerTravel,
-// we just give it nothing as URL and rely on TRAVEL_Relative doing the right
-// thing.
+// Clients dont need to know about all of the URL, since were not making them
+// switch servers. So instead of handing the full URL to
+// GameInfo.ProcessServerTravel, we just give it the map name as URL and rely on
+// TRAVEL_Relative doing the right thing.
 function ServerTravel(string ServerURL, string ClientURL) {
 	if (Level.NextURL == "") {
 		Level.SetTimer(0.0, false);
