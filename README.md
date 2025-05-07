@@ -38,6 +38,7 @@ In addition there are INI files that dont contain configuration, but are used to
 
 * VoteSysTemp.ini
 * VoteSysHistory.ini
+* VoteSysBans.ini
 
 ### Full Preset Names
 
