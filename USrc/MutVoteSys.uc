@@ -1,6 +1,7 @@
 class MutVoteSys extends Mutator
 	imports(VS_BannedPlayers)
-	imports(VS_Msg_LocalMessage);
+	imports(VS_Msg_LocalMessage)
+	imports(VS_Util_Logging);
 // Description="Enables voting for next map"
 
 var VS_ChannelContainer ChannelList;
@@ -238,7 +239,7 @@ function EBanState IsPlayerBanned(PlayerPawn P, Actor AceCheck) {
 	if (Address == "")
 		return BS_Unknown;
 
-	Log("Checking if"@Address@"is banned", 'VoteSys');
+	LogMsg("Checking if"@Address@"is banned");
 	for (i = 0; i < BannedAddresses.Length; i++)
 		if (Address == BannedAddresses[i])
 			return BS_Banned;
@@ -361,7 +362,7 @@ function OpenVoteMenu(PlayerPawn P) {
 
 	C = FindChannel(P);
 	if (C == none || C.Channel == none) {
-		Log("Could not find Channel for"@P.PlayerReplicationInfo.PlayerName@"("$P.PlayerReplicationInfo.PlayerId$")", 'VoteSys');
+		LogErr("Could not find Channel for"@P.PlayerReplicationInfo.PlayerName@"("$P.PlayerReplicationInfo.PlayerId$")");
 		return;
 	}
 
@@ -373,7 +374,7 @@ function OpenSettings(PlayerPawn P) {
 
 	C = FindChannel(P);
 	if (C == none || C.Channel == none) {
-		Log("Could not find Channel for"@P.PlayerReplicationInfo.PlayerName@"("$P.PlayerReplicationInfo.PlayerId$")", 'VoteSys');
+		LogErr("Could not find Channel for"@P.PlayerReplicationInfo.PlayerName@"("$P.PlayerReplicationInfo.PlayerId$")");
 		return;
 	}
 
@@ -412,7 +413,7 @@ event Timer() {
 	}
 
 	if (TimerRate != Level.TimeDilation) {
-		Log("TimeDilation has changed to"@Level.TimeDilation, 'VoteSys');
+		LogMsg("TimeDilation has changed to"@Level.TimeDilation);
 		SetTimer(Level.TimeDilation, true);
 	}
 }
@@ -738,8 +739,8 @@ function TravelTo(VS_Preset P, VS_Map M) {
 
 	if (Len(Url) > 1023) {
 		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', EVS_MsgId.ErrUrlTooLong, M.MapName, P.GetFullName());
-		Log("URL too long: "$Url, 'VoteSys');
-		Log("URL used instead: "$Left(Url, 1023), 'VoteSys');
+		LogErr("URL too long: "$Url);
+		LogErr("URL used instead: "$Left(Url, 1023));
 	}
 
 	ServerTravel(Url, M.MapName);
@@ -860,7 +861,7 @@ function CheckVotedMap() {
 	// Without it, the map wont load at all. Checking that that object exists
 	// should be enough for us.
 	while (DynamicLoadObject(VotedMap.MapName$".MyLevel", class'Object', true) == none) {
-		Log(VotedMap.MapName@"failed to load", 'VoteSys');
+		LogErr(VotedMap.MapName@"failed to load");
 		OldMapName = VotedMap.MapName;
 		VotedMap = VotedPreset.SelectRandomMapFromList();
 		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', EVS_MsgId.ErrMapLoadFailed, OldMapName, VotedMap.MapName);
@@ -1018,10 +1019,10 @@ function AddClassToPackageMap(string ClassName, out array<string> PkgMap) {
 
 	SetPropertyText("TempPkg", C.GetPropertyText("Outer"));
 	if (TempPkg == none) {
-		Log("Casting to Package failed"@C.Outer, 'VoteSys');
+		LogErr("Casting to Package failed"@C.Outer);
 		return;
 	} else if ((TempPkg.PackageFlags & 0x0004) != 0) {
-		Log("Package '"$P$"' is marked ServerSideOnly", 'VoteSys');
+		LogMsg("Package '"$P$"' is marked ServerSideOnly");
 		return;
 	}
 
@@ -1092,7 +1093,7 @@ function GetDefaultServerPackages() {
 		return; // already done
 
 	Prop = ConsoleCommand("get Engine.GameEngine ServerPackages");
-	Log("Packages="$Prop, 'VoteSys');
+	LogDbg("Packages="$Prop);
 	Settings.DefaultPackages = ParseConsoleStringArray(Prop);
 	Settings.SaveConfig();
 }
@@ -1104,7 +1105,7 @@ function GetDefaultServerActors() {
 		return; // already done
 
 	Prop = ConsoleCommand("get Engine.GameEngine ServerActors");
-	Log("Actors="$Prop, 'VoteSys');
+	LogDbg("Actors="$Prop);
 	Settings.DefaultActors = ParseConsoleStringArray(Prop);
 	Settings.SaveConfig();
 }
@@ -1137,7 +1138,7 @@ function SetServerPackages(array<string> Packages) {
 		Value = Value$",\""$Packages[i]$"\"";
 	}
 
-	Log("Packages=("$Value$")", 'VoteSys');
+	LogDbg("Packages=("$Value$")");
 	ConsoleCommand("set Engine.GameEngine ServerPackages ("$Value$")");
 }
 
@@ -1153,7 +1154,7 @@ function SetServerActors(array<string> Actors) {
 		Value = Value$",\""$Actors[i]$"\"";
 	}
 
-	Log("Actors=("$Value$")", 'VoteSys');
+	LogDbg("Actors=("$Value$")");
 	ConsoleCommand("set Engine.GameEngine ServerActors ("$Value$")");
 }
 
@@ -1246,7 +1247,7 @@ function LoadConfig() {
 	for (i = 0; ProbeDepth < Settings.PresetProbeDepth; i++) {
 		SetPropertyText("PresetNameDummy", "VS_PresetConfig"$i);
 		PC = new(PresetConfigDummy, PresetNameDummy) class'VS_PresetConfig';
-		Log("Try Loading"@PC.Name, 'VoteSys');
+		LogMsg("Try Loading"@PC.Name);
 		if (PC.PresetName == "") {
 			ProbeDepth++;
 			continue;
@@ -1288,7 +1289,7 @@ function LoadConfig() {
 function VS_Preset LoadPresetPassOne(VS_PresetConfig PC, int Index) {
 	local VS_Preset P;
 
-	Log("Adding Preset '"$PC.Category$"/"$PC.PresetName$"' ("$PC.Abbreviation$")", 'VoteSys');
+	LogMsg("Adding Preset '"$PC.Category$"/"$PC.PresetName$"' ("$PC.Abbreviation$")");
 
 	P = new(PresetListDummy) class'VS_Preset';
 	P.PresetName   = PC.PresetName;
@@ -1311,11 +1312,11 @@ function LoadPresetPassTwo(VS_Preset P) {
 		return;
 
 	if (P.bLoading) {
-		Log("    Preset '"$P.GetFullName()$"' is already being loaded. Circular reference detected.", 'VoteSys');
+		LogErr("    Preset '"$P.GetFullName()$"' is already being loaded. Circular reference detected.");
 		return;
 	}
 
-	Log("Loading Preset '"$P.GetFullName()$"'", 'VoteSys');
+	LogMsg("Loading Preset '"$P.GetFullName()$"'");
 
 	P.bLoading = true;
 	PC = P.Storage;
@@ -1329,7 +1330,7 @@ function LoadPresetPassTwo(VS_Preset P) {
 
 		Base = FindPreset(PC.InheritFrom[i]);
 		if (Base == none) {
-			Log("    Base '"$PC.InheritFrom[i]$"' does not exist.", 'VoteSys');
+			LogErr("    Base '"$PC.InheritFrom[i]$"' does not exist.");
 			continue;
 		}
 		
@@ -1364,7 +1365,7 @@ function LoadPresetPassTwo(VS_Preset P) {
 		P.MinimumMapRepeatDistance = Settings.MinimumMapRepeatDistance;
 
 	if (P.Game == none && P.bDisabled == false) {
-		Log("    Forcibly disabling '"$P.GetFullName()$"' because it has no gamemode.", 'VoteSys');
+		LogErr("    Forcibly disabling '"$P.GetFullName()$"' because it has no gamemode.");
 		P.bDisabled = true;
 	}
 
@@ -1393,9 +1394,9 @@ function VS_Map LoadMapList(class<GameInfo> Game, name ListName) {
 	local VS_Map Result;
 
 	if (Game != none) {
-		Log("    Loading List '"$ListName$"' for"@Game, 'VoteSys');
+		LogMsg("    Loading List '"$ListName$"' for"@Game);
 	} else {
-		Log("    Loading List '"$ListName$"'", 'VoteSys');
+		LogMsg("    Loading List '"$ListName$"'");
 	}
 
 	ML = LoadMapListByName(ListName);

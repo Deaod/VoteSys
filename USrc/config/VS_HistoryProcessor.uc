@@ -1,4 +1,5 @@
-class VS_HistoryProcessor extends Actor;
+class VS_HistoryProcessor extends Actor
+	imports(VS_Util_Logging);
 
 var MutVoteSys VoteSys;
 var VS_HistoryConfig History;
@@ -47,7 +48,7 @@ event Tick(float Delta) {
 
 	if (ProcessedEntry == History.Entry.Length) {
 		VoteSys.HistoryProcessor = none;
-		Log("Processed history in"@ProcessingTime@"seconds ("$ProcessingTicks$" ticks)", 'VoteSys');
+		LogMsg("Processed history in"@ProcessingTime@"seconds ("$ProcessingTicks$" ticks)");
 		Destroy();
 	}
 }

@@ -1,4 +1,4 @@
-class VS_Util_String extends Object;
+class VS_Util_String extends Object abstract;
 
 static final function string Trim(string In) {
 	return TrimRight(TrimLeft(In));

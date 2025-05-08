@@ -1,4 +1,5 @@
-class VS_UI_Logo extends UWindowDialogControl;
+class VS_UI_Logo extends UWindowDialogControl
+	imports(VS_Util_Logging);
 
 var Texture LogoTexture;
 var Region LogoRegion;
@@ -21,7 +22,7 @@ function SetLogoTexture(string TextureRef) {
 		
 	LogoTexture = Texture(DynamicLoadObject(TextureRef, class'Texture', true));
 	if (LogoTexture == none) {
-		Log("Logo texture \""$TextureRef$"\" failed to load!", 'VoteSys');
+		LogErr("Logo texture \""$TextureRef$"\" failed to load!");
 		LogoRegion = NewRegion(0,0,0,0);
 	} else  {
 		LogoRegion.X = 0;

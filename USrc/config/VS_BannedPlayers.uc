@@ -1,6 +1,7 @@
 class VS_BannedPlayers extends Object
 	config(VoteSysBans)
-	perobjectconfig;
+	perobjectconfig
+	imports(VS_Util_Logging);
 
 struct BannedPlayer {
 	var string HWHash;
@@ -46,7 +47,7 @@ final function AddPlayerToBanList(out array<BannedPlayer> BanList, BannedPlayer 
 		BanList.Insert(Index, 1);
 		BanList[Index] = P;
 	} else {
-		Log("Player '"$P.PlayerName$"' with HWID '"$P.HWHash$"' is already banned", 'VoteSys');
+		LogErr("Player '"$P.PlayerName$"' with HWID '"$P.HWHash$"' is already banned");
 	}
 }
 

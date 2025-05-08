@@ -1,4 +1,5 @@
-class VS_MapList extends Object;
+class VS_MapList extends Object
+	imports(VS_Util_Logging);
 
 struct MapInfo {
 	var string MapName;
@@ -74,7 +75,7 @@ function bool AddMapFromConfig(string ConfigLine) {
 			} else if (Left(Option, 11) ~= "MaxPlayers=") {
 				MaxPlayers = int(Mid(Option, 11));
 			} else {
-				Log("Unknown Map Option '"$Option$"'", 'VoteSys');
+				LogErr("Unknown Map Option '"$Option$"'");
 			}
 
 		}

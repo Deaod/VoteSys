@@ -1,4 +1,5 @@
 class VS_DataServer extends TcpLink
+	imports(VS_Util_Logging)
 	transient;
 
 var MutVoteSys VoteSys;
@@ -18,12 +19,12 @@ event PostBeginPlay() {
 
 	Prt = BindPort(Settings.DataPort, true);
 	if (Prt == 0) {
-		Log("VS_DataServer - Failed to BindPort", 'VoteSys');
+		LogErr("VS_DataServer - Failed to BindPort");
 		return;
 	}
 
 	if (Listen() == false) {
-		Log("VS_DataServer - Failed to Listen", 'VoteSys');
+		LogErr("VS_DataServer - Failed to Listen");
 		return;
 	}
 
@@ -41,7 +42,7 @@ event PostBeginPlay() {
 		Info.Data.Port = Settings.ClientDataPort;
 	}
 
-	Log("VS_DataServer Addr="$Info.Data.Addr@"Port="$Info.Data.Port, 'VoteSys');
+	LogMsg("VS_DataServer Addr="$Info.Data.Addr@"Port="$Info.Data.Port);
 }
 
 defaultproperties {

@@ -1,5 +1,6 @@
 class VS_PlayerChannel extends Info
 	imports(VS_Msg_LocalMessage)
+	imports(VS_Util_Logging)
 	imports(VS_Util_String);
 
 var PlayerPawn PlayerOwner;
@@ -586,7 +587,7 @@ simulated function VS_ServerSettings ReloadServerSettings() {
 }
 
 simulated function VS_ServerSettings GetServerSettings() {
-	Log("PlayerChannel GetServerSettings", 'VoteSys');
+	LogDbg("PlayerChannel GetServerSettings");
 	if (ServerSettings == none) {
 		ServerSettings = DataClient.GetServerSettings();
 	}
@@ -594,7 +595,7 @@ simulated function VS_ServerSettings GetServerSettings() {
 }
 
 simulated function SaveServerSettings() {
-	Log("PlayerChannel SaveServerSettings", 'VoteSys');
+	LogDbg("PlayerChannel SaveServerSettings");
 	if (ServerSettings == none)
 		return;
 
@@ -608,7 +609,7 @@ simulated function VS_ClientPresetList ReloadServerPresets() {
 }
 
 simulated function VS_ClientPresetList GetServerPresets() {
-	Log("PlayerChannel GetServerPresets", 'VoteSys');
+	LogDbg("PlayerChannel GetServerPresets");
 	if (ServerPresets == none) {
 		ServerPresets = DataClient.GetServerPresets();
 	}
@@ -616,7 +617,7 @@ simulated function VS_ClientPresetList GetServerPresets() {
 }
 
 simulated function SaveServerPresets() {
-	Log("PlayerChannel SavePresetSettings", 'VoteSys');
+	LogDbg("PlayerChannel SavePresetSettings");
 	if (ServerPresets == none)
 		return;
 
@@ -630,7 +631,7 @@ simulated function VS_ClientMapListsContainer ReloadServerMapLists() {
 }
 
 simulated function VS_ClientMapListsContainer GetServerMapLists() {
-	Log("PlayerChannel GetServerMapLists", 'VoteSys');
+	LogDbg("PlayerChannel GetServerMapLists");
 	if (ServerMapLists == none) {
 		ServerMapLists = DataClient.GetServerMapLists();
 	}
@@ -638,7 +639,7 @@ simulated function VS_ClientMapListsContainer GetServerMapLists() {
 }
 
 simulated function SaveServerMapLists() {
-	Log("PlayerChannel SaveServerMapLists", 'VoteSys');
+	LogDbg("PlayerChannel SaveServerMapLists");
 	if (ServerMapLists == none)
 		return;
 
@@ -714,7 +715,7 @@ simulated function DumpLog() {
 	else
 		Line = Line@"''";
 
-	Log(Line, 'VoteSys');
+	LogMsg(Line);
 }
 
 defaultproperties {

@@ -1,4 +1,5 @@
 class VS_DataLink extends TcpLink
+	imports(VS_Util_Logging)
 	transient;
 
 var string Buffer;
@@ -80,7 +81,7 @@ function ParseLine(string Line) {
 		QueueCommand('SendLogo');
 	} else if (Left(Line, 8) == "/COOKIE/") {
 		Channel = VoteSys.FindChannelForCookie(int(Mid(Line, 8)));
-		Log("VS_DataLink Found Channel"@Channel, 'VoteSys');
+		LogMsg("VS_DataLink Found Channel"@Channel);
 	} else if (Line == "/SENDSERVERSETTINGS/") {
 		QueueCommand('SendServerSettings');
 	} else if (Left(Line, 19) == "/SAVESERVERSETTING/") {
@@ -121,13 +122,13 @@ event ReceivedText(string Text) {
 	Buffer = Text;
 
 	if (Len(Buffer) >= 0x10000) {
-		Log("More than 64KiB without line feed, discarding buffer ("$IpAddrToString(RemoteAddr)$")", 'VoteSys');
+		LogErr("More than 64KiB without line feed, discarding buffer ("$IpAddrToString(RemoteAddr)$")");
 		Buffer = "";
 	}
 }
 
 event Accepted() {
-	Log("VS_DataLink Accepted"@IpAddrToString(RemoteAddr), 'VoteSys');
+	LogMsg("VS_DataLink Accepted"@IpAddrToString(RemoteAddr));
 	GotoState('Idle');
 }
 
@@ -138,7 +139,7 @@ Begin:
 	while(VoteSys.HistoryProcessor != none)
 		Sleep(0);
 
-	Log("VS_DataLink SendPresets"@IpAddrToString(RemoteAddr), 'VoteSys');
+	LogMsg("VS_DataLink SendPresets"@IpAddrToString(RemoteAddr));
 
 	for (TempPreset = VoteSys.PresetList; TempPreset != none; TempPreset = TempPreset.Next) {
 		if (TempPreset.bDisabled)
@@ -152,7 +153,7 @@ Begin:
 
 	SendLine("/END/"$S11N.EncodeString(VoteSys.CurrentPreset));
 
-	Log("VS_DataLink SendPresets Done"@IpAddrToString(RemoteAddr), 'VoteSys');
+	LogMsg("VS_DataLink SendPresets Done"@IpAddrToString(RemoteAddr));
 	GoToState('Idle');
 }
 
@@ -199,7 +200,7 @@ Begin:
 		GoToState('Idle');
 	}
 
-	Log("VS_DataLink SendServerSettings"@IpAddrToString(RemoteAddr), 'VoteSys');
+	LogMsg("VS_DataLink SendServerSettings"@IpAddrToString(RemoteAddr));
 
 	SendServerSetting("bEnableACEIntegration");
 	SendServerSetting("MidGameVoteThreshold");
@@ -235,7 +236,7 @@ Begin:
 	SendServerSetting("LogoButton2");
 	SendLine("/ENDSERVERSETTINGS/");
 
-	Log("VS_DataLink SendServerSettings Done"@IpAddrToString(RemoteAddr), 'VoteSys');
+	LogMsg("VS_DataLink SendServerSettings Done"@IpAddrToString(RemoteAddr));
 	GoToState('Idle');
 }
 
@@ -253,7 +254,7 @@ function SaveServerSetting(string Line) {
 	S11N.ParseProperty(Mid(Line, 19), PropertyName, PropertyValue);
 
 	if (VoteSys.Settings.SetPropertyText(PropertyName, PropertyValue))
-		Log("Successfully set property"@PropertyName@"to"@PropertyValue, 'VoteSys');
+		LogMsg("Successfully set property"@PropertyName@"to"@PropertyValue);
 }
 
 state SendServerPresets {
@@ -308,7 +309,7 @@ Begin:
 		GoToState('Idle');
 	}
 
-	Log("VS_DataLink SendServerPresets"@IpAddrToString(RemoteAddr), 'VoteSys');
+	LogMsg("VS_DataLink SendServerPresets"@IpAddrToString(RemoteAddr));
 	SendServerPresetsF();
 
 	GoToState('Idle');
@@ -407,7 +408,7 @@ Begin:
 		GoToState('Idle');
 	}
 
-	Log("VS_DataLink SendServerMapLists"@IpAddrToString(RemoteAddr), 'VoteSys');
+	LogMsg("VS_DataLink SendServerMapLists"@IpAddrToString(RemoteAddr));
 	SendServerMapLists();
 
 	GoToState('Idle');
