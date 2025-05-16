@@ -743,7 +743,7 @@ function TravelTo(VS_Preset P, VS_Map M) {
 		LogErr("URL used instead: "$Left(Url, 1023));
 	}
 
-	ServerTravel(Url, M.MapName);
+	ServerTravel(Url, M.MapName, false);
 }
 
 // See Engine.LevelInfo.ServerTravel
@@ -751,15 +751,15 @@ function TravelTo(VS_Preset P, VS_Map M) {
 // switch servers. So instead of handing the full URL to
 // GameInfo.ProcessServerTravel, we just give it the map name as URL and rely on
 // TRAVEL_Relative doing the right thing.
-function ServerTravel(string ServerURL, string ClientURL) {
+function ServerTravel(string ServerURL, string ClientURL, bool bItems) {
 	if (Level.NextURL == "") {
 		Level.SetTimer(0.0, false);
-		Level.bNextItems = false;
+		Level.bNextItems = bItems;
 		Level.NextURL = ServerURL;
 		if (Level.Game != none)
-			Level.Game.ProcessServerTravel(ClientURL, false);
+			Level.Game.ProcessServerTravel(ClientURL, bItems);
 		else
-			Level.NextSwitchCountdown = 0;
+			Level.NextSwitchCountdown = 0;	
 	}
 }
 
