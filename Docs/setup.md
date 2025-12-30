@@ -44,6 +44,7 @@ KickVoteThreshold=0.6
 DefaultTimeMessageClass=Botpack.TimeMessage
 DefaultPreset=DM/Team DeathMatch
 DefaultMap=DM-Deck16
+bEnableCustomDataTransport=True
 ServerAddress=
 DataPort=0
 ClientDataPort=0
@@ -92,6 +93,7 @@ DefaultActors=IpServer.UdpServerUplink MasterServerAddress=unreal.epicgames.com 
 1. [bAlwaysUseDefaultPreset](#balwaysusedefaultpreset)
 1. [DefaultMap](#defaultmap)
 1. [bAlwaysUseDefaultMap](#balwaysusedefaultmap)
+1. [bEnableCustomDataTransport](#benablecustomdatatransport)
 1. [ServerAddress](#serveraddress)
 1. [DataPort](#dataport)
 1. [ClientDataPort](#clientdataport)
@@ -203,6 +205,13 @@ Empty by default.
 Specifies the map that VoteSys should switch to when using `DefaultPreset`. If empty, a random map will be selected. Map must be part of the map list for `DefaultPreset`, otherwise it will be treated as if no map was specified.
 
 Empty by default.
+
+### bEnableCustomDataTransport
+
+If True, server and clients use a separate TCP (not UDP) connection to transmit preset and map data. This connection is not subject to engine limits on data transfers and can thus happen much more quickly.
+If False, server and client use an actor to transmit preset and map data. This connection is established through the engine, so it is slower. It is also much more likely to work on managed servers with strict firewalls.
+
+True by default.
 
 ### ServerAddress
 

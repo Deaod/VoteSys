@@ -9,6 +9,7 @@ var VS_Info Info; // Info Info
 var int Cookie;
 
 var VS_DataClient DataClient;
+var VS_DataChannel DataChannel;
 var VS_FavoritesProcessor FavoritesProcessor;
 var VS_ServerSettings ServerSettings;
 var VS_ClientPresetList ServerPresets;
@@ -42,6 +43,7 @@ struct Range {
 replication {
 	reliable if (Role < ROLE_Authority)
 		ServerBanPlayer,
+		ServerSetupFallbackDataTransport,
 		ServerKickPlayer,
 		ServerVote,
 		ServerVoteExisting,
@@ -81,6 +83,30 @@ simulated function ReloadConfigFiles() {
 		return;
 
 	ConsoleCommand("RELOADCONFIG"@string(class'VS_ClientSettings'));
+}
+
+function ServerSetupFallbackDataTransport() {
+	local VS_DataLink DL;
+
+	LogDbg("VS_PlayerChannel ServerSetupFallbackDataTransport");
+
+	DataChannel = Spawn(class'VS_DataChannel', self);
+
+	DL = Spawn(class'VS_DataLink');
+	DL.DataChannel = DataChannel;
+	DL.GoToState('Idle');
+	
+	DataChannel.Link = DL;
+}
+
+simulated function ClientSetupFallbackDataTransport(VS_DataChannel Chan) {
+	LogDbg("VS_PlayerChannel ClientSetupFallbackDataTransport");
+
+	DataChannel = Chan;
+	DataChannel.Link = DataClient;
+	DataClient.DataChannel = DataChannel;
+	DataChannel.ClientEnableConnection();
+	DataClient.GoToState('Talking');
 }
 
 simulated event Tick(float Delta) {
@@ -215,7 +241,10 @@ simulated function ShowVoteMenu() {
 	if (PlayerOwner == none)
 		PlayerOwner = PlayerPawn(Owner);
 
-	if (DataClient != none && DataClient.IsConnected() == false) {
+	if (DataClient != none && 
+		DataClient.IsConnected() == false && 
+		(DataChannel == none || DataChannel.bEnableTraffic == false)
+	) {
 		LocalizeMessage(class'VS_Msg_LocalMessage', EVS_MsgId.ErrNoConnection);
 		return;
 	}

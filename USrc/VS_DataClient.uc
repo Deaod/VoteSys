@@ -10,6 +10,7 @@ var bool bTransferDone;
 
 var VS_Info Info;
 var VS_PlayerChannel Channel;
+var VS_DataChannel DataChannel;
 var VS_Preset Preset;
 var VS_Map LastMap;
 var VS_ServerSettings ServerSettings;
@@ -32,8 +33,16 @@ event PostBeginPlay() {
 }
 
 final function bool SendLine(string Line) {
-	// Len+2 to account for cr-lf at the end
-	return SendText(Line$CRLF) == Len(Line) + 2;
+	if (IsConnected()) {
+		// Len+2 to account for cr-lf at the end
+		return SendText(Line$CRLF) == Len(Line) + 2;
+	} else if (DataChannel != none) {
+		DataChannel.SendText(Line$CRLF);
+		return true;
+	}
+
+	LogErr("VS_DataClient Trying to SendLine without connection or DataChannel:"@Line);
+	return false;
 }
 
 function string GetRemoteAddress() {
@@ -93,14 +102,20 @@ Begin:
 	}
 	while(Info.Data.Port == 0) {
 		Sleep(0.5);
-		LogMsg("VS_DataClient Addr="$Info.Data.Addr@"Port="$Info.Data.Port);
 	}
-	LogDbg("VS_DataClient HavePort");
-	LogMsg("VS_DataClient RemoteAddress"@GetRemoteAddress());
+
+	if (Info.Data.Port == 0xDEADBEEF) {
+		LogMsg("VS_DataClient Custom Data Transport Disabled");
+		Channel.ServerSetupFallbackDataTransport();
+	} else {
+		LogMsg("VS_DataClient Addr="$Info.Data.Addr@"Port="$Info.Data.Port);
+		LogDbg("VS_DataClient HavePort");
+		LogMsg("VS_DataClient RemoteAddress"@GetRemoteAddress());
 
 Resolve:
-	Sleep(ResolveDelay);
-	Resolve(GetRemoteAddress());
+		Sleep(ResolveDelay);
+		Resolve(GetRemoteAddress());
+	}
 }
 
 function string ParsePresetRef(string Line) {
@@ -287,6 +302,7 @@ function SaveServerSettings(VS_ServerSettings S) {
 	SendServerSetting(S, "KickVoteThreshold");
 	SendServerSetting(S, "DefaultPreset");
 	SendServerSetting(S, "DefaultMap");
+	SendServerSetting(S, "bEnableCustomDataTransport");
 	SendServerSetting(S, "ServerAddress");
 	SendServerSetting(S, "DataPort");
 	SendServerSetting(S, "ClientDataPort");

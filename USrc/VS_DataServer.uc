@@ -17,6 +17,15 @@ event PostBeginPlay() {
 	// needs to be set because children inherit LinkMode
 	LinkMode = MODE_Text;
 
+	foreach AllActors(class'VS_Info', Info)
+		break;
+
+	if (Settings.bEnableCustomDataTransport == false) {
+		Info.Data.Port = 0xDEADBEEF;
+		LogMsg("VS_DataServer - Disabling Custom Data Transport");
+		return;
+	}
+
 	Prt = BindPort(Settings.DataPort, true);
 	if (Prt == 0) {
 		LogErr("VS_DataServer - Failed to BindPort");
@@ -27,9 +36,6 @@ event PostBeginPlay() {
 		LogErr("VS_DataServer - Failed to Listen");
 		return;
 	}
-
-	foreach AllActors(class'VS_Info', Info)
-		break;
 
 	Info.Data.Addr = Settings.ServerAddress;
 	if (Settings.ClientDataPort == 0 || Settings.DataPort != Prt) {

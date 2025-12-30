@@ -38,6 +38,7 @@ var config float KickVoteThreshold;
 var config string DefaultPreset;
 var config string DefaultMap;
 
+var config bool bEnableCustomDataTransport;
 var config string ServerAddress;
 var config int DataPort;
 var config int ClientDataPort;
@@ -111,6 +112,7 @@ defaultproperties {
 	bEnableKickVoting=True
 	KickVoteThreshold=0.6
 
+	bEnableCustomDataTransport=True
 	ServerAddress=
 	DataPort=0
 	ClientDataPort=0

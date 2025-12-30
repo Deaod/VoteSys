@@ -27,6 +27,9 @@ var localized string Text_GameNameMode_DoNotModify;
 var localized string Text_GameNameMode_PresetName;
 var localized string Text_GameNameMode_CategoryAndPresetName;
 
+var VS_UI_Checkbox Chk_EnableCustomDataTransport;
+var localized string Text_EnableCustomDataTransport;
+
 var VS_UI_EditControl Edt_ServerAddress;
 var localized string Text_ServerAddress;
 
@@ -65,6 +68,7 @@ function EnableInteraction(bool bEnable) {
 	Chk_UseServerActorsCompatibilityMode.bDisabled = !bEnable;
 	Adt_DefaultActors.SetEnabled(bEnable);
 	Cmb_GameNameMode.SetEnabled(bEnable);
+	Chk_EnableCustomDataTransport.bDisabled = !bEnable;
 	Edt_ServerAddress.EditBox.SetEditable(bEnable);
 	Edt_DataPort.EditBox.SetEditable(bEnable);
 	Edt_ClientDataPort.EditBox.SetEditable(bEnable);
@@ -84,6 +88,7 @@ function LoadServerSettings() {
 	Chk_UseServerActorsCompatibilityMode.bChecked = Settings.bUseServerActorsCompatibilityMode;
 	Adt_DefaultActors.SetValue(Settings.GetPropertyText("DefaultActors"));
 	Cmb_GameNameMode.SetSelectedIndex(int(Settings.GameNameMode));
+	Chk_EnableCustomDataTransport.bChecked = Settings.bEnableCustomDataTransport;
 	Edt_ServerAddress.SetValue(Settings.ServerAddress);
 	Edt_DataPort.SetValue(string(Settings.DataPort));
 	Edt_ClientDataPort.SetValue(string(Settings.ClientDataPort));
@@ -103,6 +108,7 @@ function SaveSettings() {
 	Settings.bUseServerActorsCompatibilityMode = Chk_UseServerActorsCompatibilityMode.bChecked;
 	Settings.SetPropertyText("DefaultActors", Adt_DefaultActors.GetValue());
 	Settings.GameNameMode = Settings.IntToGameNameMode(Cmb_GameNameMode.GetSelectedIndex());
+	Settings.bEnableCustomDataTransport = Chk_EnableCustomDataTransport.bChecked;
 	Settings.ServerAddress = Edt_ServerAddress.GetValue();
 	Settings.DataPort = int(Edt_DataPort.GetValue());
 	Settings.ClientDataPort = int(Edt_ClientDataPort.GetValue());
@@ -169,16 +175,19 @@ function Created() {
 	Cmb_GameNameMode.EditBoxWidth = 100;
 	Cmb_GameNameMode.SetEditable(false);
 
-	Edt_ServerAddress = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 128, 188, 16));
+	Chk_EnableCustomDataTransport = VS_UI_Checkbox(CreateControl(class'VS_UI_Checkbox', 200, 128, 188, 16));
+	Chk_EnableCustomDataTransport.SetText(Text_EnableCustomDataTransport);
+
+	Edt_ServerAddress = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 148, 188, 16));
 	Edt_ServerAddress.SetText(Text_ServerAddress);
 	Edt_ServerAddress.EditBoxWidth = 100;
 
-	Edt_DataPort = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 148, 188, 16));
+	Edt_DataPort = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 168, 188, 16));
 	Edt_DataPort.SetText(Text_DataPort);
 	Edt_DataPort.EditBoxWidth = 60;
 	Edt_DataPort.SetNumericOnly(true);
 
-	Edt_ClientDataPort = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 168, 188, 16));
+	Edt_ClientDataPort = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 188, 188, 16));
 	Edt_ClientDataPort.SetText(Text_ClientDataPort);
 	Edt_ClientDataPort.EditBoxWidth = 60;
 	Edt_ClientDataPort.SetNumericOnly(true);
@@ -198,6 +207,7 @@ function ApplyTheme() {
 	//Chk_UseServerActorsCompatibilityMode // not themed
 	Adt_DefaultActors.SetTheme(Theme);
 	Cmb_GameNameMode.Theme = Theme;
+	//Chk_EnableCustomDataTransport // not themed
 	Edt_ServerAddress.Theme = Theme;
 	Edt_DataPort.Theme = Theme;
 	Edt_ClientDataPort.Theme = Theme;
@@ -220,6 +230,7 @@ defaultproperties {
 	Text_GameNameMode_DoNotModify="Do Not Modify"
 	Text_GameNameMode_PresetName="Preset Name"
 	Text_GameNameMode_CategoryAndPresetName="Full Preset Name"
+	Text_EnableCustomDataTransport="Custom Data Transport"
 	Text_ServerAddress="Server Address"
 	Text_DataPort="Data Port"
 	Text_ClientDataPort="Client Data Port"

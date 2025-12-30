@@ -5,6 +5,7 @@ class VS_DataLink extends TcpLink
 var string Buffer;
 var MutVoteSys VoteSys;
 var VS_ChannelContainer Channel;
+var VS_DataChannel DataChannel;
 
 var string SendBuffer;
 var VS_Preset TempPreset;
@@ -41,10 +42,18 @@ event Closed() {
 
 final function bool SendLine(string Line) {
 	if (Len(Line) > 0xFFFE)
-		Channel.PlayerOwner.ClientMessage(
-			"Max line length exceeded in VoteSys. Please report this and include the following: "$Left(Line, 25));
-	// Len+2 to account for cr-lf at the end
-	return SendText(Line$CRLF) == Len(Line) + 2;
+		LogErr("Max line length exceeded in VoteSys. Please report this and include the following: "$Left(Line, 25));
+
+	if (IsConnected()) {
+		// Len+2 to account for cr-lf at the end
+		return SendText(Line$CRLF) == Len(Line) + 2;
+	} else if (DataChannel != none) {
+		DataChannel.SendText(Line$CRLF);
+		return true;
+	}
+
+	LogErr("Trying to SendLine without connection or DataChannel:"@Line);
+	return false;
 }
 
 function QueueCommand(name Command, optional coerce string Params) {
@@ -214,6 +223,7 @@ Begin:
 	SendServerSetting("KickVoteThreshold");
 	SendServerSetting("DefaultPreset");
 	SendServerSetting("DefaultMap");
+	SendServerSetting("bEnableCustomDataTransport");
 	SendServerSetting("ServerAddress");
 	SendServerSetting("DataPort");
 	SendServerSetting("ClientDataPort");
