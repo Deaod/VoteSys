@@ -5,7 +5,7 @@ class VS_DataLink extends TcpLink
 var string Buffer;
 var MutVoteSys VoteSys;
 var VS_ChannelContainer Channel;
-var VS_DataChannel DataChannel;
+var VS_Data_Channel DataChannel;
 
 var string SendBuffer;
 var VS_Preset TempPreset;

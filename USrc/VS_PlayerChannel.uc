@@ -9,7 +9,7 @@ var VS_Info Info; // Info Info
 var int Cookie;
 
 var VS_DataClient DataClient;
-var VS_DataChannel DataChannel;
+var VS_Data_Channel DataChannel;
 var VS_FavoritesProcessor FavoritesProcessor;
 var VS_ServerSettings ServerSettings;
 var VS_ClientPresetList ServerPresets;
@@ -90,7 +90,7 @@ function ServerSetupFallbackDataTransport() {
 
 	LogDbg("VS_PlayerChannel ServerSetupFallbackDataTransport");
 
-	DataChannel = Spawn(class'VS_DataChannel', self);
+	DataChannel = Spawn(class'VS_Data_Channel', self);
 
 	DL = Spawn(class'VS_DataLink');
 	DL.DataChannel = DataChannel;
@@ -99,7 +99,7 @@ function ServerSetupFallbackDataTransport() {
 	DataChannel.Link = DL;
 }
 
-simulated function ClientSetupFallbackDataTransport(VS_DataChannel Chan) {
+simulated function ClientSetupFallbackDataTransport(VS_Data_Channel Chan) {
 	LogDbg("VS_PlayerChannel ClientSetupFallbackDataTransport");
 
 	DataChannel = Chan;

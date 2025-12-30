@@ -1,5 +1,6 @@
-class VS_DataChannel extends Info
-	imports(VS_Util_Logging);
+class VS_Data_Channel extends Info
+	imports(VS_Util_Logging)
+	transient;
 
 // Fallback in case TcpLink doesnt work
 

@@ -10,7 +10,7 @@ var bool bTransferDone;
 
 var VS_Info Info;
 var VS_PlayerChannel Channel;
-var VS_DataChannel DataChannel;
+var VS_Data_Channel DataChannel;
 var VS_Preset Preset;
 var VS_Map LastMap;
 var VS_ServerSettings ServerSettings;
