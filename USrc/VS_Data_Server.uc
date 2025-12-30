@@ -1,4 +1,4 @@
-class VS_DataLink extends TcpLink
+class VS_Data_Server extends TcpLink
 	imports(VS_Util_Logging)
 	transient;
 
@@ -57,7 +57,7 @@ event ReceivedText(string Text) {
 }
 
 event Accepted() {
-	LogMsg("VS_DataLink Accepted"@IpAddrToString(RemoteAddr));
+	LogMsg("VS_Data_Server Accepted"@IpAddrToString(RemoteAddr));
 	GotoState('Idle');
 }
 
@@ -115,7 +115,7 @@ function ParseLine(string Line) {
 		QueueCommand('SendLogo');
 	} else if (Left(Line, 8) == "/COOKIE/") {
 		Channel = VoteSys.FindChannelForCookie(int(Mid(Line, 8)));
-		LogMsg("VS_DataLink Found Channel"@Channel);
+		LogMsg("VS_Data_Server Found Channel"@Channel);
 	} else if (Line == "/SENDSERVERSETTINGS/") {
 		QueueCommand('SendServerSettings');
 	} else if (Left(Line, 19) == "/SAVESERVERSETTING/") {
@@ -148,7 +148,7 @@ Begin:
 	while(VoteSys.HistoryProcessor != none)
 		Sleep(0);
 
-	LogMsg("VS_DataLink SendPresets"@IpAddrToString(RemoteAddr));
+	LogMsg("VS_Data_Server SendPresets"@IpAddrToString(RemoteAddr));
 
 	for (TempPreset = VoteSys.PresetList; TempPreset != none; TempPreset = TempPreset.Next) {
 		if (TempPreset.bDisabled)
@@ -162,7 +162,7 @@ Begin:
 
 	SendLine("/END/"$S11N.EncodeString(VoteSys.CurrentPreset));
 
-	LogMsg("VS_DataLink SendPresets Done"@IpAddrToString(RemoteAddr));
+	LogMsg("VS_Data_Server SendPresets Done"@IpAddrToString(RemoteAddr));
 	GoToState('Idle');
 }
 
@@ -209,7 +209,7 @@ Begin:
 		GoToState('Idle');
 	}
 
-	LogMsg("VS_DataLink SendServerSettings"@IpAddrToString(RemoteAddr));
+	LogMsg("VS_Data_Server SendServerSettings"@IpAddrToString(RemoteAddr));
 
 	SendServerSetting("bEnableACEIntegration");
 	SendServerSetting("MidGameVoteThreshold");
@@ -246,7 +246,7 @@ Begin:
 	SendServerSetting("LogoButton2");
 	SendLine("/ENDSERVERSETTINGS/");
 
-	LogMsg("VS_DataLink SendServerSettings Done"@IpAddrToString(RemoteAddr));
+	LogMsg("VS_Data_Server SendServerSettings Done"@IpAddrToString(RemoteAddr));
 	GoToState('Idle');
 }
 
@@ -319,7 +319,7 @@ Begin:
 		GoToState('Idle');
 	}
 
-	LogMsg("VS_DataLink SendServerPresets"@IpAddrToString(RemoteAddr));
+	LogMsg("VS_Data_Server SendServerPresets"@IpAddrToString(RemoteAddr));
 	SendServerPresetsF();
 
 	GoToState('Idle');
@@ -418,7 +418,7 @@ Begin:
 		GoToState('Idle');
 	}
 
-	LogMsg("VS_DataLink SendServerMapLists"@IpAddrToString(RemoteAddr));
+	LogMsg("VS_Data_Server SendServerMapLists"@IpAddrToString(RemoteAddr));
 	SendServerMapLists();
 
 	GoToState('Idle');

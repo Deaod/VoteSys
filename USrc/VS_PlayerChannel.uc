@@ -86,13 +86,13 @@ simulated function ReloadConfigFiles() {
 }
 
 function ServerSetupFallbackDataTransport() {
-	local VS_DataLink DL;
+	local VS_Data_Server DL;
 
 	LogDbg("VS_PlayerChannel ServerSetupFallbackDataTransport");
 
 	DataChannel = Spawn(class'VS_Data_Channel', self);
 
-	DL = Spawn(class'VS_DataLink');
+	DL = Spawn(class'VS_Data_Server');
 	DL.DataChannel = DataChannel;
 	DL.GoToState('Idle');
 	

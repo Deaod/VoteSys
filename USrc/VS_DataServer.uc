@@ -52,6 +52,6 @@ event PostBeginPlay() {
 }
 
 defaultproperties {
-	AcceptClass=class'VS_DataLink'
+	AcceptClass=class'VS_Data_Server'
 	RemoteRole=ROLE_None
 }
