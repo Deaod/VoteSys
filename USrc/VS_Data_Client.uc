@@ -1,4 +1,4 @@
-class VS_DataClient extends TcpLink
+class VS_Data_Client extends TcpLink
 	imports(VS_Util_Logging)
 	transient;
 
@@ -41,7 +41,7 @@ final function bool SendLine(string Line) {
 		return true;
 	}
 
-	LogErr("VS_DataClient Trying to SendLine without connection or DataChannel:"@Line);
+	LogErr("VS_Data_Client Trying to SendLine without connection or DataChannel:"@Line);
 	return false;
 }
 
@@ -79,11 +79,11 @@ auto state Initial {
 			StringToIpAddr("127.0.0.1", RemoteAddr);
 		RemoteAddr.Port = Info.Data.Port;
 
-		LogMsg("VS_DataClient Opening"@IpAddrToString(RemoteAddr));
+		LogMsg("VS_Data_Client Opening"@IpAddrToString(RemoteAddr));
 		if (BindPort(, true) != 0 && Open(RemoteAddr)) {
-			LogMsg("VS_DataClient Open Succeeded");
+			LogMsg("VS_Data_Client Open Succeeded");
 		} else {
-			LogErr("VS_DataClient Open Failed");
+			LogErr("VS_Data_Client Open Failed");
 		}
 	}
 	event ResolveFailure() {
@@ -93,7 +93,7 @@ auto state Initial {
 	}
 
 Begin:
-	LogDbg("VS_DataClient Init");
+	LogDbg("VS_Data_Client Init");
 	// Wait for replication of these variables
 	while(Info == none) {
 		Sleep(0.1);
@@ -105,12 +105,12 @@ Begin:
 	}
 
 	if (Info.Data.Port == 0xDEADBEEF) {
-		LogMsg("VS_DataClient Custom Data Transport Disabled");
+		LogMsg("VS_Data_Client Custom Data Transport Disabled");
 		Channel.ServerSetupFallbackDataTransport();
 	} else {
-		LogMsg("VS_DataClient Addr="$Info.Data.Addr@"Port="$Info.Data.Port);
-		LogDbg("VS_DataClient HavePort");
-		LogMsg("VS_DataClient RemoteAddress"@GetRemoteAddress());
+		LogMsg("VS_Data_Client Addr="$Info.Data.Addr@"Port="$Info.Data.Port);
+		LogDbg("VS_Data_Client HavePort");
+		LogMsg("VS_Data_Client RemoteAddress"@GetRemoteAddress());
 
 Resolve:
 		Sleep(ResolveDelay);
@@ -148,7 +148,7 @@ event Timer() {
 
 state Talking {
 Begin:
-	LogMsg("VS_DataClient Connection Established");
+	LogMsg("VS_Data_Client Connection Established");
 	SendLine("/SENDPRESETS");
 	SendLine("/SENDLOGO/");
 
@@ -186,21 +186,21 @@ function ParseLine(string Line) {
 		if (ServerSettings != none)
 			ParseServerSetting(Line);
 	} else if (Line == "/ENDSERVERSETTINGS/") {
-		LogDbg("VS_DataClient GetServerSettings Done");
+		LogDbg("VS_Data_Client GetServerSettings Done");
 		ServerSettings.SState = S_COMPLETE;
 	} else if (Left(Line, 25) == "/BEGINSERVERPRESETCONFIG/") {
 		ServerPresets.TransmissionState = TS_New;
 		ServerPresets.AllocatePresets(int(Mid(Line, 25)));
-		LogDbg("VS_DataClient GetServerPresets Begin");
+		LogDbg("VS_Data_Client GetServerPresets Begin");
 	} else if (Left(Line, 22) == "/SERVERPRESETPROPERTY/") {
 		ParsePresetProperty(Line);
 	} else if (Line == "/ENDSERVERPRESETCONFIG/") {
 		ServerPresets.TransmissionState = TS_Complete;
-		LogDbg("VS_DataClient GetServerPresets End");
+		LogDbg("VS_Data_Client GetServerPresets End");
 	} else if (Left(Line, 21) == "/BEGINSERVERMAPLISTS/") {
 		ServerMapLists.TransmissionState = TS_New;
 		ServerMapLists.AllocateMapLists(int(Mid(Line, 21)));
-		LogDbg("VS_DataClient GetServerMapLists Begin");
+		LogDbg("VS_Data_Client GetServerMapLists Begin");
 	} else if (Left(Line, 20) == "/BEGINSERVERMAPLIST/") {
 		ParseMapListName(Line);
 	} else if (Left(Line, 23) == "/SERVERMAPLISTPROPERTY/") {
@@ -209,7 +209,7 @@ function ParseLine(string Line) {
 		//
 	} else if (Line == "/ENDSERVERMAPLISTS/") {
 		ServerMapLists.TransmissionState = TS_Complete;
-		LogDbg("VS_DataClient GetServerMapLists End");
+		LogDbg("VS_Data_Client GetServerMapLists End");
 	} else if (Left(Line, 5) == "/PONG") {
 		// nothing to do
 	} else {
@@ -275,7 +275,7 @@ function VS_ServerSettings GetServerSettings() {
 	if (ServerSettings == none) {
 		ServerSettings = new(none) class'VS_ServerSettings';
 		SendLine("/SENDSERVERSETTINGS/");
-		LogMsg("VS_DataClient GetServerSettings Settings Requested");
+		LogMsg("VS_Data_Client GetServerSettings Settings Requested");
 	}
 	return ServerSettings;
 }
@@ -288,7 +288,7 @@ function SaveServerSettings(VS_ServerSettings S) {
 	if (S == none)
 		return;
 
-	LogMsg("VS_DataClient SaveServerSettings");
+	LogMsg("VS_Data_Client SaveServerSettings");
 
 	SendServerSetting(S, "bEnableACEIntegration");
 	SendServerSetting(S, "MidGameVoteThreshold");
@@ -325,7 +325,7 @@ function SaveServerSettings(VS_ServerSettings S) {
 	SendServerSetting(S, "LogoButton2");
 	SendLine("/SAVESERVERSETTINGSFILE/");
 
-	LogMsg("VS_DataClient SaveServerSettings Done");
+	LogMsg("VS_Data_Client SaveServerSettings Done");
 }
 
 function DiscardServerPresets() {
@@ -337,12 +337,12 @@ function VS_ClientPresetList GetServerPresets() {
 	if (int(Level.EngineVersion) < 469)
 		return none; // not supported without 469
 
-	LogMsg("VS_DataClient GetServerPresets Version OK");
+	LogMsg("VS_Data_Client GetServerPresets Version OK");
 
 	if (ServerPresets == none) {
 		ServerPresets = new(XLevel) class'VS_ClientPresetList';
 		SendLine("/SENDSERVERPRESETCONFIG/");
-		LogMsg("VS_DataClient GetServerPresets Presets Requested");
+		LogMsg("VS_Data_Client GetServerPresets Presets Requested");
 	}
 	return ServerPresets;
 }
@@ -392,7 +392,7 @@ function SaveServerPresets(VS_ClientPresetList S) {
 	if (S == none)
 		return;
 
-	LogMsg("VS_DataClient SaveServerPresets");
+	LogMsg("VS_Data_Client SaveServerPresets");
 
 	for (i = 0; i < S.PresetList.Length; i++) {
 		if (S.PresetList[i] != none && S.PresetList[i].PresetName != "") {
@@ -404,7 +404,7 @@ function SaveServerPresets(VS_ClientPresetList S) {
 
 	SendLine("/SAVESERVERPRESETSFILE/");
 
-	LogMsg("VS_DataClient SaveServerPresets Done");
+	LogMsg("VS_Data_Client SaveServerPresets Done");
 }
 
 function DiscardServerMapLists() {
@@ -419,7 +419,7 @@ function VS_ClientMapListsContainer GetServerMapLists() {
 	if (ServerMapLists == none) {
 		ServerMapLists = new(XLevel) class'VS_ClientMapListsContainer';
 		SendLine("/SENDSERVERMAPLISTS/");
-		LogMsg("VS_DataClient GetServerMapLists Map Lists Requested");
+		LogMsg("VS_Data_Client GetServerMapLists Map Lists Requested");
 	}
 
 	return ServerMapLists;
@@ -432,7 +432,7 @@ function ParseMapListName(string Line) {
 	Index = int(Line); S11N.NextVariable(Line);
 	ServerMapLists.MapLists[Index].MapListName = S11N.DecodeString(Line);
 
-	LogDbg("VS_DataClient GetServerMapList"@ServerMapLists.MapLists[Index].MapListName);
+	LogDbg("VS_Data_Client GetServerMapList"@ServerMapLists.MapLists[Index].MapListName);
 }
 
 function ParseMapListProperty(string Line) {
@@ -470,7 +470,7 @@ function SaveServerMapLists(VS_ClientMapListsContainer S) {
 	if (S == none)
 		return;
 
-	LogMsg("VS_DataClient SaveServerMapLists");
+	LogMsg("VS_Data_Client SaveServerMapLists");
 
 	for (i = 0; i < S.MapLists.Length; i++)
 		if (S.MapLists[i] != none && S.MapLists[i].MapListName != "")
@@ -478,7 +478,7 @@ function SaveServerMapLists(VS_ClientMapListsContainer S) {
 
 	SendLine("/SAVESERVERMAPLISTSFILE/");
 
-	LogMsg("VS_DataClient SaveServerMapLists Done");
+	LogMsg("VS_Data_Client SaveServerMapLists Done");
 }
 
 defaultproperties {

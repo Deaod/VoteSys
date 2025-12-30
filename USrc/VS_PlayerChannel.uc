@@ -8,7 +8,7 @@ var VS_PlayerInfo PInfo;
 var VS_Info Info; // Info Info
 var int Cookie;
 
-var VS_DataClient DataClient;
+var VS_Data_Client DataClient;
 var VS_Data_Channel DataChannel;
 var VS_FavoritesProcessor FavoritesProcessor;
 var VS_ServerSettings ServerSettings;
@@ -126,7 +126,7 @@ simulated event Tick(float Delta) {
 		return;
 
 	if (DataClient == none)
-		DataClient = Spawn(class'VS_DataClient', self);
+		DataClient = Spawn(class'VS_Data_Client', self);
 
 	if (bOpenVoteMenuAfterTyping && PlayerOwner.Player.Console.IsInState('Typing') == false) {
 		bOpenVoteMenuAfterTyping = false;
