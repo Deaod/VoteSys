@@ -6,7 +6,7 @@ class MutVoteSys extends Mutator
 
 var VS_ChannelContainer ChannelList;
 var VS_Info Info;
-var VS_DataServer DataServer;
+var VS_Data_ListenServer DataServer;
 var VS_ChatObserver ChatObserver;
 
 var Object SettingsDummy;
@@ -90,7 +90,7 @@ event PostBeginPlay() {
 	LoadHistory();
 	Info = Spawn(class'VS_Info', self);
 	Info.VoteSys = self;
-	DataServer = Spawn(class'VS_DataServer', self);
+	DataServer = Spawn(class'VS_Data_ListenServer', self);
 	Level.Game.RegisterMessageMutator(self);
 	ChatObserver = Level.Spawn(class'VS_ChatObserver');
 	ChatObserver.VoteSys = self;
