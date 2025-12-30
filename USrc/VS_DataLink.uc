@@ -36,6 +36,31 @@ event PostBeginPlay() {
 		break;
 }
 
+// no difference to ReceiveText
+event ReceivedText(string Text) {
+	local int Pos;
+
+	Text = Buffer$Text;
+
+	for(Pos = InStr(Text, CRLF); Pos > -1; Pos = InStr(Text, CRLF)) {
+		ParseLine(Left(Text, Pos));
+
+		Text = Mid(Text, Pos+2, Len(Text));
+	}
+
+	Buffer = Text;
+
+	if (Len(Buffer) >= 0x10000) {
+		LogErr("More than 64KiB without line feed, discarding buffer ("$IpAddrToString(RemoteAddr)$")");
+		Buffer = "";
+	}
+}
+
+event Accepted() {
+	LogMsg("VS_DataLink Accepted"@IpAddrToString(RemoteAddr));
+	GotoState('Idle');
+}
+
 event Closed() {
 	Destroy();
 }
@@ -114,31 +139,6 @@ function ParseLine(string Line) {
 	} else if (Line == "/SAVESERVERMAPLISTSFILE/") {
 		SaveServerMapListsFile();
 	}
-}
-
-// no difference to ReceiveText
-event ReceivedText(string Text) {
-	local int Pos;
-
-	Text = Buffer$Text;
-
-	for(Pos = InStr(Text, CRLF); Pos > -1; Pos = InStr(Text, CRLF)) {
-		ParseLine(Left(Text, Pos));
-
-		Text = Mid(Text, Pos+2);
-	}
-
-	Buffer = Text;
-
-	if (Len(Buffer) >= 0x10000) {
-		LogErr("More than 64KiB without line feed, discarding buffer ("$IpAddrToString(RemoteAddr)$")");
-		Buffer = "";
-	}
-}
-
-event Accepted() {
-	LogMsg("VS_DataLink Accepted"@IpAddrToString(RemoteAddr));
-	GotoState('Idle');
 }
 
 state SendPresets {
@@ -492,11 +492,6 @@ function SaveServerMapListsFile() {
 	for (i = 0; i < VoteSys.MapListArray.Length; ++i)
 		if (VoteSys.MapListArray[i] != none)
 			VoteSys.MapListArray[i].SaveConfig();
-}
-
-function HandleError() {
-	SendLine("/RECONNECT");
-	Close();
 }
 
 defaultproperties {

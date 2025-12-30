@@ -118,48 +118,43 @@ Resolve:
 	}
 }
 
-function string ParsePresetRef(string Line) {
-	Line = Mid(Line, 5);
-	return S11N.DecodeString(Line);
+event ReceivedText(string Text) {
+	local int Pos;
+
+	Text = Buffer$Text;
+
+	for(Pos = InStr(Text, CRLF); Pos > -1; Pos = InStr(Text, CRLF)) {
+		ParseLine(Left(Text, Pos));
+
+		Text = Mid(Text, Pos+2, Len(Text));
+	}
+
+	Buffer = Text;
+
+	if (Len(Buffer) >= 0x10000) {
+		LogErr("More than 64KiB without line feed, discarding buffer");
+		Buffer = "";
+	}
 }
 
-function ParseServerSetting(string Line) {
-	local string Prop, Value;
-
-	S11N.ParseProperty(Mid(Line, 15), Prop, Value);
-	if (ServerSettings.SetPropertyText(Prop, Value))
-		LogDbg("Successfully set property"@Prop);
+event Closed() {
+	GotoState('Initial');
 }
 
-function ParseLogo(string Line) {
-	local string Tex;
-	local int TexX, TexY, TexW, TexH;
-	local int DrawX, DrawY, DrawW, DrawH;
-	Line = Mid(Line, 6);
-
-	Tex   = S11N.DecodeString(Line); S11N.NextVariable(Line);
-	TexX  = int(Line);               S11N.NextVariable(Line);
-	TexY  = int(Line);               S11N.NextVariable(Line);
-	TexW  = int(Line);               S11N.NextVariable(Line);
-	TexH  = int(Line);               S11N.NextVariable(Line);
-	DrawX = int(Line);               S11N.NextVariable(Line);
-	DrawY = int(Line);               S11N.NextVariable(Line);
-	DrawW = int(Line);               S11N.NextVariable(Line);
-	DrawH = int(Line);
-
-	Channel.ConfigureLogo(Tex, TexX, TexY, TexW, TexH, DrawX, DrawY, DrawW, DrawH);
+event Timer() {
+	if (IsConnected())
+		SendLine("/PING");
 }
 
-function ParseLogoButton(string Line) {
-	local int Index;
-	local string Label, LinkURL;
-	Line = Mid(Line, 12);
+state Talking {
+Begin:
+	LogMsg("VS_DataClient Connection Established");
+	SendLine("/SENDPRESETS");
+	SendLine("/SENDLOGO/");
 
-	Index   = int(Line);               S11N.NextVariable(Line);
-	Label   = S11N.DecodeString(Line); S11N.NextVariable(Line);
-	LinkURL = S11N.DecodeString(Line);
-
-	Channel.ConfigureLogoButton(Index, Label, LinkURL);
+	while(Channel.Cookie == 0)
+		Sleep(0);
+	SendLine("/COOKIE/"$Channel.Cookie);
 }
 
 function ParseLine(string Line) {
@@ -222,43 +217,48 @@ function ParseLine(string Line) {
 	}
 }
 
-event ReceivedText(string Text) {
-	local int Pos;
-
-	Text = Buffer$Text;
-
-	for(Pos = InStr(Text, CRLF); Pos > -1; Pos = InStr(Text, CRLF)) {
-		ParseLine(Left(Text, Pos));
-
-		Text = Mid(Text, Pos+2);
-	}
-
-	Buffer = Text;
-
-	if (Len(Buffer) >= 0x10000) {
-		LogErr("More than 64KiB without line feed, discarding buffer");
-		Buffer = "";
-	}
+function string ParsePresetRef(string Line) {
+	Line = Mid(Line, 5);
+	return S11N.DecodeString(Line);
 }
 
-state Talking {
-Begin:
-	LogMsg("VS_DataClient Connection Established");
-	SendLine("/SENDPRESETS");
-	SendLine("/SENDLOGO/");
+function ParseServerSetting(string Line) {
+	local string Prop, Value;
 
-	while(Channel.Cookie == 0)
-		Sleep(0);
-	SendLine("/COOKIE/"$Channel.Cookie);
+	S11N.ParseProperty(Mid(Line, 15), Prop, Value);
+	if (ServerSettings.SetPropertyText(Prop, Value))
+		LogDbg("Successfully set property"@Prop);
 }
 
-event Closed() {
-	GotoState('Initial');
+function ParseLogo(string Line) {
+	local string Tex;
+	local int TexX, TexY, TexW, TexH;
+	local int DrawX, DrawY, DrawW, DrawH;
+	Line = Mid(Line, 6);
+
+	Tex   = S11N.DecodeString(Line); S11N.NextVariable(Line);
+	TexX  = int(Line);               S11N.NextVariable(Line);
+	TexY  = int(Line);               S11N.NextVariable(Line);
+	TexW  = int(Line);               S11N.NextVariable(Line);
+	TexH  = int(Line);               S11N.NextVariable(Line);
+	DrawX = int(Line);               S11N.NextVariable(Line);
+	DrawY = int(Line);               S11N.NextVariable(Line);
+	DrawW = int(Line);               S11N.NextVariable(Line);
+	DrawH = int(Line);
+
+	Channel.ConfigureLogo(Tex, TexX, TexY, TexW, TexH, DrawX, DrawY, DrawW, DrawH);
 }
 
-event Timer() {
-	if (IsConnected())
-		SendLine("/PING");
+function ParseLogoButton(string Line) {
+	local int Index;
+	local string Label, LinkURL;
+	Line = Mid(Line, 12);
+
+	Index   = int(Line);               S11N.NextVariable(Line);
+	Label   = S11N.DecodeString(Line); S11N.NextVariable(Line);
+	LinkURL = S11N.DecodeString(Line);
+
+	Channel.ConfigureLogoButton(Index, Label, LinkURL);
 }
 
 function DiscardServerSettings() {
