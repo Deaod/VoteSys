@@ -14,7 +14,7 @@
 		"tab_size": 4,
 		"translate_tabs_to_spaces": false,
 		"default_encoding": "UTF-8",
-		"default_line_ending": "windows",
+		"default_line_ending": "unix",
 	},
 	"build_systems":
 	[
