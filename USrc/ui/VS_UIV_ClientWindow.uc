@@ -51,6 +51,9 @@ var float PrevMouseX, PrevMouseY;
 var float LastMouseMoveTime;
 var VS_UI_ScreenshotWindow MapScreenshotWindow;
 
+var string ToolTipText;
+var VS_UI_ToolTipWindow ToolTipWindow;
+
 function Created() {
 	local float TabsHeight;
 
@@ -105,6 +108,9 @@ function Created() {
 
 	MapScreenshotWindow = VS_UI_ScreenshotWindow(Root.CreateWindow(class'VS_UI_ScreenshotWindow', 0,0,130,130, self));
 	MapScreenshotWindow.HideWindow();
+
+	ToolTipWindow = VS_UI_ToolTipWindow(Root.CreateWindow(class'VS_UI_ToolTipWindow', 0, 0, 120, 22, self));
+	ToolTipWindow.HideWindow();
 
 	Logo.SendToBack();
 	Logo.HideWindow();
@@ -251,6 +257,15 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 	DrawStretchedTextureSegment(C, X             , Y,     (TL.W)*S     , (TL.H)*S, TL.X, TL.Y, TL.W, TL.H, Tex);
 	DrawStretchedTextureSegment(C, X   + (TL.W)*S, Y, W - (TL.W+TR.W)*S, (T.H)*S ,  T.X,  T.Y,  T.W,  T.H, Tex);
 	DrawStretchedTextureSegment(C, X+W - (TR.W)*S, Y,     (TR.W)*S     , (TR.H)*S, TR.X, TR.Y, TR.W, TR.H, Tex);
+}
+
+function ToolTip(string Tip) {
+	if (ToolTipText != "")
+		ToolTipWindow.HideWindow();
+	ToolTipText = Tip;
+	if (Tip != "")
+		ToolTipWindow.ShowWindow();
+	ToolTipWindow.SetText(ToolTipText);
 }
 
 function UpdateActiveCategory() {
@@ -554,6 +569,7 @@ function ConfigureLogoButton(int Index, string Label, string LinkURL) {
 
 	LogoButtons[Index].SetText(Label);
 	LogoButtons[Index].LinkURL = LinkURL;
+	LogoButtons[Index].ToolTipString = LinkURL;
 
 	if (Logo.bWindowVisible && LinkURL != "")
 		LogoButtons[Index].ShowWindow();
