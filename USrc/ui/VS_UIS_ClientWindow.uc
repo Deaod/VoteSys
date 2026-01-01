@@ -75,6 +75,25 @@ function BeforePaint(Canvas C, float X, float Y) {
 	super.BeforePaint(C, X, Y);
 }
 
+function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key) {
+	// 469+ mouse scrolling
+	// scrolling should not activate this control
+	SetPropertyText("bHandledEvent", "True");
+	switch(Msg) {
+		case WM_MouseWheelDown:
+			if (Key > 0 && RightButton.bDisabled == false)
+				TabArea.TabOffset++;
+			else if (Key < 0 && LeftButton.bDisabled == false)
+				TabArea.TabOffset--;
+			break;
+		case WM_MouseWheelUp:
+			break;
+		default:
+			super.WindowEvent(Msg, C, X, Y, Key);
+			break;
+	}
+}
+
 function LoadSettings(VS_PlayerChannel C) {
 	Channel = C;
 
