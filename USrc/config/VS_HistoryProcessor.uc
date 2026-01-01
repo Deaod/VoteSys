@@ -19,8 +19,6 @@ event Tick(float Delta) {
 		return;
 	if (History == none)
 		return;
-	if (PresetList == none)
-		return;
 
 	End = Min(ProcessedEntry + EntriesPerTick, History.Entry.Length);
 	while(ProcessedEntry < End) {

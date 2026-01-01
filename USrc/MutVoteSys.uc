@@ -1263,7 +1263,7 @@ function LoadConfig() {
 			if (P.Next != none)
 				P = P.Next;
 		}
-	};
+	}
 
 	PresetMaxIndex = i - ProbeDepth;
 	PresetArray.Insert(0, PresetMaxIndex + 1);
@@ -1282,7 +1282,6 @@ function LoadConfig() {
 
 	if (DefaultPresetRef == none) {
 		Level.Game.SetPropertyText("bDontRestart", "False");
-		Destroy();
 	}
 }
 

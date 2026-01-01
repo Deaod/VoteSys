@@ -110,8 +110,9 @@ function Created() {
 	Logo.HideWindow();
 }
 
-function LoadSettings(VS_ClientSettings CS) {
-	Settings = CS;
+function LoadSettings(VS_PlayerChannel Ch) {
+	Channel = Ch;
+	Settings = Ch.Settings;
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {

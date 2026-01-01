@@ -27,7 +27,7 @@ final function string GetIdentifier() {
 	if (Link != none)
 		return Link.IpAddrToString(Link.RemoteAddr);
 	if (Chan != none)
-		return PlayerPawn(Chan.Owner).PlayerReplicationInfo.PlayerName;
+		return VS_PlayerChannel(Chan.Owner).PlayerOwner.PlayerReplicationInfo.PlayerName;
 
 	return "Unknown";
 }

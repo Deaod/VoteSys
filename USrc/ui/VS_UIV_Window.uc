@@ -15,9 +15,10 @@ function Created() {
 	WindowTitle = default.WindowTitle@"-"@class'VersionInfo'.default.PackageVersion;
 }
 
-function LoadSettings(VS_ClientSettings CS) {
-	Settings = CS;
-	VS_UIV_ClientWindow(ClientArea).LoadSettings(CS);
+function LoadSettings(VS_PlayerChannel Ch) {
+	Channel = Ch;
+	Settings = Ch.Settings;
+	VS_UIV_ClientWindow(ClientArea).LoadSettings(Ch);
 }
 
 function BeforePaint(Canvas C, float X, float Y) {
@@ -56,7 +57,6 @@ function Close(optional bool bByParent) {
 }
 
 function AddPreset(VS_Preset P) {
-	VS_UIV_ClientWindow(ClientArea).Channel = Channel;
 	VS_UIV_ClientWindow(ClientArea).AddPreset(P);
 }
 
