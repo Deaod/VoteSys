@@ -112,7 +112,7 @@ defaultproperties {
 	bEnableKickVoting=True
 	KickVoteThreshold=0.6
 
-	bEnableCustomDataTransport=True
+	bEnableCustomDataTransport=False
 	ServerAddress=
 	DataPort=0
 	ClientDataPort=0
