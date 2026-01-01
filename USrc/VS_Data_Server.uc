@@ -1,11 +1,10 @@
-class VS_Data_Server extends TcpLink
+class VS_Data_Server extends VS_Data_Peer
 	imports(VS_Util_Logging)
 	transient;
 
 var string Buffer;
 var MutVoteSys VoteSys;
-var VS_ChannelContainer Channel;
-var VS_Data_Channel DataChannel;
+var PlayerPawn PlayerOwner;
 
 var string SendBuffer;
 var VS_Preset TempPreset;
@@ -27,8 +26,7 @@ var string CommandParams;
 var name TempName;
 
 event PostBeginPlay() {
-	LinkMode = MODE_Text;
-	ReceiveMode = RMODE_Event;
+	PlayerOwner = VS_PlayerChannel(Owner).PlayerOwner;
 	S11N = class'VS_Serialization'.static.Instance();
 	CRLF = Chr(13)$Chr(10);
 
@@ -37,7 +35,7 @@ event PostBeginPlay() {
 }
 
 // no difference to ReceiveText
-event ReceivedText(string Text) {
+event Receive(string Text) {
 	local int Pos;
 
 	Text = Buffer$Text;
@@ -51,34 +49,18 @@ event ReceivedText(string Text) {
 	Buffer = Text;
 
 	if (Len(Buffer) >= 0x10000) {
-		LogErr("More than 64KiB without line feed, discarding buffer ("$IpAddrToString(RemoteAddr)$")");
+		LogErr("More than 64KiB without line feed, discarding buffer ("$GetIdentifier()$")");
 		Buffer = "";
 	}
 }
 
-event Accepted() {
-	LogMsg("VS_Data_Server Accepted"@IpAddrToString(RemoteAddr));
+event Connected() {
+	LogMsg("VS_Data_Server Accepted"@GetIdentifier());
 	GotoState('Idle');
 }
 
-event Closed() {
-	Destroy();
-}
-
-final function bool SendLine(string Line) {
-	if (Len(Line) > 0xFFFE)
-		LogErr("Max line length exceeded in VoteSys. Please report this and include the following: "$Left(Line, 25));
-
-	if (IsConnected()) {
-		// Len+2 to account for cr-lf at the end
-		return SendText(Line$CRLF) == Len(Line) + 2;
-	} else if (DataChannel != none) {
-		DataChannel.SendText(Line$CRLF);
-		return true;
-	}
-
-	LogErr("Trying to SendLine without connection or DataChannel:"@Line);
-	return false;
+final function SendLine(string Line) {
+	Send(Line$CRLF);
 }
 
 function QueueCommand(name Command, optional coerce string Params) {
@@ -114,8 +96,7 @@ function ParseLine(string Line) {
 	} else if (Line == "/SENDLOGO/") {
 		QueueCommand('SendLogo');
 	} else if (Left(Line, 8) == "/COOKIE/") {
-		Channel = VoteSys.FindChannelForCookie(int(Mid(Line, 8)));
-		LogMsg("VS_Data_Server Found Channel"@Channel);
+		// no longer handled here
 	} else if (Line == "/SENDSERVERSETTINGS/") {
 		QueueCommand('SendServerSettings');
 	} else if (Left(Line, 19) == "/SAVESERVERSETTING/") {
@@ -148,7 +129,7 @@ Begin:
 	while(VoteSys.HistoryProcessor != none)
 		Sleep(0);
 
-	LogMsg("VS_Data_Server SendPresets"@IpAddrToString(RemoteAddr));
+	LogMsg("VS_Data_Server SendPresets"@GetIdentifier());
 
 	for (TempPreset = VoteSys.PresetList; TempPreset != none; TempPreset = TempPreset.Next) {
 		if (TempPreset.bDisabled)
@@ -162,7 +143,7 @@ Begin:
 
 	SendLine("/END/"$S11N.EncodeString(VoteSys.CurrentPreset));
 
-	LogMsg("VS_Data_Server SendPresets Done"@IpAddrToString(RemoteAddr));
+	LogMsg("VS_Data_Server SendPresets Done"@GetIdentifier());
 	GoToState('Idle');
 }
 
@@ -201,15 +182,12 @@ state SendServerSettings {
 	}
 
 Begin:
-	if (Channel == none ||
-		Channel.PlayerOwner == none ||
-		Channel.PlayerOwner.bAdmin == false
-	) {
+	if (PlayerOwner == none || PlayerOwner.bAdmin == false) {
 		SendLine("/NOTADMIN/");
 		GoToState('Idle');
 	}
 
-	LogMsg("VS_Data_Server SendServerSettings"@IpAddrToString(RemoteAddr));
+	LogMsg("VS_Data_Server SendServerSettings"@GetIdentifier());
 
 	SendServerSetting("bEnableACEIntegration");
 	SendServerSetting("MidGameVoteThreshold");
@@ -246,7 +224,7 @@ Begin:
 	SendServerSetting("LogoButton2");
 	SendLine("/ENDSERVERSETTINGS/");
 
-	LogMsg("VS_Data_Server SendServerSettings Done"@IpAddrToString(RemoteAddr));
+	LogMsg("VS_Data_Server SendServerSettings Done"@GetIdentifier());
 	GoToState('Idle');
 }
 
@@ -254,10 +232,7 @@ function SaveServerSetting(string Line) {
 	local string PropertyName;
 	local string PropertyValue;
 
-	if (Channel == none ||
-		Channel.PlayerOwner == none ||
-		Channel.PlayerOwner.bAdmin == false
-	) {
+	if (PlayerOwner == none || PlayerOwner.bAdmin == false) {
 		return;
 	}
 
@@ -311,15 +286,12 @@ state SendServerPresets {
 	}
 
 Begin:
-	if (Channel == none ||
-		Channel.PlayerOwner == none ||
-		Channel.PlayerOwner.bAdmin == false
-	) {
+	if (PlayerOwner == none || PlayerOwner.bAdmin == false) {
 		SendLine("/NOTADMIN/");
 		GoToState('Idle');
 	}
 
-	LogMsg("VS_Data_Server SendServerPresets"@IpAddrToString(RemoteAddr));
+	LogMsg("VS_Data_Server SendServerPresets"@GetIdentifier());
 	SendServerPresetsF();
 
 	GoToState('Idle');
@@ -330,10 +302,7 @@ function SaveServerPreset(string Line) {
 	local string PropertyName;
 	local string PropertyValue;
 
-	if (Channel == none ||
-		Channel.PlayerOwner == none ||
-		Channel.PlayerOwner.bAdmin == false
-	) {
+	if (PlayerOwner == none || PlayerOwner.bAdmin == false) {
 		return;
 	}
 
@@ -410,15 +379,12 @@ state SendServerMapLists {
 	}
 
 Begin:
-	if (Channel == none ||
-		Channel.PlayerOwner == none ||
-		Channel.PlayerOwner.bAdmin == false
-	) {
+	if (PlayerOwner == none || PlayerOwner.bAdmin == false) {
 		SendLine("/NOTADMIN/");
 		GoToState('Idle');
 	}
 
-	LogMsg("VS_Data_Server SendServerMapLists"@IpAddrToString(RemoteAddr));
+	LogMsg("VS_Data_Server SendServerMapLists"@GetIdentifier());
 	SendServerMapLists();
 
 	GoToState('Idle');
@@ -428,10 +394,7 @@ function SaveServerMapListBegin(string Line) {
 	local int Index;
 	local string MapListName;
 
-	if (Channel == none ||
-		Channel.PlayerOwner == none ||
-		Channel.PlayerOwner.bAdmin == false
-	) {
+	if (PlayerOwner == none || PlayerOwner.bAdmin == false) {
 		return;
 	}
 
@@ -456,10 +419,7 @@ function SaveServerMapListProperty(string Line) {
 	local int Index;
 	local string PropName, PropValue;
 
-	if (Channel == none ||
-		Channel.PlayerOwner == none ||
-		Channel.PlayerOwner.bAdmin == false
-	) {
+	if (PlayerOwner == none || PlayerOwner.bAdmin == false) {
 		return;
 	}
 
@@ -476,10 +436,7 @@ function SaveServerMapListProperty(string Line) {
 function SaveServerMapListsFile() {
 	local int i;
 
-	if (Channel == none ||
-		Channel.PlayerOwner == none ||
-		Channel.PlayerOwner.bAdmin == false
-	) {
+	if (PlayerOwner == none || PlayerOwner.bAdmin == false) {
 		return;
 	}
 
@@ -493,8 +450,3 @@ function SaveServerMapListsFile() {
 		if (VoteSys.MapListArray[i] != none)
 			VoteSys.MapListArray[i].SaveConfig();
 }
-
-defaultproperties {
-	RemoteRole=ROLE_None
-}
-

@@ -8,8 +8,8 @@ var VS_PlayerInfo PInfo;
 var VS_Info Info; // Info Info
 var int Cookie;
 
-var VS_Data_Client DataClient;
-var VS_Data_Channel DataChannel;
+var VS_Data_Peer DataPeer;
+var VS_Net_ChannelLink DataChannel;
 var VS_FavoritesProcessor FavoritesProcessor;
 var VS_ServerSettings ServerSettings;
 var VS_ClientPresetList ServerPresets;
@@ -85,28 +85,43 @@ simulated function ReloadConfigFiles() {
 	ConsoleCommand("RELOADCONFIG"@string(class'VS_ClientSettings'));
 }
 
-function ServerSetupFallbackDataTransport() {
-	local VS_Data_Server DL;
-
-	LogDbg("VS_PlayerChannel ServerSetupFallbackDataTransport");
-
-	DataChannel = Spawn(class'VS_Data_Channel', self);
-
-	DL = Spawn(class'VS_Data_Server');
-	DL.DataChannel = DataChannel;
-	DL.GoToState('Idle');
-	
-	DataChannel.Link = DL;
+function ServerSetupCustomDataTransport(VS_Net_TcpLink Link) {
+	DataPeer = Spawn(class'VS_Data_Server', self);
+	DataPeer.Link = Link;
+	Link.Peer = DataPeer;
+	DataPeer.Connected();
 }
 
-simulated function ClientSetupFallbackDataTransport(VS_Data_Channel Chan) {
+simulated function ClientSetupCustomDataTransport(string Address, int Port) {
+	local VS_Net_TcpLink Link;
+
+	Link = Spawn(class'VS_Net_TcpLink');
+	Link.Peer = DataPeer;
+	DataPeer.Link = Link;
+	Link.ConnectTo(Address, Port);
+}
+
+function ServerSetupFallbackDataTransport() {
+	LogDbg("VS_PlayerChannel ServerSetupFallbackDataTransport");
+
+	DataChannel = Spawn(class'VS_Net_ChannelLink', self);
+
+	DataPeer = Spawn(class'VS_Data_Server', self);
+	DataPeer.Chan = DataChannel;
+	
+	DataChannel.Peer = DataPeer;
+
+	DataPeer.Connected();
+}
+
+simulated function ClientSetupFallbackDataTransport(VS_Net_ChannelLink Chan) {
 	LogDbg("VS_PlayerChannel ClientSetupFallbackDataTransport");
 
 	DataChannel = Chan;
-	DataChannel.Link = DataClient;
-	DataClient.DataChannel = DataChannel;
+	DataChannel.Peer = DataPeer;
+	DataPeer.Chan = DataChannel;
 	DataChannel.ClientEnableConnection();
-	DataClient.GoToState('Talking');
+	DataPeer.Connected();
 }
 
 simulated event Tick(float Delta) {
@@ -125,8 +140,8 @@ simulated event Tick(float Delta) {
 	if (VoteMenuDialog == none)
 		return;
 
-	if (DataClient == none)
-		DataClient = Spawn(class'VS_Data_Client', self);
+	if (DataPeer == none)
+		DataPeer = Spawn(class'VS_Data_Client', self);
 
 	if (bOpenVoteMenuAfterTyping && PlayerOwner.Player.Console.IsInState('Typing') == false) {
 		bOpenVoteMenuAfterTyping = false;
@@ -241,15 +256,15 @@ simulated function ShowVoteMenu() {
 	if (PlayerOwner == none)
 		PlayerOwner = PlayerPawn(Owner);
 
-	if (DataClient != none && 
-		DataClient.IsConnected() == false && 
+	if (DataPeer != none && 
+		DataPeer.IsConnected() == false && 
 		(DataChannel == none || DataChannel.bEnableTraffic == false)
 	) {
 		LocalizeMessage(class'VS_Msg_LocalMessage', EVS_MsgId.ErrNoConnection);
 		return;
 	}
 
-	if (DataClient == none || DataClient.bTransferDone == false) {
+	if (DataPeer == none || VS_Data_Client(DataPeer).bTransferDone == false) {
 		LocalizeMessage(class'VS_Msg_LocalMessage', EVS_MsgId.ErrStillLoading);
 		return;
 	}
@@ -611,14 +626,14 @@ function ServerBanPlayer(PlayerReplicationInfo PRI) {
 
 simulated function VS_ServerSettings ReloadServerSettings() {
 	ServerSettings = none;
-	DataClient.DiscardServerSettings();
+	VS_Data_Client(DataPeer).DiscardServerSettings();
 	return GetServerSettings();
 }
 
 simulated function VS_ServerSettings GetServerSettings() {
 	LogDbg("PlayerChannel GetServerSettings");
 	if (ServerSettings == none) {
-		ServerSettings = DataClient.GetServerSettings();
+		ServerSettings = VS_Data_Client(DataPeer).GetServerSettings();
 	}
 	return ServerSettings;
 }
@@ -628,19 +643,19 @@ simulated function SaveServerSettings() {
 	if (ServerSettings == none)
 		return;
 
-	DataClient.SaveServerSettings(ServerSettings);
+	VS_Data_Client(DataPeer).SaveServerSettings(ServerSettings);
 }
 
 simulated function VS_ClientPresetList ReloadServerPresets() {
 	ServerPresets = none;
-	DataClient.DiscardServerPresets();
+	VS_Data_Client(DataPeer).DiscardServerPresets();
 	return GetServerPresets();
 }
 
 simulated function VS_ClientPresetList GetServerPresets() {
 	LogDbg("PlayerChannel GetServerPresets");
 	if (ServerPresets == none) {
-		ServerPresets = DataClient.GetServerPresets();
+		ServerPresets = VS_Data_Client(DataPeer).GetServerPresets();
 	}
 	return ServerPresets;
 }
@@ -650,19 +665,19 @@ simulated function SaveServerPresets() {
 	if (ServerPresets == none)
 		return;
 
-	DataClient.SaveServerPresets(ServerPresets);
+	VS_Data_Client(DataPeer).SaveServerPresets(ServerPresets);
 }
 
 simulated function VS_ClientMapListsContainer ReloadServerMapLists() {
 	ServerMapLists = none;
-	DataClient.DiscardServerMapLists();
+	VS_Data_Client(DataPeer).DiscardServerMapLists();
 	return GetServerMapLists();
 }
 
 simulated function VS_ClientMapListsContainer GetServerMapLists() {
 	LogDbg("PlayerChannel GetServerMapLists");
 	if (ServerMapLists == none) {
-		ServerMapLists = DataClient.GetServerMapLists();
+		ServerMapLists = VS_Data_Client(DataPeer).GetServerMapLists();
 	}
 	return ServerMapLists;
 }
@@ -672,7 +687,7 @@ simulated function SaveServerMapLists() {
 	if (ServerMapLists == none)
 		return;
 
-	DataClient.SaveServerMapLists(ServerMapLists);
+	VS_Data_Client(DataPeer).SaveServerMapLists(ServerMapLists);
 }
 
 simulated function LocalizeMessage(

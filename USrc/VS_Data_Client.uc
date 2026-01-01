@@ -1,4 +1,4 @@
-class VS_Data_Client extends TcpLink
+class VS_Data_Client extends VS_Data_Peer
 	imports(VS_Util_Logging)
 	transient;
 
@@ -10,7 +10,7 @@ var bool bTransferDone;
 
 var VS_Info Info;
 var VS_PlayerChannel Channel;
-var VS_Data_Channel DataChannel;
+var VS_Net_ChannelLink DataChannel;
 var VS_Preset Preset;
 var VS_Map LastMap;
 var VS_ServerSettings ServerSettings;
@@ -20,8 +20,6 @@ var VS_ClientMapListsContainer ServerMapLists;
 var float ResolveDelay;
 
 event PostBeginPlay() {
-	LinkMode = MODE_Text;
-	ReceiveMode = RMODE_Event;
 	S11N = class'VS_Serialization'.static.Instance();
 	CRLF = Chr(13)$Chr(10);
 	Channel = VS_PlayerChannel(Owner);
@@ -32,66 +30,15 @@ event PostBeginPlay() {
 		break;
 }
 
-final function bool SendLine(string Line) {
-	if (IsConnected()) {
-		// Len+2 to account for cr-lf at the end
-		return SendText(Line$CRLF) == Len(Line) + 2;
-	} else if (DataChannel != none) {
-		DataChannel.SendText(Line$CRLF);
-		return true;
-	}
-
-	LogErr("VS_Data_Client Trying to SendLine without connection or DataChannel:"@Line);
-	return false;
+final function SendLine(string Line) {
+	Send(Line$CRLF);
 }
 
-function string GetRemoteAddress() {
-	local string Result;
-	local string LevelAddress;
-	local int PortPos;
-
-	if (Info.Data.Addr != "") // server wants us to connect to this
-		return Info.Data.Addr;
-
-	LevelAddress = Level.GetAddressURL();
-	if (Left(LevelAddress, 1) == "[") {
-		// ipv6
-		Result = Mid(LevelAddress, 1);
-		Result = Left(Result, InStr(Result, "]"));
-		return Result;
-	} else {
-		// ipv4 or domain
-		PortPos = InStr(LevelAddress, ":");
-		if (PortPos == -1)
-			return LevelAddress;
-		else 
-			return Left(LevelAddress, PortPos);
-	}
+event Connected() {
+	GoToState('Talking');
 }
 
 auto state Initial {
-	event Opened() {
-		GotoState('Talking');
-	}
-	event Resolved(IpAddr Addr) {
-		RemoteAddr.Addr = Addr.Addr;
-		if (Addr.Addr == 0) // listen servers have this address
-			StringToIpAddr("127.0.0.1", RemoteAddr);
-		RemoteAddr.Port = Info.Data.Port;
-
-		LogMsg("VS_Data_Client Opening"@IpAddrToString(RemoteAddr));
-		if (BindPort(, true) != 0 && Open(RemoteAddr)) {
-			LogMsg("VS_Data_Client Open Succeeded");
-		} else {
-			LogErr("VS_Data_Client Open Failed");
-		}
-	}
-	event ResolveFailure() {
-		ResolveDelay = 10;
-		GotoState('Initial', 'Resolve');
-		Channel.PlayerOwner.ClientMessage("Resolving failed, retrying in 10 seconds.");
-	}
-
 Begin:
 	LogDbg("VS_Data_Client Init");
 	// Wait for replication of these variables
@@ -105,20 +52,15 @@ Begin:
 	}
 
 	if (Info.Data.Port == 0xDEADBEEF) {
-		LogMsg("VS_Data_Client Custom Data Transport Disabled");
+		LogDbg("VS_Data_Client Use Fallback Data Transport");
 		Channel.ServerSetupFallbackDataTransport();
 	} else {
-		LogMsg("VS_Data_Client Addr="$Info.Data.Addr@"Port="$Info.Data.Port);
-		LogDbg("VS_Data_Client HavePort");
-		LogMsg("VS_Data_Client RemoteAddress"@GetRemoteAddress());
-
-Resolve:
-		Sleep(ResolveDelay);
-		Resolve(GetRemoteAddress());
+		LogDbg("VS_Data_Client Use Custom Data Transport");
+		Channel.ClientSetupCustomDataTransport(Info.Data.Addr, Info.Data.Port);
 	}
 }
 
-event ReceivedText(string Text) {
+event Receive(string Text) {
 	local int Pos;
 
 	Text = Buffer$Text;
@@ -137,10 +79,6 @@ event ReceivedText(string Text) {
 	}
 }
 
-event Closed() {
-	GotoState('Initial');
-}
-
 event Timer() {
 	if (IsConnected())
 		SendLine("/PING");
@@ -149,12 +87,15 @@ event Timer() {
 state Talking {
 Begin:
 	LogMsg("VS_Data_Client Connection Established");
-	SendLine("/SENDPRESETS");
-	SendLine("/SENDLOGO/");
-
 	while(Channel.Cookie == 0)
 		Sleep(0);
+	// Cookie MUST be the first thing sent, Server Link uses it to find
+	// corresponding ChannelContainer. Without it, the rest of the messages will
+	// not be processed.
 	SendLine("/COOKIE/"$Channel.Cookie);
+
+	SendLine("/SENDPRESETS");
+	SendLine("/SENDLOGO/");
 }
 
 function ParseLine(string Line) {
@@ -479,8 +420,4 @@ function SaveServerMapLists(VS_ClientMapListsContainer S) {
 	SendLine("/SAVESERVERMAPLISTSFILE/");
 
 	LogMsg("VS_Data_Client SaveServerMapLists Done");
-}
-
-defaultproperties {
-	RemoteRole=ROLE_None
 }

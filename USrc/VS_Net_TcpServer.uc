@@ -1,4 +1,4 @@
-class VS_Data_ListenServer extends TcpLink
+class VS_Net_TcpServer extends TcpLink
 	imports(VS_Util_Logging)
 	transient;
 
@@ -22,18 +22,20 @@ event PostBeginPlay() {
 
 	if (Settings.bEnableCustomDataTransport == false) {
 		Info.Data.Port = 0xDEADBEEF;
-		LogMsg("VS_Data_ListenServer - Disabling Custom Data Transport");
+		LogMsg("VS_Net_TcpServer - Disabling Custom Data Transport");
 		return;
 	}
 
 	Prt = BindPort(Settings.DataPort, true);
 	if (Prt == 0) {
-		LogErr("VS_Data_ListenServer - Failed to BindPort");
+		LogErr("VS_Net_TcpServer - Failed to BindPort, Using Fallback");
+		Info.Data.Port = 0xDEADBEEF;
 		return;
 	}
 
 	if (Listen() == false) {
-		LogErr("VS_Data_ListenServer - Failed to Listen");
+		LogErr("VS_Net_TcpServer - Failed to Listen, Using Fallback");
+		Info.Data.Port = 0xDEADBEEF;
 		return;
 	}
 
@@ -48,10 +50,10 @@ event PostBeginPlay() {
 		Info.Data.Port = Settings.ClientDataPort;
 	}
 
-	LogMsg("VS_Data_ListenServer Addr="$Info.Data.Addr@"Port="$Info.Data.Port);
+	LogMsg("VS_Net_TcpServer Addr="$Info.Data.Addr@"Port="$Info.Data.Port);
 }
 
 defaultproperties {
-	AcceptClass=class'VS_Data_Server'
+	AcceptClass=class'VS_Net_TcpLink'
 	RemoteRole=ROLE_None
 }

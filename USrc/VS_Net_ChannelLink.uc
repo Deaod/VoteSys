@@ -1,8 +1,6 @@
-class VS_Data_Channel extends Info
+class VS_Net_ChannelLink extends Info
 	imports(VS_Util_Logging)
 	transient;
-
-// Fallback in case TcpLink doesnt work
 
 var VS_PlayerChannel PlayerChannel;
 
@@ -10,7 +8,7 @@ var bool bEnableTraffic;
 var string SendBuffer;
 
 var string RecvBuffer;
-var TcpLink Link;
+var VS_Data_Peer Peer;
 
 var int SendCount;
 var int RecvCount;
@@ -44,8 +42,8 @@ simulated event Tick(float Delta) {
 		}
 	}
 
-	if (Link != none && Len(RecvBuffer) > 0) {
-		Link.ReceivedText(RecvBuffer);
+	if (Peer != none && Len(RecvBuffer) > 0) {
+		Peer.Receive(RecvBuffer);
 		RecvBuffer = "";
 	}
 }
