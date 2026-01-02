@@ -30,7 +30,7 @@ var localized string Text_IgnoreList;
 function Created() {
 	DefaultMapList = new class'VS_ClientMapList';
 
-	MapListLB = VS_UI_MapListLB(CreateControl(class'VS_UI_MapListLB', 4, 28, 188, 302));
+	MapListLB = VS_UI_MapListLB(CreateControl(class'VS_UI_MapListLB', 4, 28, 176, 302));
 
 	AddMapList = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 4, 8, 16, 16));
 	AddMapList.SetText("+");
@@ -38,37 +38,37 @@ function Created() {
 	RemMapList = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 24, 8, 16, 16));
 	RemMapList.SetText("-");
 
-	Edt_MapListName = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 8, 188, 16));
+	Edt_MapListName = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 188, 28, 200, 16));
 	Edt_MapListName.SetText(Text_MapListName);
 	Edt_MapListName.EditBoxWidth = 100;
 	Edt_MapListName.EditBox.MaxLength = 63;
 
-	Adt_Map = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 200, 28, 188, 16));
+	Adt_Map = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 188, 48, 200, 16));
 	Adt_Map.SetText(Text_Map);
 	Adt_Map.EditBoxWidth = 100;
 	Adt_Map.EditBox.MaxLength = 65000;
 
-	Adt_IgnoreMap = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 200, 48, 188, 16));
+	Adt_IgnoreMap = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 188, 68, 200, 16));
 	Adt_IgnoreMap.SetText(Text_IgnoreMap);
 	Adt_IgnoreMap.EditBoxWidth = 100;
 	Adt_IgnoreMap.EditBox.MaxLength = 65000;
 
-	Adt_IncludeMapsWithPrefix = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 200, 68, 188, 16));
+	Adt_IncludeMapsWithPrefix = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 188, 88, 200, 16));
 	Adt_IncludeMapsWithPrefix.SetText(Text_IncludeMapsWithPrefix);
 	Adt_IncludeMapsWithPrefix.EditBoxWidth = 100;
 	Adt_IncludeMapsWithPrefix.EditBox.MaxLength = 65000;
 
-	Adt_IgnoreMapsWithPrefix = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 200, 88, 188, 16));
+	Adt_IgnoreMapsWithPrefix = VS_UI_ArrayEditString(CreateControl(class'VS_UI_ArrayEditString', 188, 108, 200, 16));
 	Adt_IgnoreMapsWithPrefix.SetText(Text_IgnoreMapsWithPrefix);
 	Adt_IgnoreMapsWithPrefix.EditBoxWidth = 100;
 	Adt_IgnoreMapsWithPrefix.EditBox.MaxLength = 65000;
 
-	Adt_IncludeList = VS_UI_ArrayEditName(CreateControl(class'VS_UI_ArrayEditName', 200, 108, 188, 16));
+	Adt_IncludeList = VS_UI_ArrayEditName(CreateControl(class'VS_UI_ArrayEditName', 188, 128, 200, 16));
 	Adt_IncludeList.SetText(Text_IncludeList);
 	Adt_IncludeList.EditBoxWidth = 100;
 	Adt_IncludeList.EditBox.MaxLength = 65000;
 
-	Adt_IgnoreList = VS_UI_ArrayEditName(CreateControl(class'VS_UI_ArrayEditName', 200, 128, 188, 16));
+	Adt_IgnoreList = VS_UI_ArrayEditName(CreateControl(class'VS_UI_ArrayEditName', 188, 148, 200, 16));
 	Adt_IgnoreList.SetText(Text_IgnoreList);
 	Adt_IgnoreList.EditBoxWidth = 100;
 	Adt_IgnoreList.EditBox.MaxLength = 65000;
