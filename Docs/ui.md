@@ -14,6 +14,8 @@
 
 Each category has its own tab here. If the category of a preset is empty, it will appear in a tab called "Default".
 
+You can scroll through available tabs uing the scroll wheel of your mouse while hovering over the tab area.
+
 ### Preset Dropdown
 
 ![Preset Dropdown](PresetHighlight.png)
@@ -85,7 +87,7 @@ Shows chat messages sent by other players. Does not show messages sent only to y
 
 You can write a message in the field at the bottom and either press the "Say" button or press the "Enter" key.
 
-If you hold the "Ctrl" key while sending a message, it will be sent to your own team exclusively (and not show up in the chat area).
+If you hold the "Ctrl" key while sending a message, it will be sent to your own team exclusively.
 
 You can recall past messages sent by you by pressing the Up arrow key repeatedly.
 
@@ -95,9 +97,11 @@ Clicking and dragging the mouse while over the text area will select text inside
 
 ![Logo Area](LogoHighlight.png)
 
-If the server admin has configured a logo, that logo will be shown instead of the chat area. The logo can be dismissed by pressing the X button in the top right. Dismissing the logo will restore the chat area.
+If the server admin has configured a logo, that logo will be shown instead of the chat area. The logo can be dismissed by pressing the X button in the top right. Dismissing the logo will restore the chat area. Once dismissed, the logo can be restored by pressing the rectangle button in the top left of the chat area.
 
 Additionally, server admins can configure up to 3 buttons that will be shown along the bottom edge of the logo area.
+
+Hovering over the buttons will show the URL that they lead to underneath your cursor. This allows you to check where they lead before clicking on them.
 
 ### Player List
 
@@ -140,6 +144,8 @@ The Save button saves the current state of settings. The Close button closes the
 ### Admin Settings
 
 Admin settings are split into three parts: Voting, UI, and Setup. The tab-cards containing admin settings are prefixed with \[A\] and are only visible when logged in as admin.
+
+While hovering over the tab area with your mouse you can use the scroll wheel to show other tabs.
 
 #### Voting
 
