@@ -133,6 +133,10 @@ The Settings button with the gear icon opens a settings menu. See [Settings Menu
 
 ## Settings Menu
 
+Settings are grouped into different tabs.
+
+While hovering over the tab area with your mouse you can use the scroll wheel to see other available tabs.
+
 ### Client Settings
 
 ![Client Settings](ClientSettings.png)
@@ -144,8 +148,6 @@ The Save button saves the current state of settings. The Close button closes the
 ### Admin Settings
 
 Admin settings are split into three parts: Voting, UI, and Setup. The tab-cards containing admin settings are prefixed with \[A\] and are only visible when logged in as admin.
-
-While hovering over the tab area with your mouse you can use the scroll wheel to show other tabs.
 
 #### Voting
 
