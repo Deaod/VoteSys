@@ -63,8 +63,6 @@ function SaveSettings() {
 }
 
 function Created() {
-	super.Created();
-
 	Edt_MidGameVoteThreshold = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 8, 188, 16));
 	Edt_MidGameVoteThreshold.SetText(Text_MidGameVoteThreshold);
 	Edt_MidGameVoteThreshold.EditBoxWidth = 60;
@@ -107,6 +105,8 @@ function Created() {
 	Edt_MinimumMapRepeatDistance.SetText(Text_MinimumMapRepeatDistance);
 	Edt_MinimumMapRepeatDistance.EditBoxWidth = 60;
 	Edt_MinimumMapRepeatDistance.SetNumericOnly(true);
+
+	super.Created();
 }
 
 function ApplyTheme() {

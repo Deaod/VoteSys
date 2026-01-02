@@ -61,8 +61,6 @@ var VS_UI_Checkbox Chk_OpenVoteMenuAutomatically;
 var localized string Text_OpenVoteMenuAutomatically;
 
 function Created() {
-	super.Created();
-
 	DefaultPreset = new class'VS_ClientPreset';
 
 	PresetList = VS_UI_PresetListBox(CreateControl(class'VS_UI_PresetListBox', 4, 28, 176, 302));
@@ -170,6 +168,8 @@ function Created() {
 	Chk_OpenVoteMenuAutomatically = VS_UI_Checkbox(CreateControl(class'VS_UI_Checkbox', 0, 320, 188, 16));
 	Chk_OpenVoteMenuAutomatically.SetParent(Scr_Properties);
 	Chk_OpenVoteMenuAutomatically.SetText(Text_OpenVoteMenuAutomatically);
+
+	super.Created();
 }
 
 function ApplyTheme() {

@@ -117,8 +117,6 @@ function SaveSettings() {
 }
 
 function Created() {
-	super.Created();
-
 	Chk_EnableACEIntegration = VS_UI_Checkbox(CreateControl(class'VS_UI_Checkbox', 4, 8, 188, 16));
 	Chk_EnableACEIntegration.SetText(Text_EnableACEIntegration);
 
@@ -191,6 +189,8 @@ function Created() {
 	Edt_ClientDataPort.SetText(Text_ClientDataPort);
 	Edt_ClientDataPort.EditBoxWidth = 60;
 	Edt_ClientDataPort.SetNumericOnly(true);
+
+	super.Created();
 }
 
 function ApplyTheme() {

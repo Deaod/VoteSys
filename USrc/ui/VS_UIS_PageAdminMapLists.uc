@@ -28,8 +28,6 @@ var VS_UI_ArrayEditName Adt_IgnoreList;
 var localized string Text_IgnoreList;
 
 function Created() {
-	super.Created();
-
 	DefaultMapList = new class'VS_ClientMapList';
 
 	MapListLB = VS_UI_MapListLB(CreateControl(class'VS_UI_MapListLB', 4, 28, 188, 302));
@@ -74,6 +72,8 @@ function Created() {
 	Adt_IgnoreList.SetText(Text_IgnoreList);
 	Adt_IgnoreList.EditBoxWidth = 100;
 	Adt_IgnoreList.EditBox.MaxLength = 65000;
+
+	super.Created();
 }
 
 function ApplyTheme() {

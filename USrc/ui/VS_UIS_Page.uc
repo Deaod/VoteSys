@@ -11,12 +11,12 @@ var localized string SaveText;
 var UWindowSmallCloseButton Btn_Close;
 
 function Created() {
-	super.Created();
-
 	Btn_Save = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 298, 334, 40, 16));
 	Btn_Save.SetText(SaveText);
 
 	Btn_Close = UWindowSmallCloseButton(CreateControl(class'UWindowSmallCloseButton', 342, 334, 40, 16));
+
+	super.Created();
 }
 
 function LoadSettings(VS_PlayerChannel C) {

@@ -21,8 +21,6 @@ var VS_UI_Checkbox Chk_ShowPlayerList;
 var localized string ShowPlayerListText;
 
 function Created() {
-	super.Created();
-
 	Cmb_Theme = VS_UI_ComboControl(CreateControl(class'VS_UI_ComboControl', 8, 8, 188, 16));
 	Cmb_Theme.SetText(ThemeText);
 	Cmb_Theme.AddItem(ThemeBright);
@@ -42,6 +40,8 @@ function Created() {
 
 	Chk_ShowPlayerList = VS_UI_Checkbox(CreateControl(class'VS_UI_Checkbox', 8, 68, 188, 16));
 	Chk_ShowPlayerList.SetText(ShowPlayerListText);
+
+	super.Created();
 }
 
 function LoadSettings(VS_PlayerChannel C) {

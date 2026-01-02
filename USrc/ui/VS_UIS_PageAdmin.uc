@@ -17,8 +17,6 @@ var localized string Text_SettingsState_Complete;
 var localized string Text_SettingsState_NotAdmin;
 
 function Created() {
-	super.Created();
-
 	Btn_RestartServer = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 4, 334, 80, 16));
 	Btn_RestartServer.SetText(Text_RestartServer);
 
@@ -27,6 +25,8 @@ function Created() {
 
 	Lbl_SettingsState = UWindowLabelControl(CreateControl(class'UWindowLabelControl', 172, 336, 114, 16));
 	Lbl_SettingsState.Align = TA_Right;
+
+	super.Created();
 }
 
 function LoadServerSettings() {}

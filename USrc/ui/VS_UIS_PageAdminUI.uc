@@ -126,8 +126,6 @@ function SaveSettings() {
 }
 
 function Created() {
-	super.Created();
-
 	Chk_RetainCandidates = VS_UI_Checkbox(CreateControl(class'VS_UI_Checkbox', 4, 8, 188, 16));
 	Chk_RetainCandidates.SetText(Text_RetainCandidates);
 
@@ -211,6 +209,8 @@ function Created() {
 	Edt_LogoButton2LinkURL = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 268, 188, 16));
 	Edt_LogoButton2LinkURL.SetText(Text_LogoButton2LinkURL);
 	Edt_LogoButton2LinkURL.EditBoxWidth = 100;
+
+	super.Created();
 }
 
 function ApplyTheme() {
