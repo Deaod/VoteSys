@@ -448,8 +448,8 @@ function UpdatePlayerVoteInformation() {
 				C.PlayerInfo.bIsPlayer = false;
 			}
 			if (C.Channel != none) {
-				C.PlayerInfo.bHasVoted = (C.Channel.VotedFor != none);
 				C.PlayerInfo.bCanVote = CanVote(C.PlayerOwner);
+				C.PlayerInfo.bHasVoted = C.PlayerInfo.bCanVote && (C.Channel.VotedFor != none);
 				if (C.PlayerInfo.bCanVote == false && (C.Channel.VotedFor != none))
 					C.Channel.ClearVote();
 			} else {
