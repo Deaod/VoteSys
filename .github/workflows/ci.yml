@@ -154,7 +154,7 @@ jobs:
           overwrite: true
 
       - name: Create Pre-Release
-        if: success() && github.event_name == 'push'
+        if: success() && github.event_name == 'push' && github.ref_type != 'tag'
         uses: softprops/action-gh-release@v2
         with:
           name: VoteSys ${{ env.PREVIEW_VER }}
