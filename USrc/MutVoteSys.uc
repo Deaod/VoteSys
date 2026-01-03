@@ -58,6 +58,15 @@ var VS_AceHandler AceHandler;
 
 var VS_Package TempPkg;
 
+event PreBeginPlay() {
+	super.PreBeginPlay();
+	
+	if (bDeleteMe)
+		return;
+
+	Level.Game.BaseMutator.AddMutator(self);
+}
+
 event PostBeginPlay() {
 	super.PostBeginPlay();
 
@@ -97,6 +106,20 @@ event PostBeginPlay() {
 
 	ConfigureGameMode();
 	SaveSettings();
+}
+
+function AddMutator(Mutator M) {
+	if (M == self)
+		return;
+
+	if (M.Class.Name != Class.Name) {
+		super.AddMutator(M);
+		return;
+	}
+
+	// Second MutVoteSys was spawned.
+	// Megabot, DESTROY!
+	M.Destroy();
 }
 
 function ConfigureGameMode() {
