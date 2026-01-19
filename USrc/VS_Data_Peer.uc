@@ -11,7 +11,7 @@ final function bool IsConnected() {
 	if (Link != none)
 		return Link.IsConnected();
 	else
-		return Chan.bEnableTraffic;
+		return Chan != none && Chan.bEnableTraffic;
 }
 
 final function Send(string Content) {
