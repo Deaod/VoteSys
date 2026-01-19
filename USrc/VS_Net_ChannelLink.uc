@@ -13,7 +13,8 @@ var VS_Data_Peer Peer;
 var int SendCount;
 var int RecvCount;
 
-const MaxTextPerTick = 400;
+const MaxTextPerTick = 400; // assuming everything is ascii
+const UnicodeMaxTextPerTick = 200; // unicode is UTF-16 on all platforms
 
 replication {
 	reliable if (Role < ROLE_Authority)
@@ -30,16 +31,32 @@ simulated event PostNetBeginPlay() {
 }
 
 simulated event Tick(float Delta) {
+	local string Chunk;
+	local int CL;
+	local int I;
+
 	if (bEnableTraffic && Len(SendBuffer) > 0) {
 		SendCount += Min(Len(SendBuffer), MaxTextPerTick);
 
-		if (Role == ROLE_Authority) {
-			ClientReceiveText(Left(SendBuffer, MaxTextPerTick));
-			SendBuffer = Mid(SendBuffer, MaxTextPerTick, Len(SendBuffer));
-		} else {
-			ServerReceiveText(Left(SendBuffer, MaxTextPerTick));
-			SendBuffer = Mid(SendBuffer, MaxTextPerTick, Len(SendBuffer));
+		Chunk = Left(SendBuffer, MaxTextPerTick);
+		CL = Len(Chunk);
+		for (I = 0; I < CL; I++) {
+			if (Asc(Mid(Chunk, i, 1)) > 0x7F) {
+				if (I > UnicodeMaxTextPerTick) {
+					Chunk = Left(Chunk, I);
+				} else {
+					Chunk = Left(Chunk, UnicodeMaxTextPerTick);
+				}
+				break;
+			}
 		}
+
+		if (Role == ROLE_Authority) {
+			ClientReceiveText(Chunk);
+		} else {
+			ServerReceiveText(Chunk);
+		}
+		SendBuffer = Mid(SendBuffer, Len(Chunk), Len(SendBuffer));
 	}
 
 	if (Peer != none && Len(RecvBuffer) > 0) {
