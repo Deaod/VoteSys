@@ -14,7 +14,8 @@ var int SendCount;
 var int RecvCount;
 
 const MaxTextPerTick = 400; // assuming everything is ascii
-const UnicodeMaxTextPerTick = 200; // unicode is UTF-16 on all platforms
+//const UnicodeMaxTextPerTick = 200; // unicode is UTF-16 on all platforms
+const UnicodeMaxTextPerTick = 100; // surrogate pairs exist ...
 
 replication {
 	reliable if (Role < ROLE_Authority)
