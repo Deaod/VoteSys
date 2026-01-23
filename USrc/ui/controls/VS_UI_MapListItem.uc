@@ -1,10 +1,11 @@
-class VS_UI_MapListItem extends VS_UI_ListItem;
+class VS_UI_MapListItem extends VS_UI_ListItem
+	imports(VS_ClientSettings);
 
 var VS_Map MapRef;
 var bool bFilteredOut;
 
 // Sentinel Only
-var byte SortMode;
+var EMapListSort SortMode;
 var bool bFavoritesFirst;
 
 function int Compare(UWindowList T, UWindowList B) {
@@ -21,17 +22,24 @@ function int Compare(UWindowList T, UWindowList B) {
 	}
 
 	switch(VS_UI_MapListItem(Sentinel).SortMode) {
-		case 1:
+		case MLS_Recency:
 			if (M1.Sequence > M2.Sequence)
 				return -1;
 			else if (M1.Sequence < M2.Sequence)
 				return 1;
 			break;
 
-		case 2:
+		case MLS_PlayCount:
 			if (M1.PlayCount > M2.PlayCount)
 				return -1;
 			else if (M1.PlayCount < M2.PlayCount)
+				return 1;
+			break;
+
+		case MLS_Rating:
+			if (M1.Rating > M2.Rating)
+				return -1;
+			else if (M1.Rating < M2.Rating)
 				return 1;
 			break;
 	}

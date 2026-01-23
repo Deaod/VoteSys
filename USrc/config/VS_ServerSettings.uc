@@ -72,6 +72,8 @@ var config LogoButton LogoButton0;
 var config LogoButton LogoButton1;
 var config LogoButton LogoButton2;
 
+var config int MinimumNumberOfRatings;
+
 enum ESettingsState {
 	S_NEW,
 	S_COMPLETE,
@@ -128,4 +130,6 @@ defaultproperties {
 	GameNameMode=GNM_DoNotModify
 	bAlwaysUseDefaultPreset=True
 	bAlwaysUseDefaultMap=False
+
+	MinimumNumberOfRatings=10
 }

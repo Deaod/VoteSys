@@ -6,4 +6,5 @@ var int Sequence;
 var int PlayCount;
 var int MinPlayers;
 var int MaxPlayers;
+var int Rating;
 var bool bClientFavorite;

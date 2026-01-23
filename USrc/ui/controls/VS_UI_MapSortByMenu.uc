@@ -6,6 +6,8 @@ var UWindowPulldownMenuItem ItemRecency;
 var localized string ItemRecencyText;
 var UWindowPulldownMenuItem ItemPlayCount;
 var localized string ItemPlayCountText;
+var UWindowPulldownMenuItem ItemRating;
+var localized string ItemRatingText;
 
 var UWindowPulldownMenuItem FavoritesFirst;
 var localized string FavoritesFirstText;
@@ -16,6 +18,7 @@ function Created() {
 	ItemName = AddMenuItem(ItemNameText, none);
 	ItemRecency = AddMenuItem(ItemRecencyText, none);
 	ItemPlayCount = AddMenuItem(ItemPlayCountText, none);
+	ItemRating = AddMenuItem(ItemRatingText, none);
 	AddMenuItem("-", none);
 	FavoritesFirst = AddMenuItem(FavoritesFirstText, none);
 }
@@ -48,6 +51,9 @@ function ExecuteItem(UWindowPullDownMenuItem I) {
 		case ItemPlayCount:
 			Settings.MapListSort = MLS_PlayCount;
 			break;
+		case ItemRating:
+			Settings.MapListSort = MLS_Rating;
+			break;
 		case FavoritesFirst:
 			Settings.bFavoritesFirst = !Settings.bFavoritesFirst;
 			break;
@@ -73,6 +79,7 @@ function UpdateCheckmark() {
 	ItemName.bChecked = false;
 	ItemRecency.bChecked = false;
 	ItemPlayCount.bChecked = false;
+	ItemRating.bChecked = false;
 	FavoritesFirst.bChecked = Settings.bFavoritesFirst;
 
 	switch(Settings.MapListSort) {
@@ -84,6 +91,9 @@ function UpdateCheckmark() {
 			break;
 		case MLS_PlayCount:
 			I = ItemPlayCount;
+			break;
+		case MLS_Rating:
+			I = ItemRating;
 			break;
 	}
 
@@ -97,5 +107,6 @@ defaultproperties {
 	ItemNameText="Name"
 	ItemRecencyText="Recency"
 	ItemPlayCountText="Play Count"
+	ItemRatingText="Rating"
 	FavoritesFirstText="Favorites First"
 }

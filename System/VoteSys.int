@@ -32,6 +32,7 @@ Text_MaxPlayers="Max. Players"
 Text_OpenVoteMenuAutomatically="Open Vote Menu Automatically"
 
 [VS_UIV_ClientWindow]
+MapRatingText="Rate This Map:"
 MapFilterText="Filter Maps By Name"
 VoteButtonText="Vote"
 SuggestButtonText="Suggest"
@@ -83,6 +84,7 @@ WindowTitle="VoteSys Menu"
 Text_RetainCandidates="Retain Candidates"
 Text_OpenVoteMenuAutomatically="Open Vote Menu Automatically"
 Text_DefaultTimeMessageClass="Time Msg Class"
+Text_MinimumNumberOfRatings="Minimum Number Of Ratings"
 Text_LogoTexture="Logo Texture"
 Text_LogoRegion="Logo Region"
 Text_LogoRegionX="X"
@@ -123,6 +125,19 @@ Text_DefaultMap="Default Map"
 Text_AlwaysUseDefaultMap="Always Use Default Map"
 Text_IdleTimeout="Idle Timeout"
 
+[VS_UIS_PageClient]
+ThemeText="Theme"
+ThemeBright="Bright"
+ThemeDark="Dark"
+ThemeBlack="Black"
+MapListSortText="Sort Map List By"
+MapListSortName="Name"
+MapListSortRecency="Recency"
+MapListSortPlayCount="Play Count"
+MapListSortRating="Rating"
+FavoritesFirstText="Sort Favorites First"
+ShowPlayerListText="Show Player List"
+
 [VS_UI_PlayerMenu]
 PlayerIdText="ID:"
 PlayerKickText="&Kick"
@@ -138,21 +153,6 @@ PageAdminSetupName="[A] Setup"
 PageAdminPresetsName="[A] Presets"
 PageAdminMapListsName="[A] Map Lists"
 
-[VS_UIS_PageClient]
-ThemeText="Theme"
-ThemeBright="Bright"
-ThemeDark="Dark"
-ThemeBlack="Black"
-MapListSortText="Sort Map List By"
-MapListSortName="Name"
-MapListSortRecency="Recency"
-MapListSortPlayCount="Play Count"
-FavoritesFirstText="Sort Favorites First"
-ShowPlayerListText="Show Player List"
-
-[VS_UI_ScreenshotWindow]
-TextPlayerCount="Players:"
-
 [VS_UIS_PageAdminVoting]
 Text_MidGameVoteThreshold="Mid-Game Vote Threshold"
 Text_MidGameVoteTimeLimit="Mid-Game Vote Time Limit"
@@ -166,6 +166,9 @@ Text_EnableKickVoting="Enable Kick Voting"
 Text_KickVoteThreshold="Kick Vote Threshold"
 Text_MinimumMapRepeatDistance="Map Repeat Distance"
 
+[VS_UI_ScreenshotWindow]
+TextPlayerCount="Players:"
+
 [VS_UI_MapMenu]
 FavoriteText="Favorite"
 SortByText="Sort By"
@@ -177,5 +180,6 @@ WindowTitle="VoteSys Settings"
 ItemNameText="Name"
 ItemRecencyText="Recency"
 ItemPlayCountText="Play Count"
+ItemRatingText="Rating"
 FavoritesFirstText="Favorites First"
 

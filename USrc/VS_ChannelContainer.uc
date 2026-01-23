@@ -8,6 +8,9 @@ var PlayerPawn PlayerOwner;
 var Actor AceCheck;
 var EBanState BanState;
 
+var int Cookie;
+var int MapRating;
+
 function Initialize(PlayerPawn P) {
 	PlayerOwner = P;
 	Channel = Spawn(class'VS_PlayerChannel', P);

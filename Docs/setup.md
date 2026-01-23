@@ -62,6 +62,7 @@ LogoDrawRegion=(X=0,Y=0,W=0,H=0)
 LogoButton0=(Label="GitHub",LinkURL="https://github.com/Deaod/VoteSys")
 LogoButton1=(Label="",LinkURL="")
 LogoButton2=(Label="Discord",LinkURL="https://discord.gg/5wWAGHRvMC")
+MinimumNumberOfRatings=10
 DefaultPackages=SoldierSkins
 DefaultPackages=CommandoSkins
 DefaultPackages=FCommandoSkins
@@ -111,6 +112,7 @@ DefaultActors=IpServer.UdpServerUplink MasterServerAddress=unreal.epicgames.com 
 1. [LogoButton0](#logobuttons)
 1. [LogoButton1](#logobuttons)
 1. [LogoButton2](#logobuttons)
+1. [MinimumNumberOfRatings](#minimumnumberofratings)
 
 ### bEnableACEIntegration
 
@@ -350,6 +352,12 @@ In addition to a logo, up to three buttons can be displayed at the buttom of the
 
 For buttons to be shown, `LogoTexture` must refer to a valid texture.  
 Each button will only be shown if `LinkURL` is not empty.
+
+### MinimumNumberOfRatings
+
+Maps that have received less than this number of ratings from players will not show their average rating to players.
+
+Defaults to 10.
 
 ## VoteSysPresets.ini
 ```ini

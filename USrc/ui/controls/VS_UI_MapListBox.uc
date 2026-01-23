@@ -13,6 +13,7 @@ function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H
 	local VS_UI_MapListItem I;
 	local bool bDrawStar;
 	local float Offset;
+	local color FG;
 
 	super.DrawItem(C, Item, X, Y, W, H);
 
@@ -27,10 +28,26 @@ function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H
 		bDrawStar = true;
 	}
 
+	if (I.MapRef.Rating >= 0) {
+		DrawStretchedTexture(C, X+2, Y+1, 6.0, 10.0, Texture'WhiteTexture');
+		FG = C.DrawColor;
+		C.DrawColor = ItemBackground;
+		DrawStretchedTexture(
+			C,
+			X+2 + (1.0/Root.GUIScale),
+			Y+1 + (1.0/Root.GUIScale),
+			6 - (2.0/Root.GUIScale),
+			(65535 - I.MapRef.Rating) * (10.0 - (2.0/Root.GUIScale)) / 65535.0,
+			Texture'WhiteTexture'
+		);
+
+		C.DrawColor = FG;
+	}
+
 	if (bDrawStar)
 		ClippingRegion.W -= Offset;
 
-	ClipText(C, X+2, Y, I.MapRef.MapName);
+	ClipText(C, X+12, Y, I.MapRef.MapName);
 
 	if (bDrawStar)
 		ClippingRegion.W += Offset;
@@ -46,7 +63,7 @@ function float ItemWidth(Canvas C, UWindowList Item, float VisibleWidth) {
 	if (I.MapRef.bClientFavorite)
 		W += ItemHeight;
 
-	return FMax(W + 4.0, VisibleWidth);
+	return FMax(W + 8.0 + 4.0, VisibleWidth);
 }
 
 function AppendMap(VS_Map M, bool bEnabled) {

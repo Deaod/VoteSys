@@ -102,7 +102,8 @@ final function VS_Map ParseMap(string Line) {
 	M.Sequence   = int(Line);          NextVariable(Line);
 	M.PlayCount  = int(Line);          NextVariable(Line);
 	M.MinPlayers = int(Line);          NextVariable(Line);
-	M.MaxPlayers = int(Line);
+	M.MaxPlayers = int(Line);          NextVariable(Line);
+	M.Rating     = int(Line);
 
 	return M;
 }
@@ -135,7 +136,8 @@ final function string SerializeMap(VS_Map M) {
 	Result = Result$M.Sequence$"/";
 	Result = Result$M.PlayCount$"/";
 	Result = Result$M.MinPlayers$"/";
-	Result = Result$M.MaxPlayers;
+	Result = Result$M.MaxPlayers$"/";
+	Result = Result$M.Rating;
 
 	return Result;
 }

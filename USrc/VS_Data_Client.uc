@@ -264,6 +264,7 @@ function SaveServerSettings(VS_ServerSettings S) {
 	SendServerSetting(S, "LogoButton0");
 	SendServerSetting(S, "LogoButton1");
 	SendServerSetting(S, "LogoButton2");
+	SendServerSetting(S, "MinimumNumberOfRatings");
 	SendLine("/SAVESERVERSETTINGSFILE/");
 
 	LogMsg("VS_Data_Client SaveServerSettings Done");

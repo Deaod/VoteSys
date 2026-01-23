@@ -9,6 +9,7 @@ A new, independent implementation of map vote.
   * Before server version 469c [`DefaultPackages`](Docs/setup.md#defaultpackages) have to be configured correctly
   * With 469c or later no further configuration is necessary
 * Map repeat limits ([`MinimumMapRepeatDistance`](Docs/setup.md#minimummaprepeatdistance))
+* Map rating system
 
 Servers must run at least UT v469.  
 Clients must run at least UT v436.  

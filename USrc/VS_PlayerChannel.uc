@@ -6,7 +6,16 @@ class VS_PlayerChannel extends Info
 var PlayerPawn PlayerOwner;
 var VS_PlayerInfo PInfo;
 var VS_Info Info; // Info Info
+
+enum ECookieSaveState {
+	CKSS_Initial,
+	CKSS_Save,
+	CKSS_Done
+};
+
 var int Cookie;
+var ECookieSaveState CookieSaveState;
+var bool bLastCookieChecked;
 
 var VS_Data_Peer DataPeer;
 var VS_Net_ChannelLink DataChannel;
@@ -23,12 +32,14 @@ var bool bOpenSettingsAfterTyping;
 
 var Object SettingsDummy;
 var VS_ClientSettings Settings;
+var bool bSettingsInitialized;
 
 // Temporary variables used while receiving Preset/Map information
 var VS_Preset LatestPreset;
 var VS_Map LatestMap;
 
 var VS_Candidate VotedFor;
+var int MapRating;
 
 var int KickVotesAgainstMe;
 var array<PlayerReplicationInfo> IWantToKick;
@@ -47,10 +58,13 @@ replication {
 		ServerKickPlayer,
 		ServerVote,
 		ServerVoteExisting,
-		ServerVoteRandom;
+		ServerVoteRandom,
+		ServerFindMapRating,
+		ServerSetMapRating;
 
 	reliable if (Role == ROLE_Authority)
 		ClientApplyKickVote,
+		ClientApplyOldMapRating,
 		DumpPlayerList,
 		ShowVoteMenu,
 		HideVoteMenu,
@@ -58,23 +72,14 @@ replication {
 
 	reliable if (Role == ROLE_Authority && bNetOwner)
 		Cookie,
-		VotedFor;
+		VotedFor,
+		MapRating;
 
 	reliable if (Role == ROLE_Authority && ((bDemoRecording == false) || (bClientDemoRecording && bClientDemoNetFunc) || (Level.NetMode == NM_Standalone)))
 		LocalizeMessage, ChatMessage;
 }
 
-simulated event PostBeginPlay() {
-	ReloadConfigFiles();
-
-	SettingsDummy = new(none, 'VoteSys') class 'Object';
-	Settings = new (SettingsDummy, 'ClientSettings') class'VS_ClientSettings';
-	FavoritesProcessor = Spawn(class'VS_FavoritesProcessor', self);
-}
-
 simulated function ReloadConfigFiles() {
-	local PlayerPawn PlayerOwner;
-
 	PlayerOwner = PlayerPawn(Owner);
 	if (PlayerOwner == none || Viewport(PlayerOwner.Player) == none)
 		return;
@@ -131,7 +136,28 @@ simulated event Tick(float Delta) {
 		}
 	}
 
-	if (PlayerOwner == none || PlayerOwner.Player == none || PlayerOwner.Player.IsA('Viewport') == false)
+	if (PlayerOwner == none)
+		return;
+
+	if (bSettingsInitialized == false) {
+		if (Viewport(PlayerOwner.Player) != none && 
+			(Level.EngineVersion$Level.GetPropertyText("EngineRevision")) >= "469d"
+		) {
+			ConsoleCommand("RELOADCONFIG"@string(class'VS_ClientSettings'));
+		}
+
+		SettingsDummy = new(none, 'VoteSys') class 'Object';
+		Settings = new (SettingsDummy, 'ClientSettings') class'VS_ClientSettings';
+		FavoritesProcessor = Spawn(class'VS_FavoritesProcessor', self);
+
+		if (Viewport(PlayerOwner.Player) != none) {
+			ServerFindMapRating(Settings.LastCookie);
+		}
+
+		bSettingsInitialized = true;
+	}
+
+	if (PlayerOwner.Player == none || PlayerOwner.Player.IsA('Viewport') == false)
 		return;
 
 	if (VoteMenuDialog == none)
@@ -151,6 +177,12 @@ simulated event Tick(float Delta) {
 	if (bOpenSettingsAfterTyping && PlayerOwner.Player.Console.IsInState('Typing') == false) {
 		bOpenSettingsAfterTyping = false;
 		ShowSettings();
+	}
+
+	if (CookieSaveState == CKSS_Save && Cookie != 0) {
+		Settings.LastCookie = Cookie;
+		CookieSaveState = CKSS_Done;
+		Settings.SaveConfig();
 	}
 }
 
@@ -620,6 +652,36 @@ simulated function BanPlayer(PlayerReplicationInfo PRI) {
 
 function ServerBanPlayer(PlayerReplicationInfo PRI) {
 	VoteInfo().BanPlayer(self, PRI);
+}
+
+function ServerFindMapRating(int LastCookie) {
+	if (LastCookie == 0) {
+		ClientApplyOldMapRating(0);
+		return;
+	}
+	MapRating = VoteInfo().FindMapRating(self, LastCookie);
+	bLastCookieChecked = true;
+	ClientApplyOldMapRating(MapRating);
+}
+
+function ServerSetMapRating(int Rating) {
+	if (bLastCookieChecked == false)
+		return;
+
+	VoteInfo().SetMapRating(self, Rating, MapRating);
+}
+
+simulated function SetMapRating(int Rating) {
+	if (CookieSaveState != CKSS_Done)
+		return;
+	ServerSetMapRating(Rating);
+}
+
+simulated function ClientApplyOldMapRating(int Rating) {
+	if (CookieSaveState == CKSS_Initial) {
+		MapRating = Rating;
+		CookieSaveState = CKSS_Save;
+	}
 }
 
 simulated function VS_ServerSettings ReloadServerSettings() {

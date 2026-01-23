@@ -13,6 +13,7 @@ var localized string MapListSortText;
 var localized string MapListSortName;
 var localized string MapListSortRecency;
 var localized string MapListSortPlayCount;
+var localized string MapListSortRating;
 
 var VS_UI_Checkbox Chk_FavoritesFirst;
 var localized string FavoritesFirstText;
@@ -33,6 +34,7 @@ function Created() {
 	Cmb_MapListSort.AddItem(MapListSortName);
 	Cmb_MapListSort.AddItem(MapListSortRecency);
 	Cmb_MapListSort.AddItem(MapListSortPlayCount);
+	Cmb_MapListSort.AddItem(MapListSortRating);
 	Cmb_MapListSort.SetEditable(false);
 
 	Chk_FavoritesFirst = VS_UI_Checkbox(CreateControl(class'VS_UI_Checkbox', 8, 48, 188, 16));
@@ -79,6 +81,7 @@ defaultproperties {
 	MapListSortName="Name"
 	MapListSortRecency="Recency"
 	MapListSortPlayCount="Play Count"
+	MapListSortRating="Rating"
 
 	FavoritesFirstText="Sort Favorites First"
 	ShowPlayerListText="Show Player List"

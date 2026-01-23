@@ -16,6 +16,8 @@ var bool bAdmin, bWasAdmin;
 var int NumPlayers, PreviousNumPlayers;
 
 var VS_UI_CategoryTabControl CategoryTabs;
+var VS_UI_MapRatingControl MapRating;
+var localized string MapRatingText;
 var VS_UI_PresetComboBox Presets;
 var VS_UI_EditControl MapFilter;
 var localized string MapFilterText;
@@ -60,7 +62,10 @@ function Created() {
 	super.Created();
 
 	TabsHeight = LookAndFeel.Size_TabAreaHeight + LookAndFeel.Size_TabAreaOverhangHeight;
-	CategoryTabs = VS_UI_CategoryTabControl(CreateControl(class'VS_UI_CategoryTabControl', 0, 0, WinWidth, TabsHeight));
+	CategoryTabs = VS_UI_CategoryTabControl(CreateControl(class'VS_UI_CategoryTabControl', 0, 0, WinWidth-200, TabsHeight));
+
+	MapRating = VS_UI_MapRatingControl(CreateControl(class'VS_UI_MapRatingControl', WinWidth - 200, 0, 180, LookAndFeel.Size_TabAreaHeight));
+	MapRating.SetText(MapRatingText);
 
 	Presets = VS_UI_PresetComboBox(CreateControl(class'VS_UI_PresetComboBox', 10, TabsHeight + 10, 180, 0));
 	Presets.bCanEdit = false;
@@ -151,7 +156,9 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	PreviousMapListSort = Settings.MapListSort;
 	bPreviousFavoritesFirst = Settings.bFavoritesFirst;
 
-	CategoryTabs.WinWidth = WinWidth;
+	CategoryTabs.WinWidth = WinWidth-200;
+	MapRating.WinLeft = WinWidth-190;
+	MapRating.Rating = Channel.MapRating;
 
 	VoteButton.bDisabled = (ActivePreset == none);
 	SuggestButton.bDisabled = (ActivePreset == none);
@@ -221,6 +228,7 @@ function ApplyTheme(byte Theme) {
 	if (T == none)
 		T = new class'VS_UI_ThemeBright';
 
+	MapRating.Theme = T;
 	Presets.Theme = T;
 	MapFilter.Theme = T;
 	MapListBox.Theme = T;
@@ -451,6 +459,8 @@ function Notify(UWindowDialogControl C, byte E) {
 		HideLogo();
 	} else if (C == LogoRestore && E == DE_Click) {
 		ShowLogo();
+	} else if (C == MapRating && E == DE_Click) {
+		Channel.SetMapRating(MapRating.Rating);
 	}
 }
 
@@ -589,6 +599,7 @@ function Close(optional bool bByParent) {
 defaultproperties {
 	ActiveTheme=-1
 	
+	MapRatingText="Rate This Map:"
 	MapFilterText="Filter Maps By Name"
 	VoteButtonText="Vote"
 	SuggestButtonText="Suggest"

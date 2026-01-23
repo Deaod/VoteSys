@@ -3,6 +3,7 @@ class VS_UI_ListBox extends UWindowListBox;
 var VS_UI_ThemeBase Theme;
 
 var VS_UI_ListItem HoverItem;
+var transient color ItemBackground;
 
 var float TotalBevelWidth, TotalBevelHeight;
 
@@ -66,14 +67,17 @@ function UWindowListBoxItem GetItemAt(float MouseX, float MouseY) {
 function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H) {
 	local VS_UI_ListItem I;
 	I = VS_UI_ListItem(Item);
+	ItemBackground = Theme.Background;
 	if (I.bEnabled == false) {
 		C.DrawColor = Theme.InactiveFG;
 	} else if (I.bSelected) {
 		C.DrawColor = Theme.SelectBG;
+		ItemBackground = C.DrawColor;
 		DrawStretchedTexture(C, X, Y, W, H, Texture'WhiteTexture');
 		C.DrawColor = Theme.SelectFG;
 	} else if (I.bHover) {
 		C.DrawColor = Theme.HighlitBG;
+		ItemBackground = C.DrawColor;
 		DrawStretchedTexture(C, X, Y, W, H, Texture'WhiteTexture');
 		C.DrawColor = Theme.HighlitFG;
 	} else {

@@ -222,6 +222,7 @@ Begin:
 	SendServerSetting("LogoButton0");
 	SendServerSetting("LogoButton1");
 	SendServerSetting("LogoButton2");
+	SendServerSetting("MinimumNumberOfRatings");
 	SendLine("/ENDSERVERSETTINGS/");
 
 	LogMsg("VS_Data_Server SendServerSettings Done"@GetIdentifier());

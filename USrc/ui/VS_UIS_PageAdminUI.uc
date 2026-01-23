@@ -9,6 +9,9 @@ var localized string Text_OpenVoteMenuAutomatically;
 var VS_UI_EditControl Edt_DefaultTimeMessageClass;
 var localized string Text_DefaultTimeMessageClass;
 
+var VS_UI_EditControl Edt_MinimumNumberOfRatings;
+var localized string Text_MinimumNumberOfRatings;
+
 var VS_UI_EditControl Edt_LogoTexture;
 var localized string Text_LogoTexture;
 
@@ -64,6 +67,7 @@ function EnableInteraction(bool bEnable) {
 	Chk_RetainCandidates.bDisabled = !bEnable;
 	Chk_OpenVoteMenuAutomatically.bDisabled = !bEnable;
 	Edt_DefaultTimeMessageClass.EditBox.SetEditable(bEnable);
+	Edt_MinimumNumberOfRatings.EditBox.SetEditable(bEnable);
 	Edt_LogoTexture.EditBox.SetEditable(bEnable);
 	Edt_LogoRegionX.EditBox.SetEditable(bEnable);
 	Edt_LogoRegionY.EditBox.SetEditable(bEnable);
@@ -85,6 +89,7 @@ function LoadServerSettings() {
 	Chk_RetainCandidates.bChecked = Settings.bRetainCandidates;
 	Chk_OpenVoteMenuAutomatically.bChecked = Settings.bOpenVoteMenuAutomatically;
 	Edt_DefaultTimeMessageClass.SetValue(Settings.DefaultTimeMessageClass);
+	Edt_MinimumNumberOfRatings.SetValue(string(Settings.MinimumNumberOfRatings));
 	Edt_LogoTexture.SetValue(Settings.LogoTexture);
 	Edt_LogoRegionX.SetValue(string(Settings.LogoRegion.X));
 	Edt_LogoRegionY.SetValue(string(Settings.LogoRegion.Y));
@@ -106,6 +111,7 @@ function SaveSettings() {
 	Settings.bRetainCandidates = Chk_RetainCandidates.bChecked;
 	Settings.bOpenVoteMenuAutomatically = Chk_OpenVoteMenuAutomatically.bChecked;
 	Settings.DefaultTimeMessageClass = Edt_DefaultTimeMessageClass.GetValue();
+	Settings.MinimumNumberOfRatings = int(Edt_MinimumNumberOfRatings.GetValue());
 	Settings.LogoTexture = Edt_LogoTexture.GetValue();
 	Settings.LogoRegion.X = int(Edt_LogoRegionX.GetValue());
 	Settings.LogoRegion.Y = int(Edt_LogoRegionY.GetValue());
@@ -126,6 +132,10 @@ function SaveSettings() {
 }
 
 function Created() {
+	//
+	// Left Side
+	//
+
 	Chk_RetainCandidates = VS_UI_Checkbox(CreateControl(class'VS_UI_Checkbox', 4, 8, 188, 16));
 	Chk_RetainCandidates.SetText(Text_RetainCandidates);
 
@@ -136,77 +146,86 @@ function Created() {
 	Edt_DefaultTimeMessageClass.SetText(Text_DefaultTimeMessageClass);
 	Edt_DefaultTimeMessageClass.EditBoxWidth = 100;
 
-	Edt_LogoTexture = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 68, 188, 16));
+	Edt_MinimumNumberOfRatings = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 68, 188, 16));
+	Edt_MinimumNumberOfRatings.SetText(Text_MinimumNumberOfRatings);
+	Edt_MinimumNumberOfRatings.EditBoxWidth = 60;
+	Edt_MinimumNumberOfRatings.SetNumericOnly(true);
+
+	//
+	// Right Side
+	//
+	
+	Edt_LogoTexture = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 8, 188, 16));
 	Edt_LogoTexture.SetText(Text_LogoTexture);
 	Edt_LogoTexture.EditBoxWidth = 100;
 
-	Lbl_LogoRegion = UWindowLabelControl(CreateControl(class'UWindowLabelControl', 4, 100, 84, 16));
+	Lbl_LogoRegion = UWindowLabelControl(CreateControl(class'UWindowLabelControl', 200, 40, 84, 16));
 	Lbl_LogoRegion.SetText(Text_LogoRegion);
 
-	Edt_LogoRegionX = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 92, 88, 40, 16));
+	Edt_LogoRegionX = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 288, 28, 40, 16));
 	Edt_LogoRegionX.SetText(Text_LogoRegionX);
 	Edt_LogoRegionX.SetNumericOnly(true);
 	Edt_LogoRegionX.EditBoxWidth = 30;
 
-	Edt_LogoRegionY = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 152, 88, 40, 16));
+	Edt_LogoRegionY = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 348, 28, 40, 16));
 	Edt_LogoRegionY.SetText(Text_LogoRegionY);
 	Edt_LogoRegionY.SetNumericOnly(true);
 	Edt_LogoRegionY.EditBoxWidth = 30;
 
-	Edt_LogoRegionW = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 92, 108, 40, 16));
+	Edt_LogoRegionW = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 288, 48, 40, 16));
 	Edt_LogoRegionW.SetText(Text_LogoRegionW);
 	Edt_LogoRegionW.SetNumericOnly(true);
 	Edt_LogoRegionW.EditBoxWidth = 30;
 
-	Edt_LogoRegionH = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 152, 108, 40, 16));
+	Edt_LogoRegionH = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 348, 48, 40, 16));
 	Edt_LogoRegionH.SetText(Text_LogoRegionH);
 	Edt_LogoRegionH.SetNumericOnly(true);
 	Edt_LogoRegionH.EditBoxWidth = 30;
 
-	Lbl_LogoDrawRegion = UWindowLabelControl(CreateControl(class'UWindowLabelControl', 4, 140, 84, 16));
+	Lbl_LogoDrawRegion = UWindowLabelControl(CreateControl(class'UWindowLabelControl', 200, 80, 84, 16));
 	Lbl_LogoDrawRegion.SetText(Text_LogoDrawRegion);
 
-	Edt_LogoDrawRegionX = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 92, 128, 40, 16));
+	Edt_LogoDrawRegionX = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 288, 68, 40, 16));
 	Edt_LogoDrawRegionX.SetText(Text_LogoDrawRegionX);
 	Edt_LogoDrawRegionX.SetNumericOnly(true);
 	Edt_LogoDrawRegionX.EditBoxWidth = 30;
 
-	Edt_LogoDrawRegionY = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 152, 128, 40, 16));
+	Edt_LogoDrawRegionY = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 348, 68, 40, 16));
 	Edt_LogoDrawRegionY.SetText(Text_LogoDrawRegionY);
 	Edt_LogoDrawRegionY.SetNumericOnly(true);
 	Edt_LogoDrawRegionY.EditBoxWidth = 30;
 
-	Edt_LogoDrawRegionW = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 92, 148, 40, 16));
+	Edt_LogoDrawRegionW = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 288, 88, 40, 16));
 	Edt_LogoDrawRegionW.SetText(Text_LogoDrawRegionW);
 	Edt_LogoDrawRegionW.SetNumericOnly(true);
 	Edt_LogoDrawRegionW.EditBoxWidth = 30;
 
-	Edt_LogoDrawRegionH = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 152, 148, 40, 16));
+	Edt_LogoDrawRegionH = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 348, 88, 40, 16));
 	Edt_LogoDrawRegionH.SetText(Text_LogoDrawRegionH);
 	Edt_LogoDrawRegionH.SetNumericOnly(true);
 	Edt_LogoDrawRegionH.EditBoxWidth = 30;
 
-	Edt_LogoButton0Label = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 168, 188, 16));
+	Edt_LogoButton0Label = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 108, 188, 16));
 	Edt_LogoButton0Label.SetText(Text_LogoButton0Label);
 	Edt_LogoButton0Label.EditBoxWidth = 100;
 
-	Edt_LogoButton0LinkURL = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 188, 188, 16));
+	Edt_LogoButton0LinkURL = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 128, 188, 16));
 	Edt_LogoButton0LinkURL.SetText(Text_LogoButton0LinkURL);
 	Edt_LogoButton0LinkURL.EditBoxWidth = 100;
 
-	Edt_LogoButton1Label = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 208, 188, 16));
+	Edt_LogoButton1Label = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 148, 188, 16));
 	Edt_LogoButton1Label.SetText(Text_LogoButton1Label);
 	Edt_LogoButton1Label.EditBoxWidth = 100;
 
-	Edt_LogoButton1LinkURL = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 228, 188, 16));
+	Edt_LogoButton1LinkURL = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 168, 188, 16));
 	Edt_LogoButton1LinkURL.SetText(Text_LogoButton1LinkURL);
 	Edt_LogoButton1LinkURL.EditBoxWidth = 100;
 
-	Edt_LogoButton2Label = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 248, 188, 16));
+	Edt_LogoButton2Label = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 188, 188, 16));
 	Edt_LogoButton2Label.SetText(Text_LogoButton2Label);
 	Edt_LogoButton2Label.EditBoxWidth = 100;
 
-	Edt_LogoButton2LinkURL = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 268, 188, 16));
+	Edt_LogoButton2LinkURL = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 208, 188, 16));
 	Edt_LogoButton2LinkURL.SetText(Text_LogoButton2LinkURL);
 	Edt_LogoButton2LinkURL.EditBoxWidth = 100;
 
@@ -217,6 +236,7 @@ function ApplyTheme() {
 	//Chk_RetainCandidates // not themed
 	//Chk_OpenVoteMenuAutomatically // not themed
 	Edt_DefaultTimeMessageClass.Theme = Theme;
+	Edt_MinimumNumberOfRatings.Theme = Theme;
 	Edt_LogoTexture.Theme = Theme;
 	Edt_LogoRegionX.Theme = Theme;
 	Edt_LogoRegionY.Theme = Theme;
@@ -238,6 +258,7 @@ defaultproperties {
 	Text_RetainCandidates="Retain Candidates"
 	Text_OpenVoteMenuAutomatically="Open Vote Menu Automatically"
 	Text_DefaultTimeMessageClass="Time Msg Class"
+	Text_MinimumNumberOfRatings="Minimum Number Of Ratings"
 	Text_LogoTexture="Logo Texture"
 	Text_LogoRegion="Logo Region"
 	Text_LogoRegionX="X"

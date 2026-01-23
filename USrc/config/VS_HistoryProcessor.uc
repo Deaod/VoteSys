@@ -14,6 +14,8 @@ event Tick(float Delta) {
 	local string Cat, Pre, Map;
 	local VS_Preset P;
 	local VS_Map M;
+	local float Rating;
+	local int Ratings;
 
 	if (VoteSys == none)
 		return;
@@ -33,6 +35,23 @@ event Tick(float Delta) {
 						M.Sequence = History.Entry[ProcessedEntry].Sequence;
 						P.MaxSequenceNumber = Max(P.MaxSequenceNumber, M.Sequence);
 						M.PlayCount = History.Entry[ProcessedEntry].NumVoted;
+
+						Rating =
+							History.Entry[ProcessedEntry].Rating2   +
+							History.Entry[ProcessedEntry].Rating3*2 +
+							History.Entry[ProcessedEntry].Rating4*3 +
+							History.Entry[ProcessedEntry].Rating5*4;
+						Ratings =
+							History.Entry[ProcessedEntry].Rating1 +
+							History.Entry[ProcessedEntry].Rating2 +
+							History.Entry[ProcessedEntry].Rating3 +
+							History.Entry[ProcessedEntry].Rating4 +
+							History.Entry[ProcessedEntry].Rating5;
+
+						if (Ratings >= VoteSys.Settings.MinimumNumberOfRatings)
+							M.Rating = int((Rating / (float(Ratings) * 4.0)) * 65535.0);
+						else
+							M.Rating = -1;
 					}
 				}
 			}

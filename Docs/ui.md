@@ -4,9 +4,13 @@
 
 ![Overview](Overview.png)
 
-### Dark Mode
+### Themes
+
+VoteSys supports three UI themes: Bright (seen above), Dark, and Black.
 
 ![Dark Mode Overview](OverviewDark.png)
+
+![Black Mode Overview](OverviewBlack.png)
 
 ### Category Tabs
 
@@ -15,6 +19,14 @@
 Each category has its own tab here. If the category of a preset is empty, it will appear in a tab called "Default".
 
 You can scroll through available tabs uing the scroll wheel of your mouse while hovering over the tab area.
+
+### Map Rating
+
+![Map Rating](MapRatingHighlight.png)
+
+Players can rate the currently running map using a 5-star system. Players can vote once per match.
+
+Playing the same map multiple times allows the same player to rate that map multiple times.
 
 ### Preset Dropdown
 
@@ -54,6 +66,12 @@ The outline of a star is shown when hovering over maps in the list.
 Maps can also be marked as favorites through the [context menu](#map-context-menu).
 
 By default, your favorite maps are show at the top of the list.
+
+#### Map Rating Display
+
+Left of map names there is space for the rating of maps to be shown. A full bar is equivalent to a 5-star rating, and an empty bar is equivalent to a 1-star rating.
+
+Maps without a bar have not yet received enough ratings from players. By default a minimum of 10 ratings must have been registered for a map to show the average of the ratings it has received.
 
 #### Map Screenshot Preview
 

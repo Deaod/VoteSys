@@ -92,11 +92,7 @@ event PostBeginPlay() {
 		GetDefaultServerActors();
 	}
 
-	ApplyVotedPreset();
-
 	SetTimer(0.5, true);
-	LoadConfig();
-	LoadHistory();
 	Info = Spawn(class'VS_Info', self);
 	Info.VoteSys = self;
 	DataServer = Spawn(class'VS_Net_TcpServer', self);
@@ -104,6 +100,9 @@ event PostBeginPlay() {
 	ChatObserver = Level.Spawn(class'VS_ChatObserver');
 	ChatObserver.VoteSys = self;
 
+	ApplyVotedPreset();
+	LoadConfig();
+	LoadHistory();
 	ConfigureGameMode();
 	SaveSettings();
 }
@@ -146,7 +145,7 @@ function VS_ChannelContainer FindChannelForCookie(int Cookie) {
 	local VS_ChannelContainer C;
 
 	for (C = ChannelList; C != none; C = C.Next)
-		if (C.Channel != none && C.Channel.Cookie == Cookie)
+		if (C.Cookie == Cookie)
 			return C;
 
 	return none;
@@ -162,6 +161,7 @@ function CreateChannel(PlayerPawn P) {
 	C = Spawn(class'VS_ChannelContainer');
 	C.Initialize(P);
 	C.Channel.Cookie = CreateCookie();
+	C.Cookie = C.Channel.Cookie;
 	C.Next = ChannelList;
 	ChannelList = C;
 }
@@ -1569,6 +1569,8 @@ function LoadHistory() {
 	HistoryProcessor.VoteSys = self;
 	HistoryProcessor.History = History;
 	HistoryProcessor.PresetList = PresetList;
+
+	History.DetermineCurrentMapIndex(Info.ResolvePreset(CurrentPreset), string(Level.Outer.Name));
 }
 
 function SaveSettings() {

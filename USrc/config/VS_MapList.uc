@@ -147,6 +147,7 @@ function VS_Map DuplicateList() {
 		M.MapName = Maps[i].MapName;
 		M.MinPlayers = Maps[i].MinPlayers;
 		M.MaxPlayers = Maps[i].MaxPlayers;
+		M.Rating = -1;
 		
 		if (++i >= Maps.Length)
 			break;

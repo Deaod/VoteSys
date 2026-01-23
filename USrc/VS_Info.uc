@@ -1,5 +1,6 @@
 class VS_Info extends ReplicationInfo
-	imports(VS_Msg_LocalMessage);
+	imports(VS_Msg_LocalMessage)
+	imports(VS_Util_Logging);
 
 var MutVoteSys VoteSys;
 struct ConnectionData {
@@ -280,6 +281,34 @@ function VS_Map ResolveMapOfPreset(VS_Preset P, string MapName) {
 			return M;
 
 	return none;
+}
+
+function int FindMapRating(VS_PlayerChannel Origin, int Cookie) {
+	local VS_ChannelContainer OldC;
+	local VS_ChannelContainer CurC;
+	
+	OldC = VoteSys.FindChannelForCookie(Cookie);
+	if (OldC == none)
+		return 0;
+
+	CurC = VoteSys.FindChannel(Origin.PlayerOwner);
+	if (CurC == none)
+		return 0;
+
+	CurC.MapRating = OldC.MapRating;
+	return CurC.MapRating;
+}
+
+function SetMapRating(VS_PlayerChannel Origin, int Rating, int OldRating) {
+	local VS_ChannelContainer C;
+
+	C = VoteSys.FindChannel(Origin.PlayerOwner);
+	if (C == none)
+		return;
+
+	VoteSys.History.RateMap(Rating, OldRating);
+	C.MapRating = Rating;
+	Origin.MapRating = Rating;
 }
 
 defaultproperties {

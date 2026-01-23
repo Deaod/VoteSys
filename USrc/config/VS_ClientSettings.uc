@@ -11,7 +11,8 @@ enum ETheme {
 enum EMapListSort {
 	MLS_Name,
 	MLS_Recency,
-	MLS_PlayCount
+	MLS_PlayCount,
+	MLS_Rating
 };
 
 var config ETheme Theme;
@@ -28,6 +29,8 @@ var config float MenuY;
 var config float SettingsX;
 var config float SettingsY;
 
+var config int LastCookie;
+
 static final function ETheme IntToTheme(int A) {
 	switch(A) {
 		case 0: return TH_Bright;
@@ -42,6 +45,7 @@ static final function EMapListSort IntToMapListSort(int A) {
 		case 0: return MLS_Name;
 		case 1: return MLS_Recency;
 		case 2: return MLS_PlayCount;
+		case 3: return MLS_Rating;
 	}
 	return default.MapListSort;
 }
