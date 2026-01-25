@@ -4,14 +4,20 @@ class VS_Net_ChannelLink extends Info
 
 var VS_PlayerChannel PlayerChannel;
 
+struct Simplex {
+	var() string Buffer;
+	var() int Count;
+};
+
+struct Connection {
+	var VS_Data_Peer Peer;
+	var() Simplex Tx;
+	var() Simplex Rx;
+};
+
 var bool bEnableTraffic;
-var string SendBuffer;
-
-var string RecvBuffer;
-var VS_Data_Peer Peer;
-
-var int SendCount;
-var int RecvCount;
+var Connection Client;
+var Connection Server;
 
 const MaxTextPerTick = 400; // assuming everything is ascii
 //const UnicodeMaxTextPerTick = 200; // unicode is UTF-16 on all platforms
@@ -36,10 +42,28 @@ simulated event Tick(float Delta) {
 	local int CL;
 	local int I;
 
-	if (bEnableTraffic && Len(SendBuffer) > 0) {
-		SendCount += Min(Len(SendBuffer), MaxTextPerTick);
+	if (PlayerChannel != none && Viewport(PlayerChannel.PlayerOwner.Player) != none && Client.Peer == none) {
+		// deals with listen server
+		PlayerChannel.ClientSetupFallbackDataTransport(self);
+	}
 
-		Chunk = Left(SendBuffer, MaxTextPerTick);
+	if (Client.Peer != none && Len(Client.Rx.Buffer) > 0) {
+		Client.Peer.Receive(Client.Rx.Buffer);
+		Client.Rx.Buffer = "";
+	}
+
+	if (Server.Peer != none && Len(Server.Rx.Buffer) > 0) {
+		Server.Peer.Receive(Server.Rx.Buffer);
+		Server.Rx.Buffer = "";
+	}
+
+	if (bEnableTraffic == false)
+		return;
+
+	if (Len(Client.Tx.Buffer) > 0) {
+		Client.Tx.Count += Min(Len(Client.Tx.Buffer), MaxTextPerTick);
+
+		Chunk = Left(Client.Tx.Buffer, MaxTextPerTick);
 		CL = Len(Chunk);
 		for (I = 0; I < CL; I++) {
 			if (Asc(Mid(Chunk, i, 1)) > 0x7F) {
@@ -52,42 +76,58 @@ simulated event Tick(float Delta) {
 			}
 		}
 
-		if (Role == ROLE_Authority) {
-			ClientReceiveText(Chunk);
-		} else {
-			ServerReceiveText(Chunk);
+		ServerReceiveText(Chunk);
+		Client.Tx.Buffer = Mid(Client.Tx.Buffer, Len(Chunk), Len(Client.Tx.Buffer));
+	}
+
+	if (Len(Server.Tx.Buffer) > 0) {
+		Server.Tx.Count += Min(Len(Server.Tx.Buffer), MaxTextPerTick);
+
+		Chunk = Left(Server.Tx.Buffer, MaxTextPerTick);
+		CL = Len(Chunk);
+		for (I = 0; I < CL; I++) {
+			if (Asc(Mid(Chunk, i, 1)) > 0x7F) {
+				if (I > UnicodeMaxTextPerTick) {
+					Chunk = Left(Chunk, I);
+				} else {
+					Chunk = Left(Chunk, UnicodeMaxTextPerTick);
+				}
+				break;
+			}
 		}
-		SendBuffer = Mid(SendBuffer, Len(Chunk), Len(SendBuffer));
-	}
 
-	if (Peer != none && Len(RecvBuffer) > 0) {
-		Peer.Receive(RecvBuffer);
-		RecvBuffer = "";
+		ClientReceiveText(Chunk);
+		Server.Tx.Buffer = Mid(Server.Tx.Buffer, Len(Chunk), Len(Server.Tx.Buffer));
 	}
-}
-
-final function ServerEnableConnection() {
-	bEnableTraffic = true;
 }
 
 final simulated function ClientEnableConnection() {
 	ServerEnableConnection();
 	bEnableTraffic = true;
-	SetTimer(Level.TimeDilation, true);
+	LogDbg("VS_Net_ChannelLink ClientEnableConnection");
 }
 
-final simulated function SendText(coerce string Content) {
-	SendBuffer = SendBuffer$Content;
+final function ServerEnableConnection() {
+	bEnableTraffic = true;
+	LogDbg("VS_Net_ChannelLink ServerEnableConnection");
 }
 
-final function ServerReceiveText(string Content) {
-	RecvCount += Len(Content);
-	RecvBuffer = RecvBuffer$Content;
+final simulated function ClientSendText(coerce string Content) {
+	Client.Tx.Buffer = Client.Tx.Buffer$Content;
+}
+
+final function ServerSendText(coerce string Content) {
+	Server.Tx.Buffer = Server.Tx.Buffer$Content;
 }
 
 final simulated function ClientReceiveText(string Content) {
-	RecvCount += Len(Content);
-	RecvBuffer = RecvBuffer$Content;
+	Client.Rx.Count += Len(Content);
+	Client.Rx.Buffer = Client.Rx.Buffer$Content;
+}
+
+final function ServerReceiveText(string Content) {
+	Server.Rx.Count += Len(Content);
+	Server.Rx.Buffer = Server.Rx.Buffer$Content;
 }
 
 defaultproperties {

@@ -15,12 +15,16 @@ final function bool IsConnected() {
 }
 
 final function Send(string Content) {
-	if (Link != none && Link.IsConnected())
+	if (Link != none && Link.IsConnected()) {
 		Link.SendText(Content);
-	else if (Chan != none)
-		Chan.SendText(Content);
-	else
+	} else if (Chan != none) {
+		if (Class == class'VS_Data_Client')
+			Chan.ClientSendText(Content);
+		else
+			Chan.ServerSendText(Content);
+	} else {
 		LogErr("VS_Data_Peer SendText - Internal Error while sending:"@Content);
+	}
 }
 
 final function string GetIdentifier() {
