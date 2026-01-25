@@ -104,12 +104,10 @@ simulated event Tick(float Delta) {
 final simulated function ClientEnableConnection() {
 	ServerEnableConnection();
 	bEnableTraffic = true;
-	LogDbg("VS_Net_ChannelLink ClientEnableConnection");
 }
 
 final function ServerEnableConnection() {
 	bEnableTraffic = true;
-	LogDbg("VS_Net_ChannelLink ServerEnableConnection");
 }
 
 final simulated function ClientSendText(coerce string Content) {
