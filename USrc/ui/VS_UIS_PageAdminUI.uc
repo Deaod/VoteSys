@@ -111,7 +111,7 @@ function SaveSettings() {
 	Settings.bRetainCandidates = Chk_RetainCandidates.bChecked;
 	Settings.bOpenVoteMenuAutomatically = Chk_OpenVoteMenuAutomatically.bChecked;
 	Settings.DefaultTimeMessageClass = Edt_DefaultTimeMessageClass.GetValue();
-	Settings.MinimumNumberOfRatings = int(Edt_MinimumNumberOfRatings.GetValue());
+	Settings.MinimumNumberOfRatings = Max(1, int(Edt_MinimumNumberOfRatings.GetValue()));
 	Settings.LogoTexture = Edt_LogoTexture.GetValue();
 	Settings.LogoRegion.X = int(Edt_LogoRegionX.GetValue());
 	Settings.LogoRegion.Y = int(Edt_LogoRegionY.GetValue());
@@ -154,7 +154,7 @@ function Created() {
 	//
 	// Right Side
 	//
-	
+
 	Edt_LogoTexture = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 200, 8, 188, 16));
 	Edt_LogoTexture.SetText(Text_LogoTexture);
 	Edt_LogoTexture.EditBoxWidth = 100;
