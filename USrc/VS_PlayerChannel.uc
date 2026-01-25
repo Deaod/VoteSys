@@ -386,9 +386,15 @@ simulated function ShowSettings() {
 	SettingsDialog.ShowWindow();
 }
 
+// currently only called at the end of the game
 simulated function HideVoteMenu() {
-	if (VoteMenuDialog != none)
+	if (VoteMenuDialog != none) {
 		VoteMenuDialog.Close();
+
+		Settings.LastCookie = 0;
+		Settings.LastMap = "";
+		Settings.SaveConfig();
+	}
 }
 
 simulated function AddPreset(VS_Preset P) {
