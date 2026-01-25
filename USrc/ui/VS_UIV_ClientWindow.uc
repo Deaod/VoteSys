@@ -131,6 +131,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	local LevelInfo L;
 	local string Filter;
 	local VS_UI_MapListItem M;
+	local bool bEnableVoting;
 
 	super.BeforePaint(C, MouseX, MouseY);
 
@@ -160,9 +161,11 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	MapRating.WinLeft = WinWidth-190;
 	MapRating.Rating = Channel.MapRating;
 
-	VoteButton.bDisabled = (ActivePreset == none);
-	SuggestButton.bDisabled = (ActivePreset == none);
-	RandomButton.bDisabled = (ActivePreset == none);
+	bEnableVoting = (ActivePreset != none && Channel.PlayerInfo().bCanVote);
+	VoteButton.bDisabled = (bEnableVoting == false);
+	SuggestButton.bDisabled = (bEnableVoting == false);
+	RandomButton.bDisabled = (bEnableVoting == false);
+	MapRating.bDisabled = (bEnableVoting == false);
 
 	if (ChatEdit.EditBox.bControlDown)
 		ChatSay.SetText(ChatTeamSayText);

@@ -302,6 +302,9 @@ function int FindMapRating(VS_PlayerChannel Origin, int Cookie) {
 function SetMapRating(VS_PlayerChannel Origin, int Rating, int OldRating) {
 	local VS_ChannelContainer C;
 
+	if (VoteSys.CanVote(Origin.PlayerOwner) == false)
+		return;
+
 	C = VoteSys.FindChannel(Origin.PlayerOwner);
 	if (C == none)
 		return;

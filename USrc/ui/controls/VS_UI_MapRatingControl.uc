@@ -3,6 +3,7 @@ class VS_UI_MapRatingControl extends UWindowDialogControl
 
 var VS_UI_ThemeBase Theme;
 
+var bool bDisabled;
 var float StarSpacing;
 var Texture StarEmpty;
 var Texture StarFilled;
@@ -27,7 +28,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 		TextY = (WinHeight - H);
 	}
 
-	if (MouseIsOver() && MouseX >= TextEndX) {
+	if (bDisabled == false && MouseIsOver() && MouseX >= TextEndX) {
 		Rating = int((MouseX - TextEndX) / (WinHeight + StarSpacing)) + 1;
 	}
 
@@ -43,11 +44,15 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 function Paint( Canvas C, float MouseX, float MouseY) {
 	local float X;
 
+	C.Style = 2;
 	C.Font = Root.Fonts[0];
 	Theme.DrawBox(C, self, 0, 0, WinWidth, WinHeight);
 
-	C.DrawColor = Theme.Foreground;
-	C.Style = 2;
+	if (bDisabled) {
+		C.DrawColor = Theme.InactiveFG;
+	} else {
+		C.DrawColor = Theme.Foreground;
+	}
 
 	if (Text != "") {
 		ClipText(C, TextEndX - TextWidth, TextY - 1, Text, true);
@@ -69,6 +74,9 @@ function Paint( Canvas C, float MouseX, float MouseY) {
 }
 
 function Click(float MouseX, float MouseY) {
+	if (bDisabled)
+		return;
+		
 	TextEndX = WinWidth - 5*(WinHeight+StarSpacing);
 	if (MouseX >= TextEndX) {
 		Rating = int((MouseX - TextEndX) / (WinHeight + StarSpacing)) + 1;
