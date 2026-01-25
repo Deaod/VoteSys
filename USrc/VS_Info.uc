@@ -283,9 +283,12 @@ function VS_Map ResolveMapOfPreset(VS_Preset P, string MapName) {
 	return none;
 }
 
-function int FindMapRating(VS_PlayerChannel Origin, int Cookie) {
+function int FindMapRating(VS_PlayerChannel Origin, int Cookie, string LastMap) {
 	local VS_ChannelContainer OldC;
 	local VS_ChannelContainer CurC;
+
+	if (string(Level.Outer.Name) != LastMap)
+		return 0;
 	
 	OldC = VoteSys.FindChannelForCookie(Cookie);
 	if (OldC == none)

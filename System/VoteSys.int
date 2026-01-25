@@ -125,6 +125,13 @@ Text_DefaultMap="Default Map"
 Text_AlwaysUseDefaultMap="Always Use Default Map"
 Text_IdleTimeout="Idle Timeout"
 
+[VS_UI_PlayerMenu]
+PlayerIdText="ID:"
+PlayerKickText="&Kick"
+PlayerBanText="&Ban"
+PlayerBanTitle="Ban Player"
+PlayerBanMessage="Do you want to permanently ban {1}?"
+
 [VS_UIS_PageClient]
 ThemeText="Theme"
 ThemeBright="Bright"
@@ -146,12 +153,8 @@ PageAdminSetupName="[A] Setup"
 PageAdminPresetsName="[A] Presets"
 PageAdminMapListsName="[A] Map Lists"
 
-[VS_UI_PlayerMenu]
-PlayerIdText="ID:"
-PlayerKickText="&Kick"
-PlayerBanText="&Ban"
-PlayerBanTitle="Ban Player"
-PlayerBanMessage="Do you want to permanently ban {1}?"
+[VS_UI_ScreenshotWindow]
+TextPlayerCount="Players:"
 
 [VS_UIS_PageAdminVoting]
 Text_MidGameVoteThreshold="Mid-Game Vote Threshold"
@@ -165,9 +168,6 @@ Text_VoteEndCondition_TimerOrResultDetermined="Result Certain"
 Text_EnableKickVoting="Enable Kick Voting"
 Text_KickVoteThreshold="Kick Vote Threshold"
 Text_MinimumMapRepeatDistance="Map Repeat Distance"
-
-[VS_UI_ScreenshotWindow]
-TextPlayerCount="Players:"
 
 [VS_UI_MapMenu]
 FavoriteText="Favorite"

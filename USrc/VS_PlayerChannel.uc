@@ -153,7 +153,7 @@ simulated event Tick(float Delta) {
 		FavoritesProcessor = Spawn(class'VS_FavoritesProcessor', self);
 
 		if (Viewport(PlayerOwner.Player) != none) {
-			ServerFindMapRating(Settings.LastCookie);
+			ServerFindMapRating(Settings.LastCookie, Settings.LastMap);
 		}
 
 		bSettingsInitialized = true;
@@ -183,6 +183,7 @@ simulated event Tick(float Delta) {
 
 	if (CookieSaveState == CKSS_Save && Cookie != 0) {
 		Settings.LastCookie = Cookie;
+		Settings.LastMap = string(Level.Outer.Name);
 		CookieSaveState = CKSS_Done;
 		Settings.SaveConfig();
 	}
@@ -656,12 +657,12 @@ function ServerBanPlayer(PlayerReplicationInfo PRI) {
 	VoteInfo().BanPlayer(self, PRI);
 }
 
-function ServerFindMapRating(int LastCookie) {
+function ServerFindMapRating(int LastCookie, string LastMap) {
 	if (LastCookie == 0) {
 		ClientApplyOldMapRating(0);
 		return;
 	}
-	MapRating = VoteInfo().FindMapRating(self, LastCookie);
+	MapRating = VoteInfo().FindMapRating(self, LastCookie, LastMap);
 	bLastCookieChecked = true;
 	ClientApplyOldMapRating(MapRating);
 }

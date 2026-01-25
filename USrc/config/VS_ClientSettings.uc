@@ -30,6 +30,7 @@ var config float SettingsX;
 var config float SettingsY;
 
 var config int LastCookie;
+var config string LastMap;
 
 static final function ETheme IntToTheme(int A) {
 	switch(A) {
