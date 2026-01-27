@@ -554,20 +554,27 @@ function HandleKickVoting() {
 	}
 }
 
-function CheckMidGameVoting() {
-	local int NumVotes;
-	local int NumPlayers;
+function CountVotersAndVotes(out int NumVoters, out int NumVotes) {
 	local VS_ChannelContainer C;
 
-	NumPlayers = 0;
+	NumVoters = 0;
+	NumVotes = 0;
+
 	for (C = ChannelList; C != none; C = C.Next) {
 		if (C.PlayerInfo != none) {
-			if (C.PlayerInfo.bIsPlayer && C.PlayerInfo.bCanVote)
-				NumPlayers++;
+			if (IsVoter(C.PlayerOwner))
+				NumVoters++;
 			if (C.PlayerInfo.bHasVoted)
 				NumVotes++;
 		}
 	}
+}
+
+function CheckMidGameVoting() {
+	local int NumVotes;
+	local int NumPlayers;
+
+	CountVotersAndVotes(NumPlayers, NumVotes);
 	
 	if (NumPlayers <= 0)
 		return;
@@ -904,14 +911,7 @@ function bool CheckVoteEndConditions() {
 	if (Settings.VoteEndCondition == VEC_TimerOnly)
 		return false;
 
-	for (C = ChannelList; C != none; C = C.Next) {
-		if (C.PlayerInfo != none) {
-			if (C.PlayerInfo.bIsPlayer && C.PlayerInfo.bCanVote)
-				NumVoters++;
-			if (C.PlayerInfo.bHasVoted)
-				NumVotes++;
-		}
-	}
+	CountVotersAndVotes(NumVoters, NumVotes);
 
 	if (Settings.VoteEndCondition == VEC_TimerOrAllVotesIn) {
 		if (NumVotes == NumVoters)
@@ -1577,6 +1577,13 @@ function SaveSettings() {
 	Settings.SaveConfig();
 
 	Info.bEnableKickVoting = Settings.bEnableKickVoting;
+}
+
+// This differs from CanVote in that admins spectating dont count as voters
+function bool IsVoter(PlayerPawn P) {
+	return P != none
+		&& P.IsA('Spectator') == false
+		&& P.Player != none;
 }
 
 function bool CanVote(PlayerPawn P) {
