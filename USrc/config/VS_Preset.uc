@@ -23,6 +23,10 @@ var int             MinimumMapRepeatDistance;
 var int             MinPlayers;
 var int             MaxPlayers;
 
+// These are used by function SelectRandomMapFromList
+var private transient int SequenceCutoff;
+var private transient int NumPlayers;
+
 function AppendMutator(string Mut) {
 	if (Mut == "")
 		return;
@@ -70,23 +74,28 @@ function string GetFullName() {
 	return Category$"/"$PresetName;
 }
 
-function VS_Map SelectRandomMapFromList() {
+function bool _ShouldSkip(VS_Map M) {
+	return (M.Sequence > 0 && M.Sequence > SequenceCutoff) ||
+		(NumPlayers > 0 && (NumPlayers < M.MinPlayers || NumPlayers > M.MaxPlayers));
+}
+
+function VS_Map SelectRandomMapFromList(optional int Players) {
 	local float Target;
 	local float TargetCount;
 	local VS_Map M;
 	local VS_Map Result;
-	local int SequenceCutoff;
 	local bool Skip;
 
 	if (MapList == none)
 		return none;
 
 	SequenceCutoff = MaxSequenceNumber - MinimumMapRepeatDistance;
+	NumPlayers = Players;
 	Target = FRand();
 	M = MapList;
 	Result = MapList;
 	while (M.Next != none) {
-		Skip = (M.Sequence > 0 && M.Sequence > SequenceCutoff);
+		Skip = _ShouldSkip(M);
 		M = M.Next;
 		if (Skip)
 			continue;
@@ -95,7 +104,7 @@ function VS_Map SelectRandomMapFromList() {
 			TargetCount -= 1.0;
 			do {
 				Result = Result.Next;
-			} until(Result.Sequence == 0 || Result.Sequence <= SequenceCutoff);
+			} until(_ShouldSkip(Result) == false);
 		}
 	}
 

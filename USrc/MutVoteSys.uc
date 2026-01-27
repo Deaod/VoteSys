@@ -798,7 +798,7 @@ function AdminForceTravelTo(VS_Preset P, VS_Map M) {
 	
 	VotedPreset = P;
 	VotedMap = M;
-	CheckVotedMap();
+	CheckVotedMap(0);
 	
 	GameState = GS_VoteEnded;
 	TimeCounter = 5;
@@ -809,6 +809,8 @@ function TallyVotes() {
 	local int CountTiedCandidates;
 	local float TiedCandidatesFraction;
 	local float RandomCandidate;
+	local int NumVoters;
+	local int NumVotes;
 	local VS_Map M;
 	local VS_ChannelContainer C;
 	local VS_Candidate Cd;
@@ -820,9 +822,10 @@ function TallyVotes() {
 		if (C.Channel != none)
 			C.Channel.DumpLog();
 
-
 	for (Cd = Info.FirstCandidate; Cd != none; Cd = Cd.Next)
 		Cd.Dump();
+
+	CountVotersAndVotes(NumVoters, NumVotes);
 
 	if (Info.FirstCandidate == none || Info.FirstCandidate.Votes == 0) {
 		// nobody voted
@@ -840,7 +843,7 @@ function TallyVotes() {
 		if ((Settings.bAlwaysUseDefaultPreset && Settings.bAlwaysUseDefaultMap) || bChangeMapImmediately)
 			M = Info.ResolveMapOfPreset(VotedPreset, Settings.DefaultMap);
 		if (M == none)
-			M = VotedPreset.SelectRandomMapFromList();
+			M = VotedPreset.SelectRandomMapFromList(NumVoters);
 		if (M == none)
 			return;
 		VotedMap = M;
@@ -867,7 +870,7 @@ function TallyVotes() {
 		VotedPreset = Cd.PresetRef;
 		M = Cd.MapRef;
 		if (M == none)
-			M = VotedPreset.SelectRandomMapFromList();
+			M = VotedPreset.SelectRandomMapFromList(NumVoters);
 		VotedMap = M;
 	}
 
@@ -880,10 +883,10 @@ function TallyVotes() {
 		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', EVS_MsgId.MsgHaveWinner, VotedMap.MapName@"("$VotedPreset.Abbreviation$")");
 	}
 
-	CheckVotedMap();
+	CheckVotedMap(NumVoters);
 }
 
-function CheckVotedMap() {
+function CheckVotedMap(int NumVoters) {
 	local string OldMapName;
 
 	// Object MyLevel is what the game natively loads from maps when switching
@@ -893,13 +896,12 @@ function CheckVotedMap() {
 	while (DynamicLoadObject(VotedMap.MapName$".MyLevel", class'Object', true) == none) {
 		LogErr(VotedMap.MapName@"failed to load");
 		OldMapName = VotedMap.MapName;
-		VotedMap = VotedPreset.SelectRandomMapFromList();
+		VotedMap = VotedPreset.SelectRandomMapFromList(NumVoters);
 		BroadcastLocalizedMessage2(class'VS_Msg_LocalMessage', EVS_MsgId.ErrMapLoadFailed, OldMapName, VotedMap.MapName);
 	}
 }
 
 function bool CheckVoteEndConditions() {
-	local VS_ChannelContainer C;
 	local int VotesFirst;
 	local int VotesSecond;
 	local int NumVoters;

@@ -97,12 +97,17 @@ function VS_Candidate AddMapVoteInternal(VS_Preset P, VS_Map M) {
 function VS_Candidate AddCandidateVote(VS_PlayerChannel Origin, VS_Candidate Candidate) {
 	local VS_Preset P;
 	local VS_Map M;
+	local int NumVoters;
+	local int NumVotes;
+
 	if (VoteSys.CanVote(Origin.PlayerOwner)) {
 		if (Origin.PlayerOwner.bAdmin) {
 			P = Candidate.PresetRef;
 			M = Candidate.MapRef;
-			if (M == none)
-				M = P.SelectRandomMapFromList();
+			if (M == none) {
+				VoteSys.CountVotersAndVotes(NumVoters, NumVotes);
+				M = P.SelectRandomMapFromList(NumVoters);
+			}
 				
 			VoteSys.BroadcastLocalizedMessage2(
 				class'VS_Msg_LocalMessage', EVS_MsgId.MsgAdminForceTravel,
@@ -135,10 +140,13 @@ function VS_Candidate AddCandidateVote(VS_PlayerChannel Origin, VS_Candidate Can
 
 function VS_Candidate AddRandomVote(VS_PlayerChannel Origin, VS_Preset P) {
 	local VS_Map M;
+	local int NumVoters;
+	local int NumVotes;
 
 	if (VoteSys.CanVote(Origin.PlayerOwner)) {
 		if (Origin.PlayerOwner.bAdmin) {
-			M = P.SelectRandomMapFromList();
+			VoteSys.CountVotersAndVotes(NumVoters, NumVotes);
+			M = P.SelectRandomMapFromList(NumVoters);
 			VoteSys.BroadcastLocalizedMessage2(
 				class'VS_Msg_LocalMessage', EVS_MsgId.MsgAdminForceTravel,
 				Origin.PlayerOwner.PlayerReplicationInfo.PlayerName,
