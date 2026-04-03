@@ -10,11 +10,17 @@ var localized string SaveText;
 
 var UWindowSmallCloseButton Btn_Close;
 
+var string ToolTipText;
+var VS_UI_ToolTipWindow ToolTipWindow;
+
 function Created() {
 	Btn_Save = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 298, 334, 40, 16));
 	Btn_Save.SetText(SaveText);
 
 	Btn_Close = UWindowSmallCloseButton(CreateControl(class'UWindowSmallCloseButton', 342, 334, 40, 16));
+
+	ToolTipWindow = VS_UI_ToolTipWindow(Root.CreateWindow(class'VS_UI_ToolTipWindow', 0, 0, 120, 22, self));
+	ToolTipWindow.HideWindow();
 
 	super.Created();
 }
@@ -36,6 +42,15 @@ function Notify(UWindowDialogControl C, byte E) {
 		if (CanSaveSettings())
 			SaveSettings();
 	}
+}
+
+function ToolTip(string Tip) {
+	if (ToolTipText != "")
+		ToolTipWindow.HideWindow();
+	ToolTipText = Tip;
+	if (Tip != "")
+		ToolTipWindow.ShowWindow();
+	ToolTipWindow.SetText(ToolTipText);
 }
 
 function BeforePaint(Canvas C, float X, float Y) {

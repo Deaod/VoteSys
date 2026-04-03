@@ -144,6 +144,11 @@ MapListSortPlayCount="Play Count"
 MapListSortRating="Rating"
 FavoritesFirstText="Sort Favorites First"
 ShowPlayerListText="Show Player List"
+HotkeyResetInstructions="Left-Click to Bind, Right-Click to Unbind Hotkey"
+HotkeyVoteMenuText="Hotkey Vote Menu"
+HotkeySettingsText="Hotkey Settings"
+OverwriteTitle="Overwrite Bind?"
+OverwriteMessage="The key '{1}' is already bound to:\n>> {2}\nDo you want to overwrite it?"
 
 [VS_UIS_ClientWindow]
 PageClientSettingsName="Client"
