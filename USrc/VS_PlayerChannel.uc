@@ -47,6 +47,8 @@ var array<PlayerReplicationInfo> IWantToKick;
 
 var int MaxMapSequenceNumber;
 
+var VS_Msg_ParameterContainer LocalizeMessageParams;
+
 struct Range {
 	var int Beg;
 	var int End;
@@ -770,7 +772,10 @@ simulated function LocalizeMessage(
 ) {
 	local VS_Msg_ParameterContainer Params;
 
-	Params = new(none) class'VS_Msg_ParameterContainer';
+	if (LocalizeMessageParams == none)
+		LocalizeMessageParams = new(none) class'VS_Msg_ParameterContainer';
+
+	Params = LocalizeMessageParams;
 	// no Param0, reserved for invalid parameter sequences
 	Params.Params[1] = Param1;
 	Params.Params[2] = Param2;
