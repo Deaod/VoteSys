@@ -439,6 +439,8 @@ It is recommended to define a `ServerName` either for all presets or for none of
 ### Map List
 `MapListName` can be used to specify a custom list of maps that can be used with the preset. If `MapListName` is blank, all maps for the specified gametype are used.
 
+The name of a map list should not contain spaces. The name should only contain alphanumeric characters, `-` or `_`.
+
 ### Mutators
 `Mutators` can be used to specify both Mutators and ServerActors.
 
