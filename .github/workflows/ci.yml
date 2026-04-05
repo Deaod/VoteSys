@@ -163,7 +163,7 @@ jobs:
             -H "Authorization: Bearer ${{ github.token }}" `
             -H "X-GitHub-Api-Version: 2026-03-10" `
             -H "Content-Type: application/octet-stream" `
-            "${{ github.event.release.upload_url }}?name=${{ env.PKG_NAME }}.zip" `
+            "https://uploads.github.com/repos/${{ github.repository}}/releases/${{ github.event.release.id }}/assets?name=${{ env.PKG_NAME }}.zip" `
             --data-binary "@Release/${{ env.PKG_NAME }}.zip"
 
       - name: Create Pre-Release
