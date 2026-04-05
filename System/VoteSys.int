@@ -2,189 +2,189 @@
 Object=(Name=VoteSys.MutVoteSys,Class=Class,MetaClass=Engine.Mutator,Description="MutVoteSys,Enables voting for next map")
 
 [VS_UIS_PageAdmin]
-Text_RestartServer="Restart Server"
-Text_ReloadSettings="Reload Settings"
-Text_SettingsState_New="Loading"
-Text_SettingsState_Complete="Loaded"
-Text_SettingsState_NotAdmin="Unauthorized"
+Text_RestartServer=Restart Server
+Text_ReloadSettings=Reload Settings
+Text_SettingsState_New=Loading
+Text_SettingsState_Complete=Loaded
+Text_SettingsState_NotAdmin=Unauthorized
 
 [VS_UIS_Page]
-SaveText="Save"
+SaveText=Save
 
 [VS_UIS_PageAdminPresets]
-Text_PresetName="Preset Name"
-Text_PresetNameEmpty="Preset will be deleted"
-Text_Category="Category"
-Text_Abbreviation="Abbreviation"
-Text_SortPriority="Sort Priority"
-Text_InheritFrom="Inherit From"
-Text_ServerName="Server Name"
-Text_Game="Game"
-Text_MapListName="Map List Name"
-Text_Mutators="Mutators"
-Text_Parameters="Parameters"
-Text_GameSettings="Game Settings"
-Text_Packages="Packages"
-Text_Disabled="Disabled"
-Text_MinimumMapRepeatDistance="Min. Map Repeat Distance"
-Text_MinPlayers="Min. Players"
-Text_MaxPlayers="Max. Players"
-Text_OpenVoteMenuAutomatically="Open Vote Menu Automatically"
+Text_PresetName=Preset Name
+Text_PresetNameEmpty=Preset will be deleted
+Text_Category=Category
+Text_Abbreviation=Abbreviation
+Text_SortPriority=Sort Priority
+Text_InheritFrom=Inherit From
+Text_ServerName=Server Name
+Text_Game=Game
+Text_MapListName=Map List Name
+Text_Mutators=Mutators
+Text_Parameters=Parameters
+Text_GameSettings=Game Settings
+Text_Packages=Packages
+Text_Disabled=Disabled
+Text_MinimumMapRepeatDistance=Min. Map Repeat Distance
+Text_MinPlayers=Min. Players
+Text_MaxPlayers=Max. Players
+Text_OpenVoteMenuAutomatically=Open Vote Menu Automatically
 
 [VS_UIV_ClientWindow]
-MapRatingText="Rate This Map:"
-MapFilterText="Filter Maps By Name"
-VoteButtonText="Vote"
-SuggestButtonText="Suggest"
-RandomButtonText="Random"
-ChatSayText="Say"
-ChatTeamSayText="TeamSay"
+MapRatingText=Rate This Map:
+MapFilterText=Filter Maps By Name
+VoteButtonText=Vote
+SuggestButtonText=Suggest
+RandomButtonText=Random
+ChatSayText=Say
+ChatTeamSayText=TeamSay
 
 [VS_UI_CandidateListBox]
-PresetColumnHeader="Preset"
-MapColumnHeader="Map"
-VotesColumnHeader="Votes"
-RandomMapDisplayName="<Random>"
+PresetColumnHeader=Preset
+MapColumnHeader=Map
+VotesColumnHeader=Votes
+RandomMapDisplayName=<Random>
 
 [VS_Msg_LocalMessage]
-MsgNobodyVotedText="Nobody voted, randomly selecting {1}"
-MsgVotesTiedText="Tied, randomly selecting {1}"
-MsgHaveWinnerText="{1} won"
-MsgMidGameText="Initiating mid-game voting, opening Vote Menu"
-MsgGameEndedText="Game ended, opening Vote Menu"
-MsgPlayerVotedText="{1} voted for {2}"
-MsgAdminForceTravelText="Admin {1} forced switching to {2}"
-MsgAdminKickPlayerText="Admin {1} kicked player {2} ({3})"
-MsgAdminBanPlayerText="Admin {1} banned player {2} ({3})"
-MsgKickVotePlacedText="A player voted to kick {1}"
-MsgKickVoteSuccessfulText="{1} was kicked"
-MsgPlayerVotedRandomText="{1} voted for random map ({2})"
-ErrStillLoadingText="Vote Menu data is still being transferred, please try again"
-ErrNoRootWindowText="Failed to create {1} window (Root does not exist)"
-ErrCreateDialogText="Failed to create {1} window (Could not create Dialog)"
-ErrWrongConsoleText="Failed to create {1} window (Console not a WindowConsole)"
-ErrMapLoadFailedText="Loading map {1} failed, randomly selecting {2}"
-ErrNoConnectionText="VoteSys has no connection to server, check server firewall"
-ErrNotAllowedText="Sorry, you are not allowed to vote"
-ErrUrlTooLongText="URL to switch to '{1}' with preset '{2}' is too long (>1023 characters)"
+MsgNobodyVotedText=Nobody voted, randomly selecting {1}
+MsgVotesTiedText=Tied, randomly selecting {1}
+MsgHaveWinnerText={1} won
+MsgMidGameText=Initiating mid-game voting, opening Vote Menu
+MsgGameEndedText=Game ended, opening Vote Menu
+MsgPlayerVotedText={1} voted for {2}
+MsgAdminForceTravelText=Admin {1} forced switching to {2}
+MsgAdminKickPlayerText=Admin {1} kicked player {2} ({3})
+MsgAdminBanPlayerText=Admin {1} banned player {2} ({3})
+MsgKickVotePlacedText=A player voted to kick {1}
+MsgKickVoteSuccessfulText={1} was kicked
+MsgPlayerVotedRandomText={1} voted for random map ({2})
+ErrStillLoadingText=Vote Menu data is still being transferred, please try again
+ErrNoRootWindowText=Failed to create {1} window (Root does not exist)
+ErrCreateDialogText=Failed to create {1} window (Could not create Dialog)
+ErrWrongConsoleText=Failed to create {1} window (Console not a WindowConsole)
+ErrMapLoadFailedText=Loading map {1} failed, randomly selecting {2}
+ErrNoConnectionText=VoteSys has no connection to server, check server firewall
+ErrNotAllowedText=Sorry, you are not allowed to vote
+ErrUrlTooLongText=URL to switch to '{1}' with preset '{2}' is too long (>1023 characters)
 
 [VS_UIS_PageAdminMapLists]
-Text_MapListName="Map List Name"
-Text_Map="Include Maps"
-Text_IgnoreMap="Exclude Maps"
-Text_IncludeMapsWithPrefix="Include Prefixes"
-Text_IgnoreMapsWithPrefix="Exclude Prefixes"
-Text_IncludeList="Include Lists"
-Text_IgnoreList="Exclude Lists"
+Text_MapListName=Map List Name
+Text_Map=Include Maps
+Text_IgnoreMap=Exclude Maps
+Text_IncludeMapsWithPrefix=Include Prefixes
+Text_IgnoreMapsWithPrefix=Exclude Prefixes
+Text_IncludeList=Include Lists
+Text_IgnoreList=Exclude Lists
 
 [VS_UIV_Window]
-WindowTitle="VoteSys Menu"
+WindowTitle=VoteSys Menu
 
 [VS_UIS_PageAdminUI]
-Text_RetainCandidates="Retain Candidates"
-Text_OpenVoteMenuAutomatically="Open Vote Menu Automatically"
-Text_DefaultTimeMessageClass="Time Msg Class"
-Text_MinimumNumberOfRatings="Minimum Number Of Ratings"
-Text_LogoTexture="Logo Texture"
-Text_LogoRegion="Logo Region"
-Text_LogoRegionX="X"
-Text_LogoRegionY="Y"
-Text_LogoRegionW="W"
-Text_LogoRegionH="H"
-Text_LogoDrawRegion="Logo Draw Region"
-Text_LogoDrawRegionX="X"
-Text_LogoDrawRegionY="Y"
-Text_LogoDrawRegionW="W"
-Text_LogoDrawRegionH="H"
-Text_LogoButton0Label="Button 1 Label"
-Text_LogoButton0LinkURL="Button 1 URL"
-Text_LogoButton1Label="Button 2 Label"
-Text_LogoButton1LinkURL="Button 2 URL"
-Text_LogoButton2Label="Button 3 Label"
-Text_LogoButton2LinkURL="Button 3 URL"
+Text_RetainCandidates=Retain Candidates
+Text_OpenVoteMenuAutomatically=Open Vote Menu Automatically
+Text_DefaultTimeMessageClass=Time Msg Class
+Text_MinimumNumberOfRatings=Minimum Number Of Ratings
+Text_LogoTexture=Logo Texture
+Text_LogoRegion=Logo Region
+Text_LogoRegionX=X
+Text_LogoRegionY=Y
+Text_LogoRegionW=W
+Text_LogoRegionH=H
+Text_LogoDrawRegion=Logo Draw Region
+Text_LogoDrawRegionX=X
+Text_LogoDrawRegionY=Y
+Text_LogoDrawRegionW=W
+Text_LogoDrawRegionH=H
+Text_LogoButton0Label=Button 1 Label
+Text_LogoButton0LinkURL=Button 1 URL
+Text_LogoButton1Label=Button 2 Label
+Text_LogoButton1LinkURL=Button 2 URL
+Text_LogoButton2Label=Button 3 Label
+Text_LogoButton2LinkURL=Button 3 URL
 
 [VS_UIS_PageAdminSetup]
-Text_EnableACEIntegration="Enable ACE Integration"
-Text_PresetProbeDepth="Preset Probe Depth"
-Text_ManageServerPackages="Manage Server Packages"
-Text_UseServerPackagesCompatibilityMode="Use Server Package Compat. Mode"
-Text_DefaultPackages="Default Packages"
-Text_UseServerActorsCompatibilityMode="Use Server Actors Compat. Mode"
-Text_DefaultActors="Default Actors"
-Text_GameNameMode="GameName Mode"
-Text_GameNameMode_DoNotModify="Do Not Modify"
-Text_GameNameMode_PresetName="Preset Name"
-Text_GameNameMode_CategoryAndPresetName="Full Preset Name"
-Text_EnableCustomDataTransport="Custom Data Transport"
-Text_ServerAddress="Server Address"
-Text_DataPort="Data Port"
-Text_ClientDataPort="Client Data Port"
-Text_DefaultPreset="Default Preset"
-Text_AlwaysUseDefaultPreset="Always Use Default Preset"
-Text_DefaultMap="Default Map"
-Text_AlwaysUseDefaultMap="Always Use Default Map"
-Text_IdleTimeout="Idle Timeout"
-
-[VS_UI_PlayerMenu]
-PlayerIdText="ID:"
-PlayerKickText="&Kick"
-PlayerBanText="&Ban"
-PlayerBanTitle="Ban Player"
-PlayerBanMessage="Do you want to permanently ban {1}?"
+Text_EnableACEIntegration=Enable ACE Integration
+Text_PresetProbeDepth=Preset Probe Depth
+Text_ManageServerPackages=Manage Server Packages
+Text_UseServerPackagesCompatibilityMode=Use Server Package Compat. Mode
+Text_DefaultPackages=Default Packages
+Text_UseServerActorsCompatibilityMode=Use Server Actors Compat. Mode
+Text_DefaultActors=Default Actors
+Text_GameNameMode=GameName Mode
+Text_GameNameMode_DoNotModify=Do Not Modify
+Text_GameNameMode_PresetName=Preset Name
+Text_GameNameMode_CategoryAndPresetName=Full Preset Name
+Text_EnableCustomDataTransport=Custom Data Transport
+Text_ServerAddress=Server Address
+Text_DataPort=Data Port
+Text_ClientDataPort=Client Data Port
+Text_DefaultPreset=Default Preset
+Text_AlwaysUseDefaultPreset=Always Use Default Preset
+Text_DefaultMap=Default Map
+Text_AlwaysUseDefaultMap=Always Use Default Map
+Text_IdleTimeout=Idle Timeout
 
 [VS_UIS_PageClient]
-ThemeText="Theme"
-ThemeBright="Bright"
-ThemeDark="Dark"
-ThemeBlack="Black"
-MapListSortText="Sort Map List By"
-MapListSortName="Name"
-MapListSortRecency="Recency"
-MapListSortPlayCount="Play Count"
-MapListSortRating="Rating"
-FavoritesFirstText="Sort Favorites First"
-ShowPlayerListText="Show Player List"
-HotkeyResetInstructions="Left-Click to Bind, Right-Click to Unbind Hotkey"
-HotkeyVoteMenuText="Hotkey Vote Menu"
-HotkeySettingsText="Hotkey Settings"
-OverwriteTitle="Overwrite Bind?"
-OverwriteMessage="The key '{1}' is already bound to:\n>> {2}\nDo you want to overwrite it?"
+ThemeText=Theme
+ThemeBright=Bright
+ThemeDark=Dark
+ThemeBlack=Black
+MapListSortText=Sort Map List By
+MapListSortName=Name
+MapListSortRecency=Recency
+MapListSortPlayCount=Play Count
+MapListSortRating=Rating
+FavoritesFirstText=Sort Favorites First
+ShowPlayerListText=Show Player List
+HotkeyResetInstructions=Left-Click to Bind, Right-Click to Unbind Hotkey
+HotkeyVoteMenuText=Hotkey Vote Menu
+HotkeySettingsText=Hotkey Settings
+OverwriteTitle=Overwrite Bind?
+OverwriteMessage=The key '{1}' is already bound to:\n>> {2}\nDo you want to overwrite it?
+
+[VS_UI_PlayerMenu]
+PlayerIdText=ID:
+PlayerKickText=&Kick
+PlayerBanText=&Ban
+PlayerBanTitle=Ban Player
+PlayerBanMessage=Do you want to permanently ban {1}?
 
 [VS_UIS_ClientWindow]
-PageClientSettingsName="Client"
-PageAdminVotingName="[A] Voting"
-PageAdminUIName="[A] UI"
-PageAdminSetupName="[A] Setup"
-PageAdminPresetsName="[A] Presets"
-PageAdminMapListsName="[A] Map Lists"
-
-[VS_UI_ScreenshotWindow]
-TextPlayerCount="Players:"
+PageClientSettingsName=Client
+PageAdminVotingName=[A] Voting
+PageAdminUIName=[A] UI
+PageAdminSetupName=[A] Setup
+PageAdminPresetsName=[A] Presets
+PageAdminMapListsName=[A] Map Lists
 
 [VS_UIS_PageAdminVoting]
-Text_MidGameVoteThreshold="Mid-Game Vote Threshold"
-Text_MidGameVoteTimeLimit="Mid-Game Vote Time Limit"
-Text_GameEndedVoteDelay="Game Ended Vote Delay"
-Text_VoteTimeLimit="Vote Time Limit"
-Text_VoteEndCondition="Vote End Rules"
-Text_VoteEndCondition_TimerOnly="Timer Only"
-Text_VoteEndCondition_TimerOrAllVotesIn="Everyone Voted"
-Text_VoteEndCondition_TimerOrResultDetermined="Result Certain"
-Text_EnableKickVoting="Enable Kick Voting"
-Text_KickVoteThreshold="Kick Vote Threshold"
-Text_MinimumMapRepeatDistance="Map Repeat Distance"
+Text_MidGameVoteThreshold=Mid-Game Vote Threshold
+Text_MidGameVoteTimeLimit=Mid-Game Vote Time Limit
+Text_GameEndedVoteDelay=Game Ended Vote Delay
+Text_VoteTimeLimit=Vote Time Limit
+Text_VoteEndCondition=Vote End Rules
+Text_VoteEndCondition_TimerOnly=Timer Only
+Text_VoteEndCondition_TimerOrAllVotesIn=Everyone Voted
+Text_VoteEndCondition_TimerOrResultDetermined=Result Certain
+Text_EnableKickVoting=Enable Kick Voting
+Text_KickVoteThreshold=Kick Vote Threshold
+Text_MinimumMapRepeatDistance=Map Repeat Distance
+
+[VS_UI_ScreenshotWindow]
+TextPlayerCount=Players:
 
 [VS_UI_MapMenu]
-FavoriteText="Favorite"
-SortByText="Sort By"
+FavoriteText=Favorite
+SortByText=Sort By
 
 [VS_UIS_Window]
-WindowTitle="VoteSys Settings"
+WindowTitle=VoteSys Settings
 
 [VS_UI_MapSortByMenu]
-ItemNameText="Name"
-ItemRecencyText="Recency"
-ItemPlayCountText="Play Count"
-ItemRatingText="Rating"
-FavoritesFirstText="Favorites First"
+ItemNameText=Name
+ItemRecencyText=Recency
+ItemPlayCountText=Play Count
+ItemRatingText=Rating
+FavoritesFirstText=Favorites First
 
