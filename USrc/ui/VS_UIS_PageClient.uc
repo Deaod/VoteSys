@@ -244,15 +244,11 @@ function MessageBoxDone(UWindowMessageBox W, MessageBoxResult Result) {
 function KeyDown(int Key, float X, float Y) {
 	local PlayerPawn P;
 
-	LogMsg("KeyDown"@Key@X@Y);
-
 	P = GetPlayerOwner();
 	if (HotkeyCaptureButton == none) {
 		super.KeyDown(Key, X, Y);
 		return;
 	}
-
-	HotkeyCaptureButton.SetText(HotkeyCaptureButton.Text$Chr(Key));
 
 	if (Key == P.EInputKey.IK_Escape) {
 		HotkeyAssignDone();
