@@ -147,15 +147,7 @@ jobs:
           cd Release
           7z a -tzip -- "${{ env.PKG_NAME }}.zip" *
 
-      # - name: Attach Asset To Release
-      #   if: false && success() && github.event_name == 'release'
-      #   uses: shogo82148/actions-upload-release-asset@v1
-      #   with:
-      #     upload_url: ${{ github.event.release.upload_url }}
-      #     asset_path: Release/${{ env.PKG_NAME }}.zip
-      #     overwrite: true
-
-      - name: Attach Asset To Release Direct
+      - name: Attach Asset To Release
         if: success() && github.event_name == 'release'
         run: |
           curl -L -X POST `
