@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Download 469e Patch
         run:
-          wget https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v469e/OldUnreal-UTPatch469e-Windows-x86.zip
+          curl --output OldUnreal-UTPatch469e-Windows-x86.zip https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v469e/OldUnreal-UTPatch469e-Windows-x86.zip
         # uses: robinraju/release-downloader@v1.9
         # with:
         #   repository: "OldUnreal/UnrealTournamentPatches"
@@ -51,7 +51,7 @@ jobs:
         run: echo ("${{ env.PKG_NAME }}") >> PackageName
 
       - name: Create Package Name Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: PackageName
           path: PackageName
@@ -113,7 +113,7 @@ jobs:
 
       - name: Save UCC.log
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ucc-output
           path: System/UCC.log
