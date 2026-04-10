@@ -18,11 +18,13 @@ jobs:
 
     steps:
       - name: Download 469e Patch
-        uses: robinraju/release-downloader@v1.9
-        with:
-          repository: "OldUnreal/UnrealTournamentPatches"
-          tag: "v469e"
-          fileName: "OldUnreal-UTPatch469e-Windows-x86.zip"
+        run:
+          wget https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v469e/OldUnreal-UTPatch469e-Windows-x86.zip
+        # uses: robinraju/release-downloader@v1.9
+        # with:
+        #   repository: "OldUnreal/UnrealTournamentPatches"
+        #   tag: "v469e"
+        #   fileName: "OldUnreal-UTPatch469e-Windows-x86.zip"
           
       - name: Extract Patch
         run: 7z x "OldUnreal-UTPatch469e-Windows-x86.zip"
@@ -57,7 +59,7 @@ jobs:
           if-no-files-found: error
 
       - name: Checkout ${{ github.event.repository.name }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: ${{ env.PKG_NAME }}/
 
@@ -134,7 +136,7 @@ jobs:
           }
 
       - name: Save ${{ github.event.repository.name }} Package
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: "${{ env.PKG_NAME }}"
           path: |
