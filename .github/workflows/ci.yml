@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Download 469e Patch
         run:
-          curl --output OldUnreal-UTPatch469e-Windows-x86.zip https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v469e/OldUnreal-UTPatch469e-Windows-x86.zip
+          curl -o OldUnreal-UTPatch469e-Windows-x86.zip https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v469e/OldUnreal-UTPatch469e-Windows-x86.zip
         # uses: robinraju/release-downloader@v1.9
         # with:
         #   repository: "OldUnreal/UnrealTournamentPatches"
