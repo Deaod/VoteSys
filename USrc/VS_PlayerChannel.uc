@@ -98,6 +98,9 @@ function ServerSetupCustomDataTransport(VS_Net_TcpLink Link) {
 	DataServer.Link = Link;
 	Link.Peer = DataServer;
 	DataServer.Connected();
+
+	if (VoteInfo().bSendPresetsDataGenerated)
+		DataServer.CacheSendPresets = VoteInfo().SendPresetsData.Server.Tx.Buffer;
 }
 
 simulated function ClientSetupCustomDataTransport(string Address, int Port) {
@@ -121,6 +124,9 @@ function ServerSetupFallbackDataTransport() {
 	DataChannel.Server.Peer = DataServer;
 
 	DataServer.Connected();
+
+	if (VoteInfo().bSendPresetsDataGenerated)
+		DataServer.CacheSendPresets = VoteInfo().SendPresetsData.Server.Tx.Buffer;
 }
 
 simulated function ClientSetupFallbackDataTransport(VS_Net_ChannelLink Chan) {

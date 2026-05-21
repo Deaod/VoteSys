@@ -101,6 +101,10 @@ simulated event Tick(float Delta) {
 	}
 }
 
+simulated function string GetIdentifier() {
+	return VS_PlayerChannel(Owner).PlayerOwner.PlayerReplicationInfo.PlayerName;
+}
+
 final simulated function ClientEnableConnection() {
 	ServerEnableConnection();
 	bEnableTraffic = true;

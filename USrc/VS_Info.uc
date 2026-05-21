@@ -16,6 +16,10 @@ var VS_Candidate LastCandidate;
 var VS_PlayerInfo PlayerInfo[60];
 var string RandomMapNameIdentifier;
 
+var VS_Net_Sponge SendPresetsData;
+var VS_Data_Server SendPresetsDataGenerator;
+var bool bSendPresetsDataGenerated;
+
 replication {
 	unreliable if (Role == ROLE_Authority)
 		Data,
@@ -26,6 +30,15 @@ replication {
 
 simulated event PostBeginPlay() {
 	SetTimer(0.2, true);
+
+	if (Role == ROLE_Authority) {
+		SendPresetsData = Spawn(class'VS_Net_Sponge');
+		SendPresetsDataGenerator = Spawn(class'VS_Data_Server');
+		SendPresetsDataGenerator.Chan = SendPresetsData;
+		SendPresetsData.Server.Peer = SendPresetsDataGenerator;
+		SendPresetsDataGenerator.Connected();
+		SendPresetsDataGenerator.QueueCommand('SendPresets');
+	}
 }
 
 simulated event Timer() {
@@ -38,6 +51,9 @@ simulated event Timer() {
 	
 	while(i < arraycount(PlayerInfo))
 		PlayerInfo[i++] = none;
+
+	if (Role == ROLE_Authority)
+		bSendPresetsDataGenerated = (SendPresetsDataGenerator.GetStateName() == 'Idle');
 }
 
 simulated function VS_PlayerInfo GetPlayerInfoForPRI(PlayerReplicationInfo PRI) {

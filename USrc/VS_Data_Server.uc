@@ -25,8 +25,15 @@ var string CommandParams;
 
 var name TempName;
 
+// used to stretch long responses over multiple ticks
+var int OpsRemaining;
+const MaxOpsPerTick = 500;
+
+var string CacheSendPresets;
+
 event PostBeginPlay() {
-	PlayerOwner = VS_PlayerChannel(Owner).PlayerOwner;
+	if (VS_PlayerChannel(Owner) != none)
+		PlayerOwner = VS_PlayerChannel(Owner).PlayerOwner;
 	S11N = class'VS_Serialization'.static.Instance();
 	CRLF = Chr(13)$Chr(10);
 
@@ -131,17 +138,28 @@ Begin:
 
 	LogMsg("VS_Data_Server SendPresets"@GetIdentifier());
 
-	for (TempPreset = VoteSys.PresetList; TempPreset != none; TempPreset = TempPreset.Next) {
-		if (TempPreset.bDisabled)
-			continue;
+	if (Len(CacheSendPresets) == 0) {
+		OpsRemaining = MaxOpsPerTick;
+		for (TempPreset = VoteSys.PresetList; TempPreset != none; TempPreset = TempPreset.Next) {
+			if (TempPreset.bDisabled)
+				continue;
 
-		SendLine(S11N.SerializePreset(TempPreset));
-		for (TempMap = TempPreset.MapList; TempMap != none; TempMap = TempMap.Next) {
-			SendLine(S11N.SerializeMap(TempMap));
+			SendLine(S11N.SerializePreset(TempPreset));
+			for (TempMap = TempPreset.MapList; TempMap != none; TempMap = TempMap.Next) {
+				SendLine(S11N.SerializeMap(TempMap));
+
+				OpsRemaining--;
+				if (OpsRemaining <= 0) {
+					OpsRemaining = MaxOpsPerTick;
+					Sleep(0);
+				}
+			}
 		}
-	}
 
-	SendLine("/END/"$S11N.EncodeString(VoteSys.CurrentPreset));
+		SendLine("/END/"$S11N.EncodeString(VoteSys.CurrentPreset));
+	} else {
+		Send(CacheSendPresets);
+	}
 
 	LogMsg("VS_Data_Server SendPresets Done"@GetIdentifier());
 	GoToState('Idle');
