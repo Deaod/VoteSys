@@ -6,6 +6,7 @@ var VS_PlayerChannel PlayerChannel;
 
 struct Simplex {
 	var() string Buffer;
+	var() int Pos;
 	var() int Count;
 };
 
@@ -61,9 +62,7 @@ simulated event Tick(float Delta) {
 		return;
 
 	if (Len(Client.Tx.Buffer) > 0) {
-		Client.Tx.Count += Min(Len(Client.Tx.Buffer), MaxTextPerTick);
-
-		Chunk = Left(Client.Tx.Buffer, MaxTextPerTick);
+		Chunk = Mid(Client.Tx.Buffer, Client.Tx.Pos, MaxTextPerTick);
 		CL = Len(Chunk);
 		for (I = 0; I < CL; I++) {
 			if (Asc(Mid(Chunk, i, 1)) > 0x7F) {
@@ -77,13 +76,16 @@ simulated event Tick(float Delta) {
 		}
 
 		ServerReceiveText(Chunk);
-		Client.Tx.Buffer = Mid(Client.Tx.Buffer, Len(Chunk), Len(Client.Tx.Buffer));
+		Client.Tx.Pos += Len(Chunk);
+		if (Client.Tx.Pos == Len(Client.Tx.Buffer)) {
+			Client.Tx.Buffer = "";
+			Client.Tx.Pos = 0;
+		}
+		Client.Tx.Count += Len(Chunk);
 	}
 
 	if (Len(Server.Tx.Buffer) > 0) {
-		Server.Tx.Count += Min(Len(Server.Tx.Buffer), MaxTextPerTick);
-
-		Chunk = Left(Server.Tx.Buffer, MaxTextPerTick);
+		Chunk = Mid(Server.Tx.Buffer, Server.Tx.Pos, MaxTextPerTick);
 		CL = Len(Chunk);
 		for (I = 0; I < CL; I++) {
 			if (Asc(Mid(Chunk, i, 1)) > 0x7F) {
@@ -97,7 +99,12 @@ simulated event Tick(float Delta) {
 		}
 
 		ClientReceiveText(Chunk);
-		Server.Tx.Buffer = Mid(Server.Tx.Buffer, Len(Chunk), Len(Server.Tx.Buffer));
+		Server.Tx.Pos += Len(Chunk);
+		if (Server.Tx.Pos == Len(Server.Tx.Buffer)) {
+			Server.Tx.Buffer = "";
+			Server.Tx.Pos = 0;
+		}
+		Server.Tx.Count += Len(Chunk);
 	}
 }
 
