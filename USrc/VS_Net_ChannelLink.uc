@@ -43,7 +43,11 @@ simulated event Tick(float Delta) {
 	local int CL;
 	local int I;
 
-	if (PlayerChannel != none && Viewport(PlayerChannel.PlayerOwner.Player) != none && Client.Peer == none) {
+	if (PlayerChannel != none &&
+		PlayerChannel.PlayerOwner != none &&
+		Viewport(PlayerChannel.PlayerOwner.Player) != none &&
+		Client.Peer == none
+	) {
 		// deals with listen server
 		PlayerChannel.ClientSetupFallbackDataTransport(self);
 	}
