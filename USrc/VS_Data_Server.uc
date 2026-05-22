@@ -28,6 +28,8 @@ var name TempName;
 // used to stretch long responses over multiple ticks
 var int OpsRemaining;
 const MaxOpsPerTick = 500;
+var array<string> LinesBuffer;
+var int LinesBufferEntries;
 
 var string CacheSendPresets;
 
@@ -68,6 +70,41 @@ event Connected() {
 
 final function SendLine(string Line) {
 	Send(Line$CRLF);
+}
+
+final function BufferAddLine(string Line) {
+	if (LinesBufferEntries == LinesBuffer.Length) {
+		if (LinesBuffer.Length == 0) {
+			LinesBuffer.Insert(0, 256);
+		} else {
+			LinesBuffer.Insert(LinesBuffer.Length, LinesBuffer.Length);
+		}
+	}
+	LinesBuffer[LinesBufferEntries++] = Line $ CRLF;
+}
+
+final function string BufferFlush() {
+	local int Remaining;
+	local int I;
+	local string Result;
+
+	Remaining = LinesBufferEntries;
+
+	if ((Remaining & 1) == 1) {
+		LinesBuffer.Insert(LinesBufferEntries);
+	}
+	while (Remaining > 1) {
+		LinesBuffer[Remaining] = "";
+		for (I = 0; I < Remaining; I += 2) {
+			LinesBuffer[I >> 1] = LinesBuffer[I]$LinesBuffer[I+1];
+		}
+		Remaining = (Remaining + 1) / 2;
+	}
+
+	Result = LinesBuffer[0];
+	LinesBuffer.Remove(0, LinesBuffer.Length);
+	LinesBufferEntries = 0;
+	return Result;
 }
 
 function QueueCommand(name Command, optional coerce string Params) {
@@ -144,9 +181,9 @@ Begin:
 			if (TempPreset.bDisabled)
 				continue;
 
-			SendLine(S11N.SerializePreset(TempPreset));
+			BufferAddLine(S11N.SerializePreset(TempPreset));
 			for (TempMap = TempPreset.MapList; TempMap != none; TempMap = TempMap.Next) {
-				SendLine(S11N.SerializeMap(TempMap));
+				BufferAddLine(S11N.SerializeMap(TempMap));
 
 				OpsRemaining--;
 				if (OpsRemaining <= 0) {
@@ -156,7 +193,8 @@ Begin:
 			}
 		}
 
-		SendLine("/END/"$S11N.EncodeString(VoteSys.CurrentPreset));
+		BufferAddLine("/END/"$S11N.EncodeString(VoteSys.CurrentPreset));
+		Send(BufferFlush());
 	} else {
 		Send(CacheSendPresets);
 	}
