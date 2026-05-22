@@ -153,6 +153,8 @@ function ParseLine(string Line) {
 		LogDbg("VS_Data_Client GetServerMapLists End");
 	} else if (Left(Line, 5) == "/PONG") {
 		// nothing to do
+	} else if (Len(Line) == 0) {
+		// empty line, ignore
 	} else {
 		LogMsg("Unhandled->"$Line);
 	}
