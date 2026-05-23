@@ -2,7 +2,7 @@ class VS_Msg_ParameterContainer extends Object;
 
 var string Params[6];
 
-function string ApplyParameters(string Input) {
+final function string ApplyParameters(string Input) {
 	local string Result;
 	local int OpenPos;
 	local int ClosePos;

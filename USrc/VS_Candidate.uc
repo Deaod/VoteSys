@@ -22,7 +22,7 @@ replication {
 		Votes;
 }
 
-function Fill(VS_Preset P, VS_Map M) {
+final function Fill(VS_Preset P, VS_Map M) {
 	PresetRef = P;
 	MapRef = M;
 
@@ -30,7 +30,7 @@ function Fill(VS_Preset P, VS_Map M) {
 	MapName = M.MapName;
 }
 
-function FillRandom(VS_Preset P) {
+final function FillRandom(VS_Preset P) {
 	PresetRef = P;
 	MapRef = none;
 
@@ -38,7 +38,7 @@ function FillRandom(VS_Preset P) {
 	MapName = class'VS_Info'.default.RandomMapNameIdentifier;
 }
 
-function Append(VS_Info I) {
+final function Append(VS_Info I) {
 	Origin = I;
 
 	if (I.FirstCandidate == none)
@@ -51,7 +51,7 @@ function Append(VS_Info I) {
 	I.LastCandidate = self;
 }
 
-function Remove() {
+final function Remove() {
 	if (Next != none)
 		Next.Prev = Prev;
 	if (Prev != none)
@@ -63,7 +63,7 @@ function Remove() {
 		Origin.LastCandidate = Prev;
 }
 
-function SwapWithPrev() {
+final function SwapWithPrev() {
 	local VS_Candidate PP, P, C, N;
 
 	if (Prev == none)
@@ -91,7 +91,7 @@ function SwapWithPrev() {
 		Origin.LastCandidate = P;
 }
 
-function SwapWithNext() {
+final function SwapWithNext() {
 	local VS_Candidate P, C, N, NN;
 
 	if (Next == none)
@@ -119,7 +119,7 @@ function SwapWithNext() {
 		Origin.LastCandidate = C;
 }
 
-function SortInList() {
+final function SortInList() {
 	while(true) {
 		switch (CalcSortDirection()) {
 			case 1: SwapWithPrev(); break;
@@ -129,7 +129,7 @@ function SortInList() {
 	}
 }
 
-function int CalcSortDirection() {
+final function int CalcSortDirection() {
 	if (Prev != none && Prev.Votes < Votes)
 		return 1;
 	if (Next != none && Next.Votes > Votes)
@@ -138,7 +138,7 @@ function int CalcSortDirection() {
 	return 0;
 }
 
-function Dump() {
+final function Dump() {
 	Log(Votes$"|'"$Preset$"''"$MapName$"'", 'VoteSys');
 }
 

@@ -16,7 +16,7 @@ event PostBeginPlay() {
 
 // PrioPreset indicates that out of the list of Presets, this specific preset
 // should be updated first.
-function UpdateFavorites(VS_Preset Presets, string Rules, optional VS_Preset PrioPreset) {
+final function UpdateFavorites(VS_Preset Presets, string Rules, optional VS_Preset PrioPreset) {
 	FavoritesRules = Rules;
 	PresetList = Presets;
 	FirstPreset = PrioPreset;
@@ -65,7 +65,7 @@ event Tick(float Delta) {
 	VS_PlayerChannel(Owner).UpdateFavoritesEnd();
 }
 
-function ClearFavorites() {
+final function ClearFavorites() {
 	local VS_Preset P;
 	local VS_Map M;
 

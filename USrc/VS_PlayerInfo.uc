@@ -14,7 +14,7 @@ replication {
 		PRI;
 }
 
-simulated function string GetVariableText(string S) {
+final simulated function string GetVariableText(string S) {
 	local string Result;
 
 	Result = GetPropertyText(S);
@@ -23,11 +23,11 @@ simulated function string GetVariableText(string S) {
 	return Result;
 }
 
-simulated function string GetVariable(string S) {
+final simulated function string GetVariable(string S) {
 	return S$"="@GetVariableText(S);
 }
 
-simulated function string Dump() {
+final simulated function string Dump() {
 	return
 		GetVariable("PRI")$","$
 		GetVariable("bCanVote")$","$

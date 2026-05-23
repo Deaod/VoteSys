@@ -20,7 +20,7 @@ var config array<HistoryEntry> Entry;
 
 var int CurrentMapIndex;
 
-function RateMap(int Stars, int Previous) {
+final function RateMap(int Stars, int Previous) {
 	Stars = Clamp(Stars, 1, 5);
 	Previous = Clamp(Previous, 0, 5); // 0 = no vote
 
@@ -63,7 +63,7 @@ function RateMap(int Stars, int Previous) {
 	SaveConfig();
 }
 
-function DetermineCurrentMapIndex(VS_Preset Preset, string MapName) {
+final function DetermineCurrentMapIndex(VS_Preset Preset, string MapName) {
 	local int BestIndex;
 	local int i;
 
@@ -85,7 +85,7 @@ function DetermineCurrentMapIndex(VS_Preset Preset, string MapName) {
 	CurrentMapIndex = BestIndex;
 }
 
-function InsertVote(VS_Preset Preset, string MapName) {
+final function InsertVote(VS_Preset Preset, string MapName) {
 	local int BestIndex;
 	local int i;
 

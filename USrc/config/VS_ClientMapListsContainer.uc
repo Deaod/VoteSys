@@ -9,7 +9,7 @@ enum ETransmissionState {
 };
 var ETransmissionState TransmissionState;
 
-function AllocateMapLists(int MaxIndex) {
+final function AllocateMapLists(int MaxIndex) {
 	local int i;
 	i = MapLists.Length;
 	if (i <= MaxIndex) {
@@ -21,7 +21,7 @@ function AllocateMapLists(int MaxIndex) {
 	}
 }
 
-function VS_ClientMapList AddMapList() {
+final function VS_ClientMapList AddMapList() {
 	local int i;
 
 	if (TransmissionState != TS_Complete)

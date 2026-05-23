@@ -71,7 +71,7 @@ final function CheckSendPresetsGenerator() {
 			DS.CacheSendPresets = SendPresetsData.Server.Tx.Buffer;
 }
 
-simulated function VS_PlayerInfo GetPlayerInfoForPRI(PlayerReplicationInfo PRI) {
+final simulated function VS_PlayerInfo GetPlayerInfoForPRI(PlayerReplicationInfo PRI) {
 	local int i;
 
 	for (i = 0; i < arraycount(PlayerInfo); i++)
@@ -81,7 +81,7 @@ simulated function VS_PlayerInfo GetPlayerInfoForPRI(PlayerReplicationInfo PRI) 
 	return none;
 }
 
-function VS_Candidate AddMapVote(VS_PlayerChannel Origin, VS_Preset P, VS_Map M) {
+final function VS_Candidate AddMapVote(VS_PlayerChannel Origin, VS_Preset P, VS_Map M) {
 	if (VoteSys.CanVote(Origin.PlayerOwner)) {
 		if (Origin.PlayerOwner.bAdmin) {
 			VoteSys.BroadcastLocalizedMessage2(
@@ -103,7 +103,7 @@ function VS_Candidate AddMapVote(VS_PlayerChannel Origin, VS_Preset P, VS_Map M)
 	return none;
 }
 
-function VS_Candidate AddMapVoteInternal(VS_Preset P, VS_Map M) {
+final function VS_Candidate AddMapVoteInternal(VS_Preset P, VS_Map M) {
 	local VS_Candidate C;
 
 	for (C = FirstCandidate; C != none; C = C.Next) {
@@ -125,7 +125,7 @@ function VS_Candidate AddMapVoteInternal(VS_Preset P, VS_Map M) {
 	return C;
 }
 
-function VS_Candidate AddCandidateVote(VS_PlayerChannel Origin, VS_Candidate Candidate) {
+final function VS_Candidate AddCandidateVote(VS_PlayerChannel Origin, VS_Candidate Candidate) {
 	local VS_Preset P;
 	local VS_Map M;
 	local int NumVoters;
@@ -169,7 +169,7 @@ function VS_Candidate AddCandidateVote(VS_PlayerChannel Origin, VS_Candidate Can
 	return none;
 }
 
-function VS_Candidate AddRandomVote(VS_PlayerChannel Origin, VS_Preset P) {
+final function VS_Candidate AddRandomVote(VS_PlayerChannel Origin, VS_Preset P) {
 	local VS_Map M;
 	local int NumVoters;
 	local int NumVotes;
@@ -197,7 +197,7 @@ function VS_Candidate AddRandomVote(VS_PlayerChannel Origin, VS_Preset P) {
 	return none;
 }
 
-function VS_Candidate AddRandomVoteInternal(VS_Preset P) {
+final function VS_Candidate AddRandomVoteInternal(VS_Preset P) {
 	local VS_Candidate C;
 
 	for (C = FirstCandidate; C != none; C = C.Next) {
@@ -219,7 +219,7 @@ function VS_Candidate AddRandomVoteInternal(VS_Preset P) {
 	return C;
 }
 
-function RemCandidateVote(VS_PlayerChannel Origin, VS_Candidate Candidate) {
+final function RemCandidateVote(VS_PlayerChannel Origin, VS_Candidate Candidate) {
 	Candidate.Votes -= 1;
 	if (VoteSys.Settings.bRetainCandidates == false && Candidate.Votes == 0) {
 		Candidate.Remove();
@@ -229,7 +229,7 @@ function RemCandidateVote(VS_PlayerChannel Origin, VS_Candidate Candidate) {
 	}
 }
 
-function KickPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target, bool bWantKick) {
+final function KickPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target, bool bWantKick) {
 	local PlayerPawn P;
 	local VS_ChannelContainer ChCont;
 	local VS_PlayerChannel TCh;
@@ -279,7 +279,7 @@ function KickPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target, bool 
 	}
 }
 
-function BanPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target) {
+final function BanPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target) {
 	local PlayerPawn P;
 	if (Origin == none || Target == none)
 		return;
@@ -299,7 +299,7 @@ function BanPlayer(VS_PlayerChannel Origin, PlayerReplicationInfo Target) {
 	}
 }
 
-function VS_Preset ResolvePreset(string FullPresetName) {
+final function VS_Preset ResolvePreset(string FullPresetName) {
 	local VS_Preset P;
 
 	for (P = VoteSys.PresetList; P != none; P = P.Next)
@@ -309,7 +309,7 @@ function VS_Preset ResolvePreset(string FullPresetName) {
 	return none;
 }
 
-function VS_Map ResolveMapOfPreset(VS_Preset P, string MapName) {
+final function VS_Map ResolveMapOfPreset(VS_Preset P, string MapName) {
 	local VS_Map M;
 
 	if (P == none)
@@ -322,7 +322,7 @@ function VS_Map ResolveMapOfPreset(VS_Preset P, string MapName) {
 	return none;
 }
 
-function int FindMapRating(VS_PlayerChannel Origin, int Cookie, string LastMap) {
+final function int FindMapRating(VS_PlayerChannel Origin, int Cookie, string LastMap) {
 	local VS_ChannelContainer OldC;
 	local VS_ChannelContainer CurC;
 
@@ -341,7 +341,7 @@ function int FindMapRating(VS_PlayerChannel Origin, int Cookie, string LastMap) 
 	return CurC.MapRating;
 }
 
-function SetMapRating(VS_PlayerChannel Origin, int Rating, int OldRating) {
+final function SetMapRating(VS_PlayerChannel Origin, int Rating, int OldRating) {
 	local VS_ChannelContainer C;
 
 	if (VoteSys.CanVote(Origin.PlayerOwner) == false)

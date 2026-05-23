@@ -82,7 +82,7 @@ enum ESettingsState {
 
 var ESettingsState SState;
 
-function EVoteEndCond IntToVoteEndCond(int v) {
+final function EVoteEndCond IntToVoteEndCond(int v) {
 	switch(v) {
 		case 0: return VEC_TimerOnly;
 		case 1: return VEC_TimerOrAllVotesIn;
@@ -91,7 +91,7 @@ function EVoteEndCond IntToVoteEndCond(int v) {
 	return VEC_TimerOnly;
 }
 
-function EGameNameMode IntToGameNameMode(int v) {
+final function EGameNameMode IntToGameNameMode(int v) {
 	switch(v) {
 		case 0: return GNM_DoNotModify;
 		case 1: return GNM_PresetName;

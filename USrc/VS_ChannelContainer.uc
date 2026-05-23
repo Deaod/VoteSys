@@ -11,7 +11,7 @@ var EBanState BanState;
 var int Cookie;
 var int MapRating;
 
-function Initialize(PlayerPawn P) {
+final function Initialize(PlayerPawn P) {
 	PlayerOwner = P;
 	Channel = Spawn(class'VS_PlayerChannel', P);
 	Channel.PlayerOwner = P;

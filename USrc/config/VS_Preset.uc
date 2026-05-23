@@ -27,7 +27,7 @@ var int             MaxPlayers;
 var private transient int SequenceCutoff;
 var private transient int NumPlayers;
 
-function AppendMutator(string Mut) {
+final function AppendMutator(string Mut) {
 	if (Mut == "")
 		return;
 
@@ -38,11 +38,11 @@ function AppendMutator(string Mut) {
 	}
 }
 
-function AppendParameter(string Param) {
+final function AppendParameter(string Param) {
 	Parameters = Parameters$Param;
 }
 
-function AppendGameSetting(string Setting) {
+final function AppendGameSetting(string Setting) {
 	if (Setting == "")
 		return;
 
@@ -53,7 +53,7 @@ function AppendGameSetting(string Setting) {
 	}
 }
 
-function AppendPackage(string Pkg) {
+final function AppendPackage(string Pkg) {
 	if (Pkg == "")
 		return;
 
@@ -64,22 +64,22 @@ function AppendPackage(string Pkg) {
 	}
 }
 
-function string GetDisplayCategory() {
+final function string GetDisplayCategory() {
 	if (Category == "")
 		return "Default";
 	return Category;
 }
 
-function string GetFullName() {
+final function string GetFullName() {
 	return Category$"/"$PresetName;
 }
 
-function bool _ShouldSkip(VS_Map M) {
+final function bool _ShouldSkip(VS_Map M) {
 	return (M.Sequence > 0 && M.Sequence > SequenceCutoff) ||
 		(NumPlayers > 0 && (NumPlayers < M.MinPlayers || NumPlayers > M.MaxPlayers));
 }
 
-function VS_Map SelectRandomMapFromList(optional int Players) {
+final function VS_Map SelectRandomMapFromList(optional int Players) {
 	local float Target;
 	local float TargetCount;
 	local VS_Map M;

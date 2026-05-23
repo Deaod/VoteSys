@@ -82,18 +82,7 @@ replication {
 		LocalizeMessage, ChatMessage;
 }
 
-simulated function ReloadConfigFiles() {
-	PlayerOwner = PlayerPawn(Owner);
-	if (PlayerOwner == none || Viewport(PlayerOwner.Player) == none)
-		return;
-
-	if ((Level.EngineVersion$Level.GetPropertyText("EngineRevision")) < "469d")
-		return;
-
-	ConsoleCommand("RELOADCONFIG"@string(class'VS_ClientSettings'));
-}
-
-function ServerSetupCustomDataTransport(VS_Net_TcpLink Link) {
+final function ServerSetupCustomDataTransport(VS_Net_TcpLink Link) {
 	DataServer = Spawn(class'VS_Data_Server', self);
 	DataServer.Link = Link;
 	Link.Peer = DataServer;
@@ -103,7 +92,7 @@ function ServerSetupCustomDataTransport(VS_Net_TcpLink Link) {
 		DataServer.CacheSendPresets = VoteInfo().SendPresetsData.Server.Tx.Buffer;
 }
 
-simulated function ClientSetupCustomDataTransport(string Address, int Port) {
+final simulated function ClientSetupCustomDataTransport(string Address, int Port) {
 	local VS_Net_TcpLink Link;
 
 	Link = Spawn(class'VS_Net_TcpLink');
@@ -112,7 +101,7 @@ simulated function ClientSetupCustomDataTransport(string Address, int Port) {
 	Link.ConnectTo(Address, Port);
 }
 
-function ServerSetupFallbackDataTransport() {
+final function ServerSetupFallbackDataTransport() {
 	LogDbg("VS_PlayerChannel ServerSetupFallbackDataTransport");
 
 	DataChannel = Spawn(class'VS_Net_ChannelLink', self);
@@ -129,7 +118,7 @@ function ServerSetupFallbackDataTransport() {
 		DataServer.CacheSendPresets = VoteInfo().SendPresetsData.Server.Tx.Buffer;
 }
 
-simulated function ClientSetupFallbackDataTransport(VS_Net_ChannelLink Chan) {
+final simulated function ClientSetupFallbackDataTransport(VS_Net_ChannelLink Chan) {
 	LogDbg("VS_PlayerChannel ClientSetupFallbackDataTransport");
 
 	DataChannel = Chan;
@@ -197,7 +186,7 @@ simulated event Tick(float Delta) {
 	}
 }
 
-simulated function VS_PlayerInfo PlayerInfo() {
+final simulated function VS_PlayerInfo PlayerInfo() {
 	local int i;
 	local VS_Info Nfo;
 
@@ -215,7 +204,7 @@ simulated function VS_PlayerInfo PlayerInfo() {
 	return none;
 }
 
-simulated function VS_Info VoteInfo() {
+final simulated function VS_Info VoteInfo() {
 	if (Info != none)
 		return Info;
 
@@ -225,7 +214,7 @@ simulated function VS_Info VoteInfo() {
 	return Info;
 }
 
-simulated function TryCreateVoteMenuDialog() {
+final simulated function TryCreateVoteMenuDialog() {
 	local WindowConsole C;
 
 	if (PlayerOwner == none)
@@ -255,7 +244,7 @@ simulated function TryCreateVoteMenuDialog() {
 	}
 }
 
-simulated function CreateVoteMenuDialog() {
+final simulated function CreateVoteMenuDialog() {
 	local WindowConsole C;
 
 	if (PlayerOwner == none)
@@ -291,7 +280,7 @@ simulated function CreateVoteMenuDialog() {
 	}
 }
 
-simulated function ShowVoteMenu() {
+final simulated function ShowVoteMenu() {
 	local WindowConsole C;
 
 	if (PlayerOwner == none)
@@ -341,7 +330,7 @@ simulated function ShowVoteMenu() {
 	VoteMenuDialog.ShowWindow();
 }
 
-simulated function ShowSettings() {
+final simulated function ShowSettings() {
 	local WindowConsole C;
 
 	if (PlayerOwner == none)
@@ -395,7 +384,7 @@ simulated function ShowSettings() {
 }
 
 // currently only called at the end of the game
-simulated function HideVoteMenu() {
+final simulated function HideVoteMenu() {
 	if (VoteMenuDialog != none) {
 		VoteMenuDialog.Close();
 
@@ -405,7 +394,7 @@ simulated function HideVoteMenu() {
 	}
 }
 
-simulated function AddPreset(VS_Preset P) {
+final simulated function AddPreset(VS_Preset P) {
 	if (LatestPreset != none) {
 		if (VoteMenuDialog == none)
 			CreateVoteMenuDialog();
@@ -422,7 +411,7 @@ simulated function AddPreset(VS_Preset P) {
 	LatestMap = none;
 }
 
-simulated function FocusPreset(string Ref) {
+final simulated function FocusPreset(string Ref) {
 	local VS_Preset P;
 
 	for (P = PresetList; P != none; P = P.Next)
@@ -433,21 +422,21 @@ simulated function FocusPreset(string Ref) {
 		VoteMenuDialog.FocusPreset(P);
 }
 
-simulated function ConfigureLogo(string Tex, int TexX, int TexY, int TexW, int TexH, int DrawX, int DrawY, int DrawW, int DrawH) {
+final simulated function ConfigureLogo(string Tex, int TexX, int TexY, int TexW, int TexH, int DrawX, int DrawY, int DrawW, int DrawH) {
 	if (VoteMenuDialog == none)
 		CreateVoteMenuDialog();
 
 	VoteMenuDialog.ConfigureLogo(Tex, TexX, TexY, TexW, TexH, DrawX, DrawY, DrawW, DrawH);
 }
 
-simulated function ConfigureLogoButton(int Index, string Label, string LinkURL) {
+final simulated function ConfigureLogoButton(int Index, string Label, string LinkURL) {
 	if (VoteMenuDialog == none)
 		CreateVoteMenuDialog();
 
 	VoteMenuDialog.ConfigureLogoButton(Index, Label, LinkURL);
 }
 
-simulated function AddMap(VS_Map M) {
+final simulated function AddMap(VS_Map M) {
 	if (LatestPreset.MapList == none) {
 		LatestPreset.MapList = M;
 	} else {
@@ -456,7 +445,7 @@ simulated function AddMap(VS_Map M) {
 	LatestMap = M;
 }
 
-simulated function ToggleFavorite(VS_Map M, VS_Preset PrioPreset) {
+final simulated function ToggleFavorite(VS_Map M, VS_Preset PrioPreset) {
 	local Range R;
 
 	R = FindFavoriteRule(Settings.FavoritesList, M.MapName);
@@ -469,16 +458,16 @@ simulated function ToggleFavorite(VS_Map M, VS_Preset PrioPreset) {
 	UpdateFavorites(PrioPreset);
 }
 
-simulated function UpdateFavorites(optional VS_Preset PrioPreset) {
+final simulated function UpdateFavorites(optional VS_Preset PrioPreset) {
 	FavoritesProcessor.UpdateFavorites(PresetList, Settings.FavoritesList, PrioPreset);
 }
 
-simulated function UpdateFavoritesEnd() {
+final simulated function UpdateFavoritesEnd() {
 	if (VoteMenuDialog != none)
 		VoteMenuDialog.UpdateFavoritesEnd();
 }
 
-simulated function Range FindFavoriteRule(string Rules, string M) {
+final simulated function Range FindFavoriteRule(string Rules, string M) {
 	local string List;
 	local string Part;
 	local int Pos, Old;
@@ -512,14 +501,14 @@ simulated function Range FindFavoriteRule(string Rules, string M) {
 	return Result;
 }
 
-simulated function Vote(VS_Preset P, VS_Map M) {
+final simulated function Vote(VS_Preset P, VS_Map M) {
 	if (P == none || M == none)
 		return;
 
 	ServerVote(P.GetFullName(), M.MapName);
 }
 
-function ServerVote(string FullPresetName, string MapName) {
+final function ServerVote(string FullPresetName, string MapName) {
 	local VS_Preset P;
 	local VS_Map M;
 	local VS_Info I;
@@ -555,11 +544,11 @@ function ServerVote(string FullPresetName, string MapName) {
 	VotedFor = I.AddMapVote(self, P, M);
 }
 
-simulated function VoteExisting(VS_Candidate Candidate) {
+final simulated function VoteExisting(VS_Candidate Candidate) {
 	ServerVoteExisting(Candidate);
 }
 
-function ServerVoteExisting(VS_Candidate Candidate) {
+final function ServerVoteExisting(VS_Candidate Candidate) {
 	local VS_Info I;
 
 	I = VoteInfo();
@@ -580,11 +569,11 @@ function ServerVoteExisting(VS_Candidate Candidate) {
 	VotedFor = I.AddCandidateVote(self, Candidate);
 }
 
-simulated function VoteRandom(VS_Preset P) {
+final simulated function VoteRandom(VS_Preset P) {
 	ServerVoteRandom(P.GetFullName());
 }
 
-function ServerVoteRandom(string FullPresetName) {
+final function ServerVoteRandom(string FullPresetName) {
 	local VS_Info I;
 	local VS_Preset P;
 
@@ -605,14 +594,14 @@ function ServerVoteRandom(string FullPresetName) {
 	VotedFor = I.AddRandomVote(self, P);
 }
 
-function ClearVote() {
+final function ClearVote() {
 	if (VotedFor != none) {
 		VoteInfo().RemCandidateVote(self, VotedFor);
 		VotedFor = none;
 	}
 }
 
-simulated function bool WantsToKick(PlayerReplicationInfo PRI) {
+final simulated function bool WantsToKick(PlayerReplicationInfo PRI) {
 	local VS_PlayerInfo P;
 
 	P = VoteInfo().GetPlayerInfoForPRI(PRI);
@@ -622,7 +611,7 @@ simulated function bool WantsToKick(PlayerReplicationInfo PRI) {
 	return false;
 }
 
-simulated function ClientSetKick(PlayerReplicationInfo PRI, bool bWantKick) {
+final simulated function ClientSetKick(PlayerReplicationInfo PRI, bool bWantKick) {
 	local VS_PlayerInfo P;
 
 	P = VoteInfo().GetPlayerInfoForPRI(PRI);
@@ -630,7 +619,7 @@ simulated function ClientSetKick(PlayerReplicationInfo PRI, bool bWantKick) {
 		P.bLocalPlayerWantsToKick = bWantKick;
 }
 
-function int ServerKickIndex(PlayerReplicationInfo PRI) {
+final function int ServerKickIndex(PlayerReplicationInfo PRI) {
 	local int Index;
 
 	for (Index = 0; Index < IWantToKick.Length; Index++)
@@ -640,7 +629,7 @@ function int ServerKickIndex(PlayerReplicationInfo PRI) {
 	return -1;
 }
 
-function bool ServerToggleKick(PlayerReplicationInfo PRI, int Index) {
+final function bool ServerToggleKick(PlayerReplicationInfo PRI, int Index) {
 	if (Index < 0) {
 		IWantToKick.Insert(0, 1);
 		IWantToKick[0] = PRI;
@@ -651,27 +640,27 @@ function bool ServerToggleKick(PlayerReplicationInfo PRI, int Index) {
 	}
 }
 
-simulated function KickPlayer(PlayerReplicationInfo PRI, bool bWantKick) {
+final simulated function KickPlayer(PlayerReplicationInfo PRI, bool bWantKick) {
 	ServerKickPlayer(PRI, bWantKick);
 }
 
-function ServerKickPlayer(PlayerReplicationInfo PRI, bool bWantKick) {
+final function ServerKickPlayer(PlayerReplicationInfo PRI, bool bWantKick) {
 	VoteInfo().KickPlayer(self, PRI, bWantKick);
 }
 
-simulated function ClientApplyKickVote(PlayerReplicationInfo PRI, bool bWantKick) {
+final simulated function ClientApplyKickVote(PlayerReplicationInfo PRI, bool bWantKick) {
 	ClientSetKick(PRI, bWantKick);
 }
 
-simulated function BanPlayer(PlayerReplicationInfo PRI) {
+final simulated function BanPlayer(PlayerReplicationInfo PRI) {
 	ServerBanPlayer(PRI);
 }
 
-function ServerBanPlayer(PlayerReplicationInfo PRI) {
+final function ServerBanPlayer(PlayerReplicationInfo PRI) {
 	VoteInfo().BanPlayer(self, PRI);
 }
 
-function ServerFindMapRating(int LastCookie, string LastMap) {
+final function ServerFindMapRating(int LastCookie, string LastMap) {
 	if (LastCookie == 0) {
 		ClientApplyOldMapRating(0);
 		return;
@@ -681,33 +670,33 @@ function ServerFindMapRating(int LastCookie, string LastMap) {
 	ClientApplyOldMapRating(MapRating);
 }
 
-function ServerSetMapRating(int Rating) {
+final function ServerSetMapRating(int Rating) {
 	if (bLastCookieChecked == false)
 		return;
 
 	VoteInfo().SetMapRating(self, Rating, MapRating);
 }
 
-simulated function SetMapRating(int Rating) {
+final simulated function SetMapRating(int Rating) {
 	if (CookieSaveState != CKSS_Done)
 		return;
 	ServerSetMapRating(Rating);
 }
 
-simulated function ClientApplyOldMapRating(int Rating) {
+final simulated function ClientApplyOldMapRating(int Rating) {
 	if (CookieSaveState == CKSS_Initial) {
 		MapRating = Rating;
 		CookieSaveState = CKSS_Save;
 	}
 }
 
-simulated function VS_ServerSettings ReloadServerSettings() {
+final simulated function VS_ServerSettings ReloadServerSettings() {
 	ServerSettings = none;
 	DataClient.DiscardServerSettings();
 	return GetServerSettings();
 }
 
-simulated function VS_ServerSettings GetServerSettings() {
+final simulated function VS_ServerSettings GetServerSettings() {
 	LogDbg("PlayerChannel GetServerSettings");
 	if (ServerSettings == none) {
 		ServerSettings = DataClient.GetServerSettings();
@@ -715,7 +704,7 @@ simulated function VS_ServerSettings GetServerSettings() {
 	return ServerSettings;
 }
 
-simulated function SaveServerSettings() {
+final simulated function SaveServerSettings() {
 	LogDbg("PlayerChannel SaveServerSettings");
 	if (ServerSettings == none)
 		return;
@@ -723,13 +712,13 @@ simulated function SaveServerSettings() {
 	DataClient.SaveServerSettings(ServerSettings);
 }
 
-simulated function VS_ClientPresetList ReloadServerPresets() {
+final simulated function VS_ClientPresetList ReloadServerPresets() {
 	ServerPresets = none;
 	DataClient.DiscardServerPresets();
 	return GetServerPresets();
 }
 
-simulated function VS_ClientPresetList GetServerPresets() {
+final simulated function VS_ClientPresetList GetServerPresets() {
 	LogDbg("PlayerChannel GetServerPresets");
 	if (ServerPresets == none) {
 		ServerPresets = DataClient.GetServerPresets();
@@ -737,7 +726,7 @@ simulated function VS_ClientPresetList GetServerPresets() {
 	return ServerPresets;
 }
 
-simulated function SaveServerPresets() {
+final simulated function SaveServerPresets() {
 	LogDbg("PlayerChannel SavePresetSettings");
 	if (ServerPresets == none)
 		return;
@@ -745,13 +734,13 @@ simulated function SaveServerPresets() {
 	DataClient.SaveServerPresets(ServerPresets);
 }
 
-simulated function VS_ClientMapListsContainer ReloadServerMapLists() {
+final simulated function VS_ClientMapListsContainer ReloadServerMapLists() {
 	ServerMapLists = none;
 	DataClient.DiscardServerMapLists();
 	return GetServerMapLists();
 }
 
-simulated function VS_ClientMapListsContainer GetServerMapLists() {
+final simulated function VS_ClientMapListsContainer GetServerMapLists() {
 	LogDbg("PlayerChannel GetServerMapLists");
 	if (ServerMapLists == none) {
 		ServerMapLists = DataClient.GetServerMapLists();
@@ -759,7 +748,7 @@ simulated function VS_ClientMapListsContainer GetServerMapLists() {
 	return ServerMapLists;
 }
 
-simulated function SaveServerMapLists() {
+final simulated function SaveServerMapLists() {
 	LogDbg("PlayerChannel SaveServerMapLists");
 	if (ServerMapLists == none)
 		return;
@@ -767,7 +756,7 @@ simulated function SaveServerMapLists() {
 	DataClient.SaveServerMapLists(ServerMapLists);
 }
 
-simulated function LocalizeMessage(
+final simulated function LocalizeMessage(
 	class<LocalMessage> MessageClass,
 	optional int Switch,
 	optional string Param1,
@@ -792,14 +781,14 @@ simulated function LocalizeMessage(
 	PlayerOwner.ReceiveLocalizedMessage(MessageClass, Switch, /*PRI1*/, /*PRI2*/, Params);
 }
 
-simulated function ChatMessage(PlayerReplicationInfo PRI, string Msg, bool bTeamMsg) {
+final simulated function ChatMessage(PlayerReplicationInfo PRI, string Msg, bool bTeamMsg) {
 	if (VoteMenuDialog == none)
 		return;
 
 	VS_UIV_ClientWindow(VoteMenuDialog.ClientArea).ChatArea.AddChat(PRI, Msg, bTeamMsg);
 }
 
-simulated function DumpPlayerList() {
+final simulated function DumpPlayerList() {
 	local int i;
 	local VS_Info Info;
 	local VS_UI_PlayerListItem Item;
@@ -814,7 +803,7 @@ simulated function DumpPlayerList() {
 	}
 }
 
-simulated function DumpLog() {
+final simulated function DumpLog() {
 	local string Line;
 
 	Line = string(self.Name);

@@ -9,7 +9,7 @@ enum ETransmissionState {
 };
 var ETransmissionState TransmissionState;
 
-function AllocatePresets(int MaxIndex) {
+final function AllocatePresets(int MaxIndex) {
 	local int i;
 	i = PresetList.Length;
 	if (i <= MaxIndex) {
@@ -21,7 +21,7 @@ function AllocatePresets(int MaxIndex) {
 	}
 }
 
-function VS_ClientPreset AddPreset() {
+final function VS_ClientPreset AddPreset() {
 	local int i;
 
 	if (TransmissionState != TS_Complete)
