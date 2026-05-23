@@ -44,8 +44,7 @@ simulated event PostBeginPlay() {
 simulated event Timer() {
 	local int i;
 	local VS_PlayerInfo P;
-	local VS_Data_Server DS;
-
+	
 	foreach AllActors(class'VS_PlayerInfo', P)
 		if (i < arraycount(PlayerInfo))
 			PlayerInfo[i++] = P;
@@ -53,14 +52,23 @@ simulated event Timer() {
 	while(i < arraycount(PlayerInfo))
 		PlayerInfo[i++] = none;
 
-	if (Role == ROLE_Authority && bSendPresetsDataGenerated == false) {
-		bSendPresetsDataGenerated = (SendPresetsDataGenerator.GetStateName() == 'Idle');
-		if (bSendPresetsDataGenerated) {
-			foreach AllActors(class'VS_Data_Server', DS)
-				if (DS.Owner != none && DS.Owner.IsA('VS_PlayerChannel'))
-					DS.CacheSendPresets = SendPresetsData.Server.Tx.Buffer;
-		}
-	}
+	CheckSendPresetsGenerator();
+}
+
+final function CheckSendPresetsGenerator() {
+	local VS_Data_Server DS;
+
+	if (bSendPresetsDataGenerated)
+		return;
+
+	bSendPresetsDataGenerated = (SendPresetsDataGenerator.GetStateName() == 'Idle');
+
+	if (bSendPresetsDataGenerated == false)
+		return;
+
+	foreach AllActors(class'VS_Data_Server', DS)
+		if (DS.Owner != none && DS.Owner.IsA('VS_PlayerChannel'))
+			DS.CacheSendPresets = SendPresetsData.Server.Tx.Buffer;
 }
 
 simulated function VS_PlayerInfo GetPlayerInfoForPRI(PlayerReplicationInfo PRI) {

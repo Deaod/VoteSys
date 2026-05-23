@@ -170,10 +170,13 @@ state SendPresets {
 Begin:
 	foreach AllActors(class'MutVoteSys', VoteSys)
 		break;
+		
 	while(VoteSys.HistoryProcessor != none)
 		Sleep(0);
-	while(Len(CacheSendPresets) == 0 && VS_PlayerChannel(Owner) != none)
-		Sleep(0);
+
+	if (VS_PlayerChannel(Owner) != none)
+		while(Len(CacheSendPresets) == 0)
+			Sleep(0);
 
 	LogMsg("VS_Data_Server SendPresets"@GetIdentifier());
 
