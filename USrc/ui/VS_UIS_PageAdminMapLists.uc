@@ -123,6 +123,8 @@ function LoadMapListSettings(VS_ClientMapList M) {
 	Adt_IgnoreMapsWithPrefix.SetValue(M.GetPropertyText("IgnoreMapsWithPrefix"));
 	Adt_IncludeList.SetValue(M.GetPropertyText("IncludeList"));
 	Adt_IgnoreList.SetValue(M.GetPropertyText("IgnoreList"));
+
+	FillMapListHints();
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
@@ -157,6 +159,23 @@ function Notify(UWindowDialogControl C, byte E) {
 			SelectedMapList.MapList.MapListName = Edt_MapListName.GetValue();
 	} else {
 		super.Notify(C, E);
+	}
+}
+
+function FillMapListHints() {
+	local int I;
+	local VS_UI_MapListLI M;
+
+	Adt_IncludeList.EntryHints.Remove(0, Adt_IncludeList.EntryHints.Length);
+	Adt_IncludeList.EntryHints.Insert(0, MapLists.MapLists.Length);
+	Adt_IgnoreList.EntryHints.Remove(0, Adt_IgnoreList.EntryHints.Length);
+	Adt_IgnoreList.EntryHints.Insert(0, MapLists.MapLists.Length);
+
+	for (M = VS_UI_MapListLI(MapListLB.Items.Next); M != none; M = VS_UI_MapListLI(M.Next)) {
+		if (M == SelectedMapList)
+			continue;
+		Adt_IncludeList.EntryHints[I] = M.MapList.MapListName;
+		Adt_IgnoreList.EntryHints[I] = M.MapList.MapListName;
 	}
 }
 
