@@ -35,6 +35,8 @@ VoteSys has a way to transfer maps and presets data more quickly to players. For
 
 ## [Server Configuration](Docs/setup.md)
 
+## [Troubleshooting](Docs/help.md)
+
 ## Build
 In order to build this mutator, you need to be using UT99 v469d or later.
 
