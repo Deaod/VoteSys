@@ -314,6 +314,16 @@ function Notify(UWindowDialogControl C, byte E) {
 	}
 }
 
+function FillPresetHints() {
+	local int I;
+	local VS_UI_PresetListItem P;
+
+	Adt_InheritFrom.EntryHints.Remove(0, Adt_InheritFrom.EntryHints.Length);
+	Adt_InheritFrom.EntryHints.Insert(0, PresetList.Items.Count());
+	for (P = VS_UI_PresetListItem(PresetList.Items.Next); P != none; P = VS_UI_PresetListItem(P.Next))
+		Adt_InheritFrom.EntryHints[I++] = P.Preset.Category$"/"$P.Preset.PresetName;
+}
+
 function LoadServerSettings() {
 	local int i;
 	local VS_UI_PresetListItem P;
@@ -329,6 +339,7 @@ function LoadServerSettings() {
 		P.Preset = Presets.PresetList[i];
 	}
 
+	FillPresetHints();
 	LoadPresetSettings(none);
 }
 
