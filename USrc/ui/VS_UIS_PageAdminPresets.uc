@@ -261,6 +261,8 @@ function LoadPresetSettings(VS_ClientPreset P) {
 	Edt_MinPlayers.SetValue(string(P.MinPlayers));
 	Edt_MaxPlayers.SetValue(string(P.MaxPlayers));
 	Chk_OpenVoteMenuAutomatically.bChecked = P.bOpenVoteMenuAutomatically;
+
+	FillPresetHints();
 }
 
 function BeforePaint(Canvas C, float MouseX, float MouseY) {
@@ -320,8 +322,13 @@ function FillPresetHints() {
 
 	Adt_InheritFrom.EntryHints.Remove(0, Adt_InheritFrom.EntryHints.Length);
 	Adt_InheritFrom.EntryHints.Insert(0, PresetList.Items.Count());
-	for (P = VS_UI_PresetListItem(PresetList.Items.Next); P != none; P = VS_UI_PresetListItem(P.Next))
+
+	for (P = VS_UI_PresetListItem(PresetList.Items.Next); P != none; P = VS_UI_PresetListItem(P.Next)) {
+		if (P == SelectedPreset)
+			continue;
+
 		Adt_InheritFrom.EntryHints[I++] = P.Preset.Category$"/"$P.Preset.PresetName;
+	}
 }
 
 function LoadServerSettings() {
@@ -339,7 +346,6 @@ function LoadServerSettings() {
 		P.Preset = Presets.PresetList[i];
 	}
 
-	FillPresetHints();
 	LoadPresetSettings(none);
 }
 
