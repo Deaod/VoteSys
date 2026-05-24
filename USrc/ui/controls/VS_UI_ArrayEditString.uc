@@ -5,6 +5,8 @@ var array<string> Entries;
 function FillEditWindow(VS_UI_ArrayEditW Wnd) {
 	local int i;
 
+	super.FillEditWindow(Wnd);
+
 	SetPropertyText("Entries", EditBox.GetValue());
 	for (i = 0; i < Entries.Length; i++)
 		Wnd.AddElement(Entries[i]);

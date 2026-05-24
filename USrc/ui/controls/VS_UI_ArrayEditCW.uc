@@ -3,6 +3,7 @@ class VS_UI_ArrayEditCW extends UWindowDialogClientWindow;
 var VS_UI_ArrayEditBase Owner;
 
 var VS_UI_EditControl Edt_Element;
+var VS_UI_ComboControl Cmb_Element;
 var VS_UI_ArrayEditLB Lst_Elements;
 var VS_UI_ArrayEditLI CurrentElement;
 
@@ -17,6 +18,12 @@ function Created() {
 	Edt_Element = VS_UI_EditControl(CreateControl(class'VS_UI_EditControl', 4, 4, 180, 16));
 	Edt_Element.EditBoxWidth = Edt_Element.WinWidth;
 	Edt_Element.EditBox.bSelectOnFocus = false;
+
+	Cmb_Element = VS_UI_ComboControl(CreateControl(class'VS_UI_ComboControl', 4, 4, 180, 16));
+	Cmb_Element.EditBoxWidth = Cmb_Element.WinWidth;
+	Cmb_Element.EditBox.bSelectOnFocus = false;
+	Cmb_Element.SetEditable(true);
+	Cmb_Element.HideWindow();
 
 	Lst_Elements = VS_UI_ArrayEditLB(CreateControl(class'VS_UI_ArrayEditLB', 24, 24, 160, 36));
 
@@ -33,6 +40,7 @@ function Created() {
 
 function SetTheme(VS_UI_ThemeBase T) {
 	Edt_Element.Theme = T;
+	Cmb_Element.Theme = T;
 	Lst_Elements.Theme = T;
 }
 
@@ -46,9 +54,14 @@ function Notify(UWindowDialogControl C, byte E) {
 	} else if (E == DE_Change) {
 		if (C == Edt_Element && CurrentElement != none) {
 			CurrentElement.Text = Edt_Element.GetValue();
+		} else if (C == Cmb_Element && CurrentElement != none) {
+			CurrentElement.Text = Cmb_Element.GetValue();
 		}
 	} else if (C == Lst_Elements && E == Lst_Elements.DE_VoteSys_ClickDone) {
-		Edt_Element.ActivateWindow(0, false);
+		if (Edt_Element.WindowIsVisible())
+			Edt_Element.ActivateWindow(0, false);
+		if (Cmb_Element.WindowIsVisible())
+			Cmb_Element.ActivateWindow(0, false);
 	}
 }
 
@@ -60,7 +73,10 @@ function AddNewElement() {
 	local VS_UI_ArrayEditLI I;
 	I = AddElement("");
 	Lst_Elements.SetSelectedItem(I);
-	Edt_Element.ActivateWindow(0, false);
+	if (Edt_Element.WindowIsVisible())
+		Edt_Element.ActivateWindow(0, false);
+	if (Cmb_Element.WindowIsVisible())
+		Cmb_Element.ActivateWindow(0, false);
 }
 
 function RemoveCurrentElement() {
@@ -86,6 +102,9 @@ function Resized() {
 	Edt_Element.SetSize(WinWidth - 8, 16);
 	Edt_Element.EditBoxWidth = Edt_Element.WinWidth;
 
+	Cmb_Element.SetSize(WinWidth - 8, 16);
+	Cmb_Element.EditBoxWidth = Cmb_Element.WinWidth;
+
 	Lst_Elements.SetSize(
 		WinWidth - 12 - Btn_AddElement.WinWidth,
 		WinHeight - 16 - Edt_Element.WinHeight - Btn_Close.WinHeight
@@ -100,16 +119,25 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 
 	if (CurrentElement != Lst_Elements.SelectedItem) {
 		CurrentElement = VS_UI_ArrayEditLI(Lst_Elements.SelectedItem);
-		Edt_Element.SetValue(CurrentElement.Text);
-		Edt_Element.EditBox.MoveEnd();
+
+		if (Edt_Element.WindowIsVisible()) {
+			Edt_Element.SetValue(CurrentElement.Text);
+			Edt_Element.EditBox.MoveEnd();
+		}
+		if (Cmb_Element.WindowIsVisible()) {
+			Cmb_Element.SetValue(CurrentElement.Text);
+			Cmb_Element.EditBox.MoveEnd();
+		}
 	}
 
 	if (CurrentElement == none) {
 		Btn_RemElement.bDisabled = true;
 		Edt_Element.EditBox.bCanEdit = false;
+		Cmb_Element.SetEnabled(false);
 	} else {
 		Btn_RemElement.bDisabled = false;
 		Edt_Element.EditBox.bCanEdit = true;
+		Cmb_Element.SetEnabled(true);
 	}
 }
 

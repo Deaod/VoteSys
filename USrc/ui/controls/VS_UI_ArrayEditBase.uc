@@ -1,27 +1,29 @@
 class VS_UI_ArrayEditBase extends UWindowDialogControl;
 
-var	float               EditBoxWidth;
-var float               EditAreaDrawX, EditAreaDrawY;
+var	float EditBoxWidth;
+var float EditAreaDrawX, EditAreaDrawY;
 
-var VS_UI_ThemeBase     Theme;
-var VS_UI_ArrayEditBox  EditBox;
+var VS_UI_ThemeBase       Theme;
+var VS_UI_ArrayEditBox    EditBox;
 var VS_UI_ArrayEditButton Button;
-var VS_UI_ArrayEditW    EditWindow;
+var VS_UI_ArrayEditW      EditWindow;
 
-var bool                bCanEdit;
-var bool                bEnabled;
-var bool                bSavedCanEdit;
+var bool bCanEdit;
+var bool bEnabled;
+var bool bSavedCanEdit;
+
+var array<string> EntryHints;
 
 function Created() {
-	Super.Created();
+	super.Created();
 	
 	EditBox = VS_UI_ArrayEditBox(CreateWindow(class'VS_UI_ArrayEditBox', 0, 0, WinWidth-12, WinHeight)); 
-	EditBox.NotifyOwner = Self;
+	EditBox.NotifyOwner = self;
 	EditBoxWidth = WinWidth / 2;
-	EditBox.bTransient = True;
+	EditBox.bTransient = true;
 
 	Button = VS_UI_ArrayEditButton(CreateWindow(class'VS_UI_ArrayEditButton', WinWidth-12, 0, 12, 10));
-	Button.Owner = Self;
+	Button.Owner = self;
 
 	EditWindow = VS_UI_ArrayEditW(Root.CreateWindow(class'VS_UI_ArrayEditW', 0, 0, 320, 200, self));
 	EditWindow.SetOwner(self);
@@ -42,19 +44,36 @@ function LaunchEditWindow() {
 	FillEditWindow(EditWindow);
 }
 
-function FillEditWindow(VS_UI_ArrayEditW Wnd);
+function FillEditWindow(VS_UI_ArrayEditW Wnd) {
+	local int i;
+	local VS_UI_ArrayEditCW CW;
+
+	CW = VS_UI_ArrayEditCW(Wnd.ClientArea);
+
+	if (EntryHints.Length > 0) {
+		CW.Edt_Element.HideWindow();
+		CW.Cmb_Element.ShowWindow();
+	} else {
+		CW.Cmb_Element.HideWindow();
+		CW.Edt_Element.ShowWindow();
+	}
+
+	CW.Cmb_Element.List.Clear();
+	for (i = 0; i < EntryHints.Length; i++)
+		CW.Cmb_Element.AddItem(EntryHints[i]);
+}
 
 function EditWindowClosed(VS_UI_ArrayEditW Wnd);
 
 function Notify(byte E) {
-	Super.Notify(E);
+	super.Notify(E);
 }
 
 function Close(optional bool bByParent) {
 	if (EditWindow.bWindowVisible)
 		EditWindow.Close(bByParent);
 
-	Super.Close(bByParent);
+	super.Close(bByParent);
 }
 
 function SetTheme(VS_UI_ThemeBase T) {
@@ -62,11 +81,11 @@ function SetTheme(VS_UI_ThemeBase T) {
 }
 
 function SetFont(int NewFont) {
-	Super.SetFont(NewFont);
+	super.SetFont(NewFont);
 	EditBox.SetFont(NewFont);
 }
 
-function SetEditTextColor(Color NewColor) {
+function SetEditTextColor(color NewColor) {
 	EditBox.SetTextColor(NewColor);
 }
 
@@ -114,7 +133,7 @@ function Paint(Canvas C, float MouseX, float MouseY) {
 function BeforePaint(Canvas C, float X, float Y) {
 	local float TW, TH;
 
-	Super.BeforePaint(C, X, Y);
+	super.BeforePaint(C, X, Y);
 
 	// BEGIN COPY UMenuGoldLookAndFeel.Combo_SetupSizes
 	C.Font = Root.Fonts[Font];
@@ -181,7 +200,7 @@ function Clear() {
 }
 
 function FocusOtherWindow(UWindowWindow W) {
-	Super.FocusOtherWindow(W);
+	super.FocusOtherWindow(W);
 }
 
 function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key) {
