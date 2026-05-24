@@ -190,3 +190,22 @@ This tab-card is only visible when logged in as admin. It allows changing preset
 This tab-card is only visible when logged in as admin. It allows editing map lists, including adding and removing them.
 
 ![Admin Map Lists Settings](AdminMapListsSettings.png)
+
+## Custom Controls
+
+VoteSys has a rather complex UI and needed new UI elements to make interacting more intuitive for users. This section documents those new controls.
+
+### Array Edit
+
+![Array Edit Control embedded in admin presets settings page](ArrayEditControl.png)
+
+An array edit is similar to a combo box, but instead of a drop-down menu, the button with three dots opens a new, modal window that allows entering multiple values.
+
+![Array Edit window](ArrayEditWindow.png)
+
+The array edit window is resizeable and most of its area is occupied by a list where each element starts with a `>` to distinguish blank space from an empty element.  
+The title of the window is the name of the option currently being edited.  
+Above the list is an edit box where the element thats currently selected within the list can be modified. Sometimes the values elements can have should be one of a known set, in which case the edit box is replaced by a combo box.  
+To the left of the list are two buttons. The `+` adds a new element to the list and immediately selects it. The `-` removes the currently selected element from the list.  
+Elements with the list can be reordered by dragging them up/down within the list.  
+Underneath the list is the `Close` button that closes the window and updates the control with the new list.
