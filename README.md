@@ -15,6 +15,11 @@ Servers must run at least UT v469.
 Clients must run at least UT v436.  
 Admin UI functionality also requires at least UT v469 clients.
 
+## Licensing
+
+This project is licensed under the GNU Affero General Public License v3.0 or later.
+See the [LICENSE file](LICENSE) for the full text.
+
 ## [UI Documentation](Docs/ui.md)
 
 ## Installation
