@@ -188,3 +188,6 @@ ItemPlayCountText=Play Count
 ItemRatingText=Rating
 FavoritesFirstText=Favorites First
 
+[VS_UIA_Window]
+WindowTitle=About VoteSys
+

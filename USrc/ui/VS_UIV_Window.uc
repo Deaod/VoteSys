@@ -1,11 +1,15 @@
 class VS_UIV_Window extends UWindowFramedWindow;
 
+var VS_UI_AboutButton Btn_About;
+
 var bool bPlaced;
 var VS_ClientSettings Settings;
 var VS_PlayerChannel Channel;
 
 function Created() {
 	super.Created();
+
+	Btn_About = VS_UI_AboutButton(CreateWindow(class'VS_UI_AboutButton', 2, 2, 11, 11));
 
 	if (WinLeft != -1.0 || WinTop != -1.0)
 		bPlaced = true;
@@ -21,6 +25,11 @@ function LoadSettings(VS_PlayerChannel Ch) {
 	VS_UIV_ClientWindow(ClientArea).LoadSettings(Ch);
 }
 
+function SetupAboutButton() {
+	Btn_About.WinLeft = WinWidth - 4 - CloseBox.WinWidth - Btn_About.WinWidth;
+	Btn_About.WinTop = 2;
+}
+
 function BeforePaint(Canvas C, float X, float Y) {
 	if (bPlaced == false) {
 		WinLeft = FMax((C.SizeX/Root.GUIScale - WinWidth) / 2.0, 0.0);
@@ -29,6 +38,8 @@ function BeforePaint(Canvas C, float X, float Y) {
 	}
 
 	super.BeforePaint(C, X, Y);
+
+	SetupAboutButton();
 
 	if (WaitModal() && ModalWindow.IsA('UWindowMessageBox') && UWindowMessageBox(ModalWindow).bSetupSize == false) {
 		ModalWindow.BeforePaint(C, X, Y);
