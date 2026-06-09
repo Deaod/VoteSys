@@ -75,8 +75,11 @@ final function string GetFullName() {
 }
 
 final function bool _ShouldSkip(VS_Map M) {
+	if (NumPlayers == 0)
+		return false;
 	return (M.Sequence > 0 && M.Sequence > SequenceCutoff) ||
-		(NumPlayers > 0 && (NumPlayers < M.MinPlayers || NumPlayers > M.MaxPlayers));
+		(M.MinPlayers > 0 && NumPlayers < M.MinPlayers) || 
+		(M.MaxPlayers > 0 && NumPlayers > M.MaxPlayers);
 }
 
 final function VS_Map SelectRandomMapFromList(optional int Players) {
