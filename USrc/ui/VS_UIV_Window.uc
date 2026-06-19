@@ -56,7 +56,8 @@ function Close(optional bool bByParent) {
 	) {
 		if (Root.ActiveWindow == none ||
 			Root.ActiveWindow == UMenuRootWindow(Root).StatusBar ||
-			Root.ActiveWindow == UMenuRootWindow(Root).MenuBar
+			Root.ActiveWindow == UMenuRootWindow(Root).MenuBar ||
+			(Root.ActiveWindow.Class.Name == 'AutoRecorder' && Root.ActiveWindow.Class.Outer.Name == 'udemo')
 		) {
 			Root.Console.CloseUWindow();
 		}
