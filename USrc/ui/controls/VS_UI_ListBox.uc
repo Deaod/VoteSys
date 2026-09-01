@@ -133,6 +133,7 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	}
 
 	VisibleHeight = WinHeight - TotalBevelHeight;
+	VertSB.WinHeight = WinHeight;
 	if (HorSB.bWindowVisible) {
 		VisibleHeight -= HorSB.WinHeight;
 		VertSB.WinHeight = WinHeight - LookAndFeel.Size_ScrollbarWidth;
