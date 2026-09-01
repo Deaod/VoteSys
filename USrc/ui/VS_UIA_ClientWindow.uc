@@ -6,6 +6,7 @@ class VS_UIA_ClientWindow extends UWindowDialogClientWindow;
 var UWindowMessageBoxArea Lbl_Copyright;
 var UWindowSmallOKButton Btn_Okay;
 var UWindowSmallButton Btn_Github;
+var UWindowSmallButton Btn_License;
 
 var VS_Util_TextBufferOverlay DummyTextBuffer;
 
@@ -44,6 +45,8 @@ function Created() {
 	Btn_Okay = UWindowSmallOKButton(CreateControl(class'UWindowSmallOKButton', 5, 5, 48, 16));
 	Btn_Github = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 5, 5, 60, 16));
 	Btn_Github.SetText("GitHub");
+	Btn_License = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 5, 5, 60, 16));
+	Btn_License.SetText("License");
 }
 
 function VS_Util_TextBufferOverlay TextBufferOverlay(TextBuffer B) {
@@ -60,6 +63,9 @@ function BeforePaint(Canvas C, float MouseX, float MouseY) {
 	Btn_Github.WinLeft = WinWidth - 10 - Btn_Okay.WinWidth - Btn_Github.WinWidth;
 	Btn_Github.WinTop = WinHeight - 5 - Btn_Github.WinHeight;
 
+	Btn_License.WinLeft = WinWidth - 15 - Btn_Okay.WinWidth - Btn_Github.WinWidth - Btn_License.WinWidth;
+	Btn_License.WinTop = WinHeight - 5 - Btn_License.WinHeight;
+
 	super.BeforePaint(C, MouseX, MouseY);
 }
 
@@ -68,6 +74,8 @@ function Notify(UWindowDialogControl C, byte E) {
 		UWindowFramedWindow(GetParent(class'UWindowFramedWindow')).Close();
 	} else if (C == Btn_Github && E == DE_Click) {
 		GetPlayerOwner().ConsoleCommand("start https://github.com/Deaod/VoteSys");
+	} else if (C == Btn_License && E == DE_Click) {
+		GetPlayerOwner().ConsoleCommand("start https://www.gnu.org/licenses/agpl-3.0.html");
 	}
 }
 
