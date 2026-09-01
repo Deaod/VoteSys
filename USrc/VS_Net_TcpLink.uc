@@ -137,3 +137,7 @@ function string GetRemoteAddress() {
 			return Left(LevelAddress, PortPos);
 	}
 }
+
+defaultproperties {
+	RemoteRole=ROLE_None
+}
